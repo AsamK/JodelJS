@@ -1,0 +1,7 @@
+node_modules/
+lib/
+*.swp
+*~
+build/
+build-debug/
+.idea/

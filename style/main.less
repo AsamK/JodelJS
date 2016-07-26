@@ -1,0 +1,265 @@
+@import (less) "npm://normalize.css";
+//@import (less) "npm://nprogress/nprogress.css";
+
+body {
+  overflow-y: scroll;
+}
+
+.list {
+  display: block;
+  &.postShown {
+    display: none;
+  }
+}
+
+.detail {
+  visibility: collapse;
+  &.postShown {
+    visibility: visible;
+  }
+}
+
+.jodel {
+  color: #eeeeee;
+}
+
+.post {
+  margin-bottom:1em;
+  overflow: hidden;
+}
+
+.postPicture {
+  width: 85%;
+  float:left;
+  clear: both;
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+  background-size: cover;
+  height: 100px;
+  margin: .2em;
+}
+
+.postMessage {
+  width: 85%;
+  float:left;
+  clear: both;
+  white-space: pre-line;
+  margin: .2em;
+}
+
+.vote {
+  width: 10%;
+  float: left;
+  text-align: center;
+  margin-top: 1em;
+}
+
+.vote .upVote {
+  cursor: pointer;
+  &::before {
+    content: "Up";
+  }
+  &.down {
+    visibility: hidden;
+  }}
+
+
+.vote .downVote {
+  cursor: pointer;
+  &::before {
+    content: "Down";
+  }
+  &.up {
+    visibility: hidden;
+  }
+}
+
+
+.childInfo {
+  float: left;
+  width: 20%;
+  text-align: center;
+  font-size: .8em;
+}
+
+.location {
+  float: left;
+  width: 30%;
+  font-size: .8em;
+}
+
+.location .distance {
+  float: left;
+  width: 40%;
+}
+
+.location .locationName {
+  float: left;
+  width: 60%;
+}
+
+.author {
+  width: 10%;
+  float: left;
+  font-size: .8em;
+}
+
+
+.time {
+  float: left;
+  width: 40%;
+  font-size: .8em;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 300px;
+  .logo {
+    width: 180px;
+    height: 180px;
+    margin: 10px;
+    align-self: center;
+  }
+  &>input {
+    height: 2em;
+  }
+  &>input, &>div, &>span {
+    margin-bottom: 10px;
+  }
+}
+
+#kb_app {
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  max-width: 1500px;
+  flex: 1;
+  margin: 8px;
+}
+
+.refresh {
+  display: inline-block;
+  //background-image: url("@{WEB_SERVER}/img/warning.svg");
+  width: 22px;
+  height: 22px;
+  margin: -20px auto auto;//hack
+}
+
+.titlebar {
+  display: flex;
+  height: 48px;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  .logo {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    //background: no-repeat url("@{WEB_SERVER}/app/img/icon.svg");
+    background-size: 48px 48px;
+  }
+  .programName {
+    flex: 1;
+    align-self: center;
+  }
+  .children {
+    margin: auto;
+  }
+  .topMenu {
+    position: relative;
+    padding: 10px;
+
+    z-index: 1000;
+
+    @media print {
+      & {
+        display: none;
+      }
+    }
+
+    button {
+      float: right;
+      border: 1px solid;
+      padding: 5px 8px;
+      &::before {
+        content: "☰";
+      }
+    }
+
+    .items {
+      display: none;
+      list-style: outside none none;
+      margin: 0px;
+      background: white none repeat scroll 0% 0%;
+      border: 1px solid black;
+      padding: 0px;
+
+      box-shadow: 0 0 10px rgb(170, 170, 170);
+
+      &.showMenu {
+        display: block;
+      }
+      &>li>a {
+        padding: 7px 9px;
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.invisibleoverlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #00ffffff;
+  z-index: 3000;
+  overflow: auto;
+  top: 0;
+  left: 0;
+}
+
+.contextmenu {
+  .menu {
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 0 10px rgb(170, 170, 170);
+    user-select: none;
+
+    .menuitem {
+      padding: 8px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      &:hover {
+        background-color: lightgray;
+        cursor: default;
+      }
+    }
+  }
+}
+
+.orders {
+  tr td, tr th {
+    padding-right: 10px;
+    padding-bottom: 7px;
+    padding-top: 7px;
+  }
+  .open {
+    background-color: #FF0;
+  }
+  .canceled {
+    color:grey;
+  }
+  .payed {
+    background-color: lightgreen
+  }
+}
+// Order screen
+input[name=product_id] {
+  margin: 8px;
+}

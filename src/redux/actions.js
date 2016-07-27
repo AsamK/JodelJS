@@ -57,17 +57,26 @@ export function switchPostListContainerState(state) {
     }
 }
 
+export const SWITCH_POST_SECTION = 'SWITCH_POST_SECTION';
+export function switchPostSection(section) {
+    return {
+        type: SWITCH_POST_SECTION,
+        section,
+    }
+}
+
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
-function receiveLocationPosts(recent, discussed, popular) {
+function receivePosts(section, recent, discussed, popular) {
     let posts = {};
     recent.forEach(post => posts[post.post_id] = post);
     discussed.forEach(post => posts[post.post_id] = post);
     popular.forEach(post => posts[post.post_id] = post);
     return {
         type: RECEIVE_POSTS,
-        postsLocationRecent: recent.map(post => post.post_id),
-        postsLocationDiscussed: discussed.map(post => post.post_id),
-        postsLocationPopular: popular.map(post => post.post_id),
+        section,
+        postsRecent: recent.map(post => post.post_id),
+        postsDiscussed: discussed.map(post => post.post_id),
+        postsPopular: popular.map(post => post.post_id),
         entities: recent.concat(discussed).concat(popular),
         receivedAt: Date.now()
     }
@@ -100,14 +109,15 @@ function setLocation(latitude, longitude) {
 }
 
 export const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
-function invalidatePosts() {
+function invalidatePosts(section) {
     return {
+        section,
         type: INVALIDATE_POSTS,
     }
 }
 
-function shouldFetchPosts(state) {
-    const posts = state.postsLocation;
+function shouldFetchPosts(section, state) {
+    const posts = state.postsBySection[section];
     if (!posts) {
         return true
     } else if (posts.isFetching) {
@@ -117,23 +127,26 @@ function shouldFetchPosts(state) {
     }
 }
 
-export function fetchPostsIfNeeded() {
+export function fetchPostsIfNeeded(section) {
     return (dispatch, getState) => {
-        if (shouldFetchPosts(getState())) {
-            console.log(getState());
-            apiGetPostsCombo(getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
-                if (err == null && res != null) {
-                    dispatch(receiveLocationPosts(res.body.recent, res.body.replied, res.body.voted))
-                }
-            });
+        if (shouldFetchPosts(section, getState())) {
+            switch (section) {
+                case "location":
+                apiGetPostsCombo(getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
+                    if (err == null && res != null) {
+                        dispatch(receivePosts(section, res.body.recent, res.body.replied, res.body.voted))
+                    }
+                });
+            }
         }
     }
 }
 
 export function updatePosts() {
     return (dispatch, getState) => {
-        dispatch(invalidatePosts());
-        dispatch(fetchPostsIfNeeded());
+        const section = getState().viewState.postSection;
+        dispatch(invalidatePosts(section));
+        dispatch(fetchPostsIfNeeded(section));
     }
  }
 

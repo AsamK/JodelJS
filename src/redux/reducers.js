@@ -1,6 +1,13 @@
 import {combineReducers} from "redux";
-import merge from "lodash/merge";
-import {RECEIVE_POSTS, SELECT_POST, SET_LOCATION, SWITCH_POST_LIST_CONTAINER_STATE, INVALIDATE_POSTS, PostListContainerStates} from "./actions";
+import {
+    RECEIVE_POSTS,
+    SELECT_POST,
+    SET_LOCATION,
+    SWITCH_POST_LIST_CONTAINER_STATE,
+    INVALIDATE_POSTS,
+    SWITCH_POST_SECTION,
+    PostListContainerStates
+} from "./actions";
 //const {SHOW_ALL} = VisibilityFilters
 
 /*let x = {
@@ -10,44 +17,44 @@ import {RECEIVE_POSTS, SELECT_POST, SET_LOCATION, SWITCH_POST_LIST_CONTAINER_STA
  "post_id2": {"POST"}
  }
  },
- postsLocation: {
+ postsBySection: {
+ location: {
  isFetching: false,
  didInvalidate: false,
  itemsRecent: ["post_id1", "post_id2"],
  itemsDiscussed: [],
  itemsPopular: []
  },
- postsMine: {
+ mine: {
  isFetching: false,
  itemsRecent: ["post_id1", "post_id2"],
  itemsDiscussed: [],
  itemsPopular: []
  },
- postsMyResponses: {
+ myResponses: {
  isFetching: false,
  itemsRecent: ["post_id1", "post_id2"],
  itemsDiscussed: [],
  itemsPopular: []
  },
- postsMyVotes: {
+ myVotes: {
  isFetching: false,
  itemsRecent: ["post_id1", "post_id2"],
  itemsDiscussed: [],
  itemsPopular: []
  },
- postsByChannel: {
- jedesmal: {
+ channel_jhj: {
  isFetching: false,
  itemsRecent: ["post_id1", "post_id2"],
  itemsDiscussed: [],
  itemsPopular: []
- }
  }
  };
  */
 function viewState(state = {
     selectedPostId: null,
     location: {latitude: undefined, longitude: undefined},
+    postSection: undefined,
     postListContainerState: PostListContainerStates.RECENT
 }, action) {
     switch (action.type) {
@@ -57,6 +64,8 @@ function viewState(state = {
             return Object.assign({}, state, {location: action.location});
         case SWITCH_POST_LIST_CONTAINER_STATE:
             return Object.assign({}, state, {postListContainerState: action.state});
+        case SWITCH_POST_SECTION:
+            return Object.assign({}, state, {postSection: action.section});
         default:
             return state
     }
@@ -96,15 +105,15 @@ function posts(state = {
                 isFetching: false,
                 didInvalidate: false,
                 lastUpdated: action.receivedAt
+            };
+            if (action.postsRecent != undefined) {
+                newState.itemsRecent = action.postsRecent;
             }
-            if (action.postsLocationRecent != undefined) {
-                newState.itemsRecent = action.postsLocationRecent;
+            if (action.postsDiscussed != undefined) {
+                newState.itemsDiscussed = action.postsDiscussed;
             }
-            if (action.postsLocationDiscussed != undefined) {
-                newState.itemsDiscussed = action.postsLocationDiscussed;
-            }
-            if (action.postsLocationPopular != undefined) {
-                newState.itemsPopular = action.postsLocationPopular;
+            if (action.postsPopular != undefined) {
+                newState.itemsPopular = action.postsPopular;
             }
             return Object.assign({}, state, newState);
         case INVALIDATE_POSTS:
@@ -114,18 +123,23 @@ function posts(state = {
     }
 }
 
-function postsLocation(state, action) {
+function postsBySection(state = {}, action) {
+    console.log(action);
     switch (action.type) {
         case RECEIVE_POSTS:
-            return posts(state, action);
+        case INVALIDATE_POSTS:
+        case SWITCH_POST_SECTION:
+            let newState = {};
+            newState[action.section] = posts(state[action.section], action);
+            return Object.assign({}, state, newState);
         default:
-            return posts(state, action);
+            return state;
     }
 }
 
 const JodelApp = combineReducers({
     entities,
-    postsLocation,
+    postsBySection,
     viewState,
 });
 

@@ -14,11 +14,15 @@ import {
     updateLocation,
     updatePosts
 } from "../redux/actions";
+import {switchPostSection} from "../redux/actions";
 
 class Jodel extends Component {
     componentDidMount() {
-        apiGetConfig((err, res) => {console.log(res.body)});
+        apiGetConfig((err, res) => {
+            console.log(res.body)
+        });
         this.props.dispatch(updateLocation());
+        this.props.dispatch(switchPostSection("location"));
         this.refresh();
         this.timer = setInterval(this.props.refresh, 2000);
     }
@@ -81,17 +85,24 @@ function getEmptyPost() {
 
 const mapStateToProps = (state) => {
     let items;
-    switch (state.viewState.postListContainerState) {
-        case PostListContainerStates.RECENT:
-            items = state.postsLocation.itemsRecent;
-            break;
-        case PostListContainerStates.DISCUSSED:
-            items = state.postsLocation.itemsDiscussed;
-            break;
-        case PostListContainerStates.POPULAR:
-            items = state.postsLocation.itemsPopular;
+    console.log(state);
+    const section = state.viewState.postSection;
+    if (section) {
+        switch (state.viewState.postListContainerState) {
+            case PostListContainerStates.RECENT:
+                items = state.postsBySection[section].itemsRecent;
+                break;
+            case PostListContainerStates.DISCUSSED:
+                items = state.postsBySection[section].itemsDiscussed;
+                break;
+            case PostListContainerStates.POPULAR:
+                items = state.postsBySection[section].itemsPopular;
+        }
+    } else {
+        items = [];
     }
     return {
+        section: state.viewState.postSection,
         posts: items.map(post_id => state.entities[post_id]),
         selectedPost: state.viewState.selectedPostId != null ? state.entities[state.viewState.selectedPostId] : null
     }

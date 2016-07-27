@@ -1,4 +1,4 @@
-import {apiGetPostsCombo, apiGetPost, apiUpVote, apiDownVote, apiSetPlace} from "../app/api";
+import {apiGetPostsCombo, apiGetPost, apiUpVote, apiDownVote, apiSetPlace, apiAddPost} from "../app/api";
 
 /*
  * action types
@@ -185,5 +185,18 @@ export function updateLocation() {
                 }
             });
         }
+    }
+}
+
+export function addPost(text) {
+    return (dispatch, getState) => {
+        // Dispatch a thunk from thunk!
+        const color = "FF9908";
+        const loc = getState().viewState.location;
+        apiAddPost(color, loc.latitude, loc.longitude, text, (err, res) => {
+            if (err == null && res != null) {
+                dispatch(receivePost(res.body))
+            }
+        });
     }
 }

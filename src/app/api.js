@@ -83,6 +83,10 @@ export function apiGetPostsMineReplies(callback) {
     return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/mine/replies", {}, {}, callback);
 }
 
+export function apiGetPostsMinePinned(callback) {
+    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/mine/pinned", {}, {}, callback);
+}
+
 export function apiGetPostsMineVotes(skip, limit, callback) {
     let query = {};
     if (skip) {
@@ -136,6 +140,14 @@ export function apiDownVote(postId, callback) {
     return jodelRequest("PUT", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/" + postId + "/downvote", {}, {}, callback);
 }
 
+export function apiPin(postId, callback) {
+    return jodelRequest("PUT", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/" + postId + "/pin", {}, {}, callback);
+}
+
+export function apiUnpin(postId, callback) {
+    return jodelRequest("PUT", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/" + postId + "/unpin", {}, {}, callback);
+}
+
 export function apiFollowChannel(channel, callback) {
     return jodelRequest("PUT", Settings.API_SERVER + Settings.API_PATH_V3 + "/user/followChannel", {channel: channel}, {}, callback);
 }
@@ -143,6 +155,11 @@ export function apiFollowChannel(channel, callback) {
 export function apiUnfollowChannel(channel, callback) {
     return jodelRequest("PUT", Settings.API_SERVER + Settings.API_PATH_V3 + "/user/unfollowChannel", {channel: channel}, {}, callback);
 }
+
+export function apiAddPost(color, latitude, longitude, message, callback) {
+    return jodelRequest("POST", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/", {}, {color, message, location: {loc_accuracy: 0.0, city: "Nimmerland", country: "DE", loc_coordinates: {lat: latitude, lng: longitude}}}, callback);
+}
+
 
 export function apiGetConfig(callback) {
     return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V3 + "/user/config", {}, {}, callback);

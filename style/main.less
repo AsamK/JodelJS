@@ -20,16 +20,13 @@ body {
 }
 
 .detail {
-  visibility: collapse;
+  display: none;
   &.postShown {
-    visibility: visible;
+    display: block;
   }
 }
 
 .jodel {
-}
-
-.postListContainer {
 }
 
 .postList {
@@ -65,11 +62,18 @@ body {
       content: "Lauteste";
     }
   }
+
+  &.post {
+  }
 }
 
+.postDetails .postList .post {
+  margin-bottom: 0;
+  padding-bottom: .5em;
+}
 
 .post {
-  margin-bottom:1em;
+  margin-bottom: .5em;
   overflow: hidden;
   color: #eeeeee;
 }
@@ -308,4 +312,8 @@ body {
 // Order screen
 input[name=product_id] {
   margin: 8px;
+}
+
+.addPost {
+  margin-bottom: 10em;
 }

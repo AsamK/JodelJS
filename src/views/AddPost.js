@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { addPost } from '../redux/actions'
 
 let AddPost = ({ dispatch }) => {
-    let input
+    let input;
 
     return (
         <div className="addPost">
@@ -15,7 +15,7 @@ let AddPost = ({ dispatch }) => {
                 dispatch(addPost(input.value));
                 input.value = ''
             }}>
-                <input ref={node => {
+                <textarea ref={node => {
                     input = node
                 }} />
                 <button type="submit">

@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import classnames from "classnames";
 import PostListContainer from "./PostListContainer";
 import PostDetails from "./PostDetails";
+import AddPost from "./AddPost";
 import {apiGetConfig} from "../app/api";
 import {
     fetchPostsIfNeeded,
@@ -56,6 +57,7 @@ class Jodel extends Component {
                 <PostDetails post={this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost()}
                              onPostClick={this.handleClick.bind(this, null)}/>
             </div>
+            <AddPost/>
         </div>;
     }
 }

@@ -26,8 +26,6 @@ function ajax_request(method, headers, url, query, data, callback) {
     }
     let timestamp = new Date().toISOString();
     let sig = computeSignature(method, url, timestamp, data);
-    console.log(sig);
-    console.log(url);
     const req = r(url)
         .query(query)
         .set("X-Client-Type", "android_4.12.5")
@@ -85,8 +83,15 @@ export function apiGetPostsMineReplies(callback) {
     return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/mine/replies", {}, {}, callback);
 }
 
-export function apiGetPostsMineVotes(callback) {
-    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/mine/votes", {}, {}, callback);
+export function apiGetPostsMineVotes(skip, limit, callback) {
+    let query = {};
+    if (skip) {
+        query.skip = skip;
+    }
+    if (limit) {
+        query.limit = limit;
+    }
+    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/mine/votes", query, {}, callback);
 }
 
 export function apiGetPostsChannelCombo(channel, callback) {

@@ -1,47 +1,35 @@
 'use strict';
 
 import React, {Component} from "react";
-import Post from "./Post";
+import PostList from "./PostList";
+import {PostListContainerStates} from "../redux/actions";
+import SectionLink from "./SectionLink";
+import {connect} from "react-redux";
 
-export default class PostList extends Component {
+class PostListContainer extends Component {
     constructor(props) {
         super(props);
-        this._onPostClick = this._onPostClick.bind(this);
     }
 
     static propTypes = {
         posts: React.PropTypes.array.isRequired,
-        parentPost: React.PropTypes.any,
-        onPostClick: React.PropTypes.func.isRequired
+        onPostClick: React.PropTypes.func.isRequired,
+        onRefresh: React.PropTypes.func.isRequired,
     };
 
-    _onPostClick(post) {
-        this.props.onPostClick(post);
-    }
-
     render() {
-        const {posts, parentPost, ...forwardProps} = this.props;
-        let authorList = [];
-        const postNodes = posts.map((post) => {
-            let author;
-            if (parentPost != null) {
-                if (post.hasOwnProperty('parent_creator') && post.parent_creator == 1) {
-                    author = "OJ";
-                } else {
-                    let index = authorList.indexOf(post.user_handle);
-                    if (index == -1) {
-                        index = authorList.push(post.user_handle) - 1;
-                    }
-                    author = "C" + (index + 1);
-                }
-            }
-            return <Post key={post.post_id} post={post} onPostClick={this._onPostClick.bind(this, post)} author={author}/>
-            }
-        );
+        const {posts, onPostClick, onRefresh, ...forwardProps} = this.props;
         return (
-            <div className="postList">
-                {postNodes}
+            <div className="postListContainer">
+                <PostList posts={posts} onPostClick={onPostClick}/>
+                <div className="sections">
+                    <SectionLink section={PostListContainerStates.RECENT}></SectionLink>
+                    <SectionLink section={PostListContainerStates.DISCUSSED}></SectionLink>
+                    <SectionLink section={PostListContainerStates.POPULAR}></SectionLink>
+                </div>
             </div>
         );
     }
 };
+
+export default connect()(PostListContainer);

@@ -1,8 +1,15 @@
 @import (less) "npm://normalize.css";
 //@import (less) "npm://nprogress/nprogress.css";
 
+html, body {
+  height: 100%;
+}
 body {
-  overflow-y: scroll;
+  //overflow-y: scroll;
+}
+
+#content,.jodel,.list,.postListContainer {
+  height: 100%;
 }
 
 .list {
@@ -20,12 +27,51 @@ body {
 }
 
 .jodel {
-  color: #eeeeee;
 }
+
+.postListContainer {
+}
+
+.postList {
+  overflow-y: scroll;
+  height: 100%;
+}
+
+.postListContainer .sections {
+  height: 2em;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #eeeeee;
+  text-align: center;
+
+  & .section {
+    float: left;
+    width: 33%;
+    cursor: pointer;
+  }
+  & .recent {
+    &::before {
+      content: "Neueste";
+    }
+  }
+  & .discussed {
+    &::before {
+      content: "Meist kommentierte";
+    }
+  }
+  & .popular {
+    &::before {
+      content: "Lauteste";
+    }
+  }
+}
+
 
 .post {
   margin-bottom:1em;
   overflow: hidden;
+  color: #eeeeee;
 }
 
 .postPicture {

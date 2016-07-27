@@ -1,59 +1,55 @@
 'use strict';
 
 import React, {Component} from "react";
-import classnames from 'classnames';
-
-import PostList from "./PostList";
+import {connect} from "react-redux";
+import classnames from "classnames";
+import PostListContainer from "./PostListContainer";
 import PostDetails from "./PostDetails";
-import {apiGetPosts, apiSetPlace, apiGetPost, apiGetConfig} from "../app/api";
+import {apiGetConfig} from "../app/api";
+import {
+    fetchPostsIfNeeded,
+    fetchPost,
+    selectPost,
+    PostListContainerStates,
+    updateLocation,
+    updatePosts
+} from "../redux/actions";
 
-export default class Jodel extends Component {
-    state = {
-        currentPost: null,
-        posts: []
-    };
-
+class Jodel extends Component {
     componentDidMount() {
-        apiGetConfig((err, res) => console.log(res.body));
-        if ("geolocation" in navigator) {
-            /* geolocation is available */
-            navigator.geolocation.getCurrentPosition(function (position) {
-                apiSetPlace(position.coords.latitude, position.coords.longitude, "Nimmerland", "DE");
-            });
-        }
+        apiGetConfig((err, res) => {console.log(res.body)});
+        this.props.dispatch(updateLocation());
         this.refresh();
-        this.timer = setInterval(this.refresh.bind(this), 2000);
+        this.timer = setInterval(this.props.refresh, 2000);
     }
 
     componentWillUnmount() {
         clearInterval(this.timer);
     }
 
+    onRefresh() {
+        this.props.dispatch(updatePosts())
+    }
+
     refresh() {
-        apiGetPosts((err, res) => {
-            this.setState({posts: res.body['posts']})
-        });
-        if (this.state.currentPost != null) {
-            apiGetPost(this.state.currentPost.post_id, (err, res) => {
-                if (err == null && res != null && this.state.currentPost != null) {
-                    this.setState({currentPost: res.body})
-                }
-            });
+        this.props.dispatch(fetchPostsIfNeeded());
+        if (this.props.selectedPost != null) {
+            this.props.dispatch(fetchPost(this.props.selectedPost.post_id));
         }
     }
 
     handleClick(post) {
-        this.setState({currentPost: post});
-        this.refresh();
+        this.props.dispatch(selectPost(post != null ? post.post_id : null));
     }
 
     render() {
         return <div className="jodel">
-            <div className={classnames("list", {postShown: this.state.currentPost != null})}>
-                <PostList posts={this.state.posts} onPostClick={this.handleClick.bind(this)}/>
+            <div className={classnames("list", {postShown: this.props.selectedPost != null})}>
+                <PostListContainer posts={this.props.posts} onPostClick={this.handleClick.bind(this)}
+                                   onRefresh={this.onRefresh}/>
             </div>
-            <div className={classnames("detail", {postShown: this.state.currentPost != null})}>
-                <PostDetails post={this.state.currentPost != null ? this.state.currentPost : getEmptyPost()}
+            <div className={classnames("detail", {postShown: this.props.selectedPost != null})}>
+                <PostDetails post={this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost()}
                              onPostClick={this.handleClick.bind(this, null)}/>
             </div>
         </div>;
@@ -82,16 +78,23 @@ function getEmptyPost() {
         "color": "000000"
     }
 }
-/*
- function notifyUser(text, sound) {
- if (pageActive) {
- return;
- }
- var audio = new Audio('tarot/static/' + sound + '.mp3');
- audio.play();
- }
 
- let pageActive = true;
- window.addEventListener("focus", () => pageActive = true);
- window.addEventListener("blur", () => pageActive = false);
- */
+const mapStateToProps = (state) => {
+    let items;
+    switch (state.viewState.postListContainerState) {
+        case PostListContainerStates.RECENT:
+            items = state.postsLocation.itemsRecent;
+            break;
+        case PostListContainerStates.DISCUSSED:
+            items = state.postsLocation.itemsDiscussed;
+            break;
+        case PostListContainerStates.POPULAR:
+            items = state.postsLocation.itemsPopular;
+    }
+    return {
+        posts: items.map(post_id => state.entities[post_id]),
+        selectedPost: state.viewState.selectedPostId != null ? state.entities[state.viewState.selectedPostId] : null
+    }
+};
+
+export default connect(mapStateToProps)(Jodel);

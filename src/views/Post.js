@@ -1,13 +1,15 @@
 'use strict';
 
 import React, {Component} from "react";
+import {connect} from "react-redux";
+
 import Vote from "./Vote";
 import Time from "./Time";
 import ChildInfo from "./ChildInfo";
 import Location from "./Location";
-import {apiUpVote, apiDownVote} from "../app/api";
+import {upVote, downVote} from "../redux/actions";
 
-export default class Post extends Component {
+class Post extends Component {
     constructor(props) {
         super(props);
         this.upvote = this.upvote.bind(this);
@@ -22,20 +24,12 @@ export default class Post extends Component {
 
     upvote(e) {
         e.stopPropagation();
-        apiUpVote(this.props.post.post_id, (err, res) => {
-            if (err == null && res.body != null) {
-                console.log(res.body.post);
-            }
-        });
+        this.props.dispatch(upVote(this.props.post.post_id));
     }
 
     downvote(e) {
         e.stopPropagation();
-        apiDownVote(this.props.post.post_id, (err, res) => {
-            if (err == null && res.body != null) {
-                console.log(res.body.post);
-            }
-        });
+        this.props.dispatch(downVote(this.props.post.post_id));
     }
 
     render() {
@@ -59,3 +53,5 @@ export default class Post extends Component {
         );
     }
 };
+
+export default connect()(Post);

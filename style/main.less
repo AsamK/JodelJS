@@ -3,13 +3,18 @@
 
 html, body {
   height: 100%;
+
 }
 body {
   //overflow-y: scroll;
+  overflow: hidden;
 }
 
-#content,.jodel,.list,.postListContainer {
+#content,.jodel,.list,.detail,.postListContainer {
   height: 100%;
+}
+.postList .post:last-child {
+  margin-bottom: 2em;
 }
 
 .list {
@@ -67,6 +72,15 @@ body {
   }
 }
 
+.postDetails {
+  overflow-y:auto;
+  height:100%;
+
+  & .postList {
+    overflow-y: unset;
+    height: unset;
+  }
+}
 .postDetails .postList .post {
   margin-bottom: 0;
   padding-bottom: .5em;
@@ -316,4 +330,15 @@ input[name=product_id] {
 
 .addPost {
   margin-bottom: 10em;
+  display: none;
+  & .visible {
+    display: block;
+  }
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #eeeeee;
+  text-align: center;
 }

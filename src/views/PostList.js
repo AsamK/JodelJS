@@ -7,6 +7,7 @@ export default class PostList extends Component {
     constructor(props) {
         super(props);
         this._onPostClick = this._onPostClick.bind(this);
+        this._onScroll = this._onScroll.bind(this);
     }
 
     static propTypes = {
@@ -19,12 +20,28 @@ export default class PostList extends Component {
         this.props.onPostClick(post);
     }
 
+    componentDidMount() {
+        this._scrollable.addEventListener('scroll', this._onScroll);
+    }
+
+    componentWillUnmount() {
+        this._scrollable.removeEventListener('scroll', this._onScroll);
+    }
+
+    _onScroll(event) {
+        if (!this._scrollable) {
+            return;
+        }
+        console.log(this._scrollable.scrollTop);
+    }
+
     render() {
         const {posts, parentPost, ...forwardProps} = this.props;
         let authorList = [];
         const postNodes = posts.map((post) => {
-            let author;
+            let author, parentPostId;
             if (parentPost != null) {
+                parentPostId = parentPost.post_id;
                 if (post.hasOwnProperty('parent_creator') && post.parent_creator == 1) {
                     author = "OJ";
                 } else {
@@ -35,11 +52,11 @@ export default class PostList extends Component {
                     author = "C" + (index + 1);
                 }
             }
-            return <Post key={post.post_id} post={post} onPostClick={this._onPostClick.bind(this, post)} author={author}/>
+            return <Post key={post.post_id} post={post} parentPostId={parentPostId} onPostClick={this._onPostClick.bind(this, post)} author={author}/>
             }
         );
         return (
-            <div className="postList">
+            <div className="postList" onScroll={this._onScroll()} ref={(c) => this._scrollable = c}>
                 {postNodes}
             </div>
         );

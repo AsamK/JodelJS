@@ -42,7 +42,8 @@ export default class PostList extends Component {
                 let author, parentPostId;
                 if (parentPost != null) {
                     parentPostId = parentPost.post_id;
-                    if (post.hasOwnProperty('parent_creator') && post.parent_creator == 1) {
+                    let parentUserHandle = parentPost.user_handle;
+                    if ((post.hasOwnProperty('parent_creator') && post.parent_creator == 1) || post.user_handle === parentUserHandle) {
                         author = "OJ";
                     } else {
                         let index = authorList.indexOf(post.user_handle);

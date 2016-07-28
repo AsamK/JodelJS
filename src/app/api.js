@@ -167,11 +167,6 @@ export function apiUnfollowChannel(channel, callback) {
 }
 
 export function apiAddPost(ancestorPostId, color, loc_accuracy, latitude, longitude, city, country, message, callback) {
-    if (latitude === undefined) {
-        latitude = 0.0;
-        longitude = 0.0;
-    }
-
     return jodelRequest("POST", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/", {}, {
         ancestor: ancestorPostId,
         color,

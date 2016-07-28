@@ -81,7 +81,6 @@ function entities(state = {}, action) {
         if (action.ancestor != undefined) {
             // We get child items, replace children, but don't add new ones, which shouldn't happen anyway
             let parent = Object.assign({}, state[action.ancestor]);
-            console.log(parent);
             action.entities.forEach((post) => {
                 parent.children = parent.children.map(child => child.post_id === post.post_id ? post : child);
             });
@@ -138,7 +137,6 @@ function posts(state = {
 }
 
 function postsBySection(state = {}, action) {
-    console.log(action);
     switch (action.type) {
         case RECEIVE_POSTS:
         case INVALIDATE_POSTS:

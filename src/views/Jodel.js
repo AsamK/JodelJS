@@ -51,6 +51,11 @@ class Jodel extends Component {
         this.props.dispatch(showAddPost(true));
     }
 
+    handleAddCommentClick(post) {
+        this.props.dispatch(showAddPost(true, this.props.selectedPost.post_id));
+    }
+
+
     render() {
         return <div className="jodel">
             <div className={classnames("list", {postShown: this.props.selectedPost != null})}>
@@ -59,7 +64,8 @@ class Jodel extends Component {
             </div>
             <div className={classnames("detail", {postShown: this.props.selectedPost != null})}>
                 <PostDetails post={this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost()}
-                             onPostClick={this.handleClick.bind(this, null)}/>
+                             onPostClick={this.handleClick.bind(this, null)}
+                             onAddClick={this.handleAddCommentClick.bind(this)}/>
             </div>
             <AddPost/>
         </div>;
@@ -91,7 +97,6 @@ function getEmptyPost() {
 
 const mapStateToProps = (state) => {
     let items;
-    console.log(state);
     const section = state.viewState.postSection;
     if (section && state.postsBySection[section]) {
         switch (state.viewState.postListContainerState) {

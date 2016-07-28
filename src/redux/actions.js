@@ -1,4 +1,12 @@
-import {apiGetPostsCombo, apiGetPost, apiUpVote, apiDownVote, apiSetPlace, apiAddPost} from "../app/api";
+import {
+    apiGetPostsCombo,
+    apiGetPost,
+    apiUpVote,
+    apiDownVote,
+    apiSetPlace,
+    apiAddPost,
+    apiGetPostsMineCombo
+} from "../app/api";
 
 /*
  * action types
@@ -150,6 +158,12 @@ export function fetchPostsIfNeeded(section) {
                             dispatch(receivePosts(section, res.body.recent, res.body.replied, res.body.voted))
                         }
                     });
+                case "mine":
+                    apiGetPostsMineCombo((err, res) => {
+                        if (err == null && res != null) {
+                            dispatch(receivePosts(section, res.body.recent, res.body.replied, res.body.voted))
+                        }
+                    });
             }
         }
     }
@@ -207,7 +221,7 @@ export function addPost(text, ancestor, color = "FF9908") {
         let loc = getState().viewState.location;
         apiAddPost(ancestor, color, 0.0, loc.latitude, loc.longitude, "Nimmerland", "DE", text, (err, res) => {
             if (err == null && res != null) {
-                dispatch(receivePost(res.body))
+                dispatch(receivePosts("location", res.body.posts, [], []))
             }
         });
     }

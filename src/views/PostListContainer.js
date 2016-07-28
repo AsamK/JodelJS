@@ -4,6 +4,7 @@ import React, {Component} from "react";
 import PostList from "./PostList";
 import {PostListContainerStates} from "../redux/actions";
 import SectionLink from "./SectionLink";
+import AddButton from "./AddButton";
 import {connect} from "react-redux";
 
 class PostListContainer extends Component {
@@ -15,13 +16,15 @@ class PostListContainer extends Component {
         posts: React.PropTypes.array.isRequired,
         onPostClick: React.PropTypes.func.isRequired,
         onRefresh: React.PropTypes.func.isRequired,
+        onAddClick: React.PropTypes.func.isRequired,
     };
 
     render() {
-        const {posts, onPostClick, onRefresh, ...forwardProps} = this.props;
+        const {posts, onPostClick, onRefresh, onAddClick, ...forwardProps} = this.props;
         return (
             <div className="postListContainer">
                 <PostList posts={posts} onPostClick={onPostClick}/>
+                <AddButton onClick={onAddClick}/>
                 <div className="sections">
                     <SectionLink section={PostListContainerStates.RECENT}></SectionLink>
                     <SectionLink section={PostListContainerStates.DISCUSSED}></SectionLink>
@@ -31,6 +34,6 @@ class PostListContainer extends Component {
         );
     }
 }
-;
+
 
 export default connect()(PostListContainer);

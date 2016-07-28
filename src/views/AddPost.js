@@ -1,31 +1,39 @@
 import React from "react";
 import {connect} from "react-redux";
 import {addPost} from "../redux/actions";
+import classnames from "classnames";
 
-let AddPost = ({ dispatch }) => {
+let AddPost = ({ancestor, visible, dispatch}) => {
     let input;
 
     return (
-        <div className="addPost">
+        <div className={classnames("addPost", {visible})}>
             <form onSubmit={e => {
                 e.preventDefault();
                 if (!input.value.trim()) {
                     return
                 }
-                dispatch(addPost(input.value));
+                dispatch(addPost(input.value, ancestor));
                 input.value = ''
             }}>
                 <textarea ref={node => {
                     input = node
-                }} />
+                }}/>
                 <button type="submit">
-                    Add Todo
+                    Senden
                 </button>
             </form>
         </div>
     )
 };
 
-AddPost = connect()(AddPost);
+const mapStateToProps = (state) => {
+    return {
+        ancestor: state.viewState.addPost.ancestor,
+        visible: state.viewState.addPost.visible,
+    }
+};
+
+AddPost = connect(mapStateToProps)(AddPost);
 
 export default AddPost

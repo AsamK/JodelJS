@@ -5,14 +5,16 @@ html, body {
   height: 100%;
 
 }
+
 body {
   //overflow-y: scroll;
   overflow: hidden;
 }
 
-#content,.jodel,.list,.detail,.postListContainer {
+#content, .jodel, .list, .detail, .postListContainer {
   height: 100%;
 }
+
 .postList .post:last-child {
   margin-bottom: 2em;
 }
@@ -37,6 +39,23 @@ body {
 .postList {
   overflow-y: scroll;
   height: 100%;
+}
+
+.addButton {
+  width: 4em;
+  height: 4em;
+  position: fixed;
+  bottom: 3em;
+  text-align: center;
+  background-color: gray;
+  opacity: .5;
+  &::before {
+    font-size: 4em;
+    content: "+";
+  }
+  margin-left: -2em;
+  left: 50%;
+
 }
 
 .postListContainer .sections {
@@ -73,14 +92,15 @@ body {
 }
 
 .postDetails {
-  overflow-y:auto;
-  height:100%;
+  overflow-y: auto;
+  height: 100%;
 
   & .postList {
     overflow-y: unset;
     height: unset;
   }
 }
+
 .postDetails .postList .post {
   margin-bottom: 0;
   padding-bottom: .5em;
@@ -94,7 +114,7 @@ body {
 
 .postPicture {
   width: 85%;
-  float:left;
+  float: left;
   clear: both;
   -webkit-filter: blur(5px);
   -moz-filter: blur(5px);
@@ -108,7 +128,7 @@ body {
 
 .postMessage {
   width: 85%;
-  float:left;
+  float: left;
   clear: both;
   white-space: pre-line;
   margin: .2em;
@@ -128,8 +148,8 @@ body {
   }
   &.down {
     visibility: hidden;
-  }}
-
+  }
+}
 
 .vote .downVote {
   cursor: pointer;
@@ -140,7 +160,6 @@ body {
     visibility: hidden;
   }
 }
-
 
 .childInfo {
   float: left;
@@ -171,7 +190,6 @@ body {
   font-size: .8em;
 }
 
-
 .time {
   float: left;
   width: 40%;
@@ -189,10 +207,10 @@ body {
     margin: 10px;
     align-self: center;
   }
-  &>input {
+  & > input {
     height: 2em;
   }
-  &>input, &>div, &>span {
+  & > input, & > div, & > span {
     margin-bottom: 10px;
   }
 }
@@ -213,7 +231,7 @@ body {
   //background-image: url("@{WEB_SERVER}/img/warning.svg");
   width: 22px;
   height: 22px;
-  margin: -20px auto auto;//hack
+  margin: -20px auto auto; //hack
 }
 
 .titlebar {
@@ -269,7 +287,7 @@ body {
       &.showMenu {
         display: block;
       }
-      &>li>a {
+      & > li > a {
         padding: 7px 9px;
         display: inline-block;
       }
@@ -317,12 +335,13 @@ body {
     background-color: #FF0;
   }
   .canceled {
-    color:grey;
+    color: grey;
   }
   .payed {
     background-color: lightgreen
   }
 }
+
 // Order screen
 input[name=product_id] {
   margin: 8px;
@@ -331,7 +350,7 @@ input[name=product_id] {
 .addPost {
   margin-bottom: 10em;
   display: none;
-  & .visible {
+  &.visible {
     display: block;
   }
   position: fixed;
@@ -341,4 +360,8 @@ input[name=product_id] {
   height: 100%;
   background-color: #eeeeee;
   text-align: center;
+  &textarea {
+    height: 100%;
+    width: 80%;
+  }
 }

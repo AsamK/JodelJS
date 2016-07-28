@@ -13,7 +13,8 @@ import {
     selectPost,
     PostListContainerStates,
     updateLocation,
-    updatePosts
+    updatePosts,
+    showAddPost
 } from "../redux/actions";
 
 class Jodel extends Component {
@@ -46,11 +47,15 @@ class Jodel extends Component {
         this.props.dispatch(selectPost(post != null ? post.post_id : null));
     }
 
+    handleAddClick(post) {
+        this.props.dispatch(showAddPost(true));
+    }
+
     render() {
         return <div className="jodel">
             <div className={classnames("list", {postShown: this.props.selectedPost != null})}>
                 <PostListContainer posts={this.props.posts} onPostClick={this.handleClick.bind(this)}
-                                   onRefresh={this.onRefresh}/>
+                                   onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}/>
             </div>
             <div className={classnames("detail", {postShown: this.props.selectedPost != null})}>
                 <PostDetails post={this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost()}

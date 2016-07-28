@@ -65,6 +65,15 @@ export function switchPostSection(section) {
     }
 }
 
+export const SHOW_ADD_POST = 'SHOW_ADD_POST';
+export function showAddPost(visible, ancestor) {
+    return {
+        type: SHOW_ADD_POST,
+        visible,
+        ancestor,
+    }
+}
+
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 function receivePosts(section, recent, discussed, popular) {
     let posts = {};
@@ -192,11 +201,11 @@ export function updateLocation() {
     }
 }
 
-export function addPost(text, color = "FF9908") {
+export function addPost(text, ancestor, color = "FF9908") {
     return (dispatch, getState) => {
-        // Dispatch a thunk from thunk!
-        const loc = getState().viewState.location;
-        apiAddPost(color, 0.0, loc.latitude, loc.longitude, "Nimmerland", "DE", text, (err, res) => {
+        dispatch(showAddPost(false));
+        let loc = getState().viewState.location;
+        apiAddPost(ancestor, color, 0.0, loc.latitude, loc.longitude, "Nimmerland", "DE", text, (err, res) => {
             if (err == null && res != null) {
                 dispatch(receivePost(res.body))
             }

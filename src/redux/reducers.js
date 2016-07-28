@@ -6,7 +6,8 @@ import {
     SWITCH_POST_LIST_CONTAINER_STATE,
     INVALIDATE_POSTS,
     SWITCH_POST_SECTION,
-    PostListContainerStates
+    PostListContainerStates,
+    SHOW_ADD_POST
 } from "./actions";
 //const {SHOW_ALL} = VisibilityFilters
 
@@ -55,7 +56,8 @@ function viewState(state = {
     selectedPostId: null,
     location: {latitude: undefined, longitude: undefined},
     postSection: "location",
-    postListContainerState: PostListContainerStates.RECENT
+    postListContainerState: PostListContainerStates.RECENT,
+    addPost: {visible: false, ancestor: undefined},
 }, action) {
     switch (action.type) {
         case SELECT_POST:
@@ -66,6 +68,8 @@ function viewState(state = {
             return Object.assign({}, state, {postListContainerState: action.state});
         case SWITCH_POST_SECTION:
             return Object.assign({}, state, {postSection: action.section});
+        case SHOW_ADD_POST:
+            return Object.assign({}, state, {addPost: {visible: action.visible, ancestor: action.ancestor}});
         default:
             return state
     }

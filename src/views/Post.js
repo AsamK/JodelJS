@@ -18,18 +18,19 @@ class Post extends Component {
 
     static propTypes = {
         post: React.PropTypes.any.isRequired,
+        parentPostId: React.PropTypes.string,
         author: React.PropTypes.string,
         onPostClick: React.PropTypes.func.isRequired
     };
 
     upvote(e) {
         e.stopPropagation();
-        this.props.dispatch(upVote(this.props.post.post_id));
+        this.props.dispatch(upVote(this.props.post.post_id, this.props.parentPostId));
     }
 
     downvote(e) {
         e.stopPropagation();
-        this.props.dispatch(downVote(this.props.post.post_id));
+        this.props.dispatch(downVote(this.props.post.post_id, this.props.parentPostId));
     }
 
     render() {

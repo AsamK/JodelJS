@@ -19,23 +19,23 @@ export const PostListContainerStates = {
  * action creators
  */
 
-export function upVote(postId) {
+export function upVote(postId, parentPostId) {
     return (dispatch, getState) => {
         // Dispatch a thunk from thunk!
         apiUpVote(postId, (err, res) => {
             if (err == null && res != null) {
-                dispatch(receivePost(res.body.post))
+                dispatch(receivePost(res.body.post, parentPostId))
             }
         });
     }
 }
 
-export function downVote(postId) {
+export function downVote(postId, parentPostId) {
     return (dispatch, getState) => {
         // Dispatch a thunk from thunk!
         apiDownVote(postId, (err, res) => {
             if (err == null && res != null) {
-                dispatch(receivePost(res.body.post))
+                dispatch(receivePost(res.body.post, parentPostId))
             }
         });
     }
@@ -82,10 +82,11 @@ function receivePosts(section, recent, discussed, popular) {
     }
 }
 
-function receivePost(post) {
+function receivePost(post, ancestor) {
     return {
         type: RECEIVE_POSTS,
         entities: [post],
+        ancestor,
         receivedAt: Date.now()
     }
 }

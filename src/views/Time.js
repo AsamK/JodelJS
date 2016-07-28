@@ -24,20 +24,26 @@ export default class Time extends Component {
             diff = 0;
         }
         let age;
-        const hours = Math.trunc(diff / 1000 / 60 / 60);
         let timerInterval;
-        if (hours > 0) {
-            age = hours + "h";
-            timerInterval = 1000 * 60 * 15;
+        const days = Math.trunc(diff / 1000 / 60 / 60 / 24);
+        if (days > 0) {
+            age = days + "d";
+            timerInterval = 1000 * 60 * 60;
         } else {
-            const minutes = Math.trunc(diff / 1000 / 60);
-            if (minutes > 0) {
-                age = minutes + "min";
-                timerInterval = 1000 * 15;
+            const hours = Math.trunc(diff / 1000 / 60 / 60);
+            if (hours > 0) {
+                age = hours + "h";
+                timerInterval = 1000 * 60 * 15;
             } else {
-                const seconds = Math.trunc(diff / 1000);
-                age = seconds + "s";
-                timerInterval = 1000;
+                const minutes = Math.trunc(diff / 1000 / 60);
+                if (minutes > 0) {
+                    age = minutes + "min";
+                    timerInterval = 1000 * 15;
+                } else {
+                    const seconds = Math.trunc(diff / 1000);
+                    age = seconds + "s";
+                    timerInterval = 1000;
+                }
             }
         }
         if (this.timer != undefined) {

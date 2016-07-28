@@ -54,7 +54,7 @@ import {
 function viewState(state = {
     selectedPostId: null,
     location: {latitude: undefined, longitude: undefined},
-    postSection: undefined,
+    postSection: "location",
     postListContainerState: PostListContainerStates.RECENT
 }, action) {
     switch (action.type) {

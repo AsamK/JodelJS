@@ -23,7 +23,7 @@ class Jodel extends Component {
             console.log(res.body)
         });
         this.props.dispatch(updateLocation());
-        this.props.dispatch(switchPostSection("location"));
+        //this.props.dispatch(switchPostSection("location"));
         this.refresh();
         this.timer = setInterval(this.props.refresh, 2000);
     }
@@ -89,7 +89,7 @@ const mapStateToProps = (state) => {
     let items;
     console.log(state);
     const section = state.viewState.postSection;
-    if (section) {
+    if (section && state.postsBySection[section]) {
         switch (state.viewState.postListContainerState) {
             case PostListContainerStates.RECENT:
                 items = state.postsBySection[section].itemsRecent;

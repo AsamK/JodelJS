@@ -156,10 +156,13 @@ export function apiUnfollowChannel(channel, callback) {
     return jodelRequest("PUT", Settings.API_SERVER + Settings.API_PATH_V3 + "/user/unfollowChannel", {channel: channel}, {}, callback);
 }
 
-export function apiAddPost(color, latitude, longitude, message, callback) {
-    return jodelRequest("POST", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/", {}, {color, message, location: {loc_accuracy: 0.0, city: "Nimmerland", country: "DE", loc_coordinates: {lat: latitude, lng: longitude}}}, callback);
+export function apiAddPost(color, loc_accuracy, latitude, longitude, city, country, message, callback) {
+    return jodelRequest("POST", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/", {}, {color, message, location: {loc_accuracy, city, country, loc_coordinates: {lat: latitude, lng: longitude}}}, callback);
 }
 
+export function apiAddPostComment(ancestorPostId, color, loc_accuracy, latitude, longitude, city, country, message, callback) {
+    return jodelRequest("POST", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/", {}, {ancestor: ancestorPostId, color, message, location: {loc_accuracy, city, country, loc_coordinates: {lat: latitude, lng: longitude}}}, callback);
+}
 
 export function apiGetConfig(callback) {
     return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V3 + "/user/config", {}, {}, callback);

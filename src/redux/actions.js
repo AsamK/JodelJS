@@ -129,14 +129,17 @@ function shouldFetchPosts(section, state) {
 
 export function fetchPostsIfNeeded(section) {
     return (dispatch, getState) => {
+        if (section === undefined) {
+            section = getState().viewState.postSection;
+        }
         if (shouldFetchPosts(section, getState())) {
             switch (section) {
                 case "location":
-                apiGetPostsCombo(getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
-                    if (err == null && res != null) {
-                        dispatch(receivePosts(section, res.body.recent, res.body.replied, res.body.voted))
-                    }
-                });
+                    apiGetPostsCombo(getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
+                        if (err == null && res != null) {
+                            dispatch(receivePosts(section, res.body.recent, res.body.replied, res.body.voted))
+                        }
+                    });
             }
         }
     }
@@ -148,7 +151,7 @@ export function updatePosts() {
         dispatch(invalidatePosts(section));
         dispatch(fetchPostsIfNeeded(section));
     }
- }
+}
 
 
 export function fetchPost(postId) {
@@ -188,12 +191,11 @@ export function updateLocation() {
     }
 }
 
-export function addPost(text) {
+export function addPost(text, color = "FF9908") {
     return (dispatch, getState) => {
         // Dispatch a thunk from thunk!
-        const color = "FF9908";
         const loc = getState().viewState.location;
-        apiAddPost(color, loc.latitude, loc.longitude, text, (err, res) => {
+        apiAddPost(color, 0.0, loc.latitude, loc.longitude, "Nimmerland", "DE", text, (err, res) => {
             if (err == null && res != null) {
                 dispatch(receivePost(res.body))
             }

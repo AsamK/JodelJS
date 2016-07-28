@@ -6,16 +6,20 @@ export default class Time extends Component {
     static propTypes = {
         time: React.PropTypes.string.isRequired,
     };
+
     componentDidMount() {
         this.timer = setInterval(this.tick.bind(this), 1000);
     }
+
     tick() {
         this.forceUpdate();
     }
+
     componentWillUnmount() {
         clearInterval(this.timer);
         this.timer = undefined;
     }
+
     render() {
         const {time, ...forwardProps} = this.props;
         let diff = new Date() - new Date(time);

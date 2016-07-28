@@ -1,7 +1,7 @@
 'use strict';
 
 import React, {Component} from "react";
-import classnames from 'classnames';
+import classnames from "classnames";
 
 export default class Vote extends Component {
     static propTypes = {

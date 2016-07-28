@@ -2,7 +2,6 @@
 
 import React, {Component} from "react";
 import {connect} from "react-redux";
-
 import Vote from "./Vote";
 import Time from "./Time";
 import ChildInfo from "./ChildInfo";
@@ -38,7 +37,10 @@ class Post extends Component {
         return (
             <div className="post" style={{backgroundColor: "#" + post.color}} onClick={onPostClick}>
                 {post.hasOwnProperty('thumbnail_url') ?
-                    <a href={"https:" + post.image_url} target="_blank" onClick={(e) => {e.stopPropagation();return false;}}>
+                    <a href={"https:" + post.image_url} target="_blank" onClick={(e) => {
+                        e.stopPropagation();
+                        return false;
+                    }}>
                         <div className="postPicture"
                              style={{backgroundImage: "url(https:" + post.thumbnail_url + ")"}}></div>
                     </a> :
@@ -53,6 +55,7 @@ class Post extends Component {
             </div>
         );
     }
-};
+}
+;
 
 export default connect()(Post);

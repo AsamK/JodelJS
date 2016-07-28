@@ -64,15 +64,26 @@ export function apiGetPosts(callback) {
 }
 
 export function apiGetPostsCombo(latitude, longitude, callback) {
-    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/combo", {lat: latitude, lng: longitude}, {}, callback);
+    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/combo", {
+        lat: latitude,
+        lng: longitude
+    }, {}, callback);
 }
 
 export function apiGetPostsPopular(afterPostId, latitude, longitude, callback) {
-    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/popular", {after: afterPostId, lat: latitude, lng: longitude}, {}, callback);
+    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/popular", {
+        after: afterPostId,
+        lat: latitude,
+        lng: longitude
+    }, {}, callback);
 }
 
 export function apiGetPostsDiscussed(afterPostId, latitude, longitude, callback) {
-    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/discussed", {after: afterPostId, lat: latitude, lng: longitude}, {}, callback);
+    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/discussed", {
+        after: afterPostId,
+        lat: latitude,
+        lng: longitude
+    }, {}, callback);
 }
 
 export function apiGetPostsMineCombo(callback) {
@@ -125,7 +136,6 @@ export function apiGetPostsChannelDiscussed(afterPostId, channel, callback) {
     }
     return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V3 + "/posts/channel/discussed", query, {}, callback);
 }
-
 
 
 export function apiGetPost(post_id, callback) {

@@ -15,7 +15,6 @@ import {
     updateLocation,
     updatePosts
 } from "../redux/actions";
-import {switchPostSection} from "../redux/actions";
 
 class Jodel extends Component {
     componentDidMount() {

@@ -30,6 +30,7 @@ class PostListContainer extends Component {
             </div>
         );
     }
-};
+}
+;
 
 export default connect()(PostListContainer);

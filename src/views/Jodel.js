@@ -14,7 +14,8 @@ import {
     PostListContainerStates,
     updateLocation,
     updatePosts,
-    showAddPost
+    showAddPost,
+    fetchMorePosts
 } from "../redux/actions";
 
 class Jodel extends Component {
@@ -23,7 +24,7 @@ class Jodel extends Component {
             console.log(res.body)
         });
         this.props.dispatch(updateLocation());
-        //this.props.dispatch(switchPostSection("location"));
+        //this.props.dispatch(switchPostSection("mine"));
         this.refresh();
         this.timer = setInterval(this.props.refresh, 2000);
     }
@@ -55,12 +56,16 @@ class Jodel extends Component {
         this.props.dispatch(showAddPost(true, this.props.selectedPost.post_id));
     }
 
+    onLoadMore() {
+        this.props.dispatch(fetchMorePosts());
+    }
 
     render() {
         return <div className="jodel">
             <div className={classnames("list", {postShown: this.props.selectedPost != null})}>
-                <PostListContainer posts={this.props.posts} onPostClick={this.handleClick.bind(this)}
-                                   onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}/>
+                <PostListContainer onPostClick={this.handleClick.bind(this)}
+                                   onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}
+                                   onLoadMore={this.onLoadMore.bind(this)}/>
             </div>
             <div className={classnames("detail", {postShown: this.props.selectedPost != null})}>
                 <PostDetails post={this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost()}
@@ -96,25 +101,8 @@ function getEmptyPost() {
 }
 
 const mapStateToProps = (state) => {
-    let items;
-    const section = state.viewState.postSection;
-    if (section && state.postsBySection[section]) {
-        switch (state.viewState.postListContainerState) {
-            case PostListContainerStates.RECENT:
-                items = state.postsBySection[section].itemsRecent;
-                break;
-            case PostListContainerStates.DISCUSSED:
-                items = state.postsBySection[section].itemsDiscussed;
-                break;
-            case PostListContainerStates.POPULAR:
-                items = state.postsBySection[section].itemsPopular;
-        }
-    } else {
-        items = [];
-    }
     return {
         section: state.viewState.postSection,
-        posts: items.map(post_id => state.entities[post_id]),
         selectedPost: state.viewState.selectedPostId != null ? state.entities[state.viewState.selectedPostId] : null
     }
 };

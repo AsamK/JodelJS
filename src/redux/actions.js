@@ -5,7 +5,8 @@ import {
     apiDownVote,
     apiSetPlace,
     apiAddPost,
-    apiGetPostsMineCombo
+    apiGetPostsMineCombo,
+    apiGetPostsRecent
 } from "../app/api";
 
 /*
@@ -99,6 +100,20 @@ function receivePosts(section, recent, discussed, popular) {
     }
 }
 
+function receivePostsAppend(section, listType, items) {
+    let posts = {};
+    items.forEach(post => posts[post.post_id] = post);
+    return {
+        type: RECEIVE_POSTS,
+        section,
+        listType,
+        append: true,
+        posts: items.map(post => post.post_id),
+        entities: items,
+        receivedAt: Date.now()
+    }
+}
+
 function receivePost(post, ancestor) {
     return {
         type: RECEIVE_POSTS,
@@ -134,6 +149,14 @@ function invalidatePosts(section) {
     }
 }
 
+export const SET_IS_FETCHING = 'SET_IS_FETCHING';
+function setIsFetching(section) {
+    return {
+        section,
+        type: SET_IS_FETCHING,
+    }
+}
+
 function shouldFetchPosts(section, state) {
     const posts = state.postsBySection[section];
     if (!posts) {
@@ -151,6 +174,7 @@ export function fetchPostsIfNeeded(section) {
             section = getState().viewState.postSection;
         }
         if (shouldFetchPosts(section, getState())) {
+            dispatch(setIsFetching(section));
             switch (section) {
                 case "location":
                     apiGetPostsCombo(getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
@@ -158,13 +182,50 @@ export function fetchPostsIfNeeded(section) {
                             dispatch(receivePosts(section, res.body.recent, res.body.replied, res.body.voted))
                         }
                     });
+                    break;
                 case "mine":
                     apiGetPostsMineCombo((err, res) => {
                         if (err == null && res != null) {
                             dispatch(receivePosts(section, res.body.recent, res.body.replied, res.body.voted))
                         }
                     });
+                    break;
             }
+        }
+    }
+}
+
+export function fetchMorePosts(section, listType) {
+    return (dispatch, getState) => {
+        if (section === undefined) {
+            section = getState().viewState.postSection;
+        }
+        if (listType === undefined) {
+            listType = getState().viewState.postListContainerState;
+        }
+        if (getState().postsBySection[section] == undefined || getState().postsBySection[section].isFetching) {
+            return;
+        }
+        switch (section) {
+            case "location":
+                switch (listType) {
+                    case "RECENT":
+                        const items = getState().postsBySection[section].itemsRecent;
+                        let afterId;
+                        if (items) {
+                            afterId = items[items.length - 1];
+                        }
+                        dispatch(setIsFetching(section));
+                        apiGetPostsRecent(afterId, getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
+                            if (err == null && res != null) {
+                                dispatch(receivePostsAppend(section, listType, res.body.posts));
+                            }
+                        });
+                        break;
+                }
+                break;
+            case "mine":
+
         }
     }
 }

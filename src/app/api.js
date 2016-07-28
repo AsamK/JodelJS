@@ -70,6 +70,14 @@ export function apiGetPostsCombo(latitude, longitude, callback) {
     }, {}, callback);
 }
 
+export function apiGetPostsRecent(afterPostId, latitude, longitude, callback) {
+    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/", {
+        after: afterPostId,
+        lat: latitude,
+        lng: longitude
+    }, {}, callback);
+}
+
 export function apiGetPostsPopular(afterPostId, latitude, longitude, callback) {
     return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/popular", {
         after: afterPostId,

@@ -13,7 +13,8 @@ export default class PostList extends Component {
     static propTypes = {
         posts: React.PropTypes.array.isRequired,
         parentPost: React.PropTypes.any,
-        onPostClick: React.PropTypes.func.isRequired
+        onPostClick: React.PropTypes.func.isRequired,
+        onLoadMore: React.PropTypes.func
     };
 
     _onPostClick(post) {
@@ -22,6 +23,11 @@ export default class PostList extends Component {
 
     componentDidMount() {
         this._scrollable.addEventListener('scroll', this._onScroll);
+        this._lastScrollHeight = 0;
+    }
+
+    componentDidUpdate() {
+        this._lastScrollHeight = 0;
     }
 
     componentWillUnmount() {
@@ -29,10 +35,19 @@ export default class PostList extends Component {
     }
 
     _onScroll(event) {
-        if (!this._scrollable) {
+        if (!this._scrollable || !this.props.onLoadMore) {
             return;
         }
-        console.log(this._scrollable.scrollTop);
+        if (this._lastScrollHeight != this._scrollable.scrollHeight && this._scrollable.scrollTop > 0 && this._scrollable.scrollTop + this._scrollable.clientHeight >= this._scrollable.scrollHeight - 100) {
+            this._lastScrollHeight = this._scrollable.scrollHeight;
+            this.props.onLoadMore();
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.listState != this.props.listState) {
+            this._scrollable.scrollTop = 0;
+        }
     }
 
     render() {

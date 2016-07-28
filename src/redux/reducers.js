@@ -7,7 +7,8 @@ import {
     INVALIDATE_POSTS,
     SWITCH_POST_SECTION,
     PostListContainerStates,
-    SHOW_ADD_POST
+    SHOW_ADD_POST,
+    SET_IS_FETCHING
 } from "./actions";
 //const {SHOW_ALL} = VisibilityFilters
 
@@ -119,28 +120,46 @@ function posts(state = {
                 didInvalidate: false,
                 lastUpdated: action.receivedAt
             };
-            if (action.postsRecent != undefined) {
-                newState.itemsRecent = action.postsRecent;
-            }
-            if (action.postsDiscussed != undefined) {
-                newState.itemsDiscussed = action.postsDiscussed;
-            }
-            if (action.postsPopular != undefined) {
-                newState.itemsPopular = action.postsPopular;
+            if (action.append) {
+                switch (action.listType.toLowerCase()) {
+                    case "recent":
+                        newState.itemsRecent = state.itemsRecent.concat(action.posts);
+                        break;
+                    case "discussed":
+                        newState.itemsDiscussed = state.itemsDiscussed.concat(action.posts);
+                        break;
+                    case "popular":
+                        newState.itemsPopular = state.itemsPopular.concat(action.posts);
+                        break;
+                }
+            } else {
+                if (action.postsRecent != undefined) {
+                    newState.itemsRecent = action.postsRecent;
+                }
+                if (action.postsDiscussed != undefined) {
+                    newState.itemsDiscussed = action.postsDiscussed;
+                }
+                if (action.postsPopular != undefined) {
+                    newState.itemsPopular = action.postsPopular;
+                }
             }
             return Object.assign({}, state, newState);
         case INVALIDATE_POSTS:
             return Object.assign({}, state, {didInvalidate: true});
+        case SET_IS_FETCHING:
+            return Object.assign({}, state, {isFetching: true});
         default:
             return state
     }
 }
 
 function postsBySection(state = {}, action) {
+    console.log(action);
     switch (action.type) {
         case RECEIVE_POSTS:
         case INVALIDATE_POSTS:
         case SWITCH_POST_SECTION:
+        case SET_IS_FETCHING:
             let newState = {};
             newState[action.section] = posts(state[action.section], action);
             return Object.assign({}, state, newState);

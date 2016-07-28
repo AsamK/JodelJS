@@ -13,17 +13,17 @@ class PostListContainer extends Component {
     }
 
     static propTypes = {
-        posts: React.PropTypes.array.isRequired,
         onPostClick: React.PropTypes.func.isRequired,
         onRefresh: React.PropTypes.func.isRequired,
         onAddClick: React.PropTypes.func.isRequired,
+        onLoadMore: React.PropTypes.func.isRequired,
     };
 
     render() {
-        const {posts, onPostClick, onRefresh, onAddClick, ...forwardProps} = this.props;
+        const {posts, listState, onPostClick, onRefresh, onAddClick, onLoadMore, ...forwardProps} = this.props;
         return (
             <div className="postListContainer">
-                <PostList posts={posts} onPostClick={onPostClick}/>
+                <PostList listState={listState} posts={posts} onPostClick={onPostClick} onLoadMore={onLoadMore}/>
                 <AddButton onClick={onAddClick}/>
                 <div className="sections">
                     <SectionLink section={PostListContainerStates.RECENT}></SectionLink>
@@ -35,5 +35,28 @@ class PostListContainer extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    let items;
+    const section = state.viewState.postSection;
+    if (section && state.postsBySection[section]) {
+        switch (state.viewState.postListContainerState) {
+            case PostListContainerStates.RECENT:
+                items = state.postsBySection[section].itemsRecent;
+                break;
+            case PostListContainerStates.DISCUSSED:
+                items = state.postsBySection[section].itemsDiscussed;
+                break;
+            case PostListContainerStates.POPULAR:
+                items = state.postsBySection[section].itemsPopular;
+                break;
+        }
+    } else {
+        items = [];
+    }
+    return {
+        listState: state.viewState.postListContainerState,
+        posts: items.map(post_id => state.entities[post_id]),
+    }
+};
 
-export default connect()(PostListContainer);
+export default connect(mapStateToProps)(PostListContainer);

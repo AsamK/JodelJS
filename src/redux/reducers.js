@@ -11,6 +11,12 @@ import {
     SET_IS_FETCHING
 } from "./actions";
 
+export const VIEW_STATE_VERSION = 1;
+export function migrateViewState(storedState, oldVersion) {
+    //if (oldVersion < 2) {
+    //}
+    return storedState;
+}
 function viewState(state = {
     selectedPostId: null,
     location: {latitude: undefined, longitude: undefined},

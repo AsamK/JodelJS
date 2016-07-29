@@ -167,6 +167,10 @@ function shouldFetchPosts(section, state) {
 
 export function fetchPostsIfNeeded(section) {
     return (dispatch, getState) => {
+        if (getState().viewState.selectedPostId != null) {
+            dispatch(fetchPost(getState().viewState.selectedPostId ));
+        }
+
         if (section === undefined) {
             section = getState().viewState.postSection;
         }

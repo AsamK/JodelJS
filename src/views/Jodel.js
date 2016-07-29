@@ -27,7 +27,7 @@ class Jodel extends Component {
         this.props.dispatch(switchPostSection("location"));
         //this.props.dispatch(switchPostSection("mine"));
         this.refresh();
-        this.timer = setInterval(this.props.refresh, 2000);
+        this.timer = setInterval(this.refresh.bind(this), 10000);
     }
 
     componentWillUnmount() {
@@ -40,9 +40,6 @@ class Jodel extends Component {
 
     refresh() {
         this.props.dispatch(fetchPostsIfNeeded());
-        if (this.props.selectedPost != null) {
-            this.props.dispatch(fetchPost(this.props.selectedPost.post_id));
-        }
     }
 
     handleClick(post) {

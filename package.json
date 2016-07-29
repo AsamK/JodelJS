@@ -45,8 +45,9 @@
     "start": "npm run watch-js & npm run watch-css",
     "watch-js": "watchify -o build-debug/main.js -v -d src/app/main.js",
     "watch-css": "fsmonitor -s -p -d style/ lessc --npm-import --autoprefix=\"> 0.5%\" style/main.less build-debug/main.css",
-    "build": "npm run build-js",
+    "build": "npm run build-js & npm run build-css",
     "build-js": "NODE_ENV=production browserify src/app/main.js -t [ babelify --presets [ es2015 stage-0 react ] --plugins [ transform-react-inline-elements transform-react-constant-elements ]] -t [envify] | uglifyjs -cm > build/main.js",
+    "build-css": "lessc --clean-css=\"--s1 --advanced --compatibility=ie8\" --npm-import --autoprefix=\"> 0.5%\" style/main.less build/main.css",
     "updatepackages": "ncu -u -a"
   },
   "browserify": {

@@ -45,7 +45,7 @@ export default class PostList extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.listState != this.props.listState) {
+        if (prevProps.sortType != this.props.sortType) {
             this._scrollable.scrollTop = 0;
         }
     }

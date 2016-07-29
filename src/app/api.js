@@ -3,6 +3,7 @@
 import request from "superagent";
 import Settings from "../app/settings";
 import CryptoJS from "crypto-js";
+import {PostListSortTypes} from "../redux/actions";
 
 function ajax_request(method, headers, url, query, data, callback) {
     let r;
@@ -59,9 +60,9 @@ export function jodelRequest(method, url, query, data, callback) {
     ajax_request(method, headers, url, query, data, callback);
 }
 
-export function apiGetPosts(callback) {
-    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/", {}, {}, callback);
-}
+/*export function apiGetPosts(callback) {
+ return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/", {}, {}, callback);
+ }*/
 
 export function apiGetPostsCombo(latitude, longitude, callback) {
     return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/combo", {
@@ -70,24 +71,20 @@ export function apiGetPostsCombo(latitude, longitude, callback) {
     }, {}, callback);
 }
 
-export function apiGetPostsRecent(afterPostId, latitude, longitude, callback) {
-    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/", {
-        after: afterPostId,
-        lat: latitude,
-        lng: longitude
-    }, {}, callback);
-}
-
-export function apiGetPostsPopular(afterPostId, latitude, longitude, callback) {
-    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/popular", {
-        after: afterPostId,
-        lat: latitude,
-        lng: longitude
-    }, {}, callback);
-}
-
-export function apiGetPostsDiscussed(afterPostId, latitude, longitude, callback) {
-    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/discussed", {
+export function apiGetPosts(sortType, afterPostId, latitude, longitude, callback) {
+    let type;
+    switch (sortType) {
+        case PostListSortTypes.RECENT:
+            type = "";
+            break;
+        case PostListSortTypes.DISCUSSED:
+            type = "discussed";
+            break;
+        case PostListSortTypes.POPULAR:
+            type = "popular";
+            break;
+    }
+    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/location/" + type, {
         after: afterPostId,
         lat: latitude,
         lng: longitude

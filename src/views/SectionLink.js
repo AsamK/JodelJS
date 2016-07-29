@@ -3,7 +3,7 @@
 import React, {PropTypes} from "react";
 import {connect} from "react-redux";
 import classnames from "classnames";
-import {switchPostListContainerState} from "../redux/actions";
+import {switchPostListSortType} from "../redux/actions";
 
 const SectionLink = ({section, onClick}) => (
     <div className={classnames("section ", section.toLowerCase())} onClick={onClick}></div>
@@ -11,7 +11,7 @@ const SectionLink = ({section, onClick}) => (
 
 SectionLink.propTypes = {
     section: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired,
+    onClick: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -23,7 +23,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onClick: () => {
-            dispatch(switchPostListContainerState(ownProps.section))
+            dispatch(switchPostListSortType(ownProps.section))
         }
     }
 }

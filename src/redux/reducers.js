@@ -3,61 +3,19 @@ import {
     RECEIVE_POSTS,
     SELECT_POST,
     SET_LOCATION,
-    SWITCH_POST_LIST_CONTAINER_STATE,
+    SWITCH_POST_LIST_SORT_TYPE,
     INVALIDATE_POSTS,
     SWITCH_POST_SECTION,
-    PostListContainerStates,
+    PostListSortTypes,
     SHOW_ADD_POST,
     SET_IS_FETCHING
 } from "./actions";
-//const {SHOW_ALL} = VisibilityFilters
 
-/*let x = {
- entities: {
- posts: {
- "post_id1": {"POST"},
- "post_id2": {"POST"}
- }
- },
- postsBySection: {
- location: {
- isFetching: false,
- didInvalidate: false,
- itemsRecent: ["post_id1", "post_id2"],
- itemsDiscussed: [],
- itemsPopular: []
- },
- mine: {
- isFetching: false,
- itemsRecent: ["post_id1", "post_id2"],
- itemsDiscussed: [],
- itemsPopular: []
- },
- myResponses: {
- isFetching: false,
- itemsRecent: ["post_id1", "post_id2"],
- itemsDiscussed: [],
- itemsPopular: []
- },
- myVotes: {
- isFetching: false,
- itemsRecent: ["post_id1", "post_id2"],
- itemsDiscussed: [],
- itemsPopular: []
- },
- channel_jhj: {
- isFetching: false,
- itemsRecent: ["post_id1", "post_id2"],
- itemsDiscussed: [],
- itemsPopular: []
- }
- };
- */
 function viewState(state = {
     selectedPostId: null,
     location: {latitude: undefined, longitude: undefined},
     postSection: "location",
-    postListContainerState: PostListContainerStates.RECENT,
+    postListSortType: PostListSortTypes.RECENT,
     addPost: {visible: false, ancestor: undefined},
 }, action) {
     switch (action.type) {
@@ -65,8 +23,8 @@ function viewState(state = {
             return Object.assign({}, state, {selectedPostId: action.postId});
         case SET_LOCATION:
             return Object.assign({}, state, {location: action.location});
-        case SWITCH_POST_LIST_CONTAINER_STATE:
-            return Object.assign({}, state, {postListContainerState: action.state});
+        case SWITCH_POST_LIST_SORT_TYPE:
+            return Object.assign({}, state, {postListSortType: action.sortType});
         case SWITCH_POST_SECTION:
             return Object.assign({}, state, {postSection: action.section});
         case SHOW_ADD_POST:
@@ -105,56 +63,42 @@ function entities(state = {}, action) {
     return state;
 }
 
+function uniq(a) {
+    var seen = {};
+    return a.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
+}
+
 function posts(state = {
     isFetching: false,
     didInvalidate: true,
-    itemsRecent: [],
-    itemsDiscussed: [],
-    itemsPopular: [],
     lastUpdates: null
 }, action) {
     switch (action.type) {
         case RECEIVE_POSTS:
+            if (action.postsBySortType === undefined) {
+                return state;
+            }
             let newState = {
                 isFetching: false,
-                didInvalidate: false,
-                lastUpdated: action.receivedAt
+                lastUpdated: action.receivedAt,
             };
             if (action.append) {
-                switch (action.listType.toLowerCase()) {
-                    case "recent":
-                        newState.itemsRecent = state.itemsRecent.concat(action.posts);
-                        break;
-                    case "discussed":
-                        newState.itemsDiscussed = state.itemsDiscussed.concat(action.posts);
-                        break;
-                    case "popular":
-                        newState.itemsPopular = state.itemsPopular.concat(action.posts);
-                        break;
-                }
+                action.postsBySortType.forEach(p => newState[p.sortType] = uniq(state[p.sortType].concat(p.posts)));
             } else {
-                if (action.postsRecent != undefined) {
-                    newState.itemsRecent = action.postsRecent;
-                }
-                if (action.postsDiscussed != undefined) {
-                    newState.itemsDiscussed = action.postsDiscussed;
-                }
-                if (action.postsPopular != undefined) {
-                    newState.itemsPopular = action.postsPopular;
-                }
+                newState.didInvalidate = false;
+                action.postsBySortType.forEach(p => newState[p.sortType] = p.posts);
             }
             return Object.assign({}, state, newState);
         case INVALIDATE_POSTS:
             return Object.assign({}, state, {didInvalidate: true});
         case SET_IS_FETCHING:
-            return Object.assign({}, state, {isFetching: true});
+            return Object.assign({}, state, {isFetching: action.isFetching});
         default:
             return state
     }
 }
 
 function postsBySection(state = {}, action) {
-    console.log(action);
     switch (action.type) {
         case RECEIVE_POSTS:
         case INVALIDATE_POSTS:
@@ -174,4 +118,4 @@ const JodelApp = combineReducers({
     viewState,
 });
 
-export default JodelApp
+export default JodelApp;

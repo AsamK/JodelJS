@@ -2,7 +2,7 @@
 
 import React, {Component} from "react";
 import PostList from "./PostList";
-import {PostListContainerStates} from "../redux/actions";
+import {PostListSortTypes} from "../redux/actions";
 import SectionLink from "./SectionLink";
 import AddButton from "./AddButton";
 import {connect} from "react-redux";
@@ -20,15 +20,15 @@ class PostListContainer extends Component {
     };
 
     render() {
-        const {posts, listState, onPostClick, onRefresh, onAddClick, onLoadMore, ...forwardProps} = this.props;
+        const {posts, sortType, onPostClick, onRefresh, onAddClick, onLoadMore, ...forwardProps} = this.props;
         return (
             <div className="postListContainer">
-                <PostList listState={listState} posts={posts} onPostClick={onPostClick} onLoadMore={onLoadMore}/>
+                <PostList sortType={sortType} posts={posts} onPostClick={onPostClick} onLoadMore={onLoadMore}/>
                 <AddButton onClick={onAddClick}/>
                 <div className="sections">
-                    <SectionLink section={PostListContainerStates.RECENT}></SectionLink>
-                    <SectionLink section={PostListContainerStates.DISCUSSED}></SectionLink>
-                    <SectionLink section={PostListContainerStates.POPULAR}></SectionLink>
+                    <SectionLink section={PostListSortTypes.RECENT}/>
+                    <SectionLink section={PostListSortTypes.DISCUSSED}/>
+                    <SectionLink section={PostListSortTypes.POPULAR}/>
                 </div>
             </div>
         );
@@ -36,26 +36,17 @@ class PostListContainer extends Component {
 }
 
 const mapStateToProps = (state) => {
-    let items;
+    let posts;
     const section = state.viewState.postSection;
-    if (section && state.postsBySection[section]) {
-        switch (state.viewState.postListContainerState) {
-            case PostListContainerStates.RECENT:
-                items = state.postsBySection[section].itemsRecent;
-                break;
-            case PostListContainerStates.DISCUSSED:
-                items = state.postsBySection[section].itemsDiscussed;
-                break;
-            case PostListContainerStates.POPULAR:
-                items = state.postsBySection[section].itemsPopular;
-                break;
-        }
+    const sortType = state.viewState.postListSortType;
+    if (section !== undefined && state.postsBySection[section] !== undefined && state.postsBySection[section][sortType] !== undefined) {
+        posts = state.postsBySection[section][sortType];
     } else {
-        items = [];
+        posts = [];
     }
     return {
-        listState: state.viewState.postListContainerState,
-        posts: items.map(post_id => state.entities[post_id]),
+        sortType,
+        posts: posts.map(post_id => state.entities[post_id]),
     }
 };
 

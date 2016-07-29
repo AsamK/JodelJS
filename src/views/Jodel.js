@@ -11,7 +11,6 @@ import {
     fetchPostsIfNeeded,
     fetchPost,
     selectPost,
-    PostListContainerStates,
     updateLocation,
     updatePosts,
     showAddPost,

@@ -6,7 +6,7 @@ import {
     apiSetPlace,
     apiAddPost,
     apiGetPostsMineCombo,
-    apiGetPostsRecent
+    apiGetPosts
 } from "../app/api";
 
 /*
@@ -18,10 +18,10 @@ export const NEW_POSTS = 'NEW_POSTS';
  * other constants
  */
 
-export const PostListContainerStates = {
-    RECENT: 'RECENT',
-    DISCUSSED: 'DISCUSSED',
-    POPULAR: 'POPULAR'
+export const PostListSortTypes = {
+    RECENT: 'recent',
+    DISCUSSED: 'discussed',
+    POPULAR: 'popular'
 };
 
 /*
@@ -50,19 +50,11 @@ export function downVote(postId, parentPostId) {
     }
 }
 
-export const REQUEST_POSTS_LOCATION = 'REQUEST_POSTS_LOCATION';
-function requestPostsLocation() {
+export const SWITCH_POST_LIST_SORT_TYPE = 'SWITCH_POST_LIST_CONTAINER_STATE';
+export function switchPostListSortType(sortType) {
     return {
-        type: REQUEST_POSTS_LOCATION,
-        subreddit
-    }
-}
-
-export const SWITCH_POST_LIST_CONTAINER_STATE = 'SWITCH_POST_LIST_CONTAINER_STATE';
-export function switchPostListContainerState(state) {
-    return {
-        type: SWITCH_POST_LIST_CONTAINER_STATE,
-        state
+        type: SWITCH_POST_LIST_SORT_TYPE,
+        sortType
     }
 }
 
@@ -84,34 +76,38 @@ export function showAddPost(visible, ancestor) {
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
-function receivePosts(section, recent, discussed, popular) {
-    let posts = {};
-    recent.forEach(post => posts[post.post_id] = post);
-    discussed.forEach(post => posts[post.post_id] = post);
-    popular.forEach(post => posts[post.post_id] = post);
-    return {
+function receivePosts(section, postsBySortType, append = false) {
+    let res = {
         type: RECEIVE_POSTS,
         section,
-        postsRecent: recent.map(post => post.post_id),
-        postsDiscussed: discussed.map(post => post.post_id),
-        postsPopular: popular.map(post => post.post_id),
-        entities: recent.concat(discussed).concat(popular),
-        receivedAt: Date.now()
-    }
-}
+        postsBySortType: [],
+        entities: [],
+        receivedAt: Date.now(),
+        append
+    };
 
-function receivePostsAppend(section, listType, items) {
-    let posts = {};
-    items.forEach(post => posts[post.post_id] = post);
-    return {
-        type: RECEIVE_POSTS,
-        section,
-        listType,
-        append: true,
-        posts: items.map(post => post.post_id),
-        entities: items,
-        receivedAt: Date.now()
+    if (postsBySortType.recent !== undefined) {
+        res.entities = res.entities.concat(postsBySortType.recent);
+        res.postsBySortType.push({
+            sortType: PostListSortTypes.RECENT,
+            posts: postsBySortType.recent.map(post => post.post_id),
+        });
     }
+    if (postsBySortType.discussed !== undefined) {
+        res.entities = res.entities.concat(postsBySortType.discussed);
+        res.postsBySortType.push({
+            sortType: PostListSortTypes.DISCUSSED,
+            posts: postsBySortType.discussed.map(post => post.post_id),
+        });
+    }
+    if (postsBySortType.popular !== undefined) {
+        res.entities = res.entities.concat(postsBySortType.popular);
+        res.postsBySortType.push({
+            sortType: PostListSortTypes.POPULAR,
+            posts: postsBySortType.popular.map(post => post.post_id),
+        });
+    }
+    return res;
 }
 
 function receivePost(post, ancestor) {
@@ -150,16 +146,17 @@ function invalidatePosts(section) {
 }
 
 export const SET_IS_FETCHING = 'SET_IS_FETCHING';
-function setIsFetching(section) {
+function setIsFetching(section, isFetching = true) {
     return {
         section,
+        isFetching,
         type: SET_IS_FETCHING,
     }
 }
 
 function shouldFetchPosts(section, state) {
     const posts = state.postsBySection[section];
-    if (!posts) {
+    if (posts === undefined) {
         return true
     } else if (posts.isFetching) {
         return false
@@ -179,14 +176,26 @@ export function fetchPostsIfNeeded(section) {
                 case "location":
                     apiGetPostsCombo(getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
                         if (err == null && res != null) {
-                            dispatch(receivePosts(section, res.body.recent, res.body.replied, res.body.voted))
+                            dispatch(receivePosts(section, {
+                                recent: res.body.recent,
+                                discussed: res.body.replied,
+                                popular: res.body.voted
+                            }))
+                        } else {
+                            dispatch(setIsFetching(section, false));
                         }
                     });
                     break;
                 case "mine":
                     apiGetPostsMineCombo((err, res) => {
                         if (err == null && res != null) {
-                            dispatch(receivePosts(section, res.body.recent, res.body.replied, res.body.voted))
+                            dispatch(receivePosts(section, {
+                                recent: res.body.recent,
+                                discussed: res.body.replied,
+                                popular: res.body.voted
+                            }))
+                        } else {
+                            dispatch(setIsFetching(section, false));
                         }
                     });
                     break;
@@ -195,37 +204,37 @@ export function fetchPostsIfNeeded(section) {
     }
 }
 
-export function fetchMorePosts(section, listType) {
+export function fetchMorePosts(section, sortType) {
     return (dispatch, getState) => {
         if (section === undefined) {
             section = getState().viewState.postSection;
         }
-        if (listType === undefined) {
-            listType = getState().viewState.postListContainerState;
+        if (sortType === undefined) {
+            sortType = getState().viewState.postListSortType;
         }
-        if (getState().postsBySection[section] == undefined || getState().postsBySection[section].isFetching) {
+        const postSection = getState().postsBySection[section];
+        if (postSection === undefined || postSection.isFetching) {
             return;
+        }
+        const posts = postSection[sortType];
+        let afterId;
+        if (posts !== undefined) {
+            afterId = posts[posts.length - 1];
         }
         switch (section) {
             case "location":
-                switch (listType) {
-                    case "RECENT":
-                        const items = getState().postsBySection[section].itemsRecent;
-                        let afterId;
-                        if (items) {
-                            afterId = items[items.length - 1];
-                        }
-                        dispatch(setIsFetching(section));
-                        apiGetPostsRecent(afterId, getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
-                            if (err == null && res != null) {
-                                dispatch(receivePostsAppend(section, listType, res.body.posts));
-                            }
-                        });
-                        break;
-                }
+                dispatch(setIsFetching(section));
+                apiGetPosts(sortType, afterId, getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
+                    if (err == null && res != null) {
+                        let p = {};
+                        p[sortType] = res.body.posts;
+                        dispatch(receivePosts(section, p, true));
+                    } else {
+                        dispatch(setIsFetching(section, false));
+                    }
+                });
                 break;
             case "mine":
-
         }
     }
 }
@@ -238,10 +247,8 @@ export function updatePosts() {
     }
 }
 
-
 export function fetchPost(postId) {
     return (dispatch, getState) => {
-        // Dispatch a thunk from thunk!
         apiGetPost(postId, (err, res) => {
             if (err == null && res != null) {
                 dispatch(receivePost(res.body))
@@ -253,7 +260,6 @@ export function fetchPost(postId) {
 export function selectPost(postId) {
     return (dispatch, getState) => {
         dispatch(_selectPost(postId));
-        // Dispatch a thunk from thunk!
         if (postId != null) {
             dispatch(fetchPost(postId));
         }
@@ -280,9 +286,13 @@ export function addPost(text, ancestor, color = "FF9908") {
     return (dispatch, getState) => {
         dispatch(showAddPost(false));
         let loc = getState().viewState.location;
+        // TODO fallback to location from nearest post
         apiAddPost(ancestor, color, 0.0, loc.latitude, loc.longitude, "Nimmerland", "DE", text, (err, res) => {
             if (err == null && res != null) {
-                dispatch(receivePosts("location", res.body.posts, [], []))
+                dispatch(receivePosts("location", {recent: res.body.posts}))
+            }
+            if (ancestor !== undefined) {
+                dispatch(fetchPost(ancestor));
             }
         });
     }

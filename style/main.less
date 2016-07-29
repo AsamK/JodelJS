@@ -55,7 +55,6 @@ body {
 }
 
 .postListContainer .sections {
-  height: 3em;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -65,6 +64,7 @@ body {
   & .section {
     float: left;
     width: 33%;
+    height: 3em;
     cursor: pointer;
   }
   & .recent {
@@ -139,7 +139,9 @@ body {
 
 .vote .upVote {
   cursor: pointer;
-  padding: 1em 1em 1em 0em;
+  width: 3em;
+  padding-top: 2em;
+  padding-bottom: 1em;
   &::before {
     content: "Up";
   }
@@ -150,7 +152,9 @@ body {
 
 .vote .downVote {
   cursor: pointer;
-  padding: 1em 1em 1em 0em;
+  width: 3em;
+  padding-top: 1em;
+  padding-bottom: 2em;
   &::before {
     content: "Down";
   }
@@ -358,8 +362,9 @@ input[name=product_id] {
   height: 100%;
   background-color: #eeeeee;
   text-align: center;
-  &textarea {
-    height: 100%;
-    width: 80%;
-  }
+}
+
+.addPost textarea {
+  height: 10em;
+  width: 100%;
 }

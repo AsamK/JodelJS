@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {addPost} from "../redux/actions";
+import {addPost, showAddPost} from "../redux/actions";
 import classnames from "classnames";
 
 let AddPost = ({ancestor, visible, dispatch}) => {
@@ -21,6 +21,12 @@ let AddPost = ({ancestor, visible, dispatch}) => {
                 }}/>
                 <button type="submit">
                     Senden
+                </button>
+                <button onClick={e => {
+                    dispatch(showAddPost(false));
+                    input.value = ''
+                }}>
+                    Abbrechen
                 </button>
             </form>
         </div>

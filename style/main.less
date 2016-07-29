@@ -16,7 +16,7 @@ body {
 }
 
 .postList .post:last-child {
-  margin-bottom: 2em;
+  margin-bottom: 3em;
 }
 
 .list {
@@ -33,19 +33,16 @@ body {
   }
 }
 
-.jodel {
-}
-
 .postList {
   overflow-y: scroll;
   height: 100%;
 }
 
 .addButton {
-  width: 4em;
-  height: 4em;
+  width: 6em;
+  height: 5em;
   position: fixed;
-  bottom: 3em;
+  bottom: 5em;
   text-align: center;
   background-color: gray;
   opacity: .5;
@@ -55,11 +52,10 @@ body {
   }
   margin-left: -2em;
   left: 50%;
-
 }
 
 .postListContainer .sections {
-  height: 2em;
+  height: 3em;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -143,6 +139,7 @@ body {
 
 .vote .upVote {
   cursor: pointer;
+  padding: 1em 1em 1em 0em;
   &::before {
     content: "Up";
   }
@@ -153,6 +150,7 @@ body {
 
 .vote .downVote {
   cursor: pointer;
+  padding: 1em 1em 1em 0em;
   &::before {
     content: "Down";
   }

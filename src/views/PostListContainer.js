@@ -20,11 +20,11 @@ class PostListContainer extends Component {
     };
 
     render() {
-        const {posts, sortType, onPostClick, onRefresh, onAddClick, onLoadMore, ...forwardProps} = this.props;
+        const {posts, sortType, locationKnown, onPostClick, onRefresh, onAddClick, onLoadMore, ...forwardProps} = this.props;
         return (
             <div className="postListContainer">
                 <PostList sortType={sortType} posts={posts} onPostClick={onPostClick} onLoadMore={onLoadMore}/>
-                <AddButton onClick={onAddClick}/>
+                {locationKnown ? <AddButton onClick={onAddClick}/> : ""}
                 <div className="sections">
                     <SectionLink section={PostListSortTypes.RECENT}/>
                     <SectionLink section={PostListSortTypes.DISCUSSED}/>
@@ -47,6 +47,7 @@ const mapStateToProps = (state) => {
     return {
         sortType,
         posts: posts.map(post_id => state.entities[post_id]),
+        locationKnown: state.viewState.location.latitude !== undefined,
     }
 };
 

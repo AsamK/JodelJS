@@ -286,7 +286,6 @@ export function addPost(text, ancestor, color = "FF9908") {
     return (dispatch, getState) => {
         dispatch(showAddPost(false));
         let loc = getState().viewState.location;
-        // TODO fallback to location from nearest post
         apiAddPost(ancestor, color, 0.0, loc.latitude, loc.longitude, "Nimmerland", "DE", text, (err, res) => {
             if (err == null && res != null) {
                 dispatch(receivePosts("location", {recent: res.body.posts}))

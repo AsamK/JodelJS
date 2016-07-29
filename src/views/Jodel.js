@@ -14,7 +14,8 @@ import {
     updateLocation,
     updatePosts,
     showAddPost,
-    fetchMorePosts
+    fetchMorePosts,
+    switchPostSection
 } from "../redux/actions";
 
 class Jodel extends Component {
@@ -23,6 +24,7 @@ class Jodel extends Component {
             console.log(res.body)
         });
         this.props.dispatch(updateLocation());
+        this.props.dispatch(switchPostSection("location"));
         //this.props.dispatch(switchPostSection("mine"));
         this.refresh();
         this.timer = setInterval(this.props.refresh, 2000);
@@ -69,7 +71,8 @@ class Jodel extends Component {
             <div className={classnames("detail", {postShown: this.props.selectedPost != null})}>
                 <PostDetails post={this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost()}
                              onPostClick={this.handleClick.bind(this, null)}
-                             onAddClick={this.handleAddCommentClick.bind(this)}/>
+                             onAddClick={this.handleAddCommentClick.bind(this)}
+                             locationKnown={this.props.locationKnown}/>
             </div>
             <AddPost/>
         </div>;
@@ -102,7 +105,8 @@ function getEmptyPost() {
 const mapStateToProps = (state) => {
     return {
         section: state.viewState.postSection,
-        selectedPost: state.viewState.selectedPostId != null ? state.entities[state.viewState.selectedPostId] : null
+        selectedPost: state.viewState.selectedPostId != null ? state.entities[state.viewState.selectedPostId] : null,
+        locationKnown: state.viewState.location.latitude !== undefined,
     }
 };
 

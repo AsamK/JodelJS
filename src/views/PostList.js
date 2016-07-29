@@ -38,7 +38,7 @@ export default class PostList extends Component {
         if (!this._scrollable || !this.props.onLoadMore) {
             return;
         }
-        if (this._lastScrollHeight != this._scrollable.scrollHeight && this._scrollable.scrollTop > 0 && this._scrollable.scrollTop + this._scrollable.clientHeight >= this._scrollable.scrollHeight - 100) {
+        if (this._lastScrollHeight != this._scrollable.scrollHeight && this._scrollable.scrollTop > 0 && this._scrollable.scrollTop + this._scrollable.clientHeight >= this._scrollable.scrollHeight - 500) {
             this._lastScrollHeight = this._scrollable.scrollHeight;
             this.props.onLoadMore();
         }

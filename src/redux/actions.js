@@ -3,10 +3,12 @@ import {
     apiGetPost,
     apiUpVote,
     apiDownVote,
-    apiSetPlace,
     apiAddPost,
     apiGetPostsMineCombo,
-    apiGetPosts
+    apiGetPosts,
+    apiGetKarma,
+    apiGetPostsMineReplies,
+    apiGetPostsMineVotes
 } from "../app/api";
 
 /*
@@ -59,10 +61,22 @@ export function switchPostListSortType(sortType) {
 }
 
 export const SWITCH_POST_SECTION = 'SWITCH_POST_SECTION';
-export function switchPostSection(section) {
+function _switchPostSection(section) {
     return {
         type: SWITCH_POST_SECTION,
         section,
+    }
+}
+
+export function switchPostSection(section) {
+    return (dispatch, getState) => {
+        dispatch(invalidatePosts(section));
+        dispatch(fetchPostsIfNeeded(section));
+        if (getState().viewState.postSection !== section) {
+            dispatch(switchPostListSortType(PostListSortTypes.RECENT));
+            dispatch(_switchPostSection(section));
+        }
+        dispatch(_selectPost(null));
     }
 }
 
@@ -128,6 +142,15 @@ function _selectPost(postId) {
     }
 }
 
+export const SET_KARMA = 'SET_KARMA';
+function _setKarma(karma) {
+    return {
+        type: SET_KARMA,
+        karma,
+        receivedAt: Date.now()
+    }
+}
+
 export const SET_LOCATION = 'SET_LOCATION';
 function setLocation(latitude, longitude) {
     return {
@@ -167,8 +190,9 @@ function shouldFetchPosts(section, state) {
 
 export function fetchPostsIfNeeded(section) {
     return (dispatch, getState) => {
+        dispatch(getKarma());
         if (getState().viewState.selectedPostId != null) {
-            dispatch(fetchPost(getState().viewState.selectedPostId ));
+            dispatch(fetchPost(getState().viewState.selectedPostId));
         }
 
         if (section === undefined) {
@@ -197,6 +221,28 @@ export function fetchPostsIfNeeded(section) {
                                 recent: res.body.recent,
                                 discussed: res.body.replied,
                                 popular: res.body.voted
+                            }))
+                        } else {
+                            dispatch(setIsFetching(section, false));
+                        }
+                    });
+                    break;
+                case "mineReplies":
+                    apiGetPostsMineReplies((err, res) => {
+                        if (err == null && res != null) {
+                            dispatch(receivePosts(section, {
+                                recent: res.body.posts,
+                            }))
+                        } else {
+                            dispatch(setIsFetching(section, false));
+                        }
+                    });
+                    break;
+                case "mineVotes":
+                    apiGetPostsMineVotes(undefined, undefined, (err, res) => {
+                        if (err == null && res != null) {
+                            dispatch(receivePosts(section, {
+                                recent: res.body.posts,
                             }))
                         } else {
                             dispatch(setIsFetching(section, false));
@@ -261,6 +307,16 @@ export function fetchPost(postId) {
     }
 }
 
+export function getKarma() {
+    return (dispatch, getState) => {
+        apiGetKarma((err, res) => {
+            if (err == null && res != null) {
+                dispatch(_setKarma(res.body.karma))
+            }
+        });
+    }
+}
+
 export function selectPost(postId) {
     return (dispatch, getState) => {
         dispatch(_selectPost(postId));
@@ -277,7 +333,7 @@ export function updateLocation() {
             navigator.geolocation.getCurrentPosition(function (position) {
                 if (getState().viewState.location.latitude != position.coords.latitude &&
                     getState().viewState.location.longitude != position.coords.longitude) {
-                    apiSetPlace(position.coords.latitude, position.coords.longitude, "Nimmerland", "DE");
+                    //apiSetPlace(position.coords.latitude, position.coords.longitude, "Nimmerland", "DE");
                     dispatch(setLocation(position.coords.latitude, position.coords.longitude));
                     dispatch(updatePosts());
                 }

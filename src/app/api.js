@@ -104,14 +104,10 @@ export function apiGetPostsMinePinned(callback) {
 }
 
 export function apiGetPostsMineVotes(skip, limit, callback) {
-    let query = {};
-    if (skip) {
-        query.skip = skip;
-    }
-    if (limit) {
-        query.limit = limit;
-    }
-    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/mine/votes", query, {}, callback);
+    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/posts/mine/votes", {
+        skip,
+        limit
+    }, {}, callback);
 }
 
 export function apiGetPostsChannelCombo(channel, callback) {
@@ -182,6 +178,10 @@ export function apiAddPost(ancestorPostId, color, loc_accuracy, latitude, longit
 
 export function apiGetConfig(callback) {
     return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V3 + "/user/config", {}, {}, callback);
+}
+
+export function apiGetKarma(callback) {
+    return jodelRequest("GET", Settings.API_SERVER + Settings.API_PATH_V2 + "/users/karma", {}, {}, callback);
 }
 
 export function apiSetPlace(latitude, longitude, city, country, callback) {

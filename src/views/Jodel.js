@@ -6,10 +6,10 @@ import classnames from "classnames";
 import PostListContainer from "./PostListContainer";
 import PostDetails from "./PostDetails";
 import AddPost from "./AddPost";
+import TopBar from "./TopBar";
 import {apiGetConfig} from "../app/api";
 import {
     fetchPostsIfNeeded,
-    fetchPost,
     selectPost,
     updateLocation,
     updatePosts,
@@ -24,8 +24,6 @@ class Jodel extends Component {
             console.log(res.body)
         });
         this.props.dispatch(updateLocation());
-        this.props.dispatch(switchPostSection("location"));
-        //this.props.dispatch(switchPostSection("mine"));
         this.refresh();
         this.timer = setInterval(this.refresh.bind(this), 10000);
     }
@@ -58,8 +56,13 @@ class Jodel extends Component {
         this.props.dispatch(fetchMorePosts());
     }
 
+    switchPostSection(section) {
+        this.props.dispatch(switchPostSection(section));
+    }
+
     render() {
         return <div className="jodel">
+            <TopBar karma={this.props.karma} switchPostSection={this.switchPostSection.bind(this)}/>
             <div className={classnames("list", {postShown: this.props.selectedPost != null})}>
                 <PostListContainer onPostClick={this.handleClick.bind(this)}
                                    onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}
@@ -104,6 +107,7 @@ const mapStateToProps = (state) => {
         section: state.viewState.postSection,
         selectedPost: state.viewState.selectedPostId != null ? state.entities[state.viewState.selectedPostId] : null,
         locationKnown: state.viewState.location.latitude !== undefined,
+        karma: state.account.karma,
     }
 };
 

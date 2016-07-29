@@ -42,7 +42,6 @@ body {
   width: 6em;
   height: 5em;
   position: fixed;
-  bottom: 5em;
   text-align: center;
   background-color: gray;
   opacity: .5;
@@ -52,6 +51,14 @@ body {
   }
   margin-left: -2em;
   left: 50%;
+}
+
+.postListContainer .addButton {
+  bottom: 5em;
+}
+
+.postDetails .addButton {
+  bottom: 2em;
 }
 
 .postListContainer .sections {
@@ -370,4 +377,26 @@ input[name=product_id] {
 .addPost textarea {
   height: 10em;
   width: 100%;
+}
+
+.topBar {
+  height: 3em;
+  text-align: right;
+  clear:both;
+  width: 100%;
+  background-color: #eeeeee;
+  & .karma {
+    float: right;
+    .subText {
+      font-size: .5em;
+    }
+  }
+}
+
+.topBar .sectionLink {
+  cursor: pointer;
+  margin-top: 1em;
+  margin-right: 1.3em;
+  font-size: .7em;
+  float: left;
 }

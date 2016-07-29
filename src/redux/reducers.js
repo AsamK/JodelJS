@@ -8,7 +8,8 @@ import {
     SWITCH_POST_SECTION,
     PostListSortTypes,
     SHOW_ADD_POST,
-    SET_IS_FETCHING
+    SET_IS_FETCHING,
+    SET_KARMA
 } from "./actions";
 
 export const VIEW_STATE_VERSION = 1;
@@ -118,10 +119,20 @@ function postsBySection(state = {}, action) {
     }
 }
 
+function account(state = {karma: 0}, action) {
+    switch (action.type) {
+        case SET_KARMA:
+            return Object.assign({}, state, {karma: action.karma});
+        default:
+            return state;
+    }
+}
+
 const JodelApp = combineReducers({
     entities,
     postsBySection,
     viewState,
+    account,
 });
 
 export default JodelApp;

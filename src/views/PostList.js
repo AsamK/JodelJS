@@ -26,7 +26,10 @@ export default class PostList extends Component {
         this._lastScrollHeight = 0;
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.sortType != this.props.sortType) {
+            this._scrollable.scrollTop = 0;
+        }
         this._lastScrollHeight = 0;
     }
 
@@ -41,12 +44,6 @@ export default class PostList extends Component {
         if (this._lastScrollHeight != this._scrollable.scrollHeight && this._scrollable.scrollTop > 0 && this._scrollable.scrollTop + this._scrollable.clientHeight >= this._scrollable.scrollHeight - 500) {
             this._lastScrollHeight = this._scrollable.scrollHeight;
             this.props.onLoadMore();
-        }
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.sortType != this.props.sortType) {
-            this._scrollable.scrollTop = 0;
         }
     }
 

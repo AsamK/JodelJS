@@ -12,12 +12,19 @@ export default class PostDetails extends Component {
         onAddClick: React.PropTypes.func.isRequired,
     };
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.post === null || (prevProps.post !== null && prevProps.post.post_id === this.props.post.post_id)) {
+            return;
+        }
+        this._scrollable.scrollTop = 0;
+    }
+
     render() {
         const {post, locationKnown, onPostClick, onAddClick, ...forwardProps} = this.props;
         const childPosts = post.hasOwnProperty("children") ? post.children : [];
 
         return (
-            <div className="postDetails">
+            <div className="postDetails" ref={(c) => this._scrollable = c}>
                 <Post post={post} onPostClick={onPostClick}/>
                 <PostList parentPost={post} posts={childPosts} onPostClick={onPostClick}/>
                 {locationKnown ? <AddButton onClick={onAddClick}/> : ""}

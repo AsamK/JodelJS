@@ -2,7 +2,8 @@
 
 import request from "superagent";
 import Settings from "../app/settings";
-import CryptoJS from "crypto-js";
+import HmacSHA1 from "crypto-js/hmac-sha1";
+import Hex from "crypto-js/enc-hex";
 import {PostListSortTypes} from "../redux/actions";
 
 function ajax_request(method, headers, url, query, data, callback) {
@@ -49,7 +50,7 @@ function parseUrl(url) {
 function computeSignature(method, url, timestamp, data) {
     let u = parseUrl(url);
     let raw = method + "%" + u.hostname + "%" + 443 + "%" + u.pathname + "%" + Settings.AUTH + "%" + timestamp + "%" + "" + "%" + data;
-    return CryptoJS.enc.Hex.stringify(CryptoJS.HmacSHA1(raw, Settings.KEY));
+    return Hex.stringify(HmacSHA1(raw, Settings.KEY));
 }
 
 export function jodelRequest(method, url, query, data, callback) {

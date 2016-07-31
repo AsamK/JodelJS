@@ -15,10 +15,6 @@ body {
   height: 100%;
 }
 
-.postList .post:last-child {
-  margin-bottom: 3em;
-}
-
 .list {
   display: block;
   &.postShown {
@@ -36,6 +32,10 @@ body {
 .postList {
   overflow-y: scroll;
   height: 100%;
+}
+
+.postList .post:last-child {
+  margin-bottom: 3em;
 }
 
 .addButton {
@@ -89,9 +89,6 @@ body {
       content: "Lauteste";
     }
   }
-
-  &.post {
-  }
 }
 
 .postDetails {
@@ -107,6 +104,9 @@ body {
 .postDetails .postList .post {
   margin-bottom: .1em;
   padding-bottom: .5em;
+  &:last-child {
+    margin-bottom: 3em;
+  }
 }
 
 .post {

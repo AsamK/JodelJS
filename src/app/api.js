@@ -121,8 +121,11 @@ export function apiGetPostsMine(auth, sortType, skip, limit, callback) {
     }, {}, callback);
 }
 
-export function apiGetPostsMineReplies(auth, callback) {
-    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/mine/replies", {}, {}, callback);
+export function apiGetPostsMineReplies(auth, skip, limit, callback) {
+    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/mine/replies", {
+        skip,
+        limit
+    }, {}, callback);
 }
 
 export function apiGetPostsMinePinned(auth, callback) {

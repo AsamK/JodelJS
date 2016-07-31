@@ -15,6 +15,7 @@ import {
 } from "../../app/api";
 import {receivePost, setIsFetching, receivePosts, _setKarma, _setConfig, showAddPost, _setDeviceUID} from "./state";
 import {setToken} from "../actions";
+import {PostListSortTypes} from "./state";
 
 
 export function upVote(postId, parentPostId) {
@@ -90,7 +91,7 @@ export function fetchPostsIfNeeded(section) {
                     });
                     break;
                 case "mineReplies":
-                    apiGetPostsMineReplies(getState().account.token.access, (err, res) => {
+                    apiGetPostsMineReplies(getState().account.token.access, undefined, undefined, (err, res) => {
                         if (err == null && res != null) {
                             dispatch(receivePosts(section, {
                                 recent: res.body.posts,
@@ -129,6 +130,7 @@ export function fetchMorePosts(section, sortType) {
             return;
         }
         const posts = postSection[sortType];
+        let skip, limit;
         switch (section) {
             case "location":
                 let afterId;
@@ -147,13 +149,50 @@ export function fetchMorePosts(section, sortType) {
                 });
                 break;
             case "mine":
-                let skip, limit;
                 if (posts !== undefined) {
                     skip = posts.length;
                     limit = 10;
                 }
                 dispatch(setIsFetching(section));
                 apiGetPostsMine(getState().account.token.access, sortType, skip, limit, (err, res) => {
+                    if (err == null && res != null) {
+                        let p = {};
+                        p[sortType] = res.body.posts;
+                        dispatch(receivePosts(section, p, true));
+                    } else {
+                        dispatch(setIsFetching(section, false));
+                    }
+                });
+                break;
+            case "mineReplies":
+                if (sortType != PostListSortTypes.RECENT) {
+                    return;
+                }
+                if (posts !== undefined) {
+                    skip = posts.length;
+                    limit = 10;
+                }
+                dispatch(setIsFetching(section));
+                apiGetPostsMineReplies(getState().account.token.access, skip, limit, (err, res) => {
+                    if (err == null && res != null) {
+                        let p = {};
+                        p[sortType] = res.body.posts;
+                        dispatch(receivePosts(section, p, true));
+                    } else {
+                        dispatch(setIsFetching(section, false));
+                    }
+                });
+                break;
+            case "mineVotes":
+                if (sortType != PostListSortTypes.RECENT) {
+                    return;
+                }
+                if (posts !== undefined) {
+                    skip = posts.length;
+                    limit = 10;
+                }
+                dispatch(setIsFetching(section));
+                apiGetPostsMineVotes(getState().account.token.access, skip, limit, (err, res) => {
                     if (err == null && res != null) {
                         let p = {};
                         p[sortType] = res.body.posts;

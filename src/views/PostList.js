@@ -23,14 +23,13 @@ export default class PostList extends Component {
 
     componentDidMount() {
         this._scrollable.addEventListener('scroll', this._onScroll);
-        this._lastScrollHeight = 0;
+        this._scrollAtBottom = false;
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.sortType != this.props.sortType) {
             this._scrollable.scrollTop = 0;
         }
-        this._lastScrollHeight = 0;
     }
 
     componentWillUnmount() {
@@ -41,9 +40,12 @@ export default class PostList extends Component {
         if (!this._scrollable || !this.props.onLoadMore) {
             return;
         }
-        if (this._lastScrollHeight != this._scrollable.scrollHeight && this._scrollable.scrollTop > 0 && this._scrollable.scrollTop + this._scrollable.clientHeight >= this._scrollable.scrollHeight - 500) {
-            this._lastScrollHeight = this._scrollable.scrollHeight;
+        let newFlag = this._scrollable.scrollTop > 0 && (this._scrollable.scrollTop + this._scrollable.clientHeight) >= (this._scrollable.scrollHeight - 500);
+        if (this._scrollAtBottom != newFlag && newFlag) {
+            this._scrollAtBottom = newFlag;
             this.props.onLoadMore();
+        } else {
+            this._scrollAtBottom = newFlag;
         }
     }
 
@@ -70,7 +72,7 @@ export default class PostList extends Component {
             }
         );
         return (
-            <div className="postList" onScroll={this._onScroll()} ref={(c) => this._scrollable = c}>
+            <div className="postList" ref={(c) => this._scrollable = c}>
                 {postNodes}
             </div>
         );

@@ -7,11 +7,9 @@ import PostListContainer from "./PostListContainer";
 import PostDetails from "./PostDetails";
 import AddPost from "./AddPost";
 import TopBar from "./TopBar";
-import {apiGetConfig} from "../app/api";
 import {
     fetchPostsIfNeeded,
     selectPost,
-    updateLocation,
     updatePosts,
     showAddPost,
     fetchMorePosts,
@@ -20,11 +18,6 @@ import {
 
 class Jodel extends Component {
     componentDidMount() {
-        apiGetConfig((err, res) => {
-            console.log(res.body)
-        });
-        this.props.dispatch(updateLocation());
-        this.refresh();
         this.timer = setInterval(this.refresh.bind(this), 10000);
     }
 

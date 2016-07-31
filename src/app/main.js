@@ -2,6 +2,7 @@
 require("es6-shim");
 
 import React, {Component} from "react";
+import {fetchPostsIfNeeded, updateLocation, getConfig, setDeviceUid, createNewAccount} from "../redux/actions";
 import ReactDOM from "react-dom";
 import DocumentTitle from "react-document-title";
 import {createStore, applyMiddleware} from "redux";
@@ -28,6 +29,18 @@ store.subscribe(()=> {
     localStorage.setItem('viewState', JSON.stringify(store.getState().viewState));
     localStorage.setItem('viewStateVersion', VIEW_STATE_VERSION);
 });
+
+if (store.getState().account.token === undefined || store.getState().account.token.access === undefined) {
+    if (store.getState().account.deviceUid === undefined) {
+        store.dispatch(createNewAccount());
+    } else {
+        store.dispatch(setDeviceUid(store.getState().account.deviceUid));
+    }
+} else {
+    store.dispatch(getConfig());
+    store.dispatch(updateLocation());
+    store.dispatch(fetchPostsIfNeeded());
+}
 
 ReactDOM.render(<Provider store={store}><DocumentTitle
     title="Jodel Unofficial WebApp"><Jodel/></DocumentTitle></Provider>, document.getElementById('content'));

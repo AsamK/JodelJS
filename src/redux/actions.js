@@ -1,4 +1,5 @@
 import {
+    apiGetAccessToken,
     apiGetPostsCombo,
     apiGetPost,
     apiUpVote,
@@ -8,8 +9,10 @@ import {
     apiGetPosts,
     apiGetKarma,
     apiGetPostsMineReplies,
-    apiGetPostsMineVotes
+    apiGetPostsMineVotes,
+    apiGetConfig
 } from "../app/api";
+import crypto from "crypto";
 
 /*
  * action types
@@ -33,7 +36,7 @@ export const PostListSortTypes = {
 export function upVote(postId, parentPostId) {
     return (dispatch, getState) => {
         // Dispatch a thunk from thunk!
-        apiUpVote(postId, (err, res) => {
+        apiUpVote(getState().account.token.access, postId, (err, res) => {
             if (err == null && res != null) {
                 dispatch(receivePost(res.body.post, parentPostId))
             }
@@ -44,7 +47,7 @@ export function upVote(postId, parentPostId) {
 export function downVote(postId, parentPostId) {
     return (dispatch, getState) => {
         // Dispatch a thunk from thunk!
-        apiDownVote(postId, (err, res) => {
+        apiDownVote(getState().account.token.access, postId, (err, res) => {
             if (err == null && res != null) {
                 dispatch(receivePost(res.body.post, parentPostId))
             }
@@ -151,11 +154,40 @@ function _setKarma(karma) {
     }
 }
 
+export const SET_CONFIG = 'SET_CONFIG';
+function _setConfig(config) {
+    return {
+        type: SET_CONFIG,
+        config,
+        receivedAt: Date.now()
+    }
+}
+
+export const SET_DEVICE_UID = 'SET_DEVICE_UID';
+function _setDeviceUID(deviceUid) {
+    return {
+        type: SET_DEVICE_UID,
+        deviceUid,
+    }
+}
+
+export const SET_TOKEN = 'SET_TOKEN';
+function _setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType) {
+    return {
+        type: SET_TOKEN,
+        distinctId,
+        accessToken,
+        refreshToken,
+        expirationDate,
+        tokenType,
+    }
+}
+
 export const SET_LOCATION = 'SET_LOCATION';
 function setLocation(latitude, longitude) {
     return {
         type: SET_LOCATION,
-        location: {latitude: latitude, longitude: longitude},
+        location: {latitude: latitude, longitude: longitude, country: "DE"},
         receivedAt: Date.now()
     }
 }
@@ -202,7 +234,7 @@ export function fetchPostsIfNeeded(section) {
             dispatch(setIsFetching(section));
             switch (section) {
                 case "location":
-                    apiGetPostsCombo(getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
+                    apiGetPostsCombo(getState().account.token.access, getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
                         if (err == null && res != null) {
                             dispatch(receivePosts(section, {
                                 recent: res.body.recent,
@@ -215,7 +247,7 @@ export function fetchPostsIfNeeded(section) {
                     });
                     break;
                 case "mine":
-                    apiGetPostsMineCombo((err, res) => {
+                    apiGetPostsMineCombo(getState().account.token.access, (err, res) => {
                         if (err == null && res != null) {
                             dispatch(receivePosts(section, {
                                 recent: res.body.recent,
@@ -228,7 +260,7 @@ export function fetchPostsIfNeeded(section) {
                     });
                     break;
                 case "mineReplies":
-                    apiGetPostsMineReplies((err, res) => {
+                    apiGetPostsMineReplies(getState().account.token.access, (err, res) => {
                         if (err == null && res != null) {
                             dispatch(receivePosts(section, {
                                 recent: res.body.posts,
@@ -239,7 +271,7 @@ export function fetchPostsIfNeeded(section) {
                     });
                     break;
                 case "mineVotes":
-                    apiGetPostsMineVotes(undefined, undefined, (err, res) => {
+                    apiGetPostsMineVotes(getState().account.token.access, undefined, undefined, (err, res) => {
                         if (err == null && res != null) {
                             dispatch(receivePosts(section, {
                                 recent: res.body.posts,
@@ -274,7 +306,7 @@ export function fetchMorePosts(section, sortType) {
         switch (section) {
             case "location":
                 dispatch(setIsFetching(section));
-                apiGetPosts(sortType, afterId, getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
+                apiGetPosts(getState().account.token.access, sortType, afterId, getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
                     if (err == null && res != null) {
                         let p = {};
                         p[sortType] = res.body.posts;
@@ -299,7 +331,7 @@ export function updatePosts() {
 
 export function fetchPost(postId) {
     return (dispatch, getState) => {
-        apiGetPost(postId, (err, res) => {
+        apiGetPost(getState().account.token.access, postId, (err, res) => {
             if (err == null && res != null) {
                 dispatch(receivePost(res.body))
             }
@@ -309,9 +341,19 @@ export function fetchPost(postId) {
 
 export function getKarma() {
     return (dispatch, getState) => {
-        apiGetKarma((err, res) => {
+        apiGetKarma(getState().account.token.access, (err, res) => {
             if (err == null && res != null) {
                 dispatch(_setKarma(res.body.karma))
+            }
+        });
+    }
+}
+
+export function getConfig() {
+    return (dispatch, getState) => {
+        apiGetConfig(getState().account.token.access, (err, res) => {
+            if (err == null && res != null) {
+                dispatch(_setConfig(res.body));
             }
         });
     }
@@ -333,7 +375,6 @@ export function updateLocation() {
             navigator.geolocation.getCurrentPosition(function (position) {
                 if (getState().viewState.location.latitude != position.coords.latitude &&
                     getState().viewState.location.longitude != position.coords.longitude) {
-                    //apiSetPlace(position.coords.latitude, position.coords.longitude, "Nimmerland", "DE");
                     dispatch(setLocation(position.coords.latitude, position.coords.longitude));
                     dispatch(updatePosts());
                 }
@@ -346,7 +387,7 @@ export function addPost(text, ancestor, color = "FF9908") {
     return (dispatch, getState) => {
         dispatch(showAddPost(false));
         let loc = getState().viewState.location;
-        apiAddPost(ancestor, color, 0.0, loc.latitude, loc.longitude, "Nimmerland", "DE", text, (err, res) => {
+        apiAddPost(getState().account.token.access, ancestor, color, 0.0, loc.latitude, loc.longitude, loc.city, loc.country, text, (err, res) => {
             if (err == null && res != null) {
                 dispatch(receivePosts("location", {recent: res.body.posts}))
             }
@@ -354,5 +395,38 @@ export function addPost(text, ancestor, color = "FF9908") {
                 dispatch(fetchPost(ancestor));
             }
         });
+    }
+}
+
+export function setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType) {
+    return (dispatch, getState) => {
+        // TODO clear cached posts
+        dispatch(_setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType));
+        dispatch(getConfig());
+        dispatch(updatePosts());
+    }
+}
+
+export function setDeviceUid(deviceUid) {
+    return (dispatch, getState) => {
+        const loc = getState().viewState.location;
+        apiGetAccessToken(deviceUid, loc.latitude, loc.longitude, loc.city, loc.country, (err, res) => {
+            if (err == null && res != null) {
+                dispatch(_setDeviceUID(deviceUid));
+                dispatch(setToken(res.body.distinct_id, res.body.access_token, res.body.refresh_token, res.body.expiration_date, res.body.token_type));
+            }
+        });
+    }
+}
+
+function randomValueHex(byteCount) {
+    return crypto.randomBytes(byteCount)
+        .toString('hex'); // convert to hexadecimal format
+}
+
+export function createNewAccount() {
+    return (dispatch, getState) => {
+        const deviceUid = randomValueHex(32);
+        dispatch(setDeviceUid(deviceUid));
     }
 }

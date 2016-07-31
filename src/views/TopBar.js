@@ -10,7 +10,7 @@ let TopBar = ({karma, switchPostSection}) => {
             <div className="sectionLink" onClick={_switchPostSection.bind(this, "mineReplies")}>Meine Antworten</div>
             <div className="sectionLink" onClick={_switchPostSection.bind(this, "mineVotes")}>Meine Votes</div>
             <div className="karma">
-                +{karma}
+                {karma > 0 ? "+" : ""}{karma}
                 <div className="subText">Mein Karma</div>
             </div>
         </div>

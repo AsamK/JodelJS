@@ -102,7 +102,26 @@ export function apiGetPostsMineCombo(auth, callback) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/mine/combo", {}, {}, callback);
 }
 
-export function apiGetPostsMineReplies(callback) {
+export function apiGetPostsMine(auth, sortType, skip, limit, callback) {
+    let type;
+    switch (sortType) {
+        case PostListSortTypes.RECENT:
+            type = "";
+            break;
+        case PostListSortTypes.DISCUSSED:
+            type = "discussed";
+            break;
+        case PostListSortTypes.POPULAR:
+            type = "popular";
+            break;
+    }
+    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/mine/" + type, {
+        skip,
+        limit
+    }, {}, callback);
+}
+
+export function apiGetPostsMineReplies(auth, callback) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/mine/replies", {}, {}, callback);
 }
 

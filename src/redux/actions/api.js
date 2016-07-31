@@ -10,7 +10,8 @@ import {
     apiGetKarma,
     apiGetPostsMineReplies,
     apiGetPostsMineVotes,
-    apiGetConfig
+    apiGetConfig,
+    apiGetPostsMine
 } from "../../app/api";
 import {receivePost, setIsFetching, receivePosts, _setKarma, _setConfig, showAddPost, _setDeviceUID} from "./state";
 import {setToken} from "../actions";
@@ -128,12 +129,12 @@ export function fetchMorePosts(section, sortType) {
             return;
         }
         const posts = postSection[sortType];
-        let afterId;
-        if (posts !== undefined) {
-            afterId = posts[posts.length - 1];
-        }
         switch (section) {
             case "location":
+                let afterId;
+                if (posts !== undefined) {
+                    afterId = posts[posts.length - 1];
+                }
                 dispatch(setIsFetching(section));
                 apiGetPosts(getState().account.token.access, sortType, afterId, getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
                     if (err == null && res != null) {
@@ -146,6 +147,22 @@ export function fetchMorePosts(section, sortType) {
                 });
                 break;
             case "mine":
+                let skip, limit;
+                if (posts !== undefined) {
+                    skip = posts.length;
+                    limit = 10;
+                }
+                dispatch(setIsFetching(section));
+                apiGetPostsMine(getState().account.token.access, sortType, skip, limit, (err, res) => {
+                    if (err == null && res != null) {
+                        let p = {};
+                        p[sortType] = res.body.posts;
+                        dispatch(receivePosts(section, p, true));
+                    } else {
+                        dispatch(setIsFetching(section, false));
+                    }
+                });
+                break;
         }
     }
 }

@@ -12,6 +12,8 @@ export default class PostList extends Component {
 
     static propTypes = {
         posts: React.PropTypes.array.isRequired,
+        sortType: React.PropTypes.string,
+        section: React.PropTypes.string,
         parentPost: React.PropTypes.any,
         onPostClick: React.PropTypes.func.isRequired,
         onLoadMore: React.PropTypes.func
@@ -27,7 +29,7 @@ export default class PostList extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.sortType != this.props.sortType) {
+        if (prevProps.sortType != this.props.sortType || prevProps.section != this.props.section) {
             this._scrollable.scrollTop = 0;
         }
     }

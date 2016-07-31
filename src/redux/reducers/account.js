@@ -13,7 +13,6 @@ function account(state = {
         case SET_DEVICE_UID:
             return Object.assign({}, state, {deviceUid: action.deviceUid});
         case SET_TOKEN:
-            console.log(action);
             return Object.assign({}, state, {
                 distinctId: action.distinctId,
                 token: {

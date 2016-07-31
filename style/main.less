@@ -17,6 +17,8 @@ body {
 
 .list {
   display: block;
+  margin-top: 3em;
+  margin-bottom: 3em;
   &.postShown {
     display: none;
   }
@@ -35,7 +37,7 @@ body {
 }
 
 .postList .post:last-child {
-  margin-bottom: 3em;
+  margin-bottom: 6em;
 }
 
 .addButton {
@@ -94,7 +96,7 @@ body {
 .postDetails {
   overflow-y: auto;
   height: 100%;
-
+  margin-top: 3em;
   & .postList {
     overflow-y: unset;
     height: unset;
@@ -105,7 +107,7 @@ body {
   margin-bottom: .1em;
   padding-bottom: .5em;
   &:last-child {
-    margin-bottom: 3em;
+    margin-bottom: 6em;
   }
 }
 
@@ -208,157 +210,6 @@ body {
   font-size: .8em;
 }
 
-.login {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  width: 300px;
-  .logo {
-    width: 180px;
-    height: 180px;
-    margin: 10px;
-    align-self: center;
-  }
-  & > input {
-    height: 2em;
-  }
-  & > input, & > div, & > span {
-    margin-bottom: 10px;
-  }
-}
-
-#kb_app {
-  display: flex;
-  justify-content: center;
-}
-
-.page {
-  max-width: 1500px;
-  flex: 1;
-  margin: 8px;
-}
-
-.refresh {
-  display: inline-block;
-  //background-image: url("@{WEB_SERVER}/img/warning.svg");
-  width: 22px;
-  height: 22px;
-  margin: -20px auto auto; //hack
-}
-
-.titlebar {
-  display: flex;
-  height: 48px;
-  justify-content: space-between;
-  margin-bottom: 3px;
-  .logo {
-    display: inline-block;
-    width: 48px;
-    height: 48px;
-    //background: no-repeat url("@{WEB_SERVER}/app/img/icon.svg");
-    background-size: 48px 48px;
-  }
-  .programName {
-    flex: 1;
-    align-self: center;
-  }
-  .children {
-    margin: auto;
-  }
-  .topMenu {
-    position: relative;
-    padding: 10px;
-
-    z-index: 1000;
-
-    @media print {
-      & {
-        display: none;
-      }
-    }
-
-    button {
-      float: right;
-      border: 1px solid;
-      padding: 5px 8px;
-      &::before {
-        content: "☰";
-      }
-    }
-
-    .items {
-      display: none;
-      list-style: outside none none;
-      margin: 0px;
-      background: white none repeat scroll 0% 0%;
-      border: 1px solid black;
-      padding: 0px;
-
-      box-shadow: 0 0 10px rgb(170, 170, 170);
-
-      &.showMenu {
-        display: block;
-      }
-      & > li > a {
-        padding: 7px 9px;
-        display: inline-block;
-      }
-    }
-  }
-}
-
-.invisibleoverlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: #00ffffff;
-  z-index: 3000;
-  overflow: auto;
-  top: 0;
-  left: 0;
-}
-
-.contextmenu {
-  .menu {
-    position: absolute;
-    background-color: white;
-    box-shadow: 0 0 10px rgb(170, 170, 170);
-    user-select: none;
-
-    .menuitem {
-      padding: 8px;
-      margin-top: 8px;
-      margin-bottom: 8px;
-      &:hover {
-        background-color: lightgray;
-        cursor: default;
-      }
-    }
-  }
-}
-
-.orders {
-  tr td, tr th {
-    padding-right: 10px;
-    padding-bottom: 7px;
-    padding-top: 7px;
-  }
-  .open {
-    background-color: #FF0;
-  }
-  .canceled {
-    color: grey;
-  }
-  .payed {
-    background-color: lightgreen
-  }
-}
-
-// Order screen
-input[name=product_id] {
-  margin: 8px;
-}
-
 .addPost {
   margin-bottom: 10em;
   display: none;
@@ -385,6 +236,8 @@ input[name=product_id] {
   clear:both;
   width: 100%;
   background-color: #eeeeee;
+  position: fixed;
+  top: 0;
   & .karma {
     float: right;
     .subText {

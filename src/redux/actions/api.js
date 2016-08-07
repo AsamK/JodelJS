@@ -11,11 +11,20 @@ import {
     apiGetPostsMineReplies,
     apiGetPostsMineVotes,
     apiGetConfig,
-    apiGetPostsMine
+    apiGetPostsMine,
+    apiRefreshAccessToken
 } from "../../app/api";
-import {receivePost, setIsFetching, receivePosts, _setKarma, _setConfig, showAddPost, _setDeviceUID} from "./state";
+import {
+    receivePost,
+    setIsFetching,
+    receivePosts,
+    _setKarma,
+    _setConfig,
+    showAddPost,
+    _setDeviceUID,
+    PostListSortTypes
+} from "./state";
 import {setToken} from "../actions";
-import {PostListSortTypes} from "./state";
 
 
 export function upVote(postId, parentPostId) {
@@ -258,6 +267,17 @@ export function setDeviceUid(deviceUid) {
             if (err == null && res != null) {
                 dispatch(_setDeviceUID(deviceUid));
                 dispatch(setToken(res.body.distinct_id, res.body.access_token, res.body.refresh_token, res.body.expiration_date, res.body.token_type));
+            }
+        });
+    }
+}
+
+export function refreshAccessToken() {
+    return (dispatch, getState) => {
+        const account = getState().account;
+        apiRefreshAccessToken(account.token.access, account.token.distinctId, account.token.refresh, (err, res) => {
+            if (err == null && res !== null && res.body.upgraded === true) {
+                dispatch(setToken(account.token.distinctId, res.body.access_token, account.token.refresh, res.body.expiration_date, res.body.token_type));
             }
         });
     }

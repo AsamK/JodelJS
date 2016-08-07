@@ -2,6 +2,7 @@
 require("es6-shim");
 
 import React, {Component} from "react";
+import {refreshAccessToken} from "../redux/actions/api";
 import {migrateViewState, VIEW_STATE_VERSION} from "../redux/reducers/viewState";
 import {migrateAccount, ACCOUNT_VERSION} from "../redux/reducers/account";
 import {fetchPostsIfNeeded, updateLocation, getConfig, setDeviceUid, createNewAccount} from "../redux/actions";
@@ -47,10 +48,15 @@ if (store.getState().account.token === undefined || store.getState().account.tok
         store.dispatch(setDeviceUid(store.getState().account.deviceUid));
     }
 } else {
-    store.dispatch(getConfig());
-    store.dispatch(updateLocation());
-    store.dispatch(fetchPostsIfNeeded());
+    const now = new Date().getTime() / 1000;
+    if (now >= store.getState().account.token.expirationDate) {
+        store.dispatch(refreshAccessToken());
+    } else {
+        store.dispatch(getConfig());
+        store.dispatch(fetchPostsIfNeeded());
+    }
 }
+store.dispatch(updateLocation());
 
 ReactDOM.render(<Provider store={store}><DocumentTitle
     title="Jodel Unofficial WebApp"><Jodel/></DocumentTitle></Provider>, document.getElementById('content'));

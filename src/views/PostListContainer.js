@@ -23,7 +23,8 @@ class PostListContainer extends Component {
         const {posts, section, sortType, locationKnown, onPostClick, onRefresh, onAddClick, onLoadMore, ...forwardProps} = this.props;
         return (
             <div className="postListContainer">
-                <PostList section={section} sortType={sortType} posts={posts} onPostClick={onPostClick} onLoadMore={onLoadMore}/>
+                <PostList section={section} sortType={sortType} posts={posts} onPostClick={onPostClick}
+                          onLoadMore={onLoadMore}/>
                 {locationKnown ? <AddButton onClick={onAddClick}/> : ""}
                 <div className="sections">
                     <SectionLink section={PostListSortTypes.RECENT}/>

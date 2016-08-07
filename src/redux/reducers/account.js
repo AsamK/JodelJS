@@ -19,10 +19,10 @@ function account(state = {
             return Object.assign({}, state, {deviceUid: action.deviceUid});
         case SET_TOKEN:
             return Object.assign({}, state, {
-                distinctId: action.distinctId,
                 token: {
-                    access: action.accessToken,
+                    distinctId: action.distinctId,
                     refresh: action.refreshToken,
+                    access: action.accessToken,
                     expirationDate: action.expirationDate,
                     type: action.tokenType
                 }

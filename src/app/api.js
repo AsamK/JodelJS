@@ -244,3 +244,12 @@ export function apiGetAccessToken(deviceUid, latitude, longitude, city, country,
     };
     return jodelRequest(undefined, "POST", Settings.API_SERVER + API_PATH_V2 + "/users/", {}, data, callback);
 }
+
+export function apiRefreshAccessToken(auth, distinctId, refreshToken, callback) {
+    const data = {
+        "current_client_id": Settings.CLIENT_ID,
+        "distinct_id": distinctId,
+        "refresh_token": refreshToken,
+    };
+    return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V2 + "/users/refreshToken", {}, data, callback);
+}

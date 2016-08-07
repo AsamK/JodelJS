@@ -1,5 +1,10 @@
 import {SET_KARMA, SET_DEVICE_UID, SET_TOKEN, SET_CONFIG} from "../actions";
 
+export const ACCOUNT_VERSION = 1;
+export function migrateAccount(storedState, oldVersion) {
+    return storedState;
+}
+
 function account(state = {
     karma: 0,
     deviceUid: undefined,

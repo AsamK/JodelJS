@@ -2,6 +2,8 @@
 require("es6-shim");
 
 import React, {Component} from "react";
+import {migrateViewState, VIEW_STATE_VERSION} from "../redux/reducers/viewState";
+import {migrateAccount, ACCOUNT_VERSION} from "../redux/reducers/account";
 import {fetchPostsIfNeeded, updateLocation, getConfig, setDeviceUid, createNewAccount} from "../redux/actions";
 import ReactDOM from "react-dom";
 import DocumentTitle from "react-document-title";
@@ -9,12 +11,17 @@ import {createStore, applyMiddleware} from "redux";
 import {Provider} from "react-redux";
 import thunkMiddleware from "redux-thunk";
 import Jodel from "../views/Jodel";
-import JodelApp, {VIEW_STATE_VERSION, migrateViewState} from "../redux/reducers";
+import JodelApp from "../redux/reducers";
 
 let persistedState = {};
 if (localStorage.getItem('viewState')) {
     let oldVersion = parseInt(localStorage.getItem('viewStateVersion'), 10);
     persistedState.viewState = migrateViewState(JSON.parse(localStorage.getItem('viewState')), oldVersion);
+}
+
+if (localStorage.getItem('account')) {
+    let oldVersion = parseInt(localStorage.getItem('accountVersion'), 10);
+    persistedState.account = migrateAccount(JSON.parse(localStorage.getItem('account')), oldVersion);
 }
 
 let store = createStore(
@@ -28,6 +35,9 @@ let store = createStore(
 store.subscribe(()=> {
     localStorage.setItem('viewState', JSON.stringify(store.getState().viewState));
     localStorage.setItem('viewStateVersion', VIEW_STATE_VERSION);
+
+    localStorage.setItem('account', JSON.stringify(store.getState().account));
+    localStorage.setItem('accountVersion', ACCOUNT_VERSION);
 });
 
 if (store.getState().account.token === undefined || store.getState().account.token.access === undefined) {

@@ -245,11 +245,11 @@ export function getConfig() {
     }
 }
 
-export function addPost(text, ancestor, color = "FF9908") {
+export function addPost(text, image, ancestor, color = "FF9908") {
     return (dispatch, getState) => {
         dispatch(showAddPost(false));
         let loc = getState().viewState.location;
-        apiAddPost(getState().account.token.access, ancestor, color, 0.0, loc.latitude, loc.longitude, loc.city, loc.country, text, (err, res) => {
+        apiAddPost(getState().account.token.access, ancestor, color, 0.0, loc.latitude, loc.longitude, loc.city, loc.country, text, image, (err, res) => {
             if (err == null && res != null) {
                 dispatch(receivePosts("location", {recent: res.body.posts}))
             }

@@ -7,6 +7,7 @@ import Time from "./Time";
 import ChildInfo from "./ChildInfo";
 import Location from "./Location";
 import {upVote, downVote} from "../redux/actions";
+import {deletePost} from "../redux/actions/api";
 
 class Post extends Component {
     constructor(props) {
@@ -52,6 +53,10 @@ class Post extends Component {
                 <ChildInfo child_count={post.hasOwnProperty('child_count') ? post.child_count : 0}/>
                 <Location location={post.location.name} distance={post.distance}/>
                 <div className="author">{author != undefined ? author : ""}</div>
+                {post.post_own === "own" ? <a onClick={e => {
+                    e.stopPropagation();
+                    this.props.dispatch(deletePost(post.post_id))
+                }}>delete</a> : ""}
             </div>
         );
     }

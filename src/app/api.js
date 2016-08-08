@@ -144,6 +144,10 @@ export function apiGetPost(auth, post_id, callback) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/" + post_id, {}, {}, callback);
 }
 
+export function apiDeletePost(auth, postId, callback) {
+    return jodelRequest(auth, "DELETE", Settings.API_SERVER + API_PATH_V2 + "/posts/" + postId, {}, {}, callback);
+}
+
 export function apiUpVote(auth, postId, callback) {
     return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V2 + "/posts/" + postId + "/upvote", {}, {}, callback);
 }

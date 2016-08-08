@@ -12,7 +12,8 @@ import {
     apiGetPostsMineVotes,
     apiGetConfig,
     apiGetPostsMine,
-    apiRefreshAccessToken
+    apiRefreshAccessToken,
+    apiDeletePost
 } from "../../app/api";
 import {
     receivePost,
@@ -26,6 +27,15 @@ import {
 } from "./state";
 import {setToken} from "../actions";
 
+export function deletePost(postId) {
+    return (dispatch, getState) => {
+        apiDeletePost(getState().account.token.access, postId, (err, res) => {
+            if (err == null && res != null) {
+                console.log(res.body);
+            }
+        });
+    }
+}
 
 export function upVote(postId, parentPostId) {
     return (dispatch, getState) => {

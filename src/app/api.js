@@ -9,40 +9,6 @@ import {PostListSortTypes} from "../redux/actions";
 const API_PATH_V2 = Settings.API_PATH + "/v2";
 const API_PATH_V3 = Settings.API_PATH + "/v3";
 
-function ajax_request(auth, method, headers, url, query, data, callback) {
-    let r;
-    switch (method) {
-        case "GET":
-            r = request.get;
-            break;
-        case "POST":
-            r = request.post;
-            break;
-        case "PUT":
-            r = request.put;
-            break;
-        case "DELETE":
-            r = request.delete;
-            break;
-        default:
-            console.log("Method doesn't exist: " + method);
-            return;
-    }
-    let timestamp = new Date().toISOString();
-    let sig = computeSignature(auth, method, url, timestamp, data);
-    const req = r(url)
-        .query(query)
-        .set("X-Client-Type", Settings.CLIENT_TYPE)
-        .set("X-Api-Version", "0.2")
-        .set("X-Timestamp", timestamp)
-        .set("X-Authorization", "HMAC " + sig)
-        .type("json")
-        .send(data);
-
-    Object.keys(headers).forEach((element, index) => req.set(element, headers[element]));
-    req.end(callback);
-}
-
 function parseUrl(url) {
     var parser = document.createElement('a');
     parser.href = url;
@@ -56,15 +22,21 @@ function computeSignature(auth, method, url, timestamp, data) {
 }
 
 export function jodelRequest(auth, method, url, query, data, callback) {
-    let headers = {
-        'Accept': 'application/json',
-    };
-    if (auth !== undefined) {
-        headers.Authorization = 'Bearer ' + auth;
-    } else {
-        auth = "";
-    }
-    ajax_request(auth, method, headers, url, query, JSON.stringify(data), callback);
+    data = JSON.stringify(data);
+    let timestamp = new Date().toISOString();
+    let sig = computeSignature(auth !== undefined ? auth : "", method, url, timestamp, data);
+
+    const req = request(method, url)
+        .query(query)
+        .type("json")
+        .set('Accept', 'application/json')
+        .set('Authorization', auth !== undefined ? 'Bearer ' + auth : undefined)
+        .set("X-Client-Type", Settings.CLIENT_TYPE)
+        .set("X-Api-Version", "0.2")
+        .set("X-Timestamp", timestamp)
+        .set("X-Authorization", "HMAC " + sig)
+        .send(data)
+        .end(callback);
 }
 
 /*export function apiGetPosts(callback) {

@@ -8,6 +8,7 @@ let AddPost = ({ancestor, visible, dispatch}) => {
 
     return (
         <div className={classnames("addPost", {visible})}>
+            {ancestor === undefined ? "Neuen Jodel schreiben" : "Jodel Kommentar schreiben"}:
             <form onSubmit={e => {
                 e.preventDefault();
                 if (!input.value.trim()) {

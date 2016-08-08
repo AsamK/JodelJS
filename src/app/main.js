@@ -5,7 +5,7 @@ import React, {Component} from "react";
 import {refreshAccessToken} from "../redux/actions/api";
 import {migrateViewState, VIEW_STATE_VERSION} from "../redux/reducers/viewState";
 import {migrateAccount, ACCOUNT_VERSION} from "../redux/reducers/account";
-import {fetchPostsIfNeeded, updateLocation, getConfig, setDeviceUid, createNewAccount} from "../redux/actions";
+import {fetchPostsIfNeeded, updateLocation, getConfig, setDeviceUid} from "../redux/actions";
 import ReactDOM from "react-dom";
 import DocumentTitle from "react-document-title";
 import {createStore, applyMiddleware} from "redux";
@@ -42,9 +42,7 @@ store.subscribe(()=> {
 });
 
 if (store.getState().account.token === undefined || store.getState().account.token.access === undefined) {
-    if (store.getState().account.deviceUid === undefined) {
-        store.dispatch(createNewAccount());
-    } else {
+    if (store.getState().account.deviceUid !== undefined) {
         store.dispatch(setDeviceUid(store.getState().account.deviceUid));
     }
 } else {

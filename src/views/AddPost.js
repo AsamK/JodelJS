@@ -11,7 +11,7 @@ let AddPost = ({ancestor, visible, dispatch}) => {
             {ancestor === undefined ? "Neuen Jodel schreiben" : "Jodel Kommentar schreiben"}:
             <form onSubmit={e => {
                 e.preventDefault();
-                if (!input.value.trim()) {
+                if (input.value.trim() === '') {
                     return
                 }
                 dispatch(addPost(input.value, ancestor));

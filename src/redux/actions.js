@@ -5,9 +5,9 @@ import {
     switchPostListSortType,
     _switchPostSection,
     _selectPost,
-    setLocation,
     _setToken,
-    PostListSortTypes
+    PostListSortTypes,
+    setLocation
 } from "./actions/state";
 export * from "./actions/state";
 export * from "./actions/api";
@@ -45,11 +45,21 @@ export function updateLocation() {
     return (dispatch, getState) => {
         if ("geolocation" in navigator) {
             /* geolocation is available */
-            navigator.geolocation.getCurrentPosition(function (position) {
+            navigator.geolocation.getCurrentPosition(position => {
                 if (getState().viewState.location.latitude != position.coords.latitude &&
                     getState().viewState.location.longitude != position.coords.longitude) {
                     dispatch(setLocation(position.coords.latitude, position.coords.longitude));
                     dispatch(updatePosts());
+                }
+            }, err => {
+                // TODO do something useful
+                switch (err.code) {
+                    case err.PERMISSION_DENIED:
+                        break;
+                    case err.POSITION_UNAVAILABLE:
+                        break;
+                    case err.TIMEOUT:
+                        break;
                 }
             });
         }

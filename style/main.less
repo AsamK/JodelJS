@@ -13,6 +13,7 @@ body {
 
 #content, .jodel, .list, .detail, .postListContainer {
   height: 100%;
+  width: 100%;
 }
 
 .list {
@@ -252,4 +253,17 @@ body {
   margin-right: 1.3em;
   font-size: .7em;
   float: left;
+}
+
+.selectDeviceUid label {
+  display: block;
+  margin-bottom: .5em;
+}
+
+.locationError {
+  background-color: red;
+  & a {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 }

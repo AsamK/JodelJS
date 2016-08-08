@@ -7,6 +7,7 @@ import PostListContainer from "./PostListContainer";
 import PostDetails from "./PostDetails";
 import AddPost from "./AddPost";
 import TopBar from "./TopBar";
+import FirstStart from "./FirstStart";
 import {
     fetchPostsIfNeeded,
     selectPost,
@@ -30,6 +31,9 @@ class Jodel extends Component {
     }
 
     refresh() {
+        if (!this.props.isRegistered) {
+            return;
+        }
         this.props.dispatch(fetchPostsIfNeeded());
     }
 
@@ -54,21 +58,27 @@ class Jodel extends Component {
     }
 
     render() {
-        return <div className="jodel">
-            <TopBar karma={this.props.karma} switchPostSection={this.switchPostSection.bind(this)}/>
-            <div className={classnames("list", {postShown: this.props.selectedPost != null})}>
-                <PostListContainer onPostClick={this.handleClick.bind(this)}
-                                   onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}
-                                   onLoadMore={this.onLoadMore.bind(this)}/>
+        if (this.props.deviceUid === undefined) {
+            return <div className="jodel">
+                <FirstStart/>
             </div>
-            <div className={classnames("detail", {postShown: this.props.selectedPost != null})}>
-                <PostDetails post={this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost()}
-                             onPostClick={this.handleClick.bind(this, null)}
-                             onAddClick={this.handleAddCommentClick.bind(this)}
-                             locationKnown={this.props.locationKnown}/>
-            </div>
-            <AddPost/>
-        </div>;
+        } else {
+            return <div className="jodel">
+                <TopBar karma={this.props.karma} switchPostSection={this.switchPostSection.bind(this)}/>
+                <div className={classnames("list", {postShown: this.props.selectedPost != null})}>
+                    <PostListContainer onPostClick={this.handleClick.bind(this)}
+                                       onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}
+                                       onLoadMore={this.onLoadMore.bind(this)}/>
+                </div>
+                <div className={classnames("detail", {postShown: this.props.selectedPost != null})}>
+                    <PostDetails post={this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost()}
+                                 onPostClick={this.handleClick.bind(this, null)}
+                                 onAddClick={this.handleAddCommentClick.bind(this)}
+                                 locationKnown={this.props.locationKnown}/>
+                </div>
+                <AddPost/>
+            </div>;
+        }
     }
 }
 
@@ -101,6 +111,8 @@ const mapStateToProps = (state) => {
         selectedPost: state.viewState.selectedPostId != null ? state.entities[state.viewState.selectedPostId] : null,
         locationKnown: state.viewState.location.latitude !== undefined,
         karma: state.account.karma,
+        deviceUid: state.account.deviceUid,
+        isRegistered: state.account.token !== undefined && state.account.token.access !== undefined,
     }
 };
 

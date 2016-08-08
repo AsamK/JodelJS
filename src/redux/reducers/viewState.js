@@ -7,10 +7,13 @@ import {
     SHOW_ADD_POST
 } from "../actions";
 
-export const VIEW_STATE_VERSION = 2;
+export const VIEW_STATE_VERSION = 3;
 export function migrateViewState(storedState, oldVersion) {
     if (oldVersion < 2) {
         storedState.location.country = "DE";
+    }
+    if (oldVersion < 3) {
+        storedState.useBrowserLocation = true;
     }
     return storedState;
 }
@@ -18,6 +21,7 @@ export function migrateViewState(storedState, oldVersion) {
 function viewState(state = {
     selectedPostId: null,
     location: {latitude: undefined, longitude: undefined, city: undefined, country: "DE"},
+    useBrowserLocation: true,
     postSection: "location",
     postListSortType: PostListSortTypes.RECENT,
     addPost: {visible: false, ancestor: undefined},

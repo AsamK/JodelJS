@@ -8,6 +8,7 @@ export default class AddPost extends PureComponent {
         super(props);
         this.state = {message: "", image: null, imageUrl: null};
         this.handleChangeImage = this.handleChangeImage.bind(this);
+        this.resetForm = this.resetForm.bind(this);
     }
 
     static propTypes = {
@@ -30,6 +31,11 @@ export default class AddPost extends PureComponent {
         }
     }
 
+    resetForm(form) {
+        this.setState({message: "", image: null, imageUrl: null});
+        form.reset();
+    }
+
     render() {
         const {ancestor, visible, ...forwardProps} = this.props;
 
@@ -41,21 +47,19 @@ export default class AddPost extends PureComponent {
                     if (this.state.message.trim() === '' && this.state.image === null) {
                         return
                     }
-
+                    let form = e.target;
                     if (this.state.image !== null) {
                         let fileReader = new FileReader();
                         fileReader.onload = event => {
                             let url = event.target.result;
                             let encodedImage = url.substr(url.indexOf(',') + 1);
                             this.props.dispatch(addPost(this.state.message, encodedImage, ancestor));
-                            this.setState({message: "", image: null, imageUrl: null});
-                            event.target.parentNode.reset();
+                            this.resetForm(form);
                         };
                         fileReader.readAsDataURL(this.state.image);
                     } else {
                         this.props.dispatch(addPost(this.state.message, undefined, ancestor));
-                        this.setState({message: "", image: null, imageUrl: null});
-                        e.target.parentNode.reset();
+                        this.resetForm(form);
                     }
                 }}>
                 <textarea value={this.state.message} onChange={event => {
@@ -69,8 +73,7 @@ export default class AddPost extends PureComponent {
                     <button onClick={e => {
                         e.preventDefault();
                         this.props.dispatch(showAddPost(false));
-                        this.setState({message: "", image: null, imageUrl: null});
-                        e.target.parentNode.reset();
+                        this.resetForm(e.target.parentNode);
                     }}>
                         Abbrechen
                     </button>

@@ -42,7 +42,7 @@ export function selectPost(postId) {
 
 export function updateLocation() {
     return (dispatch, getState) => {
-        if ("geolocation" in navigator) {
+        if (getState().viewState.useBrowserLocation && "geolocation" in navigator) {
             /* geolocation is available */
             navigator.geolocation.getCurrentPosition(position => {
                 if (getState().viewState.location.latitude != position.coords.latitude &&

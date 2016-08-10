@@ -3,8 +3,10 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import SelectDeviceUid from "./SelectDeviceUid";
-import {createNewAccount, updateLocation} from "../redux/actions";
+import SelectLocation from "./SelectLocation";
+import {createNewAccount, updateLocation, _setLocation, setUseBrowserLocation} from "../redux/actions";
 import {setDeviceUid} from "../redux/actions/api";
+import Settings from "../app/settings";
 
 class FirstStart extends Component {
     constructor(props) {
@@ -43,12 +45,27 @@ class FirstStart extends Component {
                 }
             }}>
                 <SelectDeviceUid deviceUid={this.state.deviceUid} setDeviceUid={this.setDeviceUid}/>
+                <p>Standort</p>
+                <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
+                                latitude={this.props.location.latitude} longitude={this.props.location.longitude}
+                                onChange={(useBrowserLocation, latitude, longitude) => {
+                                    this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
+                                    if (!useBrowserLocation) {
+                                        if (latitude === undefined) {
+                                            latitude = Settings.DEFAULT_LOCATION.latitude;
+                                        }
+                                        if (longitude === undefined) {
+                                            longitude = Settings.DEFAULT_LOCATION.longitude;
+                                        }
+                                    }
+                                    this.props.dispatch(_setLocation(latitude, longitude));
+                                }}/>
                 {this.props.location.latitude === undefined ?
                     <div className="locationError">
                         <p>Zum erstmaligen Anmelden muss der aktuelle Standort bekannt sein.
                             Die Standort Abfrage war jedoch noch nicht erfolgreich.
                         </p>
-                        <a onClick={this.updateLocation}>Erneut versuchen</a>
+                        <a onClick={this.updateLocation}>Erneut versuchen</a> oder oben den Standort manuell festlegen
                     </div>
                     : ""}
                 <button type="submit" disabled={this.props.location.latitude === undefined}>

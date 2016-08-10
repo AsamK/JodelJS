@@ -5,8 +5,8 @@ import Settings from "../app/settings";
 import crypto from "crypto";
 import {PostListSortTypes} from "../redux/actions";
 
-const API_PATH_V2 = Settings.API_PATH + "/v2";
-const API_PATH_V3 = Settings.API_PATH + "/v3";
+const API_PATH_V2 = "/v2";
+const API_PATH_V3 = "/v3";
 
 function parseUrl(url) {
     var parser = document.createElement('a');

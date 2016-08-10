@@ -121,10 +121,19 @@ export function _setToken(distinctId, accessToken, refreshToken, expirationDate,
 }
 
 export const SET_LOCATION = 'SET_LOCATION';
-export function _setLocation(latitude, longitude, city, country) {
+export function _setLocation(latitude, longitude, city, country = "DE") {
     return {
         type: SET_LOCATION,
         location: {latitude, longitude, city, country},
+        receivedAt: Date.now()
+    }
+}
+
+export const SET_USE_BROWSER_LOCATION = 'SET_USE_BROWSER_LOCATION';
+export function setUseBrowserLocation(useBrowserLocation) {
+    return {
+        type: SET_USE_BROWSER_LOCATION,
+        useBrowserLocation,
         receivedAt: Date.now()
     }
 }

@@ -6,6 +6,7 @@ import {
     PostListSortTypes,
     SHOW_ADD_POST
 } from "../actions";
+import {SET_USE_BROWSER_LOCATION} from "../actions/state";
 
 export const VIEW_STATE_VERSION = 3;
 export function migrateViewState(storedState, oldVersion) {
@@ -37,6 +38,8 @@ function viewState(state = {
             return Object.assign({}, state, {postSection: action.section});
         case SHOW_ADD_POST:
             return Object.assign({}, state, {addPost: {visible: action.visible, ancestor: action.ancestor}});
+        case SET_USE_BROWSER_LOCATION:
+            return Object.assign({}, state, {useBrowserLocation: action.useBrowserLocation});
         default:
             return state
     }

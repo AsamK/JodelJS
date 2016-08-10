@@ -31,33 +31,21 @@ import {setToken} from "../actions";
 
 export function deletePost(postId) {
     return (dispatch, getState) => {
-        apiDeletePost(getState().account.token.access, postId, (err, res) => {
-            if (err == null && res != null) {
-                console.log(res.body);
-            }
-        });
+        apiDeletePost(getState().account.token.access, postId);
     }
 }
 
 export function upVote(postId, parentPostId) {
     return (dispatch, getState) => {
-        // Dispatch a thunk from thunk!
-        apiUpVote(getState().account.token.access, postId, (err, res) => {
-            if (err == null && res != null) {
-                dispatch(receivePost(res.body.post, parentPostId))
-            }
-        });
+        apiUpVote(getState().account.token.access, postId)
+            .then(res => dispatch(receivePost(res.body.post, parentPostId)));
     }
 }
 
 export function downVote(postId, parentPostId) {
     return (dispatch, getState) => {
-        // Dispatch a thunk from thunk!
-        apiDownVote(getState().account.token.access, postId, (err, res) => {
-            if (err == null && res != null) {
-                dispatch(receivePost(res.body.post, parentPostId))
-            }
-        });
+        apiDownVote(getState().account.token.access, postId)
+            .then(res => dispatch(receivePost(res.body.post, parentPostId)));
     }
 }
 
@@ -86,52 +74,52 @@ export function fetchPostsIfNeeded(section) {
             dispatch(setIsFetching(section));
             switch (section) {
                 case "location":
-                    apiGetPostsCombo(getState().account.token.access, getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
-                        if (err == null && res != null) {
+                    apiGetPostsCombo(getState().account.token.access, getState().viewState.location.latitude, getState().viewState.location.longitude)
+                        .then(res => {
                             dispatch(receivePosts(section, {
                                 recent: res.body.recent,
                                 discussed: res.body.replied,
                                 popular: res.body.voted
                             }))
-                        } else {
+                        })
+                        .catch(err => {
                             dispatch(setIsFetching(section, false));
-                        }
-                    });
+                        });
                     break;
                 case "mine":
-                    apiGetPostsMineCombo(getState().account.token.access, (err, res) => {
-                        if (err == null && res != null) {
+                    apiGetPostsMineCombo(getState().account.token.access)
+                        .then(res => {
                             dispatch(receivePosts(section, {
                                 recent: res.body.recent,
                                 discussed: res.body.replied,
                                 popular: res.body.voted
                             }))
-                        } else {
+                        })
+                        .catch(err => {
                             dispatch(setIsFetching(section, false));
-                        }
-                    });
+                        });
                     break;
                 case "mineReplies":
-                    apiGetPostsMineReplies(getState().account.token.access, undefined, undefined, (err, res) => {
-                        if (err == null && res != null) {
+                    apiGetPostsMineReplies(getState().account.token.access, undefined, undefined)
+                        .then(res => {
                             dispatch(receivePosts(section, {
                                 recent: res.body.posts,
                             }))
-                        } else {
+                        })
+                        .catch(err => {
                             dispatch(setIsFetching(section, false));
-                        }
-                    });
+                        });
                     break;
                 case "mineVotes":
-                    apiGetPostsMineVotes(getState().account.token.access, undefined, undefined, (err, res) => {
-                        if (err == null && res != null) {
+                    apiGetPostsMineVotes(getState().account.token.access, undefined, undefined)
+                        .then(res => {
                             dispatch(receivePosts(section, {
                                 recent: res.body.posts,
                             }))
-                        } else {
+                        })
+                        .catch(err => {
                             dispatch(setIsFetching(section, false));
-                        }
-                    });
+                        });
                     break;
             }
         }
@@ -159,15 +147,15 @@ export function fetchMorePosts(section, sortType) {
                     afterId = posts[posts.length - 1];
                 }
                 dispatch(setIsFetching(section));
-                apiGetPosts(getState().account.token.access, sortType, afterId, getState().viewState.location.latitude, getState().viewState.location.longitude, (err, res) => {
-                    if (err == null && res != null) {
+                apiGetPosts(getState().account.token.access, sortType, afterId, getState().viewState.location.latitude, getState().viewState.location.longitude)
+                    .then(res => {
                         let p = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
-                    } else {
+                    })
+                    .catch(err => {
                         dispatch(setIsFetching(section, false));
-                    }
-                });
+                    });
                 break;
             case "mine":
                 if (posts !== undefined) {
@@ -175,15 +163,15 @@ export function fetchMorePosts(section, sortType) {
                     limit = 10;
                 }
                 dispatch(setIsFetching(section));
-                apiGetPostsMine(getState().account.token.access, sortType, skip, limit, (err, res) => {
-                    if (err == null && res != null) {
+                apiGetPostsMine(getState().account.token.access, sortType, skip, limit)
+                    .then(res => {
                         let p = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
-                    } else {
+                    })
+                    .catch(err => {
                         dispatch(setIsFetching(section, false));
-                    }
-                });
+                    });
                 break;
             case "mineReplies":
                 if (sortType != PostListSortTypes.RECENT) {
@@ -194,15 +182,15 @@ export function fetchMorePosts(section, sortType) {
                     limit = 10;
                 }
                 dispatch(setIsFetching(section));
-                apiGetPostsMineReplies(getState().account.token.access, skip, limit, (err, res) => {
-                    if (err == null && res != null) {
+                apiGetPostsMineReplies(getState().account.token.access, skip, limit)
+                    .then(res => {
                         let p = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
-                    } else {
+                    })
+                    .catch(err => {
                         dispatch(setIsFetching(section, false));
-                    }
-                });
+                    });
                 break;
             case "mineVotes":
                 if (sortType != PostListSortTypes.RECENT) {
@@ -213,15 +201,15 @@ export function fetchMorePosts(section, sortType) {
                     limit = 10;
                 }
                 dispatch(setIsFetching(section));
-                apiGetPostsMineVotes(getState().account.token.access, skip, limit, (err, res) => {
-                    if (err == null && res != null) {
+                apiGetPostsMineVotes(getState().account.token.access, skip, limit)
+                    .then(res => {
                         let p = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
-                    } else {
+                    })
+                    .catch(err => {
                         dispatch(setIsFetching(section, false));
-                    }
-                });
+                    });
                 break;
         }
     }
@@ -229,31 +217,28 @@ export function fetchMorePosts(section, sortType) {
 
 export function fetchPost(postId) {
     return (dispatch, getState) => {
-        apiGetPost(getState().account.token.access, postId, (err, res) => {
-            if (err == null && res != null) {
+        apiGetPost(getState().account.token.access, postId)
+            .then(res => {
                 dispatch(receivePost(res.body))
-            }
-        });
+            });
     }
 }
 
 export function getKarma() {
     return (dispatch, getState) => {
-        apiGetKarma(getState().account.token.access, (err, res) => {
-            if (err == null && res != null) {
+        apiGetKarma(getState().account.token.access)
+            .then(res => {
                 dispatch(_setKarma(res.body.karma))
-            }
-        });
+            });
     }
 }
 
 export function getConfig() {
     return (dispatch, getState) => {
-        apiGetConfig(getState().account.token.access, (err, res) => {
-            if (err == null && res != null) {
+        apiGetConfig(getState().account.token.access)
+            .then(res => {
                 dispatch(_setConfig(res.body));
-            }
-        });
+            })
     }
 }
 
@@ -261,44 +246,44 @@ export function addPost(text, image, ancestor, color = "FF9908") {
     return (dispatch, getState) => {
         dispatch(showAddPost(false));
         let loc = getState().viewState.location;
-        apiAddPost(getState().account.token.access, ancestor, color, 0.0, loc.latitude, loc.longitude, loc.city, loc.country, text, image, (err, res) => {
-            if (err == null && res != null) {
-                dispatch(receivePosts("location", {recent: res.body.posts}))
-            }
-            if (ancestor !== undefined) {
-                dispatch(fetchPost(ancestor));
-            }
-        });
+        apiAddPost(getState().account.token.access, ancestor, color, 0.0, loc.latitude, loc.longitude, loc.city, loc.country, text, image)
+            .then(res => {
+                dispatch(receivePosts("location", {recent: res.body.posts}));
+                if (ancestor !== undefined) {
+                    dispatch(fetchPost(ancestor));
+                }
+            });
     }
 }
 
 export function setDeviceUid(deviceUid) {
     return (dispatch, getState) => {
         const loc = getState().viewState.location;
-        apiGetAccessToken(deviceUid, loc.latitude, loc.longitude, loc.city, loc.country, (err, res) => {
-            if (err == null && res != null) {
+        apiGetAccessToken(deviceUid, loc.latitude, loc.longitude, loc.city, loc.country)
+            .then(res => {
                 dispatch(_setDeviceUID(deviceUid));
                 dispatch(setToken(res.body.distinct_id, res.body.access_token, res.body.refresh_token, res.body.expiration_date, res.body.token_type));
-            }
-        });
+            });
     }
 }
 
 export function refreshAccessToken() {
     return (dispatch, getState) => {
         const account = getState().account;
-        apiRefreshAccessToken(account.token.access, account.token.distinctId, account.token.refresh, (err, res) => {
-            if (err == null && res !== null && res.body.upgraded === true) {
-                dispatch(setToken(account.token.distinctId, res.body.access_token, account.token.refresh, res.body.expiration_date, res.body.token_type));
-            }
-        });
+        apiRefreshAccessToken(account.token.access, account.token.distinctId, account.token.refresh)
+            .then(res => {
+                if (res.body.upgraded === true) {
+                    dispatch(setToken(account.token.distinctId, res.body.access_token, account.token.refresh, res.body.expiration_date, res.body.token_type));
+                }
+            });
     }
 }
 
 export function setLocation(latitude, longitude, city = undefined, country = "DE") {
     return (dispatch, getState) => {
-        _setLocation(latitude, longitude, city, country);
-        apiSetPlace(getState().account.token.access, latitude, longitude, city, country, (err, res) => {
-        });
+        dispatch(_setLocation(latitude, longitude, city, country));
+        if (getState().account.token !== undefined && getState().account.token.access !== undefined) {
+            apiSetPlace(getState().account.token.access, latitude, longitude, city, country);
+        }
     }
 }

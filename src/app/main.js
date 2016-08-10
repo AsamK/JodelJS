@@ -1,5 +1,5 @@
 'use strict';
-require("es6-shim");
+require("babel-polyfill");
 
 import React, {Component} from "react";
 import {refreshAccessToken} from "../redux/actions/api";

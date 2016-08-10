@@ -3,7 +3,7 @@
   "description": "Jodel webapp",
   "dependencies": {
     "classnames": "~2.2.5",
-    "es6-shim": "~0.35.1",
+    "babel-polyfill": "~6.13.0",
     "react": "~15.3.0",
     "react-document-title": "~2.0.2",
     "react-dom": "~15.3.0",
@@ -38,7 +38,7 @@
     "watch-js": "watchify -o build-debug/main.js -v -d src/app/main.js",
     "watch-css": "fsmonitor -s -p -d style/ lessc --npm-import --autoprefix=\"> 0.5%\" style/main.less build-debug/main.css",
     "build": "npm run build-css & npm run build-js",
-    "build-js": "NODE_ENV=production browserify src/app/main.js -t [ babelify --presets [ es2015 stage-0 react ] --plugins [ transform-react-inline-elements transform-react-constant-elements ]] -t [envify] | uglifyjs -cm > build/main.js",
+    "build-js": "NODE_ENV=production browserify src/app/main.js | uglifyjs -cm > build/main.js",
     "build-css": "lessc --clean-css=\"--s1 --advanced --compatibility=ie8\" --npm-import --autoprefix=\"> 0.5%\" style/main.less build/main.css",
     "updatepackages": "ncu -u -a"
   },
@@ -51,6 +51,10 @@
             "es2015",
             "stage-0",
             "react"
+          ],
+          "plugins": [
+            "transform-react-inline-elements",
+            "transform-react-constant-elements"
           ]
         }
       ],

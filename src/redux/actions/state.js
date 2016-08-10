@@ -121,7 +121,7 @@ export function _setToken(distinctId, accessToken, refreshToken, expirationDate,
 }
 
 export const SET_LOCATION = 'SET_LOCATION';
-export function setLocation(latitude, longitude, city = undefined, country = "DE") {
+export function _setLocation(latitude, longitude, city, country) {
     return {
         type: SET_LOCATION,
         location: {latitude, longitude, city, country},

@@ -1,13 +1,12 @@
 import crypto from "crypto";
-import {fetchPostsIfNeeded, fetchPost, getConfig, setDeviceUid} from "./actions/api";
+import {fetchPostsIfNeeded, fetchPost, getConfig, setDeviceUid, setLocation} from "./actions/api";
 import {
     invalidatePosts,
     switchPostListSortType,
     _switchPostSection,
     _selectPost,
     _setToken,
-    PostListSortTypes,
-    setLocation
+    PostListSortTypes
 } from "./actions/state";
 export * from "./actions/state";
 export * from "./actions/api";

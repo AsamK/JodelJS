@@ -13,7 +13,8 @@ import {
     apiGetConfig,
     apiGetPostsMine,
     apiRefreshAccessToken,
-    apiDeletePost
+    apiDeletePost,
+    apiSetPlace
 } from "../../app/api";
 import {
     receivePost,
@@ -23,7 +24,8 @@ import {
     _setConfig,
     showAddPost,
     _setDeviceUID,
-    PostListSortTypes
+    PostListSortTypes,
+    _setLocation
 } from "./state";
 import {setToken} from "../actions";
 
@@ -289,6 +291,14 @@ export function refreshAccessToken() {
             if (err == null && res !== null && res.body.upgraded === true) {
                 dispatch(setToken(account.token.distinctId, res.body.access_token, account.token.refresh, res.body.expiration_date, res.body.token_type));
             }
+        });
+    }
+}
+
+export function setLocation(latitude, longitude, city = undefined, country = "DE") {
+    return (dispatch, getState) => {
+        _setLocation(latitude, longitude, city, country);
+        apiSetPlace(getState().account.token.access, latitude, longitude, city, country, (err, res) => {
         });
     }
 }

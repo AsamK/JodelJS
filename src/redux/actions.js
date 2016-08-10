@@ -75,9 +75,25 @@ export function setToken(distinctId, accessToken, refreshToken, expirationDate, 
     }
 }
 
+// Gibt eine Zufallszahl zwischen min (inklusive) und max (exklusive) zurück
+// Die Verwendung von Math.round() erzeugt keine gleichmäßige Verteilung!
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
 function randomValueHex(byteCount) {
-    return crypto.randomBytes(byteCount)
-        .toString('hex'); // convert to hexadecimal format
+    let rawBytes;
+    try {
+        rawBytes = crypto.randomBytes(byteCount);
+    } catch (e) {
+        // Old browser, insecure but works
+        rawBytes = new Uint8Array(byteCount);
+        rawBytes = rawBytes.map(i => getRandomInt(0, 256));
+        rawBytes = Buffer.from(rawBytes);
+    }
+    return rawBytes.toString('hex'); // convert to hexadecimal format
 }
 
 export function createNewAccount() {

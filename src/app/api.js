@@ -2,8 +2,7 @@
 
 import request from "superagent";
 import Settings from "../app/settings";
-import HmacSHA1 from "crypto-js/hmac-sha1";
-import Hex from "crypto-js/enc-hex";
+import crypto from "crypto";
 import {PostListSortTypes} from "../redux/actions";
 
 const API_PATH_V2 = Settings.API_PATH + "/v2";
@@ -17,8 +16,18 @@ function parseUrl(url) {
 
 function computeSignature(auth, method, url, timestamp, data) {
     let u = parseUrl(url);
-    let raw = method + "%" + u.hostname + "%" + 443 + "%" + u.pathname + "%" + auth + "%" + timestamp + "%" + "" + "%" + data;
-    return Hex.stringify(HmacSHA1(raw, Settings.KEY));
+    var path = u.pathname;
+    if (!path.startsWith("/")) {
+        path = "/" + path;
+    }
+    let raw = method + "%" + u.hostname + "%" + 443 + "%" + path + "%" + auth + "%" + timestamp + "%" + "" + "%" + data;
+
+    var hmac = crypto.createHmac('sha1', Settings.KEY);
+    hmac.setEncoding('hex');
+    hmac.write(raw);
+    hmac.end();
+    var result = hmac.read();
+    return result;
 }
 
 export function jodelRequest(auth, method, url, query, data, callback) {

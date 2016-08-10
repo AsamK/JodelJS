@@ -6,7 +6,8 @@ import classnames from "classnames";
 export default class AddPost extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {message: "", image: null, imageUrl: null};
+        const messageDraft = sessionStorage.getItem("messageDraft");
+        this.state = {message: messageDraft !== null ? messageDraft : "", image: null, imageUrl: null};
         this.handleChangeImage = this.handleChangeImage.bind(this);
         this.resetForm = this.resetForm.bind(this);
     }
@@ -34,6 +35,7 @@ export default class AddPost extends PureComponent {
     resetForm(form) {
         this.setState({message: "", image: null, imageUrl: null});
         form.reset();
+        sessionStorage.removeItem("messageDraft");
     }
 
     render() {
@@ -62,11 +64,15 @@ export default class AddPost extends PureComponent {
                         this.resetForm(form);
                     }
                 }}>
-                <textarea value={this.state.message} onChange={event => {
-                    this.setState({message: event.target.value});
-                }}/>
-                    <input type="file" accept="image/*" onChange={this.handleChangeImage}/>
-                    {this.state.imageUrl !== null ? <img src={this.state.imageUrl} alt={this.state.image.name}/> : ""}
+                    <textarea value={this.state.message} onChange={event => {
+                        this.setState({message: event.target.value});
+                        sessionStorage.setItem("messageDraft", event.target.value);
+                    }}/>
+                    <div className="image">
+                        Bild Jodeln:
+                        <input type="file" accept="image/*" onChange={this.handleChangeImage}/>
+                        {this.state.imageUrl !== null ? <img src={this.state.imageUrl} alt={this.state.image.name}/> : ""}
+                    </div>
                     <button type="submit">
                         Senden
                     </button>

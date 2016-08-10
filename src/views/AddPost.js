@@ -71,7 +71,8 @@ export default class AddPost extends PureComponent {
                     <div className="image">
                         Bild Jodeln:
                         <input type="file" accept="image/*" onChange={this.handleChangeImage}/>
-                        {this.state.imageUrl !== null ? <img src={this.state.imageUrl} alt={this.state.image.name}/> : ""}
+                        {this.state.imageUrl !== null ?
+                            <img src={this.state.imageUrl} alt={this.state.image.name}/> : ""}
                     </div>
                     <button type="submit">
                         Senden

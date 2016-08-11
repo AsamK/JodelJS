@@ -45,6 +45,7 @@ export function jodelRequest(auth, method, url, query, data) {
             .set("X-Api-Version", "0.2")
             .set("X-Timestamp", timestamp)
             .set("X-Authorization", "HMAC " + sig)
+            .set("Content-Type", "application/json; charset=UTF-8")
             .send(data)
             .end((err, res) => {
                 if (err) {

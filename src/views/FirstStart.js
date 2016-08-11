@@ -59,7 +59,9 @@ class FirstStart extends Component {
                                         }
                                     }
                                     this.props.dispatch(_setLocation(latitude, longitude));
-                                }}/>
+                                }}
+                                onLocationRequested={this.updateLocation}
+                />
                 {this.props.location.latitude === undefined ?
                     <div className="locationError">
                         <p>Zum erstmaligen Anmelden muss der aktuelle Standort bekannt sein.

@@ -16,6 +16,7 @@ export default class SelectLocation extends PureComponent {
         longitude: React.PropTypes.number,
         useBrowserLocation: React.PropTypes.bool.isRequired,
         onChange: React.PropTypes.func.isRequired,
+        onLocationRequested: React.PropTypes.func.isRequired,
     };
 
     handleChangeLatitude(event) {
@@ -46,7 +47,7 @@ export default class SelectLocation extends PureComponent {
     }
 
     render() {
-        const {latitude, longitude, useBrowserLocation, ...forwardProps} = this.props;
+        const {latitude, longitude, useBrowserLocation, onLocationRequested, ...forwardProps} = this.props;
         return (
             <div className="selectLocation">
                 <label>
@@ -54,6 +55,11 @@ export default class SelectLocation extends PureComponent {
                            onChange={this.handleChangeRadio}/>
                     Standort vom Browser abfragen
                 </label>
+                {useBrowserLocation ? <div>
+                    <p>Aktueller
+                        Standort: {this.props.latitude === undefined ? "(Unbekannt)" : this.props.latitude + ", " + this.props.longitude}</p>
+                    <a onClick={onLocationRequested}>Standort aktualisieren</a>
+                </div> : ""}
                 <label>
                     <input type="radio" value={MANUAL} checked={!useBrowserLocation}
                            onChange={this.handleChangeRadio}/>

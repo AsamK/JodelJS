@@ -45,8 +45,8 @@ export function updateLocation() {
         if (getState().viewState.useBrowserLocation && "geolocation" in navigator) {
             /* geolocation is available */
             navigator.geolocation.getCurrentPosition(position => {
-                if (getState().viewState.location.latitude != position.coords.latitude &&
-                    getState().viewState.location.longitude != position.coords.longitude) {
+                if (getState().viewState.location.latitude !== position.coords.latitude ||
+                    getState().viewState.location.longitude !== position.coords.longitude) {
                     dispatch(setLocation(position.coords.latitude, position.coords.longitude));
                     dispatch(updatePosts());
                 }

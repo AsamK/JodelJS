@@ -8,13 +8,15 @@ import PostDetails from "./PostDetails";
 import AddPost from "./AddPost";
 import TopBar from "./TopBar";
 import FirstStart from "./FirstStart";
+import AppSettings from "./AppSettings";
 import {
     fetchPostsIfNeeded,
     selectPost,
     updatePosts,
     showAddPost,
     fetchMorePosts,
-    switchPostSection
+    switchPostSection,
+    showSettings
 } from "../redux/actions";
 
 class Jodel extends Component {
@@ -62,9 +64,12 @@ class Jodel extends Component {
             return <div className="jodel">
                 <FirstStart/>
             </div>
+        } else if (this.props.settings.visible) {
+            return <AppSettings/>
         } else {
             return <div className="jodel">
-                <TopBar karma={this.props.karma} switchPostSection={this.switchPostSection.bind(this)}/>
+                <TopBar karma={this.props.karma} switchPostSection={this.switchPostSection.bind(this)}
+                        showSettings={() => this.props.dispatch(showSettings(true))}/>
                 <div className={classnames("list", {postShown: this.props.selectedPost != null})}>
                     <PostListContainer onPostClick={this.handleClick.bind(this)}
                                        onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}
@@ -110,6 +115,7 @@ const mapStateToProps = (state) => {
         section: state.viewState.postSection,
         selectedPost: state.viewState.selectedPostId != null ? state.entities[state.viewState.selectedPostId] : null,
         locationKnown: state.viewState.location.latitude !== undefined,
+        settings: state.viewState.settings,
         karma: state.account.karma,
         deviceUid: state.account.deviceUid,
         isRegistered: state.account.token !== undefined && state.account.token.access !== undefined,

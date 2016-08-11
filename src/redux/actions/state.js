@@ -29,6 +29,14 @@ export function showAddPost(visible, ancestor) {
     }
 }
 
+export const SHOW_SETTINGS = 'SHOW_SETTINGS';
+export function showSettings(visible) {
+    return {
+        type: SHOW_SETTINGS,
+        visible,
+    }
+}
+
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export function receivePosts(section, postsBySortType, append = false) {
     let res = {

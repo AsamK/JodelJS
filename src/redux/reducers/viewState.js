@@ -6,15 +6,18 @@ import {
     PostListSortTypes,
     SHOW_ADD_POST
 } from "../actions";
-import {SET_USE_BROWSER_LOCATION} from "../actions/state";
+import {SET_USE_BROWSER_LOCATION, SHOW_SETTINGS} from "../actions/state";
 
-export const VIEW_STATE_VERSION = 3;
+export const VIEW_STATE_VERSION = 4;
 export function migrateViewState(storedState, oldVersion) {
     if (oldVersion < 2) {
         storedState.location.country = "DE";
     }
     if (oldVersion < 3) {
         storedState.useBrowserLocation = true;
+    }
+    if (oldVersion < 4) {
+        storedState.settings = {visible: false};
     }
     return storedState;
 }
@@ -26,6 +29,7 @@ function viewState(state = {
     postSection: "location",
     postListSortType: PostListSortTypes.RECENT,
     addPost: {visible: false, ancestor: undefined},
+    settings: {visible: false},
 }, action) {
     switch (action.type) {
         case SELECT_POST:
@@ -38,6 +42,8 @@ function viewState(state = {
             return Object.assign({}, state, {postSection: action.section});
         case SHOW_ADD_POST:
             return Object.assign({}, state, {addPost: {visible: action.visible, ancestor: action.ancestor}});
+        case SHOW_SETTINGS:
+            return Object.assign({}, state, {settings: {visible: action.visible}});
         case SET_USE_BROWSER_LOCATION:
             return Object.assign({}, state, {useBrowserLocation: action.useBrowserLocation});
         default:

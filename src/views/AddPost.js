@@ -2,12 +2,18 @@ import React, {PureComponent} from "react";
 import {connect} from "react-redux";
 import {addPost, showAddPost} from "../redux/actions";
 import classnames from "classnames";
+import ColorPicker from "./ColorPicker";
 
 export default class AddPost extends PureComponent {
     constructor(props) {
         super(props);
         const messageDraft = sessionStorage.getItem("messageDraft");
-        this.state = {message: messageDraft !== null ? messageDraft : "", image: null, imageUrl: null};
+        this.state = {
+            message: messageDraft !== null ? messageDraft : "",
+            image: null,
+            imageUrl: null,
+            color: undefined
+        };
         this.handleChangeImage = this.handleChangeImage.bind(this);
         this.resetForm = this.resetForm.bind(this);
     }
@@ -55,12 +61,12 @@ export default class AddPost extends PureComponent {
                         fileReader.onload = event => {
                             let url = event.target.result;
                             let encodedImage = url.substr(url.indexOf(',') + 1);
-                            this.props.dispatch(addPost(this.state.message, encodedImage, ancestor));
+                            this.props.dispatch(addPost(this.state.message, encodedImage, ancestor), this.state.color);
                             this.resetForm(form);
                         };
                         fileReader.readAsDataURL(this.state.image);
                     } else {
-                        this.props.dispatch(addPost(this.state.message, undefined, ancestor));
+                        this.props.dispatch(addPost(this.state.message, undefined, ancestor, this.state.color));
                         this.resetForm(form);
                     }
                 }}>
@@ -74,6 +80,9 @@ export default class AddPost extends PureComponent {
                         {this.state.imageUrl !== null ?
                             <img src={this.state.imageUrl} alt={this.state.image.name}/> : ""}
                     </div>
+                    {ancestor === undefined ? <ColorPicker color={this.state.color} onChange={(e) => {
+                        this.setState({color: e.target.value});
+                    }}/> : ""}
                     <button type="submit">
                         Senden
                     </button>

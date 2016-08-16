@@ -3,7 +3,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import SelectLocation from "./SelectLocation";
-import {updateLocation, _setLocation, setUseBrowserLocation, showSettings, updatePosts} from "../redux/actions";
+import {updateLocation, _setLocation, setUseBrowserLocation, showSettings, updatePosts, setLocation} from "../redux/actions";
 import Settings from "../app/settings";
 
 class AppSettings extends Component {
@@ -41,6 +41,7 @@ class AppSettings extends Component {
                             onLocationRequested={this.updateLocation}
             />
             <button onClick={() => {
+                this.props.dispatch(setLocation(this.props.location.latitude, this.props.location.longitude));
                 this.props.dispatch(showSettings(false));
                 this.props.dispatch(updatePosts());
             }}>

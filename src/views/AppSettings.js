@@ -3,17 +3,43 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import SelectLocation from "./SelectLocation";
-import {updateLocation, _setLocation, setUseBrowserLocation, showSettings, updatePosts, setLocation} from "../redux/actions";
+import {
+    updateLocation,
+    _setLocation,
+    setUseBrowserLocation,
+    showSettings,
+    updatePosts,
+    setLocation
+} from "../redux/actions";
 import Settings from "../app/settings";
 
 class AppSettings extends Component {
     constructor(props) {
         super(props);
         this.updateLocation = this.updateLocation.bind(this);
+        this.locationChange = this.locationChange.bind(this);
     }
 
     updateLocation() {
         this.props.dispatch(updateLocation());
+    }
+
+    locationChange(useBrowserLocation, latitude, longitude) {
+        this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
+        if (useBrowserLocation && !this.props.useBrowserLocation) {
+            this.updateLocation();
+        }
+        if (!useBrowserLocation) {
+            if (latitude === undefined) {
+                latitude = Settings.DEFAULT_LOCATION.latitude;
+            }
+            if (longitude === undefined) {
+                longitude = Settings.DEFAULT_LOCATION.longitude;
+            }
+        }
+        latitude = Math.round(latitude * 100) / 100;
+        longitude = Math.round(longitude * 100) / 100;
+        this.props.dispatch(_setLocation(latitude, longitude));
     }
 
     render() {
@@ -26,18 +52,7 @@ class AppSettings extends Component {
             <p>Standort</p>
             <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
                             latitude={this.props.location.latitude} longitude={this.props.location.longitude}
-                            onChange={(useBrowserLocation, latitude, longitude) => {
-                                this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
-                                if (!useBrowserLocation) {
-                                    if (latitude === undefined) {
-                                        latitude = Settings.DEFAULT_LOCATION.latitude;
-                                    }
-                                    if (longitude === undefined) {
-                                        longitude = Settings.DEFAULT_LOCATION.longitude;
-                                    }
-                                }
-                                this.props.dispatch(_setLocation(latitude, longitude));
-                            }}
+                            onChange={this.locationChange}
                             onLocationRequested={this.updateLocation}
             />
             <button onClick={() => {

@@ -281,6 +281,8 @@ export function refreshAccessToken() {
 
 export function setLocation(latitude, longitude, city = undefined, country = "DE") {
     return (dispatch, getState) => {
+        latitude = Math.round(latitude * 100) / 100;
+        longitude = Math.round(longitude * 100) / 100;
         dispatch(_setLocation(latitude, longitude, city, country));
         if (getState().account.token !== undefined && getState().account.token.access !== undefined) {
             apiSetPlace(getState().account.token.access, latitude, longitude, city, country);

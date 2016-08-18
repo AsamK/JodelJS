@@ -28,7 +28,7 @@ export default class SelectLocation extends PureComponent {
     }
 
     handleChangeLongitude(event) {
-        var number = Number.parseFloat(event.target.value);
+        var number = Number.parseFloat(event.target.value.replace(',', '.'));
         if (isNaN(number) || number < -180 || number > 180) {
             return
         }
@@ -69,12 +69,12 @@ export default class SelectLocation extends PureComponent {
                     <div>
                         <label>
                             Breitengrad:
-                            <input type="number" min="-90" max="90" step="0.0000001" value={this.props.latitude}
+                            <input type="number" min="-90" max="90" step="0.01" value={this.props.latitude}
                                    onChange={this.handleChangeLatitude}/>
                         </label>
                         <label>
                             Längengrad:
-                            <input type="number" min="-180" max="180" step="0.0000001" value={this.props.longitude}
+                            <input type="number" min="-180" max="180" step="0.01" value={this.props.longitude}
                                    onChange={this.handleChangeLongitude}/>
                         </label>
                     </div>

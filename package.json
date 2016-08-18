@@ -33,10 +33,10 @@
     "watchify": "~3.7.0"
   },
   "scripts": {
-    "start": "npm run watch-js & npm run watch-css",
+    "start": "mkdir -p build-debug && cp -r img build-debug/ && cp src/index.htm build-debug/ && npm run watch-js & npm run watch-css",
     "watch-js": "watchify -o build-debug/main.js -v -d src/app/main.js",
     "watch-css": "fsmonitor -s -p -d style/ lessc --npm-import --autoprefix=\"> 0.5%\" style/main.less build-debug/main.css",
-    "build": "npm run build-css & npm run build-js",
+    "build": "mkdir -p build && cp -r img build/ && cp src/index.htm build/ && npm run build-css & npm run build-js",
     "build-js": "NODE_ENV=production browserify src/app/main.js | uglifyjs -cm > build/main.js",
     "build-css": "lessc --clean-css=\"--s1 --advanced\" --npm-import --autoprefix=\"> 0.5%\" style/main.less build/main.css",
     "updatepackages": "ncu -u -a"

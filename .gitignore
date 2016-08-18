@@ -1,7 +1,7 @@
 node_modules/
-lib/
 *.swp
 *~
 build/
 build-debug/
 .idea/
+/src/app/settings.js

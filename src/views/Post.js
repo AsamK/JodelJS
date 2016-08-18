@@ -6,6 +6,7 @@ import Vote from "./Vote";
 import Time from "./Time";
 import ChildInfo from "./ChildInfo";
 import Location from "./Location";
+import Message from "./Message";
 import {upVote, downVote} from "../redux/actions";
 import {deletePost} from "../redux/actions/api";
 
@@ -45,7 +46,9 @@ class Post extends PureComponent {
                         <div className="postPicture"
                              style={{backgroundImage: "url(https:" + post.thumbnail_url + ")"}}></div>
                     </a> :
-                    <div className="postMessage">{post.message}</div>
+                    <Message message={post.message} onHashtagClick={(e)=> {
+                        e.stopPropagation();
+                    }}/>
                 }
                 <Vote vote_count={post.vote_count} voted={post.hasOwnProperty('voted') ? post.voted : ""}
                       upvote={this.upvote} downvote={this.downvote}/>

@@ -1,6 +1,6 @@
 'use strict';
 
-import React, {Component} from "react";
+import React, {PureComponent} from "react";
 import {connect} from "react-redux";
 import Vote from "./Vote";
 import Time from "./Time";
@@ -9,7 +9,7 @@ import Location from "./Location";
 import {upVote, downVote} from "../redux/actions";
 import {deletePost} from "../redux/actions/api";
 
-class Post extends Component {
+class Post extends PureComponent {
     constructor(props) {
         super(props);
         this.upvote = this.upvote.bind(this);
@@ -52,7 +52,13 @@ class Post extends Component {
                 <Time time={post.created_at}/>
                 <ChildInfo child_count={post.hasOwnProperty('child_count') ? post.child_count : 0}/>
                 <Location location={post.location.name} distance={post.distance}/>
-                <div className="author">{author != undefined ? author : ""}</div>
+                <div className="author">
+                    {author != undefined ?
+                        <div className={author}>
+                            {author}
+                        </div>
+                        : ""}
+                </div>
                 {post.post_own === "own" ? <a onClick={e => {
                     e.stopPropagation();
                     this.props.dispatch(deletePost(post.post_id))
@@ -61,6 +67,5 @@ class Post extends Component {
         );
     }
 }
-;
 
 export default connect()(Post);

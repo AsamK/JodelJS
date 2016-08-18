@@ -38,7 +38,7 @@
     "watch-css": "fsmonitor -s -p -d style/ lessc --npm-import --autoprefix=\"> 0.5%\" style/main.less build-debug/main.css",
     "build": "npm run build-css & npm run build-js",
     "build-js": "NODE_ENV=production browserify src/app/main.js | uglifyjs -cm > build/main.js",
-    "build-css": "lessc --clean-css=\"--s1 --advanced --compatibility=ie8\" --npm-import --autoprefix=\"> 0.5%\" style/main.less build/main.css",
+    "build-css": "lessc --clean-css=\"--s1 --advanced\" --npm-import --autoprefix=\"> 0.5%\" style/main.less build/main.css",
     "updatepackages": "ncu -u -a"
   },
   "browserify": {

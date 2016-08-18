@@ -42,14 +42,16 @@ body {
 }
 
 .addButton {
-  width: 6em;
-  height: 5em;
+  width: 4em;
+  height: 4em;
   position: fixed;
   text-align: center;
-  background-color: gray;
-  opacity: .5;
+  background-color: rgba(0,0,0,.3);
+  color: #fff;
+  border: solid .3em #fff;
+  border-radius: 4em;
   &::before {
-    font-size: 4em;
+    font-size: 3em;
     content: "+";
   }
   margin-left: -2em;
@@ -57,11 +59,11 @@ body {
 }
 
 .postListContainer .addButton {
-  bottom: 5em;
+  bottom: 3.5em;
 }
 
 .postDetails .addButton {
-  bottom: 2em;
+  bottom: 1em;
 }
 
 .postListContainer .sections {

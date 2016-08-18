@@ -10,7 +10,7 @@
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
-    "superagent": "^2.1.0"
+    "superagent": "^2.2.0"
   },
   "devDependencies": {
     "babel-cli": "~6.11.4",
@@ -29,7 +29,7 @@
     "less-plugin-npm-import": "~2.1.0",
     "normalize.css": "~4.2.0",
     "npm-check-updates": "~2.8.0",
-    "uglify-js": "~2.7.0",
+    "uglify-js": "~2.7.3",
     "watchify": "~3.7.0"
   },
   "scripts": {

@@ -14,7 +14,9 @@ import {
     apiGetPostsMine,
     apiRefreshAccessToken,
     apiDeletePost,
-    apiSetPlace
+    apiSetPlace,
+    apiGetPostsChannelCombo,
+    apiGetPostsChannel
 } from "../../app/api";
 import {
     receivePost,
@@ -72,55 +74,70 @@ export function fetchPostsIfNeeded(section) {
         }
         if (shouldFetchPosts(section, getState())) {
             dispatch(setIsFetching(section));
-            switch (section) {
-                case "location":
-                    apiGetPostsCombo(getState().account.token.access, getState().viewState.location.latitude, getState().viewState.location.longitude)
-                        .then(res => {
-                            dispatch(receivePosts(section, {
-                                recent: res.body.recent,
-                                discussed: res.body.replied,
-                                popular: res.body.voted
-                            }))
-                        })
-                        .catch(err => {
-                            dispatch(setIsFetching(section, false));
-                        });
-                    break;
-                case "mine":
-                    apiGetPostsMineCombo(getState().account.token.access)
-                        .then(res => {
-                            dispatch(receivePosts(section, {
-                                recent: res.body.recent,
-                                discussed: res.body.replied,
-                                popular: res.body.voted
-                            }))
-                        })
-                        .catch(err => {
-                            dispatch(setIsFetching(section, false));
-                        });
-                    break;
-                case "mineReplies":
-                    apiGetPostsMineReplies(getState().account.token.access, undefined, undefined)
-                        .then(res => {
-                            dispatch(receivePosts(section, {
-                                recent: res.body.posts,
-                            }))
-                        })
-                        .catch(err => {
-                            dispatch(setIsFetching(section, false));
-                        });
-                    break;
-                case "mineVotes":
-                    apiGetPostsMineVotes(getState().account.token.access, undefined, undefined)
-                        .then(res => {
-                            dispatch(receivePosts(section, {
-                                recent: res.body.posts,
-                            }))
-                        })
-                        .catch(err => {
-                            dispatch(setIsFetching(section, false));
-                        });
-                    break;
+            if (section.startsWith("channel:")) {
+                let channel = section.substring(8);
+                apiGetPostsChannelCombo(getState().account.token.access, channel)
+                    .then(res => {
+                        dispatch(receivePosts(section, {
+                            recent: res.body.recent,
+                            discussed: res.body.replied,
+                            popular: res.body.voted
+                        }))
+                    })
+                    .catch(err => {
+                        dispatch(setIsFetching(section, false));
+                    });
+            } else {
+                switch (section) {
+                    case "location":
+                        apiGetPostsCombo(getState().account.token.access, getState().viewState.location.latitude, getState().viewState.location.longitude)
+                            .then(res => {
+                                dispatch(receivePosts(section, {
+                                    recent: res.body.recent,
+                                    discussed: res.body.replied,
+                                    popular: res.body.voted
+                                }))
+                            })
+                            .catch(err => {
+                                dispatch(setIsFetching(section, false));
+                            });
+                        break;
+                    case "mine":
+                        apiGetPostsMineCombo(getState().account.token.access)
+                            .then(res => {
+                                dispatch(receivePosts(section, {
+                                    recent: res.body.recent,
+                                    discussed: res.body.replied,
+                                    popular: res.body.voted
+                                }))
+                            })
+                            .catch(err => {
+                                dispatch(setIsFetching(section, false));
+                            });
+                        break;
+                    case "mineReplies":
+                        apiGetPostsMineReplies(getState().account.token.access, undefined, undefined)
+                            .then(res => {
+                                dispatch(receivePosts(section, {
+                                    recent: res.body.posts,
+                                }))
+                            })
+                            .catch(err => {
+                                dispatch(setIsFetching(section, false));
+                            });
+                        break;
+                    case "mineVotes":
+                        apiGetPostsMineVotes(getState().account.token.access, undefined, undefined)
+                            .then(res => {
+                                dispatch(receivePosts(section, {
+                                    recent: res.body.posts,
+                                }))
+                            })
+                            .catch(err => {
+                                dispatch(setIsFetching(section, false));
+                            });
+                        break;
+                }
             }
         }
     }
@@ -140,77 +157,95 @@ export function fetchMorePosts(section, sortType) {
         }
         const posts = postSection[sortType];
         let skip, limit;
-        switch (section) {
-            case "location":
-                let afterId;
-                if (posts !== undefined) {
-                    afterId = posts[posts.length - 1];
-                }
-                dispatch(setIsFetching(section));
-                apiGetPosts(getState().account.token.access, sortType, afterId, getState().viewState.location.latitude, getState().viewState.location.longitude)
-                    .then(res => {
-                        let p = {};
-                        p[sortType] = res.body.posts;
-                        dispatch(receivePosts(section, p, true));
-                    })
-                    .catch(err => {
-                        dispatch(setIsFetching(section, false));
-                    });
-                break;
-            case "mine":
-                if (posts !== undefined) {
-                    skip = posts.length;
-                    limit = 10;
-                }
-                dispatch(setIsFetching(section));
-                apiGetPostsMine(getState().account.token.access, sortType, skip, limit)
-                    .then(res => {
-                        let p = {};
-                        p[sortType] = res.body.posts;
-                        dispatch(receivePosts(section, p, true));
-                    })
-                    .catch(err => {
-                        dispatch(setIsFetching(section, false));
-                    });
-                break;
-            case "mineReplies":
-                if (sortType != PostListSortTypes.RECENT) {
-                    return;
-                }
-                if (posts !== undefined) {
-                    skip = posts.length;
-                    limit = 10;
-                }
-                dispatch(setIsFetching(section));
-                apiGetPostsMineReplies(getState().account.token.access, skip, limit)
-                    .then(res => {
-                        let p = {};
-                        p[sortType] = res.body.posts;
-                        dispatch(receivePosts(section, p, true));
-                    })
-                    .catch(err => {
-                        dispatch(setIsFetching(section, false));
-                    });
-                break;
-            case "mineVotes":
-                if (sortType != PostListSortTypes.RECENT) {
-                    return;
-                }
-                if (posts !== undefined) {
-                    skip = posts.length;
-                    limit = 10;
-                }
-                dispatch(setIsFetching(section));
-                apiGetPostsMineVotes(getState().account.token.access, skip, limit)
-                    .then(res => {
-                        let p = {};
-                        p[sortType] = res.body.posts;
-                        dispatch(receivePosts(section, p, true));
-                    })
-                    .catch(err => {
-                        dispatch(setIsFetching(section, false));
-                    });
-                break;
+        if (section.startsWith("channel:")) {
+            let channel = section.substring(8);
+            let afterId;
+            if (posts !== undefined) {
+                afterId = posts[posts.length - 1];
+            }
+            dispatch(setIsFetching(section));
+            apiGetPostsChannel(getState().account.token.access, sortType, afterId, channel)
+                .then(res => {
+                    let p = {};
+                    p[sortType] = res.body.posts;
+                    dispatch(receivePosts(section, p, true));
+                })
+                .catch(err => {
+                    dispatch(setIsFetching(section, false));
+                });
+        } else {
+            switch (section) {
+                case "location":
+                    let afterId;
+                    if (posts !== undefined) {
+                        afterId = posts[posts.length - 1];
+                    }
+                    dispatch(setIsFetching(section));
+                    apiGetPosts(getState().account.token.access, sortType, afterId, getState().viewState.location.latitude, getState().viewState.location.longitude)
+                        .then(res => {
+                            let p = {};
+                            p[sortType] = res.body.posts;
+                            dispatch(receivePosts(section, p, true));
+                        })
+                        .catch(err => {
+                            dispatch(setIsFetching(section, false));
+                        });
+                    break;
+                case "mine":
+                    if (posts !== undefined) {
+                        skip = posts.length;
+                        limit = 10;
+                    }
+                    dispatch(setIsFetching(section));
+                    apiGetPostsMine(getState().account.token.access, sortType, skip, limit)
+                        .then(res => {
+                            let p = {};
+                            p[sortType] = res.body.posts;
+                            dispatch(receivePosts(section, p, true));
+                        })
+                        .catch(err => {
+                            dispatch(setIsFetching(section, false));
+                        });
+                    break;
+                case "mineReplies":
+                    if (sortType != PostListSortTypes.RECENT) {
+                        return;
+                    }
+                    if (posts !== undefined) {
+                        skip = posts.length;
+                        limit = 10;
+                    }
+                    dispatch(setIsFetching(section));
+                    apiGetPostsMineReplies(getState().account.token.access, skip, limit)
+                        .then(res => {
+                            let p = {};
+                            p[sortType] = res.body.posts;
+                            dispatch(receivePosts(section, p, true));
+                        })
+                        .catch(err => {
+                            dispatch(setIsFetching(section, false));
+                        });
+                    break;
+                case "mineVotes":
+                    if (sortType != PostListSortTypes.RECENT) {
+                        return;
+                    }
+                    if (posts !== undefined) {
+                        skip = posts.length;
+                        limit = 10;
+                    }
+                    dispatch(setIsFetching(section));
+                    apiGetPostsMineVotes(getState().account.token.access, skip, limit)
+                        .then(res => {
+                            let p = {};
+                            p[sortType] = res.body.posts;
+                            dispatch(receivePosts(section, p, true));
+                        })
+                        .catch(err => {
+                            dispatch(setIsFetching(section, false));
+                        });
+                    break;
+            }
         }
     }
 }

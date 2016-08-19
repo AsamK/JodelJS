@@ -7,7 +7,7 @@ import Time from "./Time";
 import ChildInfo from "./ChildInfo";
 import Location from "./Location";
 import Message from "./Message";
-import {upVote, downVote} from "../redux/actions";
+import {upVote, downVote, switchPostSection} from "../redux/actions";
 import {deletePost} from "../redux/actions/api";
 
 class Post extends PureComponent {
@@ -46,8 +46,9 @@ class Post extends PureComponent {
                         <div className="postPicture"
                              style={{backgroundImage: "url(https:" + post.thumbnail_url + ")"}}></div>
                     </a> :
-                    <Message message={post.message} onHashtagClick={(e)=> {
+                    <Message message={post.message} onHashtagClick={(e, hashtag)=> {
                         e.stopPropagation();
+                        this.props.dispatch(switchPostSection("channel:" + hashtag));
                     }}/>
                 }
                 <Vote vote_count={post.vote_count} voted={post.hasOwnProperty('voted') ? post.voted : ""}

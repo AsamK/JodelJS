@@ -133,30 +133,25 @@ export function apiGetPostsChannelCombo(auth, channel) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/channel/combo", {channel: channel}, {});
 }
 
-export function apiGetPostsChannel(auth, channel, afterPostId) {
+export function apiGetPostsChannel(auth, sortType, afterPostId, channel) {
+    let type;
+    switch (sortType) {
+        case PostListSortTypes.RECENT:
+            type = "";
+            break;
+        case PostListSortTypes.DISCUSSED:
+            type = "discussed";
+            break;
+        case PostListSortTypes.POPULAR:
+            type = "popular";
+            break;
+    }
     let query = {channel: channel};
     if (afterPostId) {
         query.after = afterPostId;
     }
-    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/channel", query, {});
+    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/channel/" + type, query, {});
 }
-
-export function apiGetPostsChannelPopular(auth, afterPostId, channel) {
-    let query = {channel: channel};
-    if (afterPostId) {
-        query.after = afterPostId;
-    }
-    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/channel/popular", query, {});
-}
-
-export function apiGetPostsChannelDiscussed(auth, afterPostId, channel) {
-    let query = {channel: channel};
-    if (afterPostId) {
-        query.after = afterPostId;
-    }
-    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/channel/discussed", query, {});
-}
-
 
 export function apiGetPost(auth, post_id) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/" + post_id, {}, {});

@@ -8,7 +8,7 @@ import {
 } from "../actions";
 import {SET_USE_BROWSER_LOCATION, SHOW_SETTINGS} from "../actions/state";
 
-export const VIEW_STATE_VERSION = 4;
+export const VIEW_STATE_VERSION = 5;
 export function migrateViewState(storedState, oldVersion) {
     if (oldVersion < 2) {
         storedState.location.country = "DE";
@@ -16,7 +16,7 @@ export function migrateViewState(storedState, oldVersion) {
     if (oldVersion < 3) {
         storedState.useBrowserLocation = true;
     }
-    if (oldVersion < 4) {
+    if (oldVersion < 5) {
         storedState.settings = {visible: false};
     }
     return storedState;

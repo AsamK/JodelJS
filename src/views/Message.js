@@ -10,7 +10,7 @@ export default class Message extends Component {
 
     render() {
         const {message, onHashtagClick, ...forwardProps} = this.props;
-        let hashReg = /([^#]*)(#[^\s#]*)/mg;
+        let hashReg = /([^#]*)#([^\s#]*)/mg;
         let previousIndex = 0;
         let messageParts = [];
         while (true) {
@@ -20,7 +20,9 @@ export default class Message extends Component {
                 break;
             }
             messageParts.push(regResult[1]);
-            messageParts.push(<a className="hashtag" onClick={onHashtagClick}>{regResult[2]}</a>);
+            let hashtag = regResult[2];
+            messageParts.push(<a className="hashtag"
+                                 onClick={(e) => onHashtagClick(e, hashtag)}>#{hashtag}</a>);
             previousIndex = hashReg.lastIndex;
         }
         return (

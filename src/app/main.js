@@ -47,7 +47,8 @@ if (store.getState().account.token === undefined || store.getState().account.tok
     }
 } else {
     const now = new Date().getTime() / 1000;
-    if (now >= store.getState().account.token.expirationDate) {
+    let timeToExpire = 60 * 60 * 24 * 4;
+    if (now > store.getState().account.token.expirationDate - timeToExpire) {
         store.dispatch(refreshAccessToken());
     } else {
         store.dispatch(getConfig());

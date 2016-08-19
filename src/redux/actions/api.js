@@ -275,6 +275,10 @@ export function refreshAccessToken() {
                 if (res.body.upgraded === true) {
                     dispatch(setToken(account.token.distinctId, res.body.access_token, account.token.refresh, res.body.expiration_date, res.body.token_type));
                 }
+            })
+            .catch(err => {
+                console.error("Failed to refresh access token, reregistering…");
+                dispatch(setDeviceUid(account.deviceUid));
             });
     }
 }

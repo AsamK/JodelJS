@@ -46,7 +46,14 @@ body {
   height: 4em;
   position: fixed;
   text-align: center;
+  cursor: pointer;
   background-color: rgba(0,0,0,.3);
+  &:hover {
+    background-color: rgba(66,189,255,.76);
+  }
+  &:active {
+    background-color: rgba(66,189,255,.76);
+  }
   color: #fff;
   border: solid .3em #fff;
   border-radius: 4em;
@@ -313,6 +320,9 @@ a.hashtag {
   font-weight: bold;
 
   &:hover {
+    color: #00101455;
+  }
+  &:active {
     color: #00101455;
   }
 }

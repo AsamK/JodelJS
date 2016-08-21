@@ -9,6 +9,7 @@ import AddPost from "./AddPost";
 import TopBar from "./TopBar";
 import FirstStart from "./FirstStart";
 import AppSettings from "./AppSettings";
+import Progress from "./Progress";
 import {
     fetchPostsIfNeeded,
     selectPost,
@@ -82,6 +83,7 @@ class Jodel extends Component {
                                  locationKnown={this.props.locationKnown}/>
                 </div>
                 <AddPost/>
+                <Progress/>
             </div>;
         }
     }

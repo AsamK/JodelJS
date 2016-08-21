@@ -20,7 +20,7 @@ export default class AddPost extends PureComponent {
 
     static propTypes = {
         ancestor: React.PropTypes.string,
-        visible: React.PropTypes.bool.isRequired,
+        visible: React.PropTypes.bool,
     };
 
     handleChangeImage(event) {

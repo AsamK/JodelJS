@@ -6,7 +6,8 @@ import {
     _switchPostSection,
     _selectPost,
     _setToken,
-    PostListSortTypes
+    PostListSortTypes,
+    _setPermissionDenied
 } from "./actions/state";
 export * from "./actions/state";
 export * from "./actions/api";
@@ -99,5 +100,16 @@ export function createNewAccount() {
     return (dispatch, getState) => {
         const deviceUid = randomValueHex(32);
         dispatch(setDeviceUid(deviceUid));
+    }
+}
+
+export function setPermissionDenied(permissionDenied) {
+    return (dispatch, getState) => {
+        let account = getState().account;
+        if (account.deviceUid !== undefined && permissionDenied && !account.permissionDenied) {
+            dispatch(_setPermissionDenied(permissionDenied));
+            // Reregister
+            dispatch(setDeviceUid(account.deviceUid));
+        }
     }
 }

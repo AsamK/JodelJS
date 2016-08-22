@@ -116,6 +116,14 @@ export function _setDeviceUID(deviceUid) {
     }
 }
 
+export const SET_PERMISSION_DENIED = 'SET_PERMISSION_DENIED';
+export function _setPermissionDenied(permissionDenied) {
+    return {
+        type: SET_PERMISSION_DENIED,
+        permissionDenied,
+    }
+}
+
 export const SET_TOKEN = 'SET_TOKEN';
 export function _setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType) {
     return {

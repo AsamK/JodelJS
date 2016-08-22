@@ -2,10 +2,10 @@
 require("babel-polyfill");
 
 import React, {Component} from "react";
+import {setPermissionDenied, fetchPostsIfNeeded, updateLocation, getConfig} from "../redux/actions";
 import {refreshAccessToken} from "../redux/actions/api";
 import {migrateViewState, VIEW_STATE_VERSION} from "../redux/reducers/viewState";
 import {migrateAccount, ACCOUNT_VERSION} from "../redux/reducers/account";
-import {fetchPostsIfNeeded, updateLocation, getConfig, setDeviceUid} from "../redux/actions";
 import ReactDOM from "react-dom";
 import DocumentTitle from "react-document-title";
 import {createStore, applyMiddleware} from "redux";
@@ -43,7 +43,7 @@ store.subscribe(()=> {
 
 if (store.getState().account.token === undefined || store.getState().account.token.access === undefined) {
     if (store.getState().account.deviceUid !== undefined) {
-        store.dispatch(setDeviceUid(store.getState().account.deviceUid));
+        store.dispatch(setPermissionDenied(true));
     }
 } else {
     const now = new Date().getTime() / 1000;

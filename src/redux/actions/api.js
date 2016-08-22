@@ -29,25 +29,40 @@ import {
     PostListSortTypes,
     _setLocation
 } from "./state";
-import {setToken} from "../actions";
+import {setToken, setPermissionDenied} from "../actions";
 
+function handlePermissionDenied(dispatch, getState, err) {
+    if (err.status === 401) {
+        console.error("Permission denied, reregistering…");
+        dispatch(setPermissionDenied(true));
+    }
+}
 export function deletePost(postId) {
     return (dispatch, getState) => {
-        apiDeletePost(getState().account.token.access, postId);
+        apiDeletePost(getState().account.token.access, postId)
+            .catch(err => {
+                handlePermissionDenied(dispatch, getState, err);
+            });
     }
 }
 
 export function upVote(postId, parentPostId) {
     return (dispatch, getState) => {
         apiUpVote(getState().account.token.access, postId)
-            .then(res => dispatch(receivePost(res.body.post, parentPostId)));
+            .then(res => dispatch(receivePost(res.body.post, parentPostId)))
+            .catch(err => {
+                handlePermissionDenied(dispatch, getState, err);
+            });
     }
 }
 
 export function downVote(postId, parentPostId) {
     return (dispatch, getState) => {
         apiDownVote(getState().account.token.access, postId)
-            .then(res => dispatch(receivePost(res.body.post, parentPostId)));
+            .then(res => dispatch(receivePost(res.body.post, parentPostId)))
+            .catch(err => {
+                handlePermissionDenied(dispatch, getState, err);
+            });
     }
 }
 
@@ -86,6 +101,7 @@ export function fetchPostsIfNeeded(section) {
                     })
                     .catch(err => {
                         dispatch(setIsFetching(section, false));
+                        handlePermissionDenied(dispatch, getState, err);
                     });
             } else {
                 switch (section) {
@@ -100,6 +116,7 @@ export function fetchPostsIfNeeded(section) {
                             })
                             .catch(err => {
                                 dispatch(setIsFetching(section, false));
+                                handlePermissionDenied(dispatch, getState, err);
                             });
                         break;
                     case "mine":
@@ -113,6 +130,7 @@ export function fetchPostsIfNeeded(section) {
                             })
                             .catch(err => {
                                 dispatch(setIsFetching(section, false));
+                                handlePermissionDenied(dispatch, getState, err);
                             });
                         break;
                     case "mineReplies":
@@ -124,6 +142,7 @@ export function fetchPostsIfNeeded(section) {
                             })
                             .catch(err => {
                                 dispatch(setIsFetching(section, false));
+                                handlePermissionDenied(dispatch, getState, err);
                             });
                         break;
                     case "mineVotes":
@@ -135,6 +154,7 @@ export function fetchPostsIfNeeded(section) {
                             })
                             .catch(err => {
                                 dispatch(setIsFetching(section, false));
+                                handlePermissionDenied(dispatch, getState, err);
                             });
                         break;
                 }
@@ -172,6 +192,7 @@ export function fetchMorePosts(section, sortType) {
                 })
                 .catch(err => {
                     dispatch(setIsFetching(section, false));
+                    handlePermissionDenied(dispatch, getState, err);
                 });
         } else {
             switch (section) {
@@ -189,6 +210,7 @@ export function fetchMorePosts(section, sortType) {
                         })
                         .catch(err => {
                             dispatch(setIsFetching(section, false));
+                            handlePermissionDenied(dispatch, getState, err);
                         });
                     break;
                 case "mine":
@@ -205,6 +227,7 @@ export function fetchMorePosts(section, sortType) {
                         })
                         .catch(err => {
                             dispatch(setIsFetching(section, false));
+                            handlePermissionDenied(dispatch, getState, err);
                         });
                     break;
                 case "mineReplies":
@@ -224,6 +247,7 @@ export function fetchMorePosts(section, sortType) {
                         })
                         .catch(err => {
                             dispatch(setIsFetching(section, false));
+                            handlePermissionDenied(dispatch, getState, err);
                         });
                     break;
                 case "mineVotes":
@@ -243,6 +267,7 @@ export function fetchMorePosts(section, sortType) {
                         })
                         .catch(err => {
                             dispatch(setIsFetching(section, false));
+                            handlePermissionDenied(dispatch, getState, err);
                         });
                     break;
             }
@@ -255,6 +280,9 @@ export function fetchPost(postId) {
         apiGetPost(getState().account.token.access, postId)
             .then(res => {
                 dispatch(receivePost(res.body))
+            })
+            .catch(err => {
+                handlePermissionDenied(dispatch, getState, err);
             });
     }
 }
@@ -264,6 +292,9 @@ export function getKarma() {
         apiGetKarma(getState().account.token.access)
             .then(res => {
                 dispatch(_setKarma(res.body.karma))
+            })
+            .catch(err => {
+                handlePermissionDenied(dispatch, getState, err);
             });
     }
 }
@@ -274,6 +305,9 @@ export function getConfig() {
             .then(res => {
                 dispatch(_setConfig(res.body));
             })
+            .catch(err => {
+                handlePermissionDenied(dispatch, getState, err);
+            });
     }
 }
 
@@ -287,6 +321,9 @@ export function addPost(text, image, ancestor, color = "FF9908") {
                 if (ancestor !== undefined) {
                     dispatch(fetchPost(ancestor));
                 }
+            })
+            .catch(err => {
+                handlePermissionDenied(dispatch, getState, err);
             });
     }
 }
@@ -298,6 +335,9 @@ export function setDeviceUid(deviceUid) {
             .then(res => {
                 dispatch(_setDeviceUID(deviceUid));
                 dispatch(setToken(res.body.distinct_id, res.body.access_token, res.body.refresh_token, res.body.expiration_date, res.body.token_type));
+            })
+            .catch(err => {
+                console.error("Failed to register user.");
             });
     }
 }
@@ -312,8 +352,7 @@ export function refreshAccessToken() {
                 }
             })
             .catch(err => {
-                console.error("Failed to refresh access token, reregistering…");
-                dispatch(setDeviceUid(account.deviceUid));
+                handlePermissionDenied(dispatch, getState, err);
             });
     }
 }
@@ -324,7 +363,10 @@ export function setLocation(latitude, longitude, city = undefined, country = "DE
         longitude = Math.round(longitude * 100) / 100;
         dispatch(_setLocation(latitude, longitude, city, country));
         if (getState().account.token !== undefined && getState().account.token.access !== undefined) {
-            apiSetPlace(getState().account.token.access, latitude, longitude, city, country);
+            apiSetPlace(getState().account.token.access, latitude, longitude, city, country)
+                .catch(err => {
+                    handlePermissionDenied(dispatch, getState, err);
+                });
         }
     }
 }

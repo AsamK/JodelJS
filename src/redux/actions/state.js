@@ -91,6 +91,14 @@ export function _selectPost(postId) {
     }
 }
 
+export const SELECT_PICTURE = 'SELECT_PICTURE';
+export function selectPicture(postId) {
+    return {
+        type: SELECT_PICTURE,
+        postId: postId,
+    }
+}
+
 export const SET_KARMA = 'SET_KARMA';
 export function _setKarma(karma) {
     return {

@@ -4,11 +4,12 @@ import {
     SWITCH_POST_LIST_SORT_TYPE,
     SWITCH_POST_SECTION,
     PostListSortTypes,
-    SHOW_ADD_POST
+    SHOW_ADD_POST,
+    SELECT_PICTURE
 } from "../actions";
 import {SET_USE_BROWSER_LOCATION, SHOW_SETTINGS} from "../actions/state";
 
-export const VIEW_STATE_VERSION = 5;
+export const VIEW_STATE_VERSION = 6;
 export function migrateViewState(storedState, oldVersion) {
     if (oldVersion < 2) {
         storedState.location.country = "DE";
@@ -19,11 +20,15 @@ export function migrateViewState(storedState, oldVersion) {
     if (oldVersion < 5) {
         storedState.settings = {visible: false};
     }
+    if (oldVersion < 6) {
+        storedState.selectedPicturePostId = null;
+    }
     return storedState;
 }
 
 function viewState(state = {
     selectedPostId: null,
+    selectedPicturePostId: null,
     location: {latitude: undefined, longitude: undefined, city: undefined, country: "DE"},
     useBrowserLocation: true,
     postSection: "location",
@@ -34,6 +39,8 @@ function viewState(state = {
     switch (action.type) {
         case SELECT_POST:
             return Object.assign({}, state, {selectedPostId: action.postId});
+        case SELECT_PICTURE:
+            return Object.assign({}, state, {selectedPicturePostId: action.postId});
         case SET_LOCATION:
             return Object.assign({}, state, {location: action.location});
         case SWITCH_POST_LIST_SORT_TYPE:

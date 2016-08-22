@@ -7,7 +7,7 @@ import Time from "./Time";
 import ChildInfo from "./ChildInfo";
 import Location from "./Location";
 import Message from "./Message";
-import {upVote, downVote, switchPostSection} from "../redux/actions";
+import {upVote, downVote, switchPostSection, selectPicture} from "../redux/actions";
 import {deletePost} from "../redux/actions/api";
 
 class Post extends PureComponent {
@@ -15,6 +15,7 @@ class Post extends PureComponent {
         super(props);
         this.upvote = this.upvote.bind(this);
         this.downvote = this.downvote.bind(this);
+        this.pressTimer = undefined;
     }
 
     static propTypes = {
@@ -39,13 +40,19 @@ class Post extends PureComponent {
         return (
             <div className="post" style={{backgroundColor: "#" + post.color}} onClick={onPostClick}>
                 {post.hasOwnProperty('thumbnail_url') ?
-                    <a href={"https:" + post.image_url} target="_blank" onClick={(e) => {
-                        e.stopPropagation();
-                        return false;
-                    }}>
-                        <div className="postPicture"
-                             style={{backgroundImage: "url(https:" + post.thumbnail_url + ")"}}></div>
-                    </a> :
+                    <div className="postPicture"
+                         style={{backgroundImage: "url(https:" + post.thumbnail_url + ")"}}
+                         onMouseUp={e => clearTimeout(this.pressTimer)}
+                         onContextMenu={e => {
+                             e.preventDefault();
+                             clearTimeout(this.pressTimer);
+                             this.props.dispatch(selectPicture(post.post_id));
+                         }}
+                         onMouseDown={e => {
+                             clearTimeout(this.pressTimer);
+                             this.pressTimer = setTimeout(() => this.props.dispatch(selectPicture(post.post_id)), 300);
+                         }}></div>
+                    :
                     <Message message={post.message} onHashtagClick={(e, hashtag)=> {
                         e.stopPropagation();
                         this.props.dispatch(switchPostSection("channel:" + hashtag));

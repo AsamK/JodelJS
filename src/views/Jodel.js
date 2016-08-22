@@ -17,7 +17,8 @@ import {
     showAddPost,
     fetchMorePosts,
     switchPostSection,
-    showSettings
+    showSettings,
+    selectPicture
 } from "../redux/actions";
 
 class Jodel extends Component {
@@ -82,6 +83,14 @@ class Jodel extends Component {
                                  onAddClick={this.handleAddCommentClick.bind(this)}
                                  locationKnown={this.props.locationKnown}/>
                 </div>
+                {this.props.selectedPicturePost !== null ?
+                    <div className="bigPicture" onMouseUp={e => this.props.dispatch(selectPicture(null))}>
+                        <img alt={this.props.selectedPicturePost.message}
+                             src={"https:" + this.props.selectedPicturePost.thumbnail_url}/>
+                        <img alt={this.props.selectedPicturePost.message}
+                             src={"https:" + this.props.selectedPicturePost.image_url}/>
+                    </div>
+                    : ""}
                 <AddPost/>
                 <Progress/>
             </div>;
@@ -113,9 +122,17 @@ function getEmptyPost() {
 }
 
 const mapStateToProps = (state) => {
+    let selectedPicturePost = null;
+    if (state.viewState.selectedPicturePostId != null) {
+        let post = state.entities[state.viewState.selectedPicturePostId];
+        if (post !== undefined) {
+            selectedPicturePost = post;
+        }
+    }
     return {
         section: state.viewState.postSection,
         selectedPost: state.viewState.selectedPostId != null ? state.entities[state.viewState.selectedPostId] : null,
+        selectedPicturePost,
         locationKnown: state.viewState.location.latitude !== undefined,
         settings: state.viewState.settings,
         karma: state.account.karma,

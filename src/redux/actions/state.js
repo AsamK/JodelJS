@@ -77,7 +77,8 @@ export function receivePost(post, ancestor) {
         type: RECEIVE_POSTS,
         entities: [post],
         ancestor,
-        receivedAt: Date.now()
+        receivedAt: Date.now(),
+        append: true,
     }
 }
 

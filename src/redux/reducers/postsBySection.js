@@ -8,7 +8,7 @@ function uniq(a) {
 function posts(state = {
     isFetching: false,
     didInvalidate: true,
-    lastUpdates: null
+    lastUpdated: null
 }, action) {
     switch (action.type) {
         case RECEIVE_POSTS:
@@ -17,12 +17,12 @@ function posts(state = {
             }
             let newState = {
                 isFetching: false,
-                lastUpdated: action.receivedAt,
             };
             if (action.append) {
                 action.postsBySortType.forEach(p => newState[p.sortType] = uniq(state[p.sortType].concat(p.posts)));
             } else {
                 newState.didInvalidate = false;
+                newState.lastUpdated = action.receivedAt;
                 action.postsBySortType.forEach(p => newState[p.sortType] = p.posts);
             }
             return Object.assign({}, state, newState);

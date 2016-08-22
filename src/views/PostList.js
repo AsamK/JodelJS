@@ -14,6 +14,7 @@ export default class PostList extends Component {
         posts: React.PropTypes.array.isRequired,
         sortType: React.PropTypes.string,
         section: React.PropTypes.string,
+        lastUpdated: React.PropTypes.number,
         parentPost: React.PropTypes.any,
         onPostClick: React.PropTypes.func.isRequired,
         onLoadMore: React.PropTypes.func
@@ -29,7 +30,7 @@ export default class PostList extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.sortType != this.props.sortType || prevProps.section != this.props.section) {
+        if (prevProps.sortType != this.props.sortType || prevProps.section != this.props.section || prevProps.lastUpdated != this.props.lastUpdated) {
             this._scrollable.scrollTop = 0;
         }
     }

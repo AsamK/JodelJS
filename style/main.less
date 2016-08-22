@@ -1,43 +1,40 @@
 @import (less) "npm://normalize.css";
 @import (less) "npm://nprogress/nprogress.css";
 
-html, body {
-  height: 100%;
-}
-
-body {
-  //overflow-y: scroll;
-  overflow: hidden;
-}
-
-#content, .jodel, .list, .detail, .postListContainer {
+html, body, #content, .jodel, .postListContainer {
   height: 100%;
   width: 100%;
 }
 
 .list {
+  position: absolute;
+  top: 3em;
+  bottom: 3em;
+  left: 0;
+  right: 0;
+
   display: block;
-  margin-top: 3em;
-  margin-bottom: 3em;
   &.postShown {
     display: none;
   }
 }
 
 .detail {
+  position: absolute;
+  top: 3em;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
   display: none;
   &.postShown {
     display: block;
   }
 }
 
-.postList {
+.postListContainer .postList {
   overflow-y: scroll;
   height: 100%;
-}
-
-.postList .post:last-child {
-  margin-bottom: 6em;
 }
 
 .addButton {
@@ -46,12 +43,12 @@ body {
   position: fixed;
   text-align: center;
   cursor: pointer;
-  background-color: rgba(0,0,0,.3);
+  background-color: rgba(0, 0, 0, .3);
   &:hover {
-    background-color: rgba(66,189,255,.76);
+    background-color: rgba(66, 189, 255, .76);
   }
   &:active {
-    background-color: rgba(66,189,255,.76);
+    background-color: rgba(66, 189, 255, .76);
   }
   color: #fff;
   border: solid .3em #fff;
@@ -79,23 +76,23 @@ body {
   background-color: #eeeeee;
   text-align: center;
 
-  & .section {
+  .section {
     float: left;
     width: 33%;
     height: 3em;
     cursor: pointer;
   }
-  & .recent {
+  .recent {
     &::before {
       content: "Neueste";
     }
   }
-  & .discussed {
+  .discussed {
     &::before {
       content: "Meist kommentierte";
     }
   }
-  & .popular {
+  .popular {
     &::before {
       content: "Lauteste";
     }
@@ -105,23 +102,14 @@ body {
 .postDetails {
   overflow-y: auto;
   height: 100%;
-  margin-top: 3em;
-  & .postList {
-    overflow-y: visible;
-    height: unset;
-  }
-}
-
-.postDetails .postList .post {
-  margin-bottom: .1em;
-  padding-bottom: .5em;
-  &:last-child {
-    margin-bottom: 6em;
+  .postList .post {
+    margin-bottom: .1em;
   }
 }
 
 .post {
   margin-bottom: .5em;
+  padding-bottom: 2px;
   overflow: hidden;
   color: #fff;
 }
@@ -130,10 +118,6 @@ body {
   width: 85%;
   float: left;
   clear: both;
-  -webkit-filter: blur(5px);
-  -moz-filter: blur(5px);
-  -o-filter: blur(5px);
-  -ms-filter: blur(5px);
   filter: blur(5px);
   background-size: cover;
   height: 100px;
@@ -144,7 +128,7 @@ body {
   width: 85%;
   float: left;
   clear: both;
-  white-space: pre-line;
+  white-space: pre-wrap;
   margin: .2em;
 }
 
@@ -152,69 +136,86 @@ body {
   width: 10%;
   float: left;
   text-align: center;
+
+  .upVote {
+    cursor: pointer;
+    width: 3em;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    &::before {
+      content: "";
+      height: 1em;
+      margin-left: .75em;
+      background: url("img/up.svg") no-repeat;
+      background-size: 1.5em auto;
+      display: block;
+    }
+    &.down {
+      visibility: hidden;
+    }
+  }
+
+  .voteCount {
+    width: 3em;
+  }
+
+  .downVote {
+    cursor: pointer;
+    width: 3em;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    &::before {
+      content: "";
+      height: 1em;
+      margin-left: .75em;
+      background: url("img/down.svg") no-repeat;
+      background-size: 1.5em auto;
+      display: block;
+    }
+    &.up {
+      visibility: hidden;
+    }
+  }
 }
 
-.vote .upVote {
-  cursor: pointer;
-  width: 3em;
-  padding-top: 2em;
-  padding-bottom: 1em;
-  &::before {
-    content: "Up";
-  }
-  &.down {
-    visibility: hidden;
-  }
-}
-
-.vote .voteCount {
-  width: 3em;
-}
-
-.vote .downVote {
-  cursor: pointer;
-  width: 3em;
-  padding-top: 1em;
-  padding-bottom: 2em;
-  &::before {
-    content: "Down";
-  }
-  &.up {
-    visibility: hidden;
-  }
+.time {
+  float: left;
+  width: 30%;
+  font-size: .8em;
+  color: rgba(255, 255, 255, .5);
 }
 
 .childInfo {
   float: left;
-  width: 20%;
+  width: 30%;
   text-align: center;
   font-size: .8em;
-  color: rgba(255,255,255,.5);
+  color: rgba(255, 255, 255, .5);
 }
 
 .location {
   float: left;
   width: 30%;
   font-size: .8em;
-  color: rgba(255,255,255,.5);
-}
+  color: rgba(255, 255, 255, .5);
 
-.location .distance {
-  float: left;
-  width: 40%;
-}
+  .distance {
+    float: left;
+    width: 40%;
+  }
 
-.location .locationName {
-  float: left;
-  width: 60%;
+  .locationName {
+    float: left;
+    width: 60%;
+  }
 }
 
 .author {
   width: 10%;
   float: left;
   font-size: .8em;
-  color: rgba(255,255,255,.5);
-  & .OJ:after {
+  color: rgba(255, 255, 255, .5);
+  .OJ:after {
     content: "";
     margin-left: .5em;
     width: 1em;
@@ -225,15 +226,7 @@ body {
   }
 }
 
-.time {
-  float: left;
-  width: 40%;
-  font-size: .8em;
-  color: rgba(255,255,255,.5);
-}
-
 .addPost {
-  margin-bottom: 10em;
   display: none;
   &.visible {
     display: block;
@@ -241,47 +234,46 @@ body {
   position: fixed;
   top: 0;
   bottom: 0;
-  width: 100%;
-  height: 100%;
+  left: 0;
+  right: 0;
   background-color: #eeeeee;
   text-align: center;
-}
 
-.addPost textarea {
-  height: 10em;
-  width: 100%;
-}
+  textarea {
+    height: 10em;
+    width: 100%;
+  }
 
-.addPost img {
-  height: 100px;
-}
-
-.colorPicker {
-  color: white;
+  img {
+    height: 100px;
+  }
+  .colorPicker {
+    color: white;
+  }
 }
 
 .topBar {
   height: 3em;
-  text-align: right;
-  clear:both;
-  width: 100%;
   background-color: #eeeeee;
   position: fixed;
   top: 0;
-  & .karma {
+  left: 0;
+  right: 0;
+  .karma {
     float: right;
     .subText {
       font-size: .5em;
     }
   }
-}
 
-.topBar .sectionLink {
-  cursor: pointer;
-  margin-top: 1em;
-  margin-right: 1.3em;
-  font-size: .7em;
-  float: left;
+  .sectionLink {
+    cursor: pointer;
+    padding-top: 1em;
+    padding-right: 1.3em;
+    height: 100%;
+    font-size: .7em;
+    float: left;
+  }
 }
 
 .selectDeviceUid {
@@ -295,7 +287,7 @@ body {
 
 .locationError {
   background-color: red;
-  & a {
+  a {
     cursor: pointer;
     text-decoration: underline;
   }
@@ -304,6 +296,7 @@ body {
 .selectLocation {
   box-shadow: 0 0 1em gold;
 }
+
 .selectLocation label {
   display: block;
   margin-bottom: .5em;

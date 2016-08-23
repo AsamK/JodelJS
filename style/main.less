@@ -116,123 +116,123 @@ html, body, #content, .jodel, .postListContainer {
   padding-bottom: 2px;
   overflow: hidden;
   color: #fff;
-}
 
-.postPicture {
-  width: 85%;
-  float: left;
-  clear: both;
-  filter: blur(5px);
-  background-size: cover;
-  height: 100px;
-  margin: .2em;
-}
-
-.postMessage {
-  width: 85%;
-  float: left;
-  clear: both;
-  white-space: pre-wrap;
-  margin: .2em;
-}
-
-.vote {
-  width: 10%;
-  float: left;
-  text-align: center;
-
-  .upVote {
-    cursor: pointer;
-    width: 3em;
-    padding-top: .5em;
-    padding-bottom: .5em;
-    &::before {
-      content: "";
-      height: 1em;
-      margin-left: .75em;
-      background: url("img/up.svg") no-repeat;
-      background-size: 1.5em auto;
-      display: block;
-    }
-    &.down {
-      visibility: hidden;
-    }
-    &.up {
-      cursor: inherit;
-    }
-  }
-
-  .voteCount {
-    width: 3em;
-  }
-
-  .downVote {
-    cursor: pointer;
-    width: 3em;
-    padding-top: .5em;
-    padding-bottom: .5em;
-    &::before {
-      content: "";
-      height: 1em;
-      margin-left: .75em;
-      background: url("img/down.svg") no-repeat;
-      background-size: 1.5em auto;
-      display: block;
-    }
-    &.up {
-      visibility: hidden;
-    }
-    &.down {
-      cursor: inherit;
-    }
-  }
-}
-
-.time {
-  float: left;
-  width: 30%;
-  font-size: .8em;
-  color: rgba(255, 255, 255, .5);
-}
-
-.childInfo {
-  float: left;
-  width: 30%;
-  text-align: center;
-  font-size: .8em;
-  color: rgba(255, 255, 255, .5);
-}
-
-.location {
-  float: left;
-  width: 30%;
-  font-size: .8em;
-  color: rgba(255, 255, 255, .5);
-
-  .distance {
+  .postPicture {
+    width: 85%;
     float: left;
-    width: 40%;
+    clear: both;
+    filter: blur(5px);
+    background-size: cover;
+    height: 100px;
+    margin: .2em;
   }
 
-  .locationName {
+  .postMessage {
+    width: 85%;
     float: left;
-    width: 60%;
+    clear: both;
+    white-space: pre-wrap;
+    margin: .2em;
   }
-}
 
-.author {
-  width: 10%;
-  float: left;
-  font-size: .8em;
-  color: rgba(255, 255, 255, .5);
-  .OJ:after {
-    content: "";
-    margin-left: .5em;
-    width: 1em;
-    height: 1em;
-    background: url("img/crown.svg") no-repeat;
-    background-size: auto 1em;
-    display: inline-block;
+  .vote {
+    width: 10%;
+    float: left;
+    text-align: center;
+
+    .upVote {
+      cursor: pointer;
+      width: 3em;
+      padding-top: .5em;
+      padding-bottom: .5em;
+      &::before {
+        content: "";
+        height: 1em;
+        margin-left: .75em;
+        background: url("img/up.svg") no-repeat;
+        background-size: 1.5em auto;
+        display: block;
+      }
+      &.down {
+        visibility: hidden;
+      }
+      &.up {
+        cursor: inherit;
+      }
+    }
+
+    .voteCount {
+      width: 3em;
+    }
+
+    .downVote {
+      cursor: pointer;
+      width: 3em;
+      padding-top: .5em;
+      padding-bottom: .5em;
+      &::before {
+        content: "";
+        height: 1em;
+        margin-left: .75em;
+        background: url("img/down.svg") no-repeat;
+        background-size: 1.5em auto;
+        display: block;
+      }
+      &.up {
+        visibility: hidden;
+      }
+      &.down {
+        cursor: inherit;
+      }
+    }
+  }
+
+  .time {
+    float: left;
+    width: 30%;
+    font-size: .8em;
+    color: rgba(255, 255, 255, .5);
+  }
+
+  .childInfo {
+    float: left;
+    width: 30%;
+    text-align: center;
+    font-size: .8em;
+    color: rgba(255, 255, 255, .5);
+  }
+
+  .location {
+    float: left;
+    width: 30%;
+    font-size: .8em;
+    color: rgba(255, 255, 255, .5);
+
+    .distance {
+      float: left;
+      width: 40%;
+    }
+
+    .locationName {
+      float: left;
+      width: 60%;
+    }
+  }
+
+  .author {
+    width: 10%;
+    float: left;
+    font-size: .8em;
+    color: rgba(255, 255, 255, .5);
+    .OJ:after {
+      content: "";
+      margin-left: .5em;
+      width: 1em;
+      height: 1em;
+      background: url("img/crown.svg") no-repeat;
+      background-size: auto 1em;
+      display: inline-block;
+    }
   }
 }
 
@@ -264,7 +264,7 @@ html, body, #content, .jodel, .postListContainer {
 
 .topBar {
   height: 3em;
-  background-color: #eeeeee;
+  background-color: #eee;
   position: fixed;
   top: 0;
   left: 0;
@@ -280,9 +280,13 @@ html, body, #content, .jodel, .postListContainer {
     cursor: pointer;
     padding-top: 1em;
     padding-right: 1.3em;
-    height: 100%;
+    padding-bottom: 1em;
+    height: 2em;
     font-size: .7em;
     float: left;
+    &.active {
+      background-color: #ccc;
+    }
   }
 }
 

@@ -16,7 +16,6 @@ import {
     updatePosts,
     showAddPost,
     fetchMorePosts,
-    switchPostSection,
     showSettings,
     selectPicture
 } from "../redux/actions";
@@ -58,10 +57,6 @@ class Jodel extends Component {
         this.props.dispatch(fetchMorePosts());
     }
 
-    switchPostSection(section) {
-        this.props.dispatch(switchPostSection(section));
-    }
-
     render() {
         if (this.props.deviceUid === undefined) {
             return <div className="jodel">
@@ -71,7 +66,7 @@ class Jodel extends Component {
             return <AppSettings/>
         } else {
             return <div className="jodel">
-                <TopBar karma={this.props.karma} switchPostSection={this.switchPostSection.bind(this)}
+                <TopBar karma={this.props.karma}
                         showSettings={() => this.props.dispatch(showSettings(true))}/>
                 <div className={classnames("list", {postShown: this.props.selectedPost != null})}>
                     <PostListContainer onPostClick={this.handleClick.bind(this)}

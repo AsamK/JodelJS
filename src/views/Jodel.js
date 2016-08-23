@@ -10,6 +10,7 @@ import TopBar from "./TopBar";
 import FirstStart from "./FirstStart";
 import AppSettings from "./AppSettings";
 import Progress from "./Progress";
+import PostTopBar from "./PostTopBar";
 import {
     fetchPostsIfNeeded,
     selectPost,
@@ -74,8 +75,9 @@ class Jodel extends Component {
                                        onLoadMore={this.onLoadMore.bind(this)}/>
                 </div>
                 <div className={classnames("detail", {postShown: this.props.selectedPost != null})}>
+                    <PostTopBar/>
                     <PostDetails post={this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost()}
-                                 onPostClick={this.handleClick.bind(this, null)}
+                                 onPostClick={this.refresh.bind(this)}
                                  onAddClick={this.handleAddCommentClick.bind(this)}
                                  locationKnown={this.props.locationKnown}/>
                 </div>

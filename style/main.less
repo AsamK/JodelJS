@@ -32,6 +32,23 @@ html, body, #content, .jodel, .postListContainer {
   }
 }
 
+.postTopBar {
+  height: 2em;
+  margin-top: 1px;
+  background-color: #eee;
+  position: fixed;
+  top: 3em;
+  left: 0;
+  right: 0;
+}
+
+.backButton {
+  cursor: pointer;
+  padding-top: .5em;
+  padding-bottom: .5em;
+  padding-left: 1em;
+}
+
 .postListContainer .postList {
   overflow-y: scroll;
   height: 100%;
@@ -106,6 +123,7 @@ html, body, #content, .jodel, .postListContainer {
 .postDetails {
   overflow-y: auto;
   height: 100%;
+  margin-top: 2em;
   .postList .post {
     margin-bottom: .1em;
   }

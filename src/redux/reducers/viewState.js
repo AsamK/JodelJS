@@ -8,6 +8,7 @@ import {
     SELECT_PICTURE
 } from "../actions";
 import {SET_USE_BROWSER_LOCATION, SHOW_SETTINGS} from "../actions/state";
+import Immutable from "immutable";
 
 export const VIEW_STATE_VERSION = 6;
 export function migrateViewState(storedState, oldVersion) {
@@ -26,33 +27,36 @@ export function migrateViewState(storedState, oldVersion) {
     return storedState;
 }
 
-function viewState(state = {
+function viewState(state = Immutable.Map({
     selectedPostId: null,
     selectedPicturePostId: null,
-    location: {latitude: undefined, longitude: undefined, city: undefined, country: "DE"},
+    location: Immutable.Map({latitude: undefined, longitude: undefined, city: undefined, country: "DE"}),
     useBrowserLocation: true,
-    postSection: "location",
+    postSection: undefined,
     postListSortType: PostListSortTypes.RECENT,
-    addPost: {visible: false, ancestor: undefined},
-    settings: {visible: false},
-}, action) {
+    addPost: Immutable.Map({visible: false, ancestor: undefined}),
+    settings: Immutable.Map({visible: false}),
+}), action) {
     switch (action.type) {
         case SELECT_POST:
-            return Object.assign({}, state, {selectedPostId: action.postId});
+            return state.set("selectedPostId", action.postId);
         case SELECT_PICTURE:
-            return Object.assign({}, state, {selectedPicturePostId: action.postId});
+            return state.set("selectedPicturePostId", action.postId);
         case SET_LOCATION:
-            return Object.assign({}, state, {location: action.location});
+            return state.update("location", location => location.merge(action.location));
         case SWITCH_POST_LIST_SORT_TYPE:
-            return Object.assign({}, state, {postListSortType: action.sortType});
+            return state.set("postListSortType", action.sortType);
         case SWITCH_POST_SECTION:
-            return Object.assign({}, state, {postSection: action.section});
+            return state.set("postSection", action.section);
         case SHOW_ADD_POST:
-            return Object.assign({}, state, {addPost: {visible: action.visible, ancestor: action.ancestor}});
+            return state.update("addPost", addPost => addPost.merge({
+                visible: action.visible,
+                ancestor: action.ancestor
+            }));
         case SHOW_SETTINGS:
-            return Object.assign({}, state, {settings: {visible: action.visible}});
+            return state.update("settings", settings => settings.set("visible", action.visible));
         case SET_USE_BROWSER_LOCATION:
-            return Object.assign({}, state, {useBrowserLocation: action.useBrowserLocation});
+            return state.set("useBrowserLocation", action.useBrowserLocation);
         default:
             return state
     }

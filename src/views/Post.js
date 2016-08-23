@@ -27,42 +27,42 @@ class Post extends PureComponent {
 
     upvote(e) {
         e.stopPropagation();
-        this.props.dispatch(upVote(this.props.post.post_id, this.props.parentPostId));
+        this.props.dispatch(upVote(this.props.post.get("post_id"), this.props.parentPostId));
     }
 
     downvote(e) {
         e.stopPropagation();
-        this.props.dispatch(downVote(this.props.post.post_id, this.props.parentPostId));
+        this.props.dispatch(downVote(this.props.post.get("post_id"), this.props.parentPostId));
     }
 
     render() {
         const {post, author, onPostClick, ...forwardProps} = this.props;
         return (
-            <div className="post" style={{backgroundColor: "#" + post.color}} onClick={onPostClick}>
-                {post.hasOwnProperty('thumbnail_url') ?
+            <div className="post" style={{backgroundColor: "#" + post.get("color")}} onClick={onPostClick}>
+                {post.has('thumbnail_url') ?
                     <div className="postPicture"
-                         style={{backgroundImage: "url(https:" + post.thumbnail_url + ")"}}
+                         style={{backgroundImage: "url(https:" + post.get("thumbnail_url") + ")"}}
                          onMouseUp={e => clearTimeout(this.pressTimer)}
                          onContextMenu={e => {
                              e.preventDefault();
                              clearTimeout(this.pressTimer);
-                             this.props.dispatch(selectPicture(post.post_id));
+                             this.props.dispatch(selectPicture(post.get("post_id")));
                          }}
                          onMouseDown={e => {
                              clearTimeout(this.pressTimer);
-                             this.pressTimer = setTimeout(() => this.props.dispatch(selectPicture(post.post_id)), 300);
+                             this.pressTimer = setTimeout(() => this.props.dispatch(selectPicture(post.get("post_id"))), 300);
                          }}></div>
                     :
-                    <Message message={post.message} onHashtagClick={(e, hashtag)=> {
+                    <Message message={post.get("message")} onHashtagClick={(e, hashtag)=> {
                         e.stopPropagation();
                         this.props.dispatch(switchPostSection("channel:" + hashtag));
                     }}/>
                 }
-                <Vote vote_count={post.vote_count} voted={post.hasOwnProperty('voted') ? post.voted : ""}
+                <Vote vote_count={post.get("vote_count")} voted={post.has('voted') ? post.get("voted") : ""}
                       upvote={this.upvote} downvote={this.downvote}/>
-                <Time time={post.created_at}/>
-                <ChildInfo child_count={post.hasOwnProperty('child_count') ? post.child_count : 0}/>
-                <Location location={post.location.name} distance={post.distance}/>
+                <Time time={post.get("created_at")}/>
+                <ChildInfo child_count={post.has('child_count') ? post.get("child_count") : 0}/>
+                <Location location={post.getIn(["location", "name"])} distance={post.get("distance")}/>
                 <div className="author">
                     {author != undefined ?
                         <div className={author}>
@@ -70,9 +70,9 @@ class Post extends PureComponent {
                         </div>
                         : ""}
                 </div>
-                {post.post_own === "own" ? <a onClick={e => {
+                {post.get("post_own") === "own" ? <a onClick={e => {
                     e.stopPropagation();
-                    this.props.dispatch(deletePost(post.post_id))
+                    this.props.dispatch(deletePost(post.get("post_id")))
                 }}>delete</a> : ""}
             </div>
         );

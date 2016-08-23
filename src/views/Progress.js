@@ -34,7 +34,7 @@ class Progress extends Component {
 }
 
 function mapStateToProps(state) {
-    let section = state.postsBySection[state.viewState.postSection];
-    return {isFetching: section === undefined ? false : section.isFetching};
+    let isFetching = state.postsBySection.getIn([state.viewState.get("postSection"), "isFetching"]);
+    return {isFetching: isFetching === undefined ? false : isFetching};
 }
 export default connect(mapStateToProps)(Progress);

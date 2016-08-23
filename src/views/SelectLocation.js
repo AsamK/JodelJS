@@ -57,7 +57,7 @@ export default class SelectLocation extends PureComponent {
                 </label>
                 {useBrowserLocation ? <div>
                     <p>Aktueller
-                        Standort: {this.props.latitude === undefined ? "(Unbekannt)" : this.props.latitude + ", " + this.props.longitude}</p>
+                        Standort: {latitude === undefined ? "(Unbekannt)" : latitude + ", " + longitude}</p>
                     <a onClick={onLocationRequested}>Standort aktualisieren</a>
                 </div> : ""}
                 <label>
@@ -69,12 +69,12 @@ export default class SelectLocation extends PureComponent {
                     <div>
                         <label>
                             Breitengrad:
-                            <input type="number" min="-90" max="90" step="0.01" value={this.props.latitude}
+                            <input type="number" min="-90" max="90" step="0.01" value={latitude}
                                    onChange={this.handleChangeLatitude}/>
                         </label>
                         <label>
                             Längengrad:
-                            <input type="number" min="-180" max="180" step="0.01" value={this.props.longitude}
+                            <input type="number" min="-180" max="180" step="0.01" value={longitude}
                                    onChange={this.handleChangeLongitude}/>
                         </label>
                     </div>

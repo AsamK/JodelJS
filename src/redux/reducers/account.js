@@ -1,4 +1,5 @@
 import {SET_KARMA, SET_DEVICE_UID, SET_TOKEN, SET_CONFIG, SET_PERMISSION_DENIED} from "../actions";
+import Immutable from "immutable";
 
 export const ACCOUNT_VERSION = 1;
 export function migrateAccount(storedState, oldVersion) {
@@ -6,21 +7,21 @@ export function migrateAccount(storedState, oldVersion) {
     return storedState;
 }
 
-function account(state = {
+function account(state = Immutable.Map({
     karma: 0,
     deviceUid: undefined,
     distinctId: undefined,
     token: undefined,
     config: undefined,
     permissionDenied: false,
-}, action) {
+}), action) {
     switch (action.type) {
         case SET_KARMA:
-            return Object.assign({}, state, {karma: action.karma});
+            return state.set("karma", action.karma);
         case SET_DEVICE_UID:
-            return Object.assign({}, state, {deviceUid: action.deviceUid});
+            return state.set("deviceUid", action.deviceUid);
         case SET_TOKEN:
-            return Object.assign({}, state, {
+            return state.merge({
                 permissionDenied: false,
                 token: {
                     distinctId: action.distinctId,
@@ -31,9 +32,9 @@ function account(state = {
                 }
             });
         case SET_CONFIG:
-            return Object.assign({}, state, {config: action.config});
+            return state.set("config", action.config);
         case SET_PERMISSION_DENIED:
-            return Object.assign({}, state, {permissionDenied: action.permissionDenied});
+            return state.set("permissionDenied", action.permissionDenied);
         default:
             return state;
     }

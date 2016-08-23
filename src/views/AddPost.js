@@ -101,8 +101,8 @@ export default class AddPost extends PureComponent {
 
 const mapStateToProps = (state) => {
     return {
-        ancestor: state.viewState.addPost.ancestor,
-        visible: state.viewState.addPost.visible,
+        ancestor: state.viewState.getIn(["addPost", "ancestor"]),
+        visible: state.viewState.getIn(["addPost", "visible"]),
     }
 };
 

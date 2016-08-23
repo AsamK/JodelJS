@@ -2,7 +2,7 @@
 require("babel-polyfill");
 
 import React, {Component} from "react";
-import {setPermissionDenied, fetchPostsIfNeeded, updateLocation, getConfig} from "../redux/actions";
+import {_switchPostSection, setPermissionDenied, fetchPostsIfNeeded, updateLocation, getConfig} from "../redux/actions";
 import {refreshAccessToken} from "../redux/actions/api";
 import {migrateViewState, VIEW_STATE_VERSION} from "../redux/reducers/viewState";
 import {migrateAccount, ACCOUNT_VERSION} from "../redux/reducers/account";
@@ -13,16 +13,17 @@ import {Provider} from "react-redux";
 import thunkMiddleware from "redux-thunk";
 import Jodel from "../views/Jodel";
 import JodelApp from "../redux/reducers";
+import Immutable from "immutable";
 
 let persistedState = {};
 if (localStorage.getItem('viewState')) {
     let oldVersion = parseInt(localStorage.getItem('viewStateVersion'), 10);
-    persistedState.viewState = migrateViewState(JSON.parse(localStorage.getItem('viewState')), oldVersion);
+    persistedState.viewState = Immutable.fromJS(migrateViewState(JSON.parse(localStorage.getItem('viewState')), oldVersion));
 }
 
 if (localStorage.getItem('account')) {
     let oldVersion = parseInt(localStorage.getItem('accountVersion'), 10);
-    persistedState.account = migrateAccount(JSON.parse(localStorage.getItem('account')), oldVersion);
+    persistedState.account = Immutable.fromJS(migrateAccount(JSON.parse(localStorage.getItem('account')), oldVersion));
 }
 
 let store = createStore(
@@ -41,14 +42,15 @@ store.subscribe(()=> {
     localStorage.setItem('accountVersion', ACCOUNT_VERSION);
 });
 
-if (store.getState().account.token === undefined || store.getState().account.token.access === undefined) {
-    if (store.getState().account.deviceUid !== undefined) {
+store.dispatch(_switchPostSection("location"));
+if (store.getState().account.getIn(["token", "access"]) === undefined) {
+    if (store.getState().account.get("deviceUid") !== undefined) {
         store.dispatch(setPermissionDenied(true));
     }
 } else {
     const now = new Date().getTime() / 1000;
     let timeToExpire = 60 * 60 * 24 * 4;
-    if (now > store.getState().account.token.expirationDate - timeToExpire) {
+    if (now > store.getState().account.getIn(["token", "expirationDate"]) - timeToExpire) {
         store.dispatch(refreshAccessToken());
     } else {
         store.dispatch(getConfig());

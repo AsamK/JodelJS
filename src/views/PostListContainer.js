@@ -3,7 +3,7 @@
 import React, {Component} from "react";
 import PostList from "./PostList";
 import {PostListSortTypes} from "../redux/actions";
-import SectionLink from "./SectionLink";
+import SortTypeLink from "./SortTypeLink";
 import AddButton from "./AddButton";
 import {connect} from "react-redux";
 
@@ -26,10 +26,10 @@ class PostListContainer extends Component {
                 <PostList section={section} sortType={sortType} lastUpdated={lastUpdated} posts={posts}
                           onPostClick={onPostClick} onLoadMore={onLoadMore}/>
                 {locationKnown ? <AddButton onClick={onAddClick}/> : ""}
-                <div className="sections">
-                    <SectionLink section={PostListSortTypes.RECENT}/>
-                    <SectionLink section={PostListSortTypes.DISCUSSED}/>
-                    <SectionLink section={PostListSortTypes.POPULAR}/>
+                <div className="sortTypes">
+                    <SortTypeLink sortType={PostListSortTypes.RECENT}/>
+                    <SortTypeLink sortType={PostListSortTypes.DISCUSSED}/>
+                    <SortTypeLink sortType={PostListSortTypes.POPULAR}/>
                 </div>
             </div>
         );
@@ -37,20 +37,16 @@ class PostListContainer extends Component {
 }
 
 const mapStateToProps = (state) => {
-    let posts;
-    const section = state.viewState.postSection;
-    const sortType = state.viewState.postListSortType;
-    if (section !== undefined && state.postsBySection[section] !== undefined && state.postsBySection[section][sortType] !== undefined) {
-        posts = state.postsBySection[section][sortType];
-    } else {
+    const section = state.viewState.get("postSection");
+    const sortType = state.viewState.get("postListSortType");
+    let posts = state.postsBySection.getIn([section, sortType]);
+    if (posts === undefined) {
         posts = [];
     }
     return {
-        section,
-        sortType,
-        lastUpdated: state.postsBySection[section].lastUpdated,
-        posts: posts.map(post_id => state.entities[post_id]),
-        locationKnown: state.viewState.location.latitude !== undefined,
+        lastUpdated: state.postsBySection.getIn([section, "lastUpdated"]),
+        posts: posts.map(post_id => state.entities.get(post_id)),
+        locationKnown: state.viewState.getIn(["location", "latitude"]) !== undefined,
     }
 };
 

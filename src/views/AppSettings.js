@@ -51,12 +51,12 @@ class AppSettings extends Component {
             <div className="deviceUid">{this.props.deviceUid}</div>
             <p>Standort</p>
             <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
-                            latitude={this.props.location.latitude} longitude={this.props.location.longitude}
+                            latitude={this.props.latitude} longitude={this.props.longitude}
                             onChange={this.locationChange}
                             onLocationRequested={this.updateLocation}
             />
             <button onClick={() => {
-                this.props.dispatch(setLocation(this.props.location.latitude, this.props.location.longitude));
+                this.props.dispatch(setLocation(this.props.latitude, this.props.longitude));
                 this.props.dispatch(showSettings(false));
                 this.props.dispatch(updatePosts());
             }}>
@@ -68,9 +68,10 @@ class AppSettings extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        deviceUid: state.account.deviceUid,
-        location: state.viewState.location,
-        useBrowserLocation: state.viewState.useBrowserLocation,
+        deviceUid: state.account.get("deviceUid"),
+        latitude: state.viewState.getIn(["location", "latitude"]),
+        longitude: state.viewState.getIn(["location", "longitude"]),
+        useBrowserLocation: state.viewState.get("useBrowserLocation"),
     }
 };
 

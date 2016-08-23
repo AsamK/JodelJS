@@ -47,7 +47,7 @@ class FirstStart extends Component {
                 <SelectDeviceUid deviceUid={this.state.deviceUid} setDeviceUid={this.setDeviceUid}/>
                 <p>Standort</p>
                 <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
-                                latitude={this.props.location.latitude} longitude={this.props.location.longitude}
+                                latitude={this.props.latitude} longitude={this.props.longitude}
                                 onChange={(useBrowserLocation, latitude, longitude) => {
                                     this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
                                     if (!useBrowserLocation) {
@@ -62,7 +62,7 @@ class FirstStart extends Component {
                                 }}
                                 onLocationRequested={this.updateLocation}
                 />
-                {this.props.location.latitude === undefined ?
+                {this.props.latitude === undefined ?
                     <div className="locationError">
                         <p>Zum erstmaligen Anmelden muss der aktuelle Standort bekannt sein.
                             Die Standort Abfrage war jedoch noch nicht erfolgreich.
@@ -70,7 +70,7 @@ class FirstStart extends Component {
                         <a onClick={this.updateLocation}>Erneut versuchen</a> oder oben den Standort manuell festlegen
                     </div>
                     : ""}
-                <button type="submit" disabled={this.props.location.latitude === undefined}>
+                <button type="submit" disabled={this.props.latitude === undefined}>
                     Jodeln beginnen
                 </button>
             </form>
@@ -80,9 +80,10 @@ class FirstStart extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        deviceUid: state.account.deviceUid,
-        location: state.viewState.location,
-        useBrowserLocation: state.viewState.useBrowserLocation,
+        deviceUid: state.account.get("deviceUid"),
+        latitude: state.viewState.getIn(["location", "latitude"]),
+        longitude: state.viewState.getIn(["location", "longitude"]),
+        useBrowserLocation: state.viewState.get("useBrowserLocation"),
     }
 };
 

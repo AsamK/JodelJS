@@ -20,6 +20,7 @@ import {
     showSettings,
     selectPicture
 } from "../redux/actions";
+import Immutable from "immutable";
 
 class Jodel extends Component {
     componentDidMount() {
@@ -42,7 +43,7 @@ class Jodel extends Component {
     }
 
     handleClick(post) {
-        this.props.dispatch(selectPost(post != null ? post.post_id : null));
+        this.props.dispatch(selectPost(post != null ? post.get("post_id") : null));
     }
 
     handleAddClick(post) {
@@ -50,7 +51,7 @@ class Jodel extends Component {
     }
 
     handleAddCommentClick(post) {
-        this.props.dispatch(showAddPost(true, this.props.selectedPost.post_id));
+        this.props.dispatch(showAddPost(true, this.props.selectedPost.get("post_id")));
     }
 
     onLoadMore() {
@@ -66,7 +67,7 @@ class Jodel extends Component {
             return <div className="jodel">
                 <FirstStart/>
             </div>
-        } else if (this.props.settings.visible) {
+        } else if (this.props.settings.get("visible")) {
             return <AppSettings/>
         } else {
             return <div className="jodel">
@@ -85,10 +86,10 @@ class Jodel extends Component {
                 </div>
                 {this.props.selectedPicturePost !== null ?
                     <div className="bigPicture" onMouseUp={e => this.props.dispatch(selectPicture(null))}>
-                        <img alt={this.props.selectedPicturePost.message}
-                             src={"https:" + this.props.selectedPicturePost.thumbnail_url}/>
-                        <img alt={this.props.selectedPicturePost.message}
-                             src={"https:" + this.props.selectedPicturePost.image_url}/>
+                        <img alt={this.props.selectedPicturePost.get("message")}
+                             src={"https:" + this.props.selectedPicturePost.get("thumbnail_url")}/>
+                        <img alt={this.props.selectedPicturePost.get("message")}
+                             src={"https:" + this.props.selectedPicturePost.get("image_url")}/>
                     </div>
                     : ""}
                 <AddPost/>
@@ -99,7 +100,7 @@ class Jodel extends Component {
 }
 
 function getEmptyPost() {
-    return {
+    return Immutable.fromJS({
         "updated_at": "0000-00-00T00:00:00.000Z",
         "tags": [],
         "user_handle": "",
@@ -118,26 +119,29 @@ function getEmptyPost() {
         "post_id": "",
         "location": {"name": "", "loc_coordinates": {"lng": 0, "lat": 0}},
         "color": "000000"
-    }
+    })
 }
 
 const mapStateToProps = (state) => {
-    let selectedPicturePost = null;
-    if (state.viewState.selectedPicturePostId != null) {
-        let post = state.entities[state.viewState.selectedPicturePostId];
-        if (post !== undefined) {
-            selectedPicturePost = post;
-        }
+    let selectedPicturePost = state.entities.get(state.viewState.get("selectedPicturePostId"));
+    if (selectedPicturePost === undefined) {
+        selectedPicturePost = null;
+    }
+    let selectedPost = state.entities.get(state.viewState.get("selectedPostId"));
+    if (selectedPost === undefined) {
+        selectedPost = null;
+    } else if (selectedPost.has("children")) {
+        selectedPost = selectedPost.set("children", selectedPost.get("children").map((child) => state.entities.get(child)));
     }
     return {
-        section: state.viewState.postSection,
-        selectedPost: state.viewState.selectedPostId != null ? state.entities[state.viewState.selectedPostId] : null,
+        section: state.viewState.get("postSection"),
+        selectedPost,
         selectedPicturePost,
-        locationKnown: state.viewState.location.latitude !== undefined,
-        settings: state.viewState.settings,
-        karma: state.account.karma,
-        deviceUid: state.account.deviceUid,
-        isRegistered: state.account.token !== undefined && state.account.token.access !== undefined,
+        locationKnown: state.viewState.getIn(["location", "latitude"]) !== undefined,
+        settings: state.viewState.get("settings"),
+        karma: state.account.get("karma"),
+        deviceUid: state.account.get("deviceUid"),
+        isRegistered: state.account.getIn(["token", "access"]) !== undefined,
     }
 };
 

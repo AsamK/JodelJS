@@ -13,7 +13,7 @@ export default class PostDetails extends Component {
     };
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.post === null || (prevProps.post !== null && prevProps.post.post_id === this.props.post.post_id)) {
+        if (this.props.post === null || (prevProps.post !== null && prevProps.post.get("post_id") === this.props.post.get("post_id"))) {
             return;
         }
         this._scrollable.scrollTop = 0;
@@ -21,7 +21,7 @@ export default class PostDetails extends Component {
 
     render() {
         const {post, locationKnown, onPostClick, onAddClick, ...forwardProps} = this.props;
-        const childPosts = post.hasOwnProperty("children") ? post.children : [];
+        const childPosts = post.has("children") ? post.get("children") : [];
 
         return (
             <div className="postDetails" ref={(c) => this._scrollable = c}>

@@ -58,19 +58,19 @@ export default class PostList extends Component {
         const postNodes = posts.map((post) => {
                 let author, parentPostId;
                 if (parentPost != null) {
-                    parentPostId = parentPost.post_id;
-                    let parentUserHandle = parentPost.user_handle;
-                    if ((post.hasOwnProperty('parent_creator') && post.parent_creator == 1) || post.user_handle === parentUserHandle) {
+                    parentPostId = parentPost.get("post_id");
+                    let parentUserHandle = parentPost.get("user_handle");
+                    if ((post.has('parent_creator') && post.get("parent_creator") === 1) || post.get("user_handle") === parentUserHandle) {
                         author = "OJ";
                     } else {
-                        let index = authorList.indexOf(post.user_handle);
+                        let index = authorList.indexOf(post.get("user_handle"));
                         if (index == -1) {
-                            index = authorList.push(post.user_handle) - 1;
+                            index = authorList.push(post.get("user_handle")) - 1;
                         }
                         author = "C" + (index + 1);
                     }
                 }
-                return <Post key={post.post_id} post={post} parentPostId={parentPostId}
+                return <Post key={post.get("post_id")} post={post} parentPostId={parentPostId}
                              onPostClick={this._onPostClick.bind(this, post)} author={author}/>
             }
         );

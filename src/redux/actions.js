@@ -16,7 +16,7 @@ export function switchPostSection(section) {
     return (dispatch, getState) => {
         dispatch(invalidatePosts(section));
         dispatch(fetchPostsIfNeeded(section));
-        if (getState().viewState.postSection !== section) {
+        if (getState().viewState.get("postSection") !== section) {
             dispatch(switchPostListSortType(PostListSortTypes.RECENT));
             dispatch(_switchPostSection(section));
         }
@@ -26,7 +26,7 @@ export function switchPostSection(section) {
 
 export function updatePosts() {
     return (dispatch, getState) => {
-        const section = getState().viewState.postSection;
+        const section = getState().viewState.get("postSection");
         dispatch(invalidatePosts(section));
         dispatch(fetchPostsIfNeeded(section));
     }
@@ -43,13 +43,15 @@ export function selectPost(postId) {
 
 export function updateLocation() {
     return (dispatch, getState) => {
-        if (getState().viewState.useBrowserLocation && "geolocation" in navigator) {
+        if (getState().viewState.get("useBrowserLocation") && "geolocation" in navigator) {
             /* geolocation is available */
             navigator.geolocation.getCurrentPosition(position => {
-                if (getState().viewState.location.latitude !== position.coords.latitude ||
-                    getState().viewState.location.longitude !== position.coords.longitude) {
+                if (getState().viewState.getIn(["location", "latitude"]) !== position.coords.latitude ||
+                    getState().viewState.getIn(["location", "longitude"]) !== position.coords.longitude) {
                     dispatch(setLocation(position.coords.latitude, position.coords.longitude));
-                    dispatch(updatePosts());
+                    if (getState().account.getIn(["token", "access"]) !== undefined) {
+                        dispatch(updatePosts());
+                    }
                 }
             }, err => {
                 // TODO do something useful
@@ -106,10 +108,10 @@ export function createNewAccount() {
 export function setPermissionDenied(permissionDenied) {
     return (dispatch, getState) => {
         let account = getState().account;
-        if (account.deviceUid !== undefined && permissionDenied && !account.permissionDenied) {
+        if (account.get("deviceUid") !== undefined && permissionDenied && !account.get("permissionDenied")) {
             dispatch(_setPermissionDenied(permissionDenied));
             // Reregister
-            dispatch(setDeviceUid(account.deviceUid));
+            dispatch(setDeviceUid(account.get("deviceUid")));
         }
     }
 }

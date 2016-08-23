@@ -69,32 +69,36 @@ html, body, #content, .jodel, .postListContainer {
   bottom: 1em;
 }
 
-.postListContainer .sections {
+.postListContainer .sortTypes {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #eeeeee;
+  background-color: #eee;
   text-align: center;
 
-  .section {
+  .sortType {
     float: left;
     width: 33%;
     height: 3em;
     cursor: pointer;
-  }
-  .recent {
-    &::before {
-      content: "Neueste";
+    &.active {
+      background-color: #ccc;
     }
-  }
-  .discussed {
-    &::before {
-      content: "Meist kommentierte";
+
+    &.recent {
+      &::before {
+        content: "Neueste";
+      }
     }
-  }
-  .popular {
-    &::before {
-      content: "Lauteste";
+    &.discussed {
+      &::before {
+        content: "Meist kommentierte";
+      }
+    }
+    &.popular {
+      &::before {
+        content: "Lauteste";
+      }
     }
   }
 }

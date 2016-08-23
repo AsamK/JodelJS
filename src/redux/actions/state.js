@@ -87,7 +87,6 @@ export function _selectPost(postId) {
     return {
         type: SELECT_POST,
         postId: postId,
-        receivedAt: Date.now()
     }
 }
 
@@ -98,6 +97,7 @@ export function selectPicture(postId) {
         postId: postId,
     }
 }
+
 
 export const SET_KARMA = 'SET_KARMA';
 export function _setKarma(karma) {

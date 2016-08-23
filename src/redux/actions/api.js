@@ -39,7 +39,7 @@ function handlePermissionDenied(dispatch, getState, err) {
 }
 export function deletePost(postId) {
     return (dispatch, getState) => {
-        apiDeletePost(getState().account.token.access, postId)
+        apiDeletePost(getState().account.getIn(["token", "access"]), postId)
             .catch(err => {
                 handlePermissionDenied(dispatch, getState, err);
             });
@@ -48,7 +48,7 @@ export function deletePost(postId) {
 
 export function upVote(postId, parentPostId) {
     return (dispatch, getState) => {
-        apiUpVote(getState().account.token.access, postId)
+        apiUpVote(getState().account.getIn(["token", "access"]), postId)
             .then(res => dispatch(receivePost(res.body.post, parentPostId)))
             .catch(err => {
                 handlePermissionDenied(dispatch, getState, err);
@@ -58,7 +58,7 @@ export function upVote(postId, parentPostId) {
 
 export function downVote(postId, parentPostId) {
     return (dispatch, getState) => {
-        apiDownVote(getState().account.token.access, postId)
+        apiDownVote(getState().account.getIn(["token", "access"]), postId)
             .then(res => dispatch(receivePost(res.body.post, parentPostId)))
             .catch(err => {
                 handlePermissionDenied(dispatch, getState, err);
@@ -67,31 +67,31 @@ export function downVote(postId, parentPostId) {
 }
 
 function shouldFetchPosts(section, state) {
-    const posts = state.postsBySection[section];
+    const posts = state.postsBySection.get(section);
     if (posts === undefined) {
-        return true
-    } else if (posts.isFetching) {
-        return false
+        return true;
+    } else if (posts.get("isFetching")) {
+        return false;
     } else {
-        return posts.didInvalidate
+        return posts.get("didInvalidate");
     }
 }
 
 export function fetchPostsIfNeeded(section) {
     return (dispatch, getState) => {
         dispatch(getKarma());
-        if (getState().viewState.selectedPostId != null) {
-            dispatch(fetchPost(getState().viewState.selectedPostId));
+        if (getState().viewState.get("selectedPostId") !== null) {
+            dispatch(fetchPost(getState().viewState.get("selectedPostId")));
         }
 
         if (section === undefined) {
-            section = getState().viewState.postSection;
+            section = getState().viewState.get("postSection");
         }
         if (shouldFetchPosts(section, getState())) {
             dispatch(setIsFetching(section));
             if (section.startsWith("channel:")) {
                 let channel = section.substring(8);
-                apiGetPostsChannelCombo(getState().account.token.access, channel)
+                apiGetPostsChannelCombo(getState().account.getIn(["token", "access"]), channel)
                     .then(res => {
                         dispatch(receivePosts(section, {
                             recent: res.body.recent,
@@ -106,7 +106,7 @@ export function fetchPostsIfNeeded(section) {
             } else {
                 switch (section) {
                     case "location":
-                        apiGetPostsCombo(getState().account.token.access, getState().viewState.location.latitude, getState().viewState.location.longitude)
+                        apiGetPostsCombo(getState().account.getIn(["token", "access"]), getState().viewState.getIn(["location", "latitude"]), getState().viewState.getIn(["location", "longitude"]))
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.recent,
@@ -120,7 +120,7 @@ export function fetchPostsIfNeeded(section) {
                             });
                         break;
                     case "mine":
-                        apiGetPostsMineCombo(getState().account.token.access)
+                        apiGetPostsMineCombo(getState().account.getIn(["token", "access"]))
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.recent,
@@ -134,7 +134,7 @@ export function fetchPostsIfNeeded(section) {
                             });
                         break;
                     case "mineReplies":
-                        apiGetPostsMineReplies(getState().account.token.access, undefined, undefined)
+                        apiGetPostsMineReplies(getState().account.getIn(["token", "access"]), undefined, undefined)
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.posts,
@@ -146,7 +146,7 @@ export function fetchPostsIfNeeded(section) {
                             });
                         break;
                     case "mineVotes":
-                        apiGetPostsMineVotes(getState().account.token.access, undefined, undefined)
+                        apiGetPostsMineVotes(getState().account.getIn(["token", "access"]), undefined, undefined)
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.posts,
@@ -166,12 +166,12 @@ export function fetchPostsIfNeeded(section) {
 export function fetchMorePosts(section, sortType) {
     return (dispatch, getState) => {
         if (section === undefined) {
-            section = getState().viewState.postSection;
+            section = getState().viewState.get("postSection");
         }
         if (sortType === undefined) {
-            sortType = getState().viewState.postListSortType;
+            sortType = getState().viewState.get("postListSortType");
         }
-        const postSection = getState().postsBySection[section];
+        const postSection = getState().postsBySection.get(section);
         if (postSection === undefined || postSection.isFetching) {
             return;
         }
@@ -184,7 +184,7 @@ export function fetchMorePosts(section, sortType) {
                 afterId = posts[posts.length - 1];
             }
             dispatch(setIsFetching(section));
-            apiGetPostsChannel(getState().account.token.access, sortType, afterId, channel)
+            apiGetPostsChannel(getState().account.getIn(["token", "access"]), sortType, afterId, channel)
                 .then(res => {
                     let p = {};
                     p[sortType] = res.body.posts;
@@ -202,7 +202,7 @@ export function fetchMorePosts(section, sortType) {
                         afterId = posts[posts.length - 1];
                     }
                     dispatch(setIsFetching(section));
-                    apiGetPosts(getState().account.token.access, sortType, afterId, getState().viewState.location.latitude, getState().viewState.location.longitude)
+                    apiGetPosts(getState().account.getIn(["token", "access"]), sortType, afterId, getState().viewState.getIn(["location", "latitude"]), getState().viewState.getIn(["location", "longitude"]))
                         .then(res => {
                             let p = {};
                             p[sortType] = res.body.posts;
@@ -219,7 +219,7 @@ export function fetchMorePosts(section, sortType) {
                         limit = 10;
                     }
                     dispatch(setIsFetching(section));
-                    apiGetPostsMine(getState().account.token.access, sortType, skip, limit)
+                    apiGetPostsMine(getState().account.getIn(["token", "access"]), sortType, skip, limit)
                         .then(res => {
                             let p = {};
                             p[sortType] = res.body.posts;
@@ -239,7 +239,7 @@ export function fetchMorePosts(section, sortType) {
                         limit = 10;
                     }
                     dispatch(setIsFetching(section));
-                    apiGetPostsMineReplies(getState().account.token.access, skip, limit)
+                    apiGetPostsMineReplies(getState().account.getIn(["token", "access"]), skip, limit)
                         .then(res => {
                             let p = {};
                             p[sortType] = res.body.posts;
@@ -259,7 +259,7 @@ export function fetchMorePosts(section, sortType) {
                         limit = 10;
                     }
                     dispatch(setIsFetching(section));
-                    apiGetPostsMineVotes(getState().account.token.access, skip, limit)
+                    apiGetPostsMineVotes(getState().account.getIn(["token", "access"]), skip, limit)
                         .then(res => {
                             let p = {};
                             p[sortType] = res.body.posts;
@@ -277,7 +277,7 @@ export function fetchMorePosts(section, sortType) {
 
 export function fetchPost(postId) {
     return (dispatch, getState) => {
-        apiGetPost(getState().account.token.access, postId)
+        apiGetPost(getState().account.getIn(["token", "access"]), postId)
             .then(res => {
                 dispatch(receivePost(res.body))
             })
@@ -289,7 +289,7 @@ export function fetchPost(postId) {
 
 export function getKarma() {
     return (dispatch, getState) => {
-        apiGetKarma(getState().account.token.access)
+        apiGetKarma(getState().account.getIn(["token", "access"]))
             .then(res => {
                 dispatch(_setKarma(res.body.karma))
             })
@@ -301,7 +301,7 @@ export function getKarma() {
 
 export function getConfig() {
     return (dispatch, getState) => {
-        apiGetConfig(getState().account.token.access)
+        apiGetConfig(getState().account.getIn(["token", "access"]))
             .then(res => {
                 dispatch(_setConfig(res.body));
             })
@@ -314,8 +314,8 @@ export function getConfig() {
 export function addPost(text, image, ancestor, color = "FF9908") {
     return (dispatch, getState) => {
         dispatch(showAddPost(false));
-        let loc = getState().viewState.location;
-        apiAddPost(getState().account.token.access, ancestor, color, 0.0, loc.latitude, loc.longitude, loc.city, loc.country, text, image)
+        let loc = getState().viewState.get("location");
+        apiAddPost(getState().account.getIn(["token", "access"]), ancestor, color, 0.0, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"), text, image)
             .then(res => {
                 dispatch(receivePosts("location", {recent: res.body.posts}));
                 if (ancestor !== undefined) {
@@ -330,8 +330,8 @@ export function addPost(text, image, ancestor, color = "FF9908") {
 
 export function setDeviceUid(deviceUid) {
     return (dispatch, getState) => {
-        const loc = getState().viewState.location;
-        apiGetAccessToken(deviceUid, loc.latitude, loc.longitude, loc.city, loc.country)
+        const loc = getState().viewState.get("location");
+        apiGetAccessToken(deviceUid, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"))
             .then(res => {
                 dispatch(_setDeviceUID(deviceUid));
                 dispatch(setToken(res.body.distinct_id, res.body.access_token, res.body.refresh_token, res.body.expiration_date, res.body.token_type));
@@ -345,10 +345,10 @@ export function setDeviceUid(deviceUid) {
 export function refreshAccessToken() {
     return (dispatch, getState) => {
         const account = getState().account;
-        apiRefreshAccessToken(account.token.access, account.token.distinctId, account.token.refresh)
+        apiRefreshAccessToken(account.getIn(["token", "access"]), account.getIn(["token", "distinctId"]), account.getIn(["token", "refresh"]))
             .then(res => {
                 if (res.body.upgraded === true) {
-                    dispatch(setToken(account.token.distinctId, res.body.access_token, account.token.refresh, res.body.expiration_date, res.body.token_type));
+                    dispatch(setToken(account.getIn(["token", "distinctId"]), res.body.access_token, account.getIn(["token", "refresh"]), res.body.expiration_date, res.body.token_type));
                 }
             })
             .catch(err => {
@@ -362,8 +362,8 @@ export function setLocation(latitude, longitude, city = undefined, country = "DE
         latitude = Math.round(latitude * 100) / 100;
         longitude = Math.round(longitude * 100) / 100;
         dispatch(_setLocation(latitude, longitude, city, country));
-        if (getState().account.token !== undefined && getState().account.token.access !== undefined) {
-            apiSetPlace(getState().account.token.access, latitude, longitude, city, country)
+        if (getState().account.getIn(["token", "access"]) !== undefined) {
+            apiSetPlace(getState().account.getIn(["token", "access"]), latitude, longitude, city, country)
                 .catch(err => {
                     handlePermissionDenied(dispatch, getState, err);
                 });

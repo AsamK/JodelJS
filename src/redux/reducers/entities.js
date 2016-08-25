@@ -12,17 +12,17 @@ function entities(state = Immutable.Map({}), action) {
                 return child.post_id;
             })
         }
-        if (state.hasOwnProperty(post.post_id)) {
-            const oldPost = state[post.post_id];
-            if (oldPost.children !== undefined && post.children !== undefined && post.children.length == 0) {
+        if (state.has(post.post_id)) {
+            const oldPost = state.get(post.post_id);
+            if (oldPost.has("children") && post.children !== undefined && post.children.length == 0) {
                 // The old post has children and the new post has children, which however aren't included in the new data
                 // -> keep old children
-                post.children = oldPost.children;
+                post.children = oldPost.get("children");
             }
         }
         newState[post.post_id] = post;
     });
-    return state.mergeDeep(newState);
+    return state.merge(newState);
 }
 
 export default entities;

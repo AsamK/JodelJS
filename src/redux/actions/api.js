@@ -29,7 +29,7 @@ import {
     PostListSortTypes,
     _setLocation
 } from "./state";
-import {setToken, setPermissionDenied} from "../actions";
+import {setToken, setPermissionDenied, updatePosts} from "../actions";
 
 function handlePermissionDenied(dispatch, getState, err) {
     if (err.status === 401) {
@@ -40,6 +40,7 @@ function handlePermissionDenied(dispatch, getState, err) {
 export function deletePost(postId) {
     return (dispatch, getState) => {
         apiDeletePost(getState().account.getIn(["token", "access"]), postId)
+            .then(res => dispatch(updatePosts()))
             .catch(err => {
                 handlePermissionDenied(dispatch, getState, err);
             });

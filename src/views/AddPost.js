@@ -70,10 +70,11 @@ export default class AddPost extends PureComponent {
                         this.resetForm(form);
                     }
                 }}>
-                    <textarea value={this.state.message} onChange={event => {
+                    <textarea maxLength="230" value={this.state.message} onChange={event => {
                         this.setState({message: event.target.value});
                         sessionStorage.setItem("messageDraft", event.target.value);
                     }}/>
+                    Noch {230 - this.state.message.length} Zeichen
                     <div className="image">
                         Bild Jodeln:
                         <input type="file" accept="image/*" onChange={this.handleChangeImage}/>

@@ -118,8 +118,11 @@ export function apiGetPostsMineReplies(auth, skip, limit) {
     }, {});
 }
 
-export function apiGetPostsMinePinned(auth) {
-    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/mine/pinned", {}, {});
+export function apiGetPostsMinePinned(auth, skip, limit) {
+    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/mine/pinned", {
+        skip,
+        limit
+    }, {});
 }
 
 export function apiGetPostsMineVotes(auth, skip, limit) {

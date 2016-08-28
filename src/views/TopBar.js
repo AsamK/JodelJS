@@ -9,6 +9,7 @@ let TopBar = ({karma, showSettings}) => {
             <SectionLink section="mine"/>
             <SectionLink section="mineReplies"/>
             <SectionLink section="mineVotes"/>
+            <SectionLink section="minePinned"/>
             <div className="karma" onClick={showSettings}>
                 {karma > 0 ? "+" : ""}{karma}
                 <div className="subText">Mein Karma</div>

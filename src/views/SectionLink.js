@@ -20,6 +20,9 @@ const SectionLink = ({section, active, onClick}) => {
         case "mineVotes":
             name = "Meine Votes";
             break;
+        case "minePinned":
+            name = "Meine Pins";
+            break;
     }
     return <div className={classnames("sectionLink", section.toLowerCase(), {active})} onClick={onClick}>{name}</div>
 };

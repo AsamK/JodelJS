@@ -18,7 +18,8 @@ import {
     apiGetPostsChannelCombo,
     apiGetPostsChannel,
     apiPin,
-    apiUnpin
+    apiUnpin,
+    apiGetPostsMinePinned
 } from "../../app/api";
 import {
     receivePost,
@@ -179,6 +180,18 @@ export function fetchPostsIfNeeded(section) {
                                 handlePermissionDenied(dispatch, getState, err);
                             });
                         break;
+                    case "minePinned":
+                        apiGetPostsMinePinned(getState().account.getIn(["token", "access"]), undefined, undefined)
+                            .then(res => {
+                                dispatch(receivePosts(section, {
+                                    recent: res.body.posts,
+                                }))
+                            })
+                            .catch(err => {
+                                dispatch(setIsFetching(section, false));
+                                handlePermissionDenied(dispatch, getState, err);
+                            });
+                        break;
                 }
             }
         }
@@ -282,6 +295,26 @@ export function fetchMorePosts(section, sortType) {
                     }
                     dispatch(setIsFetching(section));
                     apiGetPostsMineVotes(getState().account.getIn(["token", "access"]), skip, limit)
+                        .then(res => {
+                            let p = {};
+                            p[sortType] = res.body.posts;
+                            dispatch(receivePosts(section, p, true));
+                        })
+                        .catch(err => {
+                            dispatch(setIsFetching(section, false));
+                            handlePermissionDenied(dispatch, getState, err);
+                        });
+                    break;
+                case "minePinned":
+                    if (sortType != PostListSortTypes.RECENT) {
+                        return;
+                    }
+                    if (posts !== undefined) {
+                        skip = posts.size;
+                        limit = 10;
+                    }
+                    dispatch(setIsFetching(section));
+                    apiGetPostsMinePinned(getState().account.getIn(["token", "access"]), skip, limit)
                         .then(res => {
                             let p = {};
                             p[sortType] = res.body.posts;

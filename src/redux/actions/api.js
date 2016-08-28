@@ -197,13 +197,13 @@ export function fetchMorePosts(section, sortType) {
         if (postSection === undefined || postSection.isFetching) {
             return;
         }
-        const posts = postSection[sortType];
+        const posts = postSection.get(sortType);
         let skip, limit;
         if (section.startsWith("channel:")) {
             let channel = section.substring(8);
             let afterId;
             if (posts !== undefined) {
-                afterId = posts[posts.length - 1];
+                afterId = posts.get(posts.size - 1);
             }
             dispatch(setIsFetching(section));
             apiGetPostsChannel(getState().account.getIn(["token", "access"]), sortType, afterId, channel)
@@ -221,7 +221,7 @@ export function fetchMorePosts(section, sortType) {
                 case "location":
                     let afterId;
                     if (posts !== undefined) {
-                        afterId = posts[posts.length - 1];
+                        afterId = posts.get(posts.size - 1);
                     }
                     dispatch(setIsFetching(section));
                     apiGetPosts(getState().account.getIn(["token", "access"]), sortType, afterId, getState().viewState.getIn(["location", "latitude"]), getState().viewState.getIn(["location", "longitude"]))
@@ -237,7 +237,7 @@ export function fetchMorePosts(section, sortType) {
                     break;
                 case "mine":
                     if (posts !== undefined) {
-                        skip = posts.length;
+                        skip = posts.size;
                         limit = 10;
                     }
                     dispatch(setIsFetching(section));
@@ -257,7 +257,7 @@ export function fetchMorePosts(section, sortType) {
                         return;
                     }
                     if (posts !== undefined) {
-                        skip = posts.length;
+                        skip = posts.size;
                         limit = 10;
                     }
                     dispatch(setIsFetching(section));
@@ -277,7 +277,7 @@ export function fetchMorePosts(section, sortType) {
                         return;
                     }
                     if (posts !== undefined) {
-                        skip = posts.length;
+                        skip = posts.size;
                         limit = 10;
                     }
                     dispatch(setIsFetching(section));

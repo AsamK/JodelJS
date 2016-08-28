@@ -16,7 +16,9 @@ import {
     apiDeletePost,
     apiSetPlace,
     apiGetPostsChannelCombo,
-    apiGetPostsChannel
+    apiGetPostsChannel,
+    apiPin,
+    apiUnpin
 } from "../../app/api";
 import {
     receivePost,
@@ -27,7 +29,8 @@ import {
     showAddPost,
     _setDeviceUID,
     PostListSortTypes,
-    _setLocation
+    _setLocation,
+    pinnedPost
 } from "./state";
 import {setToken, setPermissionDenied, updatePosts} from "../actions";
 
@@ -50,7 +53,7 @@ export function deletePost(postId) {
 export function upVote(postId, parentPostId) {
     return (dispatch, getState) => {
         apiUpVote(getState().account.getIn(["token", "access"]), postId)
-            .then(res => dispatch(receivePost(res.body.post, parentPostId)))
+            .then(res => dispatch(receivePost(res.body.post)))
             .catch(err => {
                 handlePermissionDenied(dispatch, getState, err);
             });
@@ -60,7 +63,25 @@ export function upVote(postId, parentPostId) {
 export function downVote(postId, parentPostId) {
     return (dispatch, getState) => {
         apiDownVote(getState().account.getIn(["token", "access"]), postId)
-            .then(res => dispatch(receivePost(res.body.post, parentPostId)))
+            .then(res => dispatch(receivePost(res.body.post)))
+            .catch(err => {
+                handlePermissionDenied(dispatch, getState, err);
+            });
+    }
+}
+
+export function pin(postId, pinned = true) {
+    return (dispatch, getState) => {
+        let fn;
+        if (pinned) {
+            fn = apiPin;
+        } else {
+            fn = apiUnpin;
+        }
+        fn(getState().account.getIn(["token", "access"]), postId)
+            .then(res => {
+                dispatch(pinnedPost(postId, pinned, res.body.pin_count))
+            })
             .catch(err => {
                 handlePermissionDenied(dispatch, getState, err);
             });

@@ -66,6 +66,7 @@ class Jodel extends Component {
         } else if (this.props.settings.get("visible")) {
             return <AppSettings/>
         } else {
+            let selectedPost = this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost();
             return <div className="jodel">
                 <TopBar karma={this.props.karma}
                         showSettings={() => this.props.dispatch(showSettings(true))}/>
@@ -75,8 +76,8 @@ class Jodel extends Component {
                                        onLoadMore={this.onLoadMore.bind(this)}/>
                 </div>
                 <div className={classnames("detail", {postShown: this.props.selectedPost != null})}>
-                    <PostTopBar/>
-                    <PostDetails post={this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost()}
+                    <PostTopBar post={selectedPost}/>
+                    <PostDetails post={selectedPost}
                                  onPostClick={this.refresh.bind(this)}
                                  onAddClick={this.handleAddCommentClick.bind(this)}
                                  locationKnown={this.props.locationKnown}/>

@@ -1,8 +1,15 @@
 import Immutable from "immutable";
+import {PINNED_POST} from "../actions";
 
 function entities(state = Immutable.Map({}), action) {
     if (action.entities === undefined) {
-        return state;
+        switch (action.type) {
+            case PINNED_POST:
+                return state.update(action.postId, post => post.set("pinned", action.pinned).set("pin_count", action.pinCount));
+                break;
+            default:
+                return state;
+        }
     }
     let newState = {};
     action.entities.forEach((post) => {

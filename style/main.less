@@ -47,6 +47,22 @@ html, body, #content, .jodel, .postListContainer {
   padding-top: 1em;
   padding-bottom: 1em;
   padding-left: 1em;
+  float: left;
+}
+
+.pin {
+  float: right;
+  .pinButton {
+    cursor: pointer;
+    display: inline-block;
+    padding: 1em;
+    &::before {
+      content: "Pin";
+    }
+    &.pinned::before {
+      content: "Unpin";
+    }
+  }
 }
 
 .postListContainer .postList {

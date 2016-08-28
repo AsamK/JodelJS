@@ -72,13 +72,22 @@ export function receivePosts(section, postsBySortType, append = false) {
     return res;
 }
 
-export function receivePost(post, ancestor) {
+export function receivePost(post) {
     return {
         type: RECEIVE_POSTS,
         entities: [post],
-        ancestor,
         receivedAt: Date.now(),
         append: true,
+    }
+}
+
+export const PINNED_POST = 'PINNED_POST';
+export function pinnedPost(postId, pinned, pinCount) {
+    return {
+        type: PINNED_POST,
+        postId,
+        pinned,
+        pinCount,
     }
 }
 

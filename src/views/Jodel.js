@@ -11,6 +11,7 @@ import FirstStart from "./FirstStart";
 import AppSettings from "./AppSettings";
 import Progress from "./Progress";
 import PostTopBar from "./PostTopBar";
+import ChannelList from "./ChannelList";
 import {
     fetchPostsIfNeeded,
     selectPost,
@@ -18,7 +19,10 @@ import {
     showAddPost,
     fetchMorePosts,
     showSettings,
-    selectPicture
+    selectPicture,
+    showChannelList,
+    switchPostSection,
+    getRecommendedChannels
 } from "../redux/actions";
 import Immutable from "immutable";
 
@@ -69,7 +73,11 @@ class Jodel extends Component {
             let selectedPost = this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost();
             return <div className="jodel">
                 <TopBar karma={this.props.karma}
-                        showSettings={() => this.props.dispatch(showSettings(true))}/>
+                        showSettings={() => this.props.dispatch(showSettings(true))}
+                        showChannelList={() => {
+                            this.props.dispatch(getRecommendedChannels());
+                            this.props.dispatch(showChannelList(!this.props.channelListShown));
+                        }}/>
                 <div className={classnames("list", {postShown: this.props.selectedPost != null})}>
                     <PostListContainer onPostClick={this.handleClick.bind(this)}
                                        onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}
@@ -91,6 +99,11 @@ class Jodel extends Component {
                     </div>
                     : ""}
                 <AddPost/>
+                <div className={classnames("channels", {channelListShown: this.props.channelListShown})}>
+                    <ChannelList channels={this.props.followedChannels}
+                                 recommendedChannels={this.props.recommendedChannels}
+                                 onChannelClick={(hashtag) => this.props.dispatch(switchPostSection("channel:" + hashtag))}/>
+                </div>
                 <Progress/>
             </div>;
         }
@@ -140,6 +153,9 @@ const mapStateToProps = (state) => {
         karma: state.account.get("karma"),
         deviceUid: state.account.get("deviceUid"),
         isRegistered: state.account.getIn(["token", "access"]) !== undefined,
+        followedChannels: state.account.getIn(["config", "followed_channels"]),
+        recommendedChannels: state.account.get("recommendedChannels"),
+        channelListShown: state.viewState.getIn(["channelList", "visible"]),
     }
 };
 

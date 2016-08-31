@@ -1,9 +1,19 @@
-import {SET_KARMA, SET_DEVICE_UID, SET_TOKEN, SET_CONFIG, SET_PERMISSION_DENIED} from "../actions";
+import {
+    SET_KARMA,
+    SET_DEVICE_UID,
+    SET_TOKEN,
+    SET_CONFIG,
+    SET_PERMISSION_DENIED,
+    SET_RECOMMENDED_CHANNELS
+} from "../actions";
 import Immutable from "immutable";
 
-export const ACCOUNT_VERSION = 1;
+export const ACCOUNT_VERSION = 2;
 export function migrateAccount(storedState, oldVersion) {
     storedState.permissionDenied = false;
+    if (oldVersion < 2) {
+        storedState.recommendedChannels = Immutable.List();
+    }
     return storedState;
 }
 
@@ -14,6 +24,7 @@ function account(state = Immutable.Map({
     token: undefined,
     config: undefined,
     permissionDenied: false,
+    recommendedChannels: Immutable.List(),
 }), action) {
     switch (action.type) {
         case SET_KARMA:
@@ -32,9 +43,11 @@ function account(state = Immutable.Map({
                 }
             });
         case SET_CONFIG:
-            return state.set("config", action.config);
+            return state.set("config", Immutable.fromJS(action.config));
         case SET_PERMISSION_DENIED:
             return state.set("permissionDenied", action.permissionDenied);
+        case SET_RECOMMENDED_CHANNELS:
+            return state.set("recommendedChannels", Immutable.List(action.recommendedChannels.map(c => c.channel)));
         default:
             return state;
     }

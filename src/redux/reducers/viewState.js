@@ -5,12 +5,14 @@ import {
     SWITCH_POST_SECTION,
     PostListSortTypes,
     SHOW_ADD_POST,
-    SELECT_PICTURE
+    SELECT_PICTURE,
+    SHOW_CHANNEL_LIST,
+    SET_USE_BROWSER_LOCATION,
+    SHOW_SETTINGS
 } from "../actions";
-import {SET_USE_BROWSER_LOCATION, SHOW_SETTINGS} from "../actions/state";
 import Immutable from "immutable";
 
-export const VIEW_STATE_VERSION = 6;
+export const VIEW_STATE_VERSION = 7;
 export function migrateViewState(storedState, oldVersion) {
     if (oldVersion < 2) {
         storedState.location.country = "DE";
@@ -24,6 +26,9 @@ export function migrateViewState(storedState, oldVersion) {
     if (oldVersion < 6) {
         storedState.selectedPicturePostId = null;
     }
+    if (oldVersion < 7) {
+        storedState.channelList = {visible: false};
+    }
     return storedState;
 }
 
@@ -36,6 +41,7 @@ function viewState(state = Immutable.Map({
     postListSortType: PostListSortTypes.RECENT,
     addPost: Immutable.Map({visible: false, ancestor: undefined}),
     settings: Immutable.Map({visible: false}),
+    channelList: Immutable.Map({visible: false}),
 }), action) {
     switch (action.type) {
         case SELECT_POST:
@@ -55,6 +61,8 @@ function viewState(state = Immutable.Map({
             }));
         case SHOW_SETTINGS:
             return state.update("settings", settings => settings.set("visible", action.visible));
+        case SHOW_CHANNEL_LIST:
+            return state.update("channelList", channelList => channelList.set("visible", action.visible));
         case SET_USE_BROWSER_LOCATION:
             return state.set("useBrowserLocation", action.useBrowserLocation);
         default:

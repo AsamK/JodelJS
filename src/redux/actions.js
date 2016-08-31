@@ -7,20 +7,22 @@ import {
     _selectPost,
     _setToken,
     PostListSortTypes,
-    _setPermissionDenied
+    _setPermissionDenied,
+    showChannelList
 } from "./actions/state";
 export * from "./actions/state";
 export * from "./actions/api";
 
 export function switchPostSection(section) {
     return (dispatch, getState) => {
-        dispatch(invalidatePosts(section));
-        dispatch(fetchPostsIfNeeded(section));
         if (getState().viewState.get("postSection") !== section) {
             dispatch(switchPostListSortType(PostListSortTypes.RECENT));
             dispatch(_switchPostSection(section));
         }
         dispatch(_selectPost(null));
+        dispatch(showChannelList(false));
+        dispatch(invalidatePosts(section));
+        dispatch(fetchPostsIfNeeded(section));
     }
 }
 

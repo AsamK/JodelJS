@@ -32,6 +32,49 @@ html, body, #content, .jodel, .postListContainer {
   }
 }
 
+.channels {
+  position: absolute;
+  top: 3em;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-y: scroll;
+  background-color: #eee;
+
+  display: none;
+  &.channelListShown {
+    display: block;
+  }
+}
+
+.channelList {
+  .channelListHeader {
+    text-transform: uppercase;
+    letter-spacing: .25em;
+    background-color: orange;
+    padding: 1em;
+    margin-bottom: 1px;
+    color: white;
+  }
+  .channelListRecommended {
+    text-transform: uppercase;
+    letter-spacing: .25em;
+    background: #ddd;
+    padding: 1em;
+    margin-bottom: 1px;
+    color: #555;
+  }
+  .channelLink {
+    background: #fff;
+    color: #333;
+    padding-top: 1em;
+    padding-left: 1em;
+    padding-bottom: 1em;
+    margin-bottom: 1px;
+    cursor: pointer;
+  }
+}
+
 .postTopBar {
   height: 3em;
   margin-top: 1px;

@@ -37,6 +37,14 @@ export function showSettings(visible) {
     }
 }
 
+export const SHOW_CHANNEL_LIST = 'SHOW_CHANNEL_LIST';
+export function showChannelList(visible) {
+    return {
+        type: SHOW_CHANNEL_LIST,
+        visible,
+    }
+}
+
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export function receivePosts(section, postsBySortType, append = false) {
     let res = {
@@ -123,6 +131,14 @@ export function _setConfig(config) {
         type: SET_CONFIG,
         config,
         receivedAt: Date.now()
+    }
+}
+
+export const SET_RECOMMENDED_CHANNELS = 'SET_RECOMMENDED_CHANNELS';
+export function setRecommendedChannels(recommendedChannels) {
+    return {
+        type: SET_RECOMMENDED_CHANNELS,
+        recommendedChannels,
     }
 }
 

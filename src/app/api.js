@@ -188,6 +188,10 @@ export function apiUnfollowChannel(auth, channel) {
     return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V3 + "/user/unfollowChannel", {channel: channel}, {});
 }
 
+export function apiGetRecommendedChannels(auth) {
+    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/user/recommendedChannels", {}, {});
+}
+
 export function apiAddPost(auth, ancestorPostId, color, loc_accuracy, latitude, longitude, city, country, message, image) {
     // image must be base64 encoded string
     return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V2 + "/posts/", {}, {

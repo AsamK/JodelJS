@@ -17,6 +17,9 @@ html, body, #content, .jodel, .postListContainer {
   &.postShown {
     display: none;
   }
+  &.isChannel {
+    top: 6em;
+  }
 }
 
 .detail {
@@ -107,6 +110,39 @@ html, body, #content, .jodel, .postListContainer {
     }
   }
 }
+
+.channelTopBar {
+  height: 3em;
+  margin-top: 1px;
+  background-color: #eee;
+  position: fixed;
+  top: 3em;
+  left: 0;
+  right: 0;
+  .title {
+    float:left;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 1em;
+    font-weight: bold;
+  }
+}
+
+.follow {
+  float: right;
+  .followButton {
+    cursor: pointer;
+    display: inline-block;
+    padding: 1em;
+    &::before {
+      content: "Follow";
+    }
+    &.isFollowing::before {
+      content: "Unfollow";
+    }
+  }
+}
+
 
 .postListContainer .postList {
   overflow-y: scroll;

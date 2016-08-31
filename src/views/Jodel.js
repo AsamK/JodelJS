@@ -12,6 +12,7 @@ import AppSettings from "./AppSettings";
 import Progress from "./Progress";
 import PostTopBar from "./PostTopBar";
 import ChannelList from "./ChannelList";
+import ChannelTopBar from "./ChannelTopBar";
 import {
     fetchPostsIfNeeded,
     selectPost,
@@ -78,7 +79,14 @@ class Jodel extends Component {
                             this.props.dispatch(getRecommendedChannels());
                             this.props.dispatch(showChannelList(!this.props.channelListShown));
                         }}/>
-                <div className={classnames("list", {postShown: this.props.selectedPost != null})}>
+                <div className={classnames("list", {
+                    postShown: this.props.selectedPost != null,
+                    isChannel: this.props.selectedChannel !== undefined
+                })}>
+                    {this.props.selectedChannel !== undefined ?
+                        <ChannelTopBar channel={this.props.selectedChannel}/>
+                        : undefined
+                    }
                     <PostListContainer onPostClick={this.handleClick.bind(this)}
                                        onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}
                                        onLoadMore={this.onLoadMore.bind(this)}/>
@@ -144,10 +152,16 @@ const mapStateToProps = (state) => {
     } else if (selectedPost.has("children")) {
         selectedPost = selectedPost.set("children", selectedPost.get("children").map((child) => state.entities.get(child)));
     }
+    let section = state.viewState.get("postSection");
+    let selectedChannel;
+    if (section.startsWith("channel:")) {
+        selectedChannel = section.substring(8);
+    }
     return {
-        section: state.viewState.get("postSection"),
+        section,
         selectedPost,
         selectedPicturePost,
+        selectedChannel,
         locationKnown: state.viewState.getIn(["location", "latitude"]) !== undefined,
         settings: state.viewState.get("settings"),
         karma: state.account.get("karma"),

@@ -20,7 +20,9 @@ import {
     apiPin,
     apiUnpin,
     apiGetPostsMinePinned,
-    apiGetRecommendedChannels
+    apiGetRecommendedChannels,
+    apiFollowChannel,
+    apiUnfollowChannel
 } from "../../app/api";
 import {
     receivePost,
@@ -437,6 +439,24 @@ export function getRecommendedChannels() {
         apiGetRecommendedChannels(getAuth(getState))
             .then(res => {
                 dispatch(setRecommendedChannels(res.body.recommended));
+            });
+    }
+}
+
+export function followChannel(channel, follow = true) {
+    return (dispatch, getState) => {
+        let fn;
+        if (follow) {
+            fn = apiFollowChannel;
+        } else {
+            fn = apiUnfollowChannel;
+        }
+        fn(getAuth(getState), channel)
+            .then(res => {
+                dispatch(getConfig()); // TODO
+            })
+            .catch(err => {
+                handlePermissionDenied(dispatch, getState, err);
             });
     }
 }

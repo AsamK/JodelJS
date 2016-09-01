@@ -3,17 +3,18 @@ import {connect} from "react-redux";
 import BackButton from "./BackButton";
 import {showChannelList, followChannel} from "../redux/actions";
 import classnames from "classnames";
+import {getChannel} from "../redux/reducers/entities";
 
 let ChannelTopBar = ({onBackClick, onFollowClick, channel, followerCount, followedName}) => {
     let isFollowing = followedName !== null;
-    console.log(followedName);
     return (
         <div className="channelTopBar">
             <BackButton onClick={onBackClick}/>
             <div className="title">#{channel}</div>
             <div className="follow">
                 {followerCount > 0 ? followerCount : ""}
-                <div className={classnames("followButton", {isFollowing})} onClick={() => onFollowClick(isFollowing ? followedName : channel, !isFollowing)}>
+                <div className={classnames("followButton", {isFollowing})}
+                     onClick={() => onFollowClick(isFollowing ? followedName : channel, !isFollowing)}>
                 </div>
             </div>
         </div>
@@ -29,6 +30,7 @@ ChannelTopBar.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+    let followers = getChannel(state, ownProps.channel).get("followers");
     return {
         followedName: state.account.getIn(["config", "followed_channels"]).reduce((v, c) => {
             if (c.toLowerCase() === ownProps.channel.toLowerCase()) {
@@ -37,7 +39,7 @@ const mapStateToProps = (state, ownProps) => {
                 return v;
             }
         }, null),
-        followerCount: 0, // TODO
+        followerCount: followers === undefined ? 0 : followers,
     }
 };
 

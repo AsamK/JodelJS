@@ -22,8 +22,7 @@ import {
     showSettings,
     selectPicture,
     showChannelList,
-    switchPostSection,
-    getRecommendedChannels
+    switchPostSection
 } from "../redux/actions";
 import Immutable from "immutable";
 import {getPost, getChannel} from "../redux/reducers/entities";
@@ -77,7 +76,6 @@ class Jodel extends Component {
                 <TopBar karma={this.props.karma}
                         showSettings={() => this.props.dispatch(showSettings(true))}
                         showChannelList={() => {
-                            this.props.dispatch(getRecommendedChannels());
                             this.props.dispatch(showChannelList(!this.props.channelListShown));
                         }}/>
                 <div className={classnames("list", {
@@ -168,8 +166,16 @@ const mapStateToProps = (state) => {
         karma: state.account.get("karma"),
         deviceUid: state.account.get("deviceUid"),
         isRegistered: state.account.getIn(["token", "access"]) !== undefined,
-        followedChannels: state.account.getIn(["config", "followed_channels"]),
-        recommendedChannels: state.account.get("recommendedChannels"),
+        followedChannels: state.account.getIn(["config", "followed_channels"]).map(c => getChannel(state, c)),
+        recommendedChannels: state.account.get("recommendedChannels")
+            .map(channel => state.account.getIn(["config", "followed_channels"]).reduce((v, c) => {
+                if (c.toLowerCase() === channel.toLowerCase()) {
+                    return undefined
+                } else {
+                    return v;
+                }
+            }, getChannel(state, channel)))
+            .filter(c => c !== undefined),
         channelListShown: state.viewState.getIn(["channelList", "visible"]),
     }
 };

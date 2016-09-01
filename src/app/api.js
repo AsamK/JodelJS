@@ -192,6 +192,11 @@ export function apiGetRecommendedChannels(auth) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/user/recommendedChannels", {}, {});
 }
 
+export function apiGetFollowedChannelsMeta(auth, channels) {
+    // Format: {"channelName": timestamp, "channel2": timestamp2}
+    return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V3 + "/user/followedChannelsMeta", {}, channels);
+}
+
 export function apiAddPost(auth, ancestorPostId, color, loc_accuracy, latitude, longitude, city, country, message, image) {
     // image must be base64 encoded string
     return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V2 + "/posts/", {}, {

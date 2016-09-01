@@ -1,6 +1,7 @@
 'use strict';
 
 import React, {Component} from "react";
+import classnames from "classnames";
 
 export default class ChannelList extends Component {
     constructor(props) {
@@ -25,23 +26,32 @@ export default class ChannelList extends Component {
     render() {
         const {channels, recommendedChannels, onChannelClick, ...forwardProps} = this.props;
         const channelNodes = channels.map((channel) => {
-                return <div key={channel} className="channelLink" onClick={() => onChannelClick(channel)}>#{channel}</div>
+                return <div key={channel.get("channel")}
+                            className={classnames("channelLink", {unread: channel.get("unread")})}
+                            onClick={() => onChannelClick(channel.get("channel"))}>
+                    <div className="title">#{channel.get("channel")}</div>
+                    {channel.has("followers") ?
+                        <div className="followers">{channel.get("followers")} Followers</div>
+                        : undefined}
+                </div>
             }
         );
-        let recommendedCount = 0;
         const recommendedChannelNodes = recommendedChannels.map((channel) => {
-                if (channels.contains(channel)) {
-                    return;
-                }
-                recommendedCount++;
-                return <div key={channel} className="channelLink" onClick={() => onChannelClick(channel)}>#{channel}</div>
+                return <div key={channel.get("channel")}
+                            className={classnames("channelLink", {unread: channel.get("unread")})}
+                            onClick={() => onChannelClick(channel.get("channel"))}>
+                    <div className="title">#{channel.get("channel")}</div>
+                    {channel.has("followers") ?
+                        <div className="followers">{channel.get("followers")} Followers</div>
+                        : undefined}
+                </div>
             }
         );
         return (
             <div className="channelList">
                 <div className="channelListHeader">Kanäle(beta)</div>
                 {channelNodes}
-                {recommendedCount > 0 ?
+                {recommendedChannelNodes.size > 0 ?
                     <div className="channelListRecommended">Vorschläge</div>
                     : undefined
                 }

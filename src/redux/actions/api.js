@@ -22,7 +22,8 @@ import {
     apiGetPostsMinePinned,
     apiGetRecommendedChannels,
     apiFollowChannel,
-    apiUnfollowChannel
+    apiUnfollowChannel,
+    apiGetFollowedChannelsMeta
 } from "../../app/api";
 import {
     receivePost,
@@ -35,7 +36,8 @@ import {
     PostListSortTypes,
     _setLocation,
     pinnedPost,
-    setRecommendedChannels
+    setRecommendedChannels,
+    setChannelsMeta
 } from "./state";
 import {setToken, setPermissionDenied, updatePosts} from "../actions";
 
@@ -124,7 +126,8 @@ export function fetchPostsIfNeeded(section) {
                             recent: res.body.recent,
                             discussed: res.body.replied,
                             popular: res.body.voted
-                        }))
+                        }));
+                        dispatch(setChannelsMeta([{channel, followers: res.body.followers_count}]));
                     })
                     .catch(err => {
                         dispatch(setIsFetching(section, false));
@@ -439,6 +442,20 @@ export function getRecommendedChannels() {
         apiGetRecommendedChannels(getAuth(getState))
             .then(res => {
                 dispatch(setRecommendedChannels(res.body.recommended));
+            });
+    }
+}
+
+export function getFollowedChannelsMeta() {
+    return (dispatch, getState) => {
+        let channels = {};
+        getState().account.getIn(["config", "followed_channels"]).forEach(c => {
+            let timestamp = getState().viewState.getIn(["channelsLastRead", c]);
+            channels[c] = timestamp === undefined ? 0 : timestamp;
+        });
+        apiGetFollowedChannelsMeta(getAuth(getState), channels)
+            .then(res => {
+                dispatch(setChannelsMeta(res.body.channels));
             });
     }
 }

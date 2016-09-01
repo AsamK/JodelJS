@@ -38,7 +38,7 @@ export function showSettings(visible) {
 }
 
 export const SHOW_CHANNEL_LIST = 'SHOW_CHANNEL_LIST';
-export function showChannelList(visible) {
+export function _showChannelList(visible) {
     return {
         type: SHOW_CHANNEL_LIST,
         visible,
@@ -139,6 +139,15 @@ export function setRecommendedChannels(recommendedChannels) {
     return {
         type: SET_RECOMMENDED_CHANNELS,
         recommendedChannels,
+        entitiesChannel: recommendedChannels,
+    }
+}
+
+export const SET_CHANNELS_META = 'SET_CHANNELS_META';
+export function setChannelsMeta(channels) {
+    return {
+        type: SET_CHANNELS_META,
+        entitiesChannel: channels,
     }
 }
 

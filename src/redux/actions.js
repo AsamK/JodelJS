@@ -1,5 +1,13 @@
 import crypto from "crypto";
-import {fetchPostsIfNeeded, fetchPost, getConfig, setDeviceUid, setLocation} from "./actions/api";
+import {
+    fetchPostsIfNeeded,
+    fetchPost,
+    getConfig,
+    setDeviceUid,
+    setLocation,
+    getRecommendedChannels,
+    getFollowedChannelsMeta
+} from "./actions/api";
 import {
     invalidatePosts,
     switchPostListSortType,
@@ -8,7 +16,7 @@ import {
     _setToken,
     PostListSortTypes,
     _setPermissionDenied,
-    showChannelList
+    _showChannelList
 } from "./actions/state";
 export * from "./actions/state";
 export * from "./actions/api";
@@ -20,7 +28,7 @@ export function switchPostSection(section) {
             dispatch(_switchPostSection(section));
         }
         dispatch(_selectPost(null));
-        dispatch(showChannelList(false));
+        dispatch(_showChannelList(false));
         dispatch(invalidatePosts(section));
         dispatch(fetchPostsIfNeeded(section));
     }
@@ -115,5 +123,15 @@ export function setPermissionDenied(permissionDenied) {
             // Reregister
             dispatch(setDeviceUid(account.get("deviceUid")));
         }
+    }
+}
+
+export function showChannelList(visible) {
+    return (dispatch, getState) => {
+        if (visible) {
+            dispatch(getRecommendedChannels());
+            dispatch(getFollowedChannelsMeta());
+        }
+        dispatch(_showChannelList(visible));
     }
 }

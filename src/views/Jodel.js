@@ -156,6 +156,7 @@ const mapStateToProps = (state) => {
     if (section.startsWith("channel:")) {
         selectedChannel = section.substring(8);
     }
+    let followedChannels = state.account.getIn(["config", "followed_channels"]);
     return {
         section,
         selectedPost,
@@ -166,9 +167,9 @@ const mapStateToProps = (state) => {
         karma: state.account.get("karma"),
         deviceUid: state.account.get("deviceUid"),
         isRegistered: state.account.getIn(["token", "access"]) !== undefined,
-        followedChannels: state.account.getIn(["config", "followed_channels"]).map(c => getChannel(state, c)),
+        followedChannels: followedChannels === undefined ? [] : followedChannels.map(c => getChannel(state, c)),
         recommendedChannels: state.account.get("recommendedChannels")
-            .map(channel => state.account.getIn(["config", "followed_channels"]).reduce((v, c) => {
+            .map(channel => followedChannels === undefined ? [] : followedChannels.reduce((v, c) => {
                 if (c.toLowerCase() === channel.toLowerCase()) {
                     return undefined
                 } else {

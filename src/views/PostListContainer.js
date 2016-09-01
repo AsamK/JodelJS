@@ -6,6 +6,7 @@ import {PostListSortTypes} from "../redux/actions";
 import SortTypeLink from "./SortTypeLink";
 import AddButton from "./AddButton";
 import {connect} from "react-redux";
+import {getPost} from "../redux/reducers/entities";
 
 class PostListContainer extends Component {
     constructor(props) {
@@ -45,7 +46,7 @@ const mapStateToProps = (state) => {
     }
     return {
         lastUpdated: state.postsBySection.getIn([section, "lastUpdated"]),
-        posts: posts.map(post_id => state.entities.get(post_id)),
+        posts: posts.map(post_id => getPost(state, post_id)),
         locationKnown: state.viewState.getIn(["location", "latitude"]) !== undefined,
     }
 };

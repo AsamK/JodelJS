@@ -26,6 +26,7 @@ import {
     getRecommendedChannels
 } from "../redux/actions";
 import Immutable from "immutable";
+import {getPost, getChannel} from "../redux/reducers/entities";
 
 class Jodel extends Component {
     componentDidMount() {
@@ -142,15 +143,15 @@ function getEmptyPost() {
 }
 
 const mapStateToProps = (state) => {
-    let selectedPicturePost = state.entities.get(state.viewState.get("selectedPicturePostId"));
+    let selectedPicturePost = getPost(state, state.viewState.get("selectedPicturePostId"));
     if (selectedPicturePost === undefined) {
         selectedPicturePost = null;
     }
-    let selectedPost = state.entities.get(state.viewState.get("selectedPostId"));
+    let selectedPost = getPost(state, state.viewState.get("selectedPostId"));
     if (selectedPost === undefined) {
         selectedPost = null;
     } else if (selectedPost.has("children")) {
-        selectedPost = selectedPost.set("children", selectedPost.get("children").map((child) => state.entities.get(child)));
+        selectedPost = selectedPost.set("children", selectedPost.get("children").map((child) => getPost(state, child)));
     }
     let section = state.viewState.get("postSection");
     let selectedChannel;

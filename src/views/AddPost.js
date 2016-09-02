@@ -4,7 +4,7 @@ import {addPost, showAddPost} from "../redux/actions";
 import classnames from "classnames";
 import ColorPicker from "./ColorPicker";
 
-export default class AddPost extends PureComponent {
+export class AddPost extends PureComponent {
     constructor(props) {
         super(props);
         const messageDraft = sessionStorage.getItem("messageDraft");

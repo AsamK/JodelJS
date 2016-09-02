@@ -119,6 +119,9 @@ export function fetchPostsIfNeeded(section) {
 
         if (section === undefined) {
             section = getState().viewState.get("postSection");
+            if (section === undefined) {
+                return;
+            }
         }
         if (shouldFetchPosts(section, getState())) {
             dispatch(setIsFetching(section));

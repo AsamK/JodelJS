@@ -20,7 +20,6 @@ import {
     showAddPost,
     fetchMorePosts,
     showSettings,
-    selectPicture,
     showChannelList,
     switchPostSection
 } from "../redux/actions";
@@ -98,7 +97,7 @@ class Jodel extends Component {
                                  locationKnown={this.props.locationKnown}/>
                 </div>
                 {this.props.selectedPicturePost !== null ?
-                    <div className="bigPicture" onMouseUp={e => this.props.dispatch(selectPicture(null))}>
+                    <div className="bigPicture" onMouseUp={e => window.history.back()}>
                         <img alt={this.props.selectedPicturePost.get("message")}
                              src={"https:" + this.props.selectedPicturePost.get("thumbnail_url")}/>
                         <img alt={this.props.selectedPicturePost.get("message")}

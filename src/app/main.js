@@ -2,7 +2,19 @@
 require("babel-polyfill");
 
 import React, {Component} from "react";
-import {_switchPostSection, setPermissionDenied, fetchPostsIfNeeded, updateLocation, getConfig} from "../redux/actions";
+import {
+    showAddPost,
+    showSettings,
+    selectPicture,
+    showChannelList,
+    switchPostSection,
+    selectPost,
+    setPermissionDenied,
+    fetchPostsIfNeeded,
+    updateLocation,
+    getConfig,
+    switchPostListSortType
+} from "../redux/actions";
 import {refreshAccessToken} from "../redux/actions/api";
 import {migrateViewState, VIEW_STATE_VERSION} from "../redux/reducers/viewState";
 import {migrateAccount, ACCOUNT_VERSION} from "../redux/reducers/account";
@@ -42,7 +54,6 @@ store.subscribe(()=> {
     localStorage.setItem('accountVersion', ACCOUNT_VERSION);
 });
 
-store.dispatch(_switchPostSection("location"));
 if (store.getState().account.getIn(["token", "access"]) === undefined) {
     if (store.getState().account.get("deviceUid") !== undefined) {
         store.dispatch(setPermissionDenied(true));
@@ -58,6 +69,53 @@ if (store.getState().account.getIn(["token", "access"]) === undefined) {
     }
 }
 store.dispatch(updateLocation());
+
+if (history.state === null) {
+    history.replaceState({
+        postSection: "location",
+        postListSortType: store.getState().viewState.get("postListSortType")
+    }, "");
+    store.dispatch(switchPostSection("location"));
+}
+
+window.onpopstate = event => {
+    if (event.state.postSection !== undefined && event.state.postSection !== store.getState().viewState.get("postSection")) {
+        store.dispatch(switchPostSection(event.state.postSection, true));
+    }
+    if (event.state.postListSortType !== undefined && event.state.postListSortType !== store.getState().viewState.get("postListSortType")) {
+        store.dispatch(switchPostListSortType(event.state.postListSortType, true));
+    }
+    if (event.state.selectedPostId === undefined) {
+        event.state.selectedPostId = null;
+    }
+    if (event.state.selectedPostId !== store.getState().viewState.get("selectedPostId")) {
+        store.dispatch(selectPost(event.state.selectedPostId, true));
+    }
+    if (event.state.selectedPicturePostId === undefined) {
+        event.state.selectedPicturePostId = null;
+    }
+    if (event.state.selectedPicturePostId !== store.getState().viewState.get("selectedPicturePostId")) {
+        store.dispatch(selectPicture(event.state.selectedPicturePostId, true));
+    }
+    if (event.state.settingsVisible === undefined) {
+        event.state.settingsVisible = false;
+    }
+    if (event.state.settingsVisible !== store.getState().viewState.getIn(["settings", "visible"])) {
+        store.dispatch(showSettings(event.state.settingsVisible, true));
+    }
+    if (event.state.addPostVisible === undefined) {
+        event.state.addPostVisible = false;
+    }
+    if (event.state.addPostVisible !== store.getState().viewState.getIn(["addPost", "visible"])) {
+        store.dispatch(showAddPost(event.state.addPostVisible, true));
+    }
+    if (event.state.channelListVisible === undefined) {
+        event.state.channelListVisible = false;
+    }
+    if (event.state.channelListVisible !== store.getState().viewState.getIn(["channelList", "visible"])) {
+        store.dispatch(showChannelList(event.state.channelListVisible, true));
+    }
+};
 
 ReactDOM.render(<Provider store={store}><DocumentTitle
     title="Jodel Unofficial WebApp"><Jodel/></DocumentTitle></Provider>, document.getElementById('content'));

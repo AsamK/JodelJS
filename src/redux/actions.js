@@ -10,27 +10,44 @@ import {
 } from "./actions/api";
 import {
     invalidatePosts,
-    switchPostListSortType,
+    _switchPostListSortType,
     _switchPostSection,
     _selectPost,
     _setToken,
     PostListSortTypes,
     _setPermissionDenied,
-    _showChannelList
+    _showChannelList,
+    _selectPicture,
+    _showSettings,
+    _showAddPost
 } from "./actions/state";
 export * from "./actions/state";
 export * from "./actions/api";
 
-export function switchPostSection(section) {
+export function switchPostSection(section, nohistory = false) {
     return (dispatch, getState) => {
         if (getState().viewState.get("postSection") !== section) {
-            dispatch(switchPostListSortType(PostListSortTypes.RECENT));
+            dispatch(switchPostListSortType(PostListSortTypes.RECENT, true));
             dispatch(_switchPostSection(section));
+            if (!nohistory) {
+                history.pushState({postSection: section, postListSortType: PostListSortTypes.RECENT}, "");
+            }
         }
         dispatch(_selectPost(null));
         dispatch(_showChannelList(false));
         dispatch(invalidatePosts(section));
         dispatch(fetchPostsIfNeeded(section));
+    }
+}
+
+export function switchPostListSortType(sortType, nohistory = false) {
+    return (dispatch, getState) => {
+        if (getState().viewState.get("postListSortType") !== sortType) {
+            dispatch(_switchPostListSortType(sortType));
+            if (!nohistory) {
+                history.replaceState(Object.assign(history.state, {postListSortType: sortType}), "");
+            }
+        }
     }
 }
 
@@ -42,12 +59,24 @@ export function updatePosts() {
     }
 }
 
-export function selectPost(postId) {
+export function selectPost(postId, nohistory = false) {
     return (dispatch, getState) => {
+        if (postId != null && !nohistory && getState().viewState.get("selectedPostId") !== postId) {
+            history.pushState({selectedPostId: postId}, "");
+        }
         dispatch(_selectPost(postId));
         if (postId != null) {
             dispatch(fetchPost(postId));
         }
+    }
+}
+
+export function selectPicture(postId, nohistory = false) {
+    return (dispatch, getState) => {
+        if (postId != null && !nohistory && getState().viewState.get("selectedPicturePostId") !== postId) {
+            history.pushState({selectedPicturePostId: postId}, "");
+        }
+        dispatch(_selectPicture(postId));
     }
 }
 
@@ -126,9 +155,30 @@ export function setPermissionDenied(permissionDenied) {
     }
 }
 
-export function showChannelList(visible) {
+export function showAddPost(visible, nohistory = false) {
+    return (dispatch, getState) => {
+        if (visible && !nohistory && getState().viewState.getIn(["addPost", "visible"]) !== visible) {
+            history.pushState({addPostVisible: visible}, "");
+        }
+        dispatch(_showAddPost(visible));
+    }
+}
+
+export function showSettings(visible, nohistory = false) {
+    return (dispatch, getState) => {
+        if (visible && !nohistory && getState().viewState.getIn(["settings", "visible"]) !== visible) {
+            history.pushState({settingsVisible: visible}, "");
+        }
+        dispatch(_showSettings(visible));
+    }
+}
+
+export function showChannelList(visible, nohistory = false) {
     return (dispatch, getState) => {
         if (visible) {
+            if (!nohistory && getState().viewState.getIn(["channelList", "visible"]) !== visible) {
+                history.pushState({channelListVisible: visible}, "");
+            }
             dispatch(getRecommendedChannels());
             dispatch(getFollowedChannelsMeta());
         }

@@ -5,7 +5,7 @@ export const PostListSortTypes = {
 };
 
 export const SWITCH_POST_LIST_SORT_TYPE = 'SWITCH_POST_LIST_CONTAINER_STATE';
-export function switchPostListSortType(sortType) {
+export function _switchPostListSortType(sortType) {
     return {
         type: SWITCH_POST_LIST_SORT_TYPE,
         sortType
@@ -21,7 +21,7 @@ export function _switchPostSection(section) {
 }
 
 export const SHOW_ADD_POST = 'SHOW_ADD_POST';
-export function showAddPost(visible, ancestor) {
+export function _showAddPost(visible, ancestor) {
     return {
         type: SHOW_ADD_POST,
         visible,
@@ -30,7 +30,7 @@ export function showAddPost(visible, ancestor) {
 }
 
 export const SHOW_SETTINGS = 'SHOW_SETTINGS';
-export function showSettings(visible) {
+export function _showSettings(visible) {
     return {
         type: SHOW_SETTINGS,
         visible,
@@ -108,7 +108,7 @@ export function _selectPost(postId) {
 }
 
 export const SELECT_PICTURE = 'SELECT_PICTURE';
-export function selectPicture(postId) {
+export function _selectPicture(postId) {
     return {
         type: SELECT_PICTURE,
         postId: postId,

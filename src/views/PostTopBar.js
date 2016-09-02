@@ -8,7 +8,7 @@ let PostTopBar = ({onBackClick, onPinClick, post}) => {
     let pinned = post.has("pinned") && post.get("pinned");
     return (
         <div className="postTopBar">
-            <BackButton onClick={onBackClick}/>
+            <BackButton onClick={e => window.history.back()}/>
             <div className="pin">
                 {post.has("pin_count") && post.get("pin_count") > 0 ? post.get("pin_count") : ""}
                 <div className={classnames("pinButton", {pinned})} onClick={onPinClick}>

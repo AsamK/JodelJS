@@ -98,7 +98,7 @@ export class AddPost extends PureComponent {
             </div>
         )
     }
-};
+}
 
 const mapStateToProps = (state) => {
     return {

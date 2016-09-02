@@ -15,9 +15,9 @@ export default class Vote extends Component {
         const {vote_count, voted, upvote, downvote, ...forwardProps} = this.props;
         return (
             <div className="vote">
-                <div className={classnames("upVote", voted)} onClick={upvote}/>
+                <div className={classnames("upVote", voted)} title="Up" onClick={upvote}/>
                 <div className="voteCount">{vote_count}</div>
-                <div className={classnames("downVote", voted)} onClick={downvote}/>
+                <div className={classnames("downVote", voted)} title="Down" onClick={downvote}/>
             </div>
         );
     }

@@ -41,10 +41,14 @@ import {
 } from "./state";
 import {setToken, setPermissionDenied, updatePosts} from "../actions";
 
-function handlePermissionDenied(dispatch, getState, err) {
-    if (err.status === 401) {
+function handleNetworkErrors(dispatch, getState, err) {
+    if (err.status === undefined) {
+        console.error("No internet access or server down…");
+    } else if (err.status === 401) {
         console.error("Permission denied, reregistering…");
         dispatch(setPermissionDenied(true));
+    } else {
+        console.error("Request error: " + err.status + " " + err.message + ": " + err.response.text)
     }
 }
 export function deletePost(postId) {
@@ -52,7 +56,7 @@ export function deletePost(postId) {
         apiDeletePost(getAuth(getState), postId)
             .then(res => dispatch(updatePosts()))
             .catch(err => {
-                handlePermissionDenied(dispatch, getState, err);
+                handleNetworkErrors(dispatch, getState, err);
             });
     }
 }
@@ -62,7 +66,7 @@ export function upVote(postId, parentPostId) {
         apiUpVote(getAuth(getState), postId)
             .then(res => dispatch(receivePost(res.body.post)))
             .catch(err => {
-                handlePermissionDenied(dispatch, getState, err);
+                handleNetworkErrors(dispatch, getState, err);
             });
     }
 }
@@ -72,7 +76,7 @@ export function downVote(postId, parentPostId) {
         apiDownVote(getAuth(getState), postId)
             .then(res => dispatch(receivePost(res.body.post)))
             .catch(err => {
-                handlePermissionDenied(dispatch, getState, err);
+                handleNetworkErrors(dispatch, getState, err);
             });
     }
 }
@@ -90,7 +94,7 @@ export function pin(postId, pinned = true) {
                 dispatch(pinnedPost(postId, pinned, res.body.pin_count))
             })
             .catch(err => {
-                handlePermissionDenied(dispatch, getState, err);
+                handleNetworkErrors(dispatch, getState, err);
             });
     }
 }
@@ -131,7 +135,7 @@ export function fetchPostsIfNeeded(section) {
                     })
                     .catch(err => {
                         dispatch(setIsFetching(section, false));
-                        handlePermissionDenied(dispatch, getState, err);
+                        handleNetworkErrors(dispatch, getState, err);
                     });
             } else {
                 switch (section) {
@@ -146,7 +150,7 @@ export function fetchPostsIfNeeded(section) {
                             })
                             .catch(err => {
                                 dispatch(setIsFetching(section, false));
-                                handlePermissionDenied(dispatch, getState, err);
+                                handleNetworkErrors(dispatch, getState, err);
                             });
                         break;
                     case "mine":
@@ -160,7 +164,7 @@ export function fetchPostsIfNeeded(section) {
                             })
                             .catch(err => {
                                 dispatch(setIsFetching(section, false));
-                                handlePermissionDenied(dispatch, getState, err);
+                                handleNetworkErrors(dispatch, getState, err);
                             });
                         break;
                     case "mineReplies":
@@ -172,7 +176,7 @@ export function fetchPostsIfNeeded(section) {
                             })
                             .catch(err => {
                                 dispatch(setIsFetching(section, false));
-                                handlePermissionDenied(dispatch, getState, err);
+                                handleNetworkErrors(dispatch, getState, err);
                             });
                         break;
                     case "mineVotes":
@@ -184,7 +188,7 @@ export function fetchPostsIfNeeded(section) {
                             })
                             .catch(err => {
                                 dispatch(setIsFetching(section, false));
-                                handlePermissionDenied(dispatch, getState, err);
+                                handleNetworkErrors(dispatch, getState, err);
                             });
                         break;
                     case "minePinned":
@@ -196,7 +200,7 @@ export function fetchPostsIfNeeded(section) {
                             })
                             .catch(err => {
                                 dispatch(setIsFetching(section, false));
-                                handlePermissionDenied(dispatch, getState, err);
+                                handleNetworkErrors(dispatch, getState, err);
                             });
                         break;
                 }
@@ -234,7 +238,7 @@ export function fetchMorePosts(section, sortType) {
                 })
                 .catch(err => {
                     dispatch(setIsFetching(section, false));
-                    handlePermissionDenied(dispatch, getState, err);
+                    handleNetworkErrors(dispatch, getState, err);
                 });
         } else {
             switch (section) {
@@ -252,7 +256,7 @@ export function fetchMorePosts(section, sortType) {
                         })
                         .catch(err => {
                             dispatch(setIsFetching(section, false));
-                            handlePermissionDenied(dispatch, getState, err);
+                            handleNetworkErrors(dispatch, getState, err);
                         });
                     break;
                 case "mine":
@@ -269,7 +273,7 @@ export function fetchMorePosts(section, sortType) {
                         })
                         .catch(err => {
                             dispatch(setIsFetching(section, false));
-                            handlePermissionDenied(dispatch, getState, err);
+                            handleNetworkErrors(dispatch, getState, err);
                         });
                     break;
                 case "mineReplies":
@@ -289,7 +293,7 @@ export function fetchMorePosts(section, sortType) {
                         })
                         .catch(err => {
                             dispatch(setIsFetching(section, false));
-                            handlePermissionDenied(dispatch, getState, err);
+                            handleNetworkErrors(dispatch, getState, err);
                         });
                     break;
                 case "mineVotes":
@@ -309,7 +313,7 @@ export function fetchMorePosts(section, sortType) {
                         })
                         .catch(err => {
                             dispatch(setIsFetching(section, false));
-                            handlePermissionDenied(dispatch, getState, err);
+                            handleNetworkErrors(dispatch, getState, err);
                         });
                     break;
                 case "minePinned":
@@ -329,7 +333,7 @@ export function fetchMorePosts(section, sortType) {
                         })
                         .catch(err => {
                             dispatch(setIsFetching(section, false));
-                            handlePermissionDenied(dispatch, getState, err);
+                            handleNetworkErrors(dispatch, getState, err);
                         });
                     break;
             }
@@ -344,7 +348,7 @@ export function fetchPost(postId) {
                 dispatch(receivePost(res.body))
             })
             .catch(err => {
-                handlePermissionDenied(dispatch, getState, err);
+                handleNetworkErrors(dispatch, getState, err);
             });
     }
 }
@@ -356,7 +360,7 @@ export function getKarma() {
                 dispatch(_setKarma(res.body.karma))
             })
             .catch(err => {
-                handlePermissionDenied(dispatch, getState, err);
+                handleNetworkErrors(dispatch, getState, err);
             });
     }
 }
@@ -368,7 +372,7 @@ export function getConfig() {
                 dispatch(_setConfig(res.body));
             })
             .catch(err => {
-                handlePermissionDenied(dispatch, getState, err);
+                handleNetworkErrors(dispatch, getState, err);
             });
     }
 }
@@ -385,7 +389,7 @@ export function addPost(text, image, ancestor, color = "FF9908") {
                 }
             })
             .catch(err => {
-                handlePermissionDenied(dispatch, getState, err);
+                handleNetworkErrors(dispatch, getState, err);
             });
     }
 }
@@ -414,7 +418,7 @@ export function refreshAccessToken() {
                 }
             })
             .catch(err => {
-                handlePermissionDenied(dispatch, getState, err);
+                handleNetworkErrors(dispatch, getState, err);
             });
     }
 }
@@ -431,7 +435,7 @@ export function setLocation(latitude, longitude, city = undefined, country = "DE
         if (auth !== undefined) {
             apiSetPlace(auth, latitude, longitude, city, country)
                 .catch(err => {
-                    handlePermissionDenied(dispatch, getState, err);
+                    handleNetworkErrors(dispatch, getState, err);
                 });
         }
     }
@@ -473,7 +477,7 @@ export function followChannel(channel, follow = true) {
                 dispatch(getConfig()); // TODO
             })
             .catch(err => {
-                handlePermissionDenied(dispatch, getState, err);
+                handleNetworkErrors(dispatch, getState, err);
             });
     }
 }

@@ -55,7 +55,7 @@ class Jodel extends Component {
     }
 
     handleAddCommentClick(post) {
-        this.props.dispatch(showAddPost(true, this.props.selectedPost.get("post_id")));
+        this.props.dispatch(showAddPost(true));
     }
 
     onLoadMore() {

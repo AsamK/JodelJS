@@ -382,9 +382,8 @@ export function getConfig() {
 
 export function addPost(text, image, ancestor, color = "FF9908") {
     return (dispatch, getState) => {
-        dispatch(showAddPost(false));
         let loc = getState().viewState.get("location");
-        apiAddPost(getAuth(getState), ancestor, color, 0.0, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"), text, image)
+        return apiAddPost(getAuth(getState), ancestor, color, 0.0, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"), text, image)
             .then(res => {
                 dispatch(receivePosts("location", {recent: res.body.posts}));
                 if (ancestor !== undefined) {

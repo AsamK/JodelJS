@@ -43,7 +43,7 @@ function viewState(state = Immutable.Map({
     useBrowserLocation: true,
     postSection: undefined,
     postListSortType: PostListSortTypes.RECENT,
-    addPost: Immutable.Map({visible: false, ancestor: undefined}),
+    addPost: Immutable.Map({visible: false}),
     settings: Immutable.Map({visible: false}),
     channelList: Immutable.Map({visible: false}),
     channelsLastRead: Immutable.Map(),
@@ -62,7 +62,6 @@ function viewState(state = Immutable.Map({
         case SHOW_ADD_POST:
             return state.update("addPost", addPost => addPost.merge({
                 visible: action.visible,
-                ancestor: action.ancestor
             }));
         case SHOW_SETTINGS:
             return state.update("settings", settings => settings.set("visible", action.visible));

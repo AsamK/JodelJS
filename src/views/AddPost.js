@@ -1,6 +1,6 @@
 import React, {PureComponent} from "react";
 import {connect} from "react-redux";
-import {addPost, showAddPost} from "../redux/actions";
+import {addPost} from "../redux/actions";
 import classnames from "classnames";
 import ColorPicker from "./ColorPicker";
 
@@ -49,7 +49,7 @@ export class AddPost extends PureComponent {
 
         return (
             <div className={classnames("addPost", {visible})}>
-                {ancestor === undefined ? "Neuen Jodel schreiben" : "Jodel Kommentar schreiben"}:
+                {ancestor === null ? "Neuen Jodel schreiben" : "Jodel Kommentar schreiben"}:
                 <form onSubmit={e => {
                     e.preventDefault();
                     if (this.state.message.trim() === '' && this.state.image === null) {
@@ -61,14 +61,17 @@ export class AddPost extends PureComponent {
                         fileReader.onload = event => {
                             let url = event.target.result;
                             let encodedImage = url.substr(url.indexOf(',') + 1);
-                            this.props.dispatch(addPost(this.state.message, encodedImage, ancestor), this.state.color);
-                            this.resetForm(form);
+                            this.props.dispatch(addPost(this.state.message, encodedImage, ancestor), this.state.color).then(
+                                res => this.resetForm(form)
+                            );
                         };
                         fileReader.readAsDataURL(this.state.image);
                     } else {
-                        this.props.dispatch(addPost(this.state.message, undefined, ancestor, this.state.color));
-                        this.resetForm(form);
+                        this.props.dispatch(addPost(this.state.message, undefined, ancestor, this.state.color)).then(
+                            res => this.resetForm(form)
+                        );
                     }
+                    window.history.back();
                 }}>
                     <textarea maxLength="230" value={this.state.message} onChange={event => {
                         this.setState({message: event.target.value});
@@ -81,7 +84,7 @@ export class AddPost extends PureComponent {
                         {this.state.imageUrl !== null ?
                             <img src={this.state.imageUrl} alt={this.state.image.name}/> : ""}
                     </div>
-                    {ancestor === undefined ? <ColorPicker color={this.state.color} onChange={(e) => {
+                    {ancestor === null ? <ColorPicker color={this.state.color} onChange={(e) => {
                         this.setState({color: e.target.value});
                     }}/> : ""}
                     <button type="submit">
@@ -89,7 +92,7 @@ export class AddPost extends PureComponent {
                     </button>
                     <button onClick={e => {
                         e.preventDefault();
-                        this.props.dispatch(showAddPost(false));
+                        window.history.back();
                         this.resetForm(e.target.parentNode);
                     }}>
                         Abbrechen
@@ -102,7 +105,7 @@ export class AddPost extends PureComponent {
 
 const mapStateToProps = (state) => {
     return {
-        ancestor: state.viewState.getIn(["addPost", "ancestor"]),
+        ancestor: state.viewState.get("selectedPostId"),
         visible: state.viewState.getIn(["addPost", "visible"]),
     }
 };

@@ -21,11 +21,10 @@ export function _switchPostSection(section) {
 }
 
 export const SHOW_ADD_POST = 'SHOW_ADD_POST';
-export function _showAddPost(visible, ancestor) {
+export function _showAddPost(visible) {
     return {
         type: SHOW_ADD_POST,
         visible,
-        ancestor,
     }
 }
 

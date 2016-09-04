@@ -57,8 +57,7 @@ class AppSettings extends Component {
             />
             <button onClick={() => {
                 this.props.dispatch(setLocation(this.props.latitude, this.props.longitude));
-                this.props.dispatch(showSettings(false));
-                this.props.dispatch(updatePosts());
+                window.history.back();
             }}>
                 Schließen
             </button>

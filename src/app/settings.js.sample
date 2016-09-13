@@ -5,8 +5,8 @@ const Settings = {};
 Settings.CLIENT_ID = '81e8a76e-1e02-4d17-9ba0-8a7020261b26';
 
 // Client type and Key for signed requests
-Settings.CLIENT_TYPE = 'android_4.16.0';
-Settings.KEY = 'nggKWnnmsyaeqzrJozIPivDdxVMLVorNgOiaxDkC';
+Settings.CLIENT_TYPE = 'android_4.17.1';
+Settings.KEY = 'JymRNkOGDUHQMVeVvdzvaxcKaeuJKWWFeihnYnsY';
 
 // API Server and Path
 Settings.API_SERVER = 'https://api.go-tellm.com/api';

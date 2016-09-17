@@ -54,30 +54,24 @@ function handleNetworkErrors(dispatch, getState, err) {
 export function deletePost(postId) {
     return (dispatch, getState) => {
         apiDeletePost(getAuth(getState), postId)
-            .then(res => dispatch(updatePosts()))
-            .catch(err => {
-                handleNetworkErrors(dispatch, getState, err);
-            });
+            .then(res => dispatch(updatePosts()),
+                err => handleNetworkErrors(dispatch, getState, err));
     }
 }
 
 export function upVote(postId, parentPostId) {
     return (dispatch, getState) => {
         apiUpVote(getAuth(getState), postId)
-            .then(res => dispatch(receivePost(res.body.post)))
-            .catch(err => {
-                handleNetworkErrors(dispatch, getState, err);
-            });
+            .then(res => dispatch(receivePost(res.body.post)),
+                err => handleNetworkErrors(dispatch, getState, err));
     }
 }
 
 export function downVote(postId, parentPostId) {
     return (dispatch, getState) => {
         apiDownVote(getAuth(getState), postId)
-            .then(res => dispatch(receivePost(res.body.post)))
-            .catch(err => {
-                handleNetworkErrors(dispatch, getState, err);
-            });
+            .then(res => dispatch(receivePost(res.body.post)),
+                err => handleNetworkErrors(dispatch, getState, err));
     }
 }
 
@@ -91,11 +85,9 @@ export function pin(postId, pinned = true) {
         }
         fn(getAuth(getState), postId)
             .then(res => {
-                dispatch(pinnedPost(postId, pinned, res.body.pin_count))
-            })
-            .catch(err => {
-                handleNetworkErrors(dispatch, getState, err);
-            });
+                    dispatch(pinnedPost(postId, pinned, res.body.pin_count))
+                },
+                err => handleNetworkErrors(dispatch, getState, err));
     }
 }
 
@@ -135,8 +127,7 @@ export function fetchPostsIfNeeded(section) {
                             popular: res.body.voted
                         }));
                         dispatch(setChannelsMeta([{channel, followers: res.body.followers_count}]));
-                    })
-                    .catch(err => {
+                    }, err => {
                         dispatch(setIsFetching(section, false));
                         handleNetworkErrors(dispatch, getState, err);
                     });
@@ -150,8 +141,7 @@ export function fetchPostsIfNeeded(section) {
                                     discussed: res.body.replied,
                                     popular: res.body.voted
                                 }))
-                            })
-                            .catch(err => {
+                            }, err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
                             });
@@ -164,8 +154,7 @@ export function fetchPostsIfNeeded(section) {
                                     discussed: res.body.replied,
                                     popular: res.body.voted
                                 }))
-                            })
-                            .catch(err => {
+                            }, err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
                             });
@@ -176,8 +165,7 @@ export function fetchPostsIfNeeded(section) {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.posts,
                                 }))
-                            })
-                            .catch(err => {
+                            }, err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
                             });
@@ -188,8 +176,7 @@ export function fetchPostsIfNeeded(section) {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.posts,
                                 }))
-                            })
-                            .catch(err => {
+                            }, err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
                             });
@@ -200,8 +187,7 @@ export function fetchPostsIfNeeded(section) {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.posts,
                                 }))
-                            })
-                            .catch(err => {
+                            }, err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
                             });
@@ -238,8 +224,7 @@ export function fetchMorePosts(section, sortType) {
                     let p = {};
                     p[sortType] = res.body.posts;
                     dispatch(receivePosts(section, p, true));
-                })
-                .catch(err => {
+                }, err => {
                     dispatch(setIsFetching(section, false));
                     handleNetworkErrors(dispatch, getState, err);
                 });
@@ -256,8 +241,7 @@ export function fetchMorePosts(section, sortType) {
                             let p = {};
                             p[sortType] = res.body.posts;
                             dispatch(receivePosts(section, p, true));
-                        })
-                        .catch(err => {
+                        }, err => {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
                         });
@@ -273,8 +257,7 @@ export function fetchMorePosts(section, sortType) {
                             let p = {};
                             p[sortType] = res.body.posts;
                             dispatch(receivePosts(section, p, true));
-                        })
-                        .catch(err => {
+                        }, err => {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
                         });
@@ -293,8 +276,7 @@ export function fetchMorePosts(section, sortType) {
                             let p = {};
                             p[sortType] = res.body.posts;
                             dispatch(receivePosts(section, p, true));
-                        })
-                        .catch(err => {
+                        }, err => {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
                         });
@@ -313,8 +295,7 @@ export function fetchMorePosts(section, sortType) {
                             let p = {};
                             p[sortType] = res.body.posts;
                             dispatch(receivePosts(section, p, true));
-                        })
-                        .catch(err => {
+                        }, err => {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
                         });
@@ -333,8 +314,7 @@ export function fetchMorePosts(section, sortType) {
                             let p = {};
                             p[sortType] = res.body.posts;
                             dispatch(receivePosts(section, p, true));
-                        })
-                        .catch(err => {
+                        }, err => {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
                         });
@@ -349,10 +329,8 @@ export function fetchPost(postId) {
         apiGetPost(getAuth(getState), postId)
             .then(res => {
                 dispatch(receivePost(res.body))
-            })
-            .catch(err => {
-                handleNetworkErrors(dispatch, getState, err);
-            });
+            },
+                err => handleNetworkErrors(dispatch, getState, err));
     }
 }
 
@@ -361,10 +339,8 @@ export function getKarma() {
         apiGetKarma(getAuth(getState))
             .then(res => {
                 dispatch(_setKarma(res.body.karma))
-            })
-            .catch(err => {
-                handleNetworkErrors(dispatch, getState, err);
-            });
+            },
+                err => handleNetworkErrors(dispatch, getState, err));
     }
 }
 
@@ -373,10 +349,8 @@ export function getConfig() {
         apiGetConfig(getAuth(getState))
             .then(res => {
                 dispatch(_setConfig(res.body));
-            })
-            .catch(err => {
-                handleNetworkErrors(dispatch, getState, err);
-            });
+            },
+                err => handleNetworkErrors(dispatch, getState, err));
     }
 }
 
@@ -389,10 +363,8 @@ export function addPost(text, image, ancestor, color = "FF9908") {
                 if (ancestor !== undefined) {
                     dispatch(fetchPost(ancestor));
                 }
-            })
-            .catch(err => {
-                handleNetworkErrors(dispatch, getState, err);
-            });
+            },
+                err => handleNetworkErrors(dispatch, getState, err));
     }
 }
 
@@ -405,7 +377,7 @@ export function setDeviceUid(deviceUid) {
                 dispatch(setToken(res.body.distinct_id, res.body.access_token, res.body.refresh_token, res.body.expiration_date, res.body.token_type));
             })
             .catch(err => {
-                console.error("Failed to register user.");
+                console.error("Failed to register user." + err);
             });
     }
 }
@@ -418,10 +390,8 @@ export function refreshAccessToken() {
                 if (res.body.upgraded === true) {
                     dispatch(setToken(account.getIn(["token", "distinctId"]), res.body.access_token, account.getIn(["token", "refresh"]), res.body.expiration_date, res.body.token_type));
                 }
-            })
-            .catch(err => {
-                handleNetworkErrors(dispatch, getState, err);
-            });
+            },
+                err => handleNetworkErrors(dispatch, getState, err));
     }
 }
 
@@ -448,7 +418,8 @@ export function getRecommendedChannels() {
         apiGetRecommendedChannels(getAuth(getState))
             .then(res => {
                 dispatch(setRecommendedChannels(res.body.recommended));
-            });
+            },
+                err => handleNetworkErrors(dispatch, getState, err));
     }
 }
 
@@ -462,7 +433,8 @@ export function getFollowedChannelsMeta() {
         apiGetFollowedChannelsMeta(getAuth(getState), channels)
             .then(res => {
                 dispatch(setChannelsMeta(res.body.channels));
-            });
+            },
+                err => handleNetworkErrors(dispatch, getState, err));
     }
 }
 
@@ -477,9 +449,7 @@ export function followChannel(channel, follow = true) {
         fn(getAuth(getState), channel)
             .then(res => {
                 dispatch(getConfig()); // TODO
-            })
-            .catch(err => {
-                handleNetworkErrors(dispatch, getState, err);
-            });
+            },
+                err => handleNetworkErrors(dispatch, getState, err));
     }
 }

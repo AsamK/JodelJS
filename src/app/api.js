@@ -26,27 +26,26 @@ function computeSignature(auth, method, url, timestamp, data) {
     hmac.setEncoding('hex');
     hmac.write(raw);
     hmac.end();
-    var result = hmac.read();
-    return result;
+    return hmac.read();
 }
 
 export function jodelRequest(auth, method, url, query, data) {
     return new Promise((resolve, reject) => {
-        data = JSON.stringify(data);
+        let dataString = JSON.stringify(data);
         let timestamp = new Date().toISOString();
-        let sig = computeSignature(auth !== undefined ? auth : "", method, url, timestamp, data);
+        let sig = computeSignature(auth, method, url, timestamp, dataString);
 
         const req = request(method, url)
             .query(query)
             .type("json")
             .set('Accept', 'application/json')
-            .set('Authorization', auth !== undefined ? 'Bearer ' + auth : undefined)
+            .set('Authorization', auth !== "" ? 'Bearer ' + auth : undefined)
             .set("X-Client-Type", Settings.CLIENT_TYPE)
             .set("X-Api-Version", "0.2")
             .set("X-Timestamp", timestamp)
-            .set("X-Authorization", "HMAC " + sig)
+            .set("X-Authorization", sig != null ? "HMAC " + sig.toString() : undefined)
             .set("Content-Type", "application/json; charset=UTF-8")
-            .send(data)
+            .send(dataString)
             .end((err, res) => {
                 if (err) {
                     reject(err);
@@ -80,6 +79,8 @@ export function apiGetPosts(auth, sortType, afterPostId, latitude, longitude) {
         case PostListSortTypes.POPULAR:
             type = "popular";
             break;
+        default:
+            throw "Unknown sort type";
     }
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/location/" + type, {
         after: afterPostId,
@@ -104,6 +105,8 @@ export function apiGetPostsMine(auth, sortType, skip, limit) {
         case PostListSortTypes.POPULAR:
             type = "popular";
             break;
+        default:
+            throw "Unknown sort type";
     }
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/mine/" + type, {
         skip,
@@ -148,11 +151,13 @@ export function apiGetPostsChannel(auth, sortType, afterPostId, channel) {
         case PostListSortTypes.POPULAR:
             type = "popular";
             break;
+        default:
+            throw "Unknown sort type";
     }
-    let query = {channel: channel};
-    if (afterPostId) {
-        query.after = afterPostId;
-    }
+    let query = {
+        channel: channel,
+        after: afterPostId
+    };
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/channel/" + type, query, {});
 }
 

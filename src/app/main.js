@@ -28,14 +28,16 @@ import JodelApp from "../redux/reducers";
 import Immutable from "immutable";
 
 let persistedState = {};
-if (localStorage.getItem('viewState')) {
+let storedViewState = localStorage.getItem('viewState');
+if (storedViewState) {
     let oldVersion = parseInt(localStorage.getItem('viewStateVersion'), 10);
-    persistedState.viewState = Immutable.fromJS(migrateViewState(JSON.parse(localStorage.getItem('viewState')), oldVersion));
+    persistedState.viewState = Immutable.fromJS(migrateViewState(JSON.parse(storedViewState), oldVersion));
 }
 
-if (localStorage.getItem('account')) {
+let storedAccount = localStorage.getItem('account');
+if (storedAccount) {
     let oldVersion = parseInt(localStorage.getItem('accountVersion'), 10);
-    persistedState.account = Immutable.fromJS(migrateAccount(JSON.parse(localStorage.getItem('account')), oldVersion));
+    persistedState.account = Immutable.fromJS(migrateAccount(JSON.parse(storedAccount), oldVersion));
 }
 
 let store = createStore(

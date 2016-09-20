@@ -200,11 +200,14 @@ export function fetchPostsIfNeeded(section) {
 
 export function fetchMorePosts(section, sortType) {
     return (dispatch, getState) => {
-        if (section === undefined) {
+        if (section == null) {
             section = getState().viewState.get("postSection");
         }
-        if (sortType === undefined) {
+        if (sortType == null) {
             sortType = getState().viewState.get("postListSortType");
+        }
+        if (sortType == null || section == null) {
+            return;
         }
         const postSection = getState().postsBySection.get(section);
         if (postSection === undefined || postSection.isFetching) {
@@ -360,7 +363,7 @@ export function addPost(text, image, ancestor, color = "FF9908") {
         return apiAddPost(getAuth(getState), ancestor, color, 0.0, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"), text, image)
             .then(res => {
                 dispatch(receivePosts("location", {recent: res.body.posts}));
-                if (ancestor !== undefined) {
+                if (ancestor != undefined) {
                     dispatch(fetchPost(ancestor));
                 }
             },

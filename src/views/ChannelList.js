@@ -29,7 +29,7 @@ export default class ChannelList extends Component {
                 return <div key={channel.get("channel")}
                             className={classnames("channelLink", {unread: channel.get("unread")})}
                             onClick={() => onChannelClick(channel.get("channel"))}>
-                    <div className="title">#{channel.get("channel")}</div>
+                    <div className="title">@{channel.get("channel")}</div>
                     {channel.has("followers") ?
                         <div className="followers">{channel.get("followers")} Followers</div>
                         : undefined}
@@ -40,7 +40,7 @@ export default class ChannelList extends Component {
                 return <div key={channel.get("channel")}
                             className={classnames("channelLink", {unread: channel.get("unread")})}
                             onClick={() => onChannelClick(channel.get("channel"))}>
-                    <div className="title">#{channel.get("channel")}</div>
+                    <div className="title">@{channel.get("channel")}</div>
                     {channel.has("followers") ?
                         <div className="followers">{channel.get("followers")} Followers</div>
                         : undefined}

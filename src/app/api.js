@@ -202,14 +202,15 @@ export function apiGetFollowedChannelsMeta(auth, channels) {
     return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V3 + "/user/followedChannelsMeta", {}, channels);
 }
 
-export function apiAddPost(auth, ancestorPostId, color, loc_accuracy, latitude, longitude, city, country, message, image) {
+export function apiAddPost(auth, channel, ancestorPostId, color, loc_accuracy, latitude, longitude, city, country, message, image) {
     // image must be base64 encoded string
-    return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V2 + "/posts/", {}, {
+    return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V3 + "/posts/", {}, {
+        channel,
         ancestor: ancestorPostId,
         color,
         message,
         image,
-        location: {loc_accuracy, city, country, loc_coordinates: {lat: latitude, lng: longitude}}
+        location: {loc_accuracy, city, name: city, country, loc_coordinates: {lat: latitude, lng: longitude}}
     });
 }
 

@@ -10,7 +10,7 @@ let ChannelTopBar = ({onBackClick, onFollowClick, channel, followerCount, follow
     return (
         <div className="channelTopBar">
             <BackButton onClick={e => window.history.back()}/>
-            <div className="title">#{channel}</div>
+            <div className="title">@{channel}</div>
             <div className="follow">
                 {followerCount > 0 ? followerCount : ""}
                 <div className={classnames("followButton", {isFollowing})}

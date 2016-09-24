@@ -45,7 +45,7 @@ export class AddPost extends PureComponent {
     }
 
     render() {
-        const {ancestor, visible, ...forwardProps} = this.props;
+        const {channel, ancestor, visible, ...forwardProps} = this.props;
 
         return (
             <div className={classnames("addPost", {visible})}>
@@ -61,13 +61,13 @@ export class AddPost extends PureComponent {
                         fileReader.onload = event => {
                             let url = event.target.result;
                             let encodedImage = url.substr(url.indexOf(',') + 1);
-                            this.props.dispatch(addPost(this.state.message, encodedImage, ancestor), this.state.color).then(
+                            this.props.dispatch(addPost(this.state.message, encodedImage, channel, ancestor), this.state.color).then(
                                 res => this.resetForm(form)
                             );
                         };
                         fileReader.readAsDataURL(this.state.image);
                     } else {
-                        this.props.dispatch(addPost(this.state.message, undefined, ancestor, this.state.color)).then(
+                        this.props.dispatch(addPost(this.state.message, undefined, channel, ancestor, this.state.color)).then(
                             res => this.resetForm(form)
                         );
                     }
@@ -104,8 +104,16 @@ export class AddPost extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
+    let channel;
+    if (state.viewState.get("selectedPostId") == null) {
+        let section = state.viewState.get("postSection");
+        if (section.startsWith("channel:")) {
+            channel = section.substring(8);
+        }
+    }
     return {
         ancestor: state.viewState.get("selectedPostId"),
+        channel,
         visible: state.viewState.getIn(["addPost", "visible"]),
     }
 };

@@ -107,7 +107,7 @@ const mapStateToProps = (state) => {
     let channel;
     if (state.viewState.get("selectedPostId") == null) {
         let section = state.viewState.get("postSection");
-        if (section.startsWith("channel:")) {
+        if (section != null && section.startsWith("channel:")) {
             channel = section.substring(8);
         }
     }

@@ -152,7 +152,7 @@ const mapStateToProps = (state) => {
     }
     let section = state.viewState.get("postSection");
     let selectedChannel;
-    if (section.startsWith("channel:")) {
+    if (section != null && section.startsWith("channel:")) {
         selectedChannel = section.substring(8);
     }
     let followedChannels = state.account.getIn(["config", "followed_channels"]);

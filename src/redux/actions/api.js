@@ -384,8 +384,8 @@ export function getKarma() {
     return (dispatch, getState) => {
         apiGetKarma(getAuth(getState))
             .then(res => {
-                dispatch(_setKarma(res.body.karma))
-            },
+                    dispatch(_setKarma(res.body.karma))
+                },
                 err => handleNetworkErrors(dispatch, getState, err));
     }
 }
@@ -394,8 +394,8 @@ export function getConfig() {
     return (dispatch, getState) => {
         apiGetConfig(getAuth(getState))
             .then(res => {
-                dispatch(_setConfig(res.body));
-            },
+                    dispatch(_setConfig(res.body));
+                },
                 err => handleNetworkErrors(dispatch, getState, err));
     }
 }
@@ -405,11 +405,11 @@ export function addPost(text, image, channel, ancestor, color = "FF9908") {
         let loc = getState().viewState.get("location");
         return apiAddPost(getAuth(getState), channel, ancestor, color, 0.0, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"), text, image)
             .then(res => {
-                dispatch(receivePosts("location", {recent: res.body.posts}));
-                if (ancestor != undefined) {
-                    dispatch(fetchPost(ancestor));
-                }
-            },
+                    dispatch(receivePosts("location", {recent: res.body.posts}));
+                    if (ancestor != undefined) {
+                        dispatch(fetchPost(ancestor));
+                    }
+                },
                 err => handleNetworkErrors(dispatch, getState, err));
     }
 }
@@ -433,10 +433,10 @@ export function refreshAccessToken() {
         const account = getState().account;
         apiRefreshAccessToken(account.getIn(["token", "access"]), account.getIn(["token", "distinctId"]), account.getIn(["token", "refresh"]))
             .then(res => {
-                if (res.body.upgraded === true) {
-                    dispatch(setToken(account.getIn(["token", "distinctId"]), res.body.access_token, account.getIn(["token", "refresh"]), res.body.expiration_date, res.body.token_type));
-                }
-            },
+                    if (res.body.upgraded === true) {
+                        dispatch(setToken(account.getIn(["token", "distinctId"]), res.body.access_token, account.getIn(["token", "refresh"]), res.body.expiration_date, res.body.token_type));
+                    }
+                },
                 err => handleNetworkErrors(dispatch, getState, err));
     }
 }
@@ -463,8 +463,8 @@ export function getRecommendedChannels() {
     return (dispatch, getState) => {
         apiGetRecommendedChannels(getAuth(getState))
             .then(res => {
-                dispatch(setRecommendedChannels(res.body.recommended));
-            },
+                    dispatch(setRecommendedChannels(res.body.recommended));
+                },
                 err => handleNetworkErrors(dispatch, getState, err));
     }
 }
@@ -478,8 +478,8 @@ export function getFollowedChannelsMeta() {
         });
         apiGetFollowedChannelsMeta(getAuth(getState), channels)
             .then(res => {
-                dispatch(setChannelsMeta(res.body.channels));
-            },
+                    dispatch(setChannelsMeta(res.body.channels));
+                },
                 err => handleNetworkErrors(dispatch, getState, err));
     }
 }
@@ -494,8 +494,8 @@ export function followChannel(channel, follow = true) {
         }
         fn(getAuth(getState), channel)
             .then(res => {
-                dispatch(getConfig()); // TODO
-            },
+                    dispatch(getConfig()); // TODO
+                },
                 err => handleNetworkErrors(dispatch, getState, err));
     }
 }

@@ -48,7 +48,7 @@ let store = createStore(
     )
 );
 
-store.subscribe(()=> {
+store.subscribe(() => {
     localStorage.setItem('viewState', JSON.stringify(store.getState().viewState));
     localStorage.setItem('viewStateVersion', VIEW_STATE_VERSION);
 

@@ -3,14 +3,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import SelectLocation from "./SelectLocation";
-import {
-    updateLocation,
-    _setLocation,
-    setUseBrowserLocation,
-    showSettings,
-    updatePosts,
-    setLocation
-} from "../redux/actions";
+import {updateLocation, _setLocation, setUseBrowserLocation, setLocation} from "../redux/actions";
 import Settings from "../app/settings";
 
 class AppSettings extends Component {

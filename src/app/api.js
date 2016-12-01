@@ -69,7 +69,7 @@ export function apiGetPostsCombo(auth, latitude, longitude, stickies = true, hom
     }, {});
 }
 
-export function apiGetPosts(auth, sortType, afterPostId, latitude, longitude) {
+export function apiGetPosts(auth, sortType, afterPostId, latitude, longitude, home = false) {
     let type;
     switch (sortType) {
         case PostListSortTypes.RECENT:
@@ -87,7 +87,8 @@ export function apiGetPosts(auth, sortType, afterPostId, latitude, longitude) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/location/" + type, {
         after: afterPostId,
         lat: latitude,
-        lng: longitude
+        lng: longitude,
+        home,
     }, {});
 }
 
@@ -137,11 +138,11 @@ export function apiGetPostsMineVotes(auth, skip, limit) {
     }, {});
 }
 
-export function apiGetPostsChannelCombo(auth, channel) {
-    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/channel/combo", {channel: channel}, {});
+export function apiGetPostsChannelCombo(auth, channel, home = false) {
+    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/channel/combo", {channel, home}, {});
 }
 
-export function apiGetPostsChannel(auth, sortType, afterPostId, channel) {
+export function apiGetPostsChannel(auth, sortType, afterPostId, channel, home = false) {
     let type;
     switch (sortType) {
         case PostListSortTypes.RECENT:
@@ -158,7 +159,8 @@ export function apiGetPostsChannel(auth, sortType, afterPostId, channel) {
     }
     let query = {
         channel: channel,
-        after: afterPostId
+        after: afterPostId,
+        home,
     };
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/channel/" + type, query, {});
 }
@@ -223,23 +225,23 @@ export function apiUnpin(auth, postId) {
 }
 
 export function apiFollowChannel(auth, channel) {
-    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V3 + "/user/followChannel", {channel: channel}, {});
+    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V3 + "/user/followChannel", {channel}, {});
 }
 
 export function apiUnfollowChannel(auth, channel) {
-    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V3 + "/user/unfollowChannel", {channel: channel}, {});
+    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V3 + "/user/unfollowChannel", {channel}, {});
 }
 
-export function apiGetRecommendedChannels(auth) {
-    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/user/recommendedChannels", {}, {});
+export function apiGetRecommendedChannels(auth, home = false) {
+    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/user/recommendedChannels", {home}, {});
 }
 
-export function apiGetFollowedChannelsMeta(auth, channels) {
+export function apiGetFollowedChannelsMeta(auth, channels, home = false) {
     // Format: {"channelName": timestamp, "channel2": timestamp2}
-    return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V3 + "/user/followedChannelsMeta", {}, channels);
+    return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V3 + "/user/followedChannelsMeta", {home}, channels);
 }
 
-export function apiAddPost(auth, channel, ancestorPostId, color, loc_accuracy, latitude, longitude, city, country, message, image) {
+export function apiAddPost(auth, channel, ancestorPostId, color, loc_accuracy, latitude, longitude, city, country, message, image, toHome = false) {
     // image must be base64 encoded string
     return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V3 + "/posts/", {}, {
         channel,
@@ -247,7 +249,8 @@ export function apiAddPost(auth, channel, ancestorPostId, color, loc_accuracy, l
         color,
         message,
         image,
-        location: {loc_accuracy, city, name: city, country, loc_coordinates: {lat: latitude, lng: longitude}}
+        location: {loc_accuracy, city, name: city, country, loc_coordinates: {lat: latitude, lng: longitude}},
+        to_home: toHome,
     });
 }
 
@@ -273,6 +276,47 @@ export function apiSetPlace(auth, latitude, longitude, city, country) {
         }
     };
     return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V2 + "/users/location", {}, data);
+}
+
+export function apiSetUserHome(auth, latitude, longitude, city, country) {
+    const data = {
+        location: {
+            loc_accuracy: 0.0,
+            city,
+            loc_coordinates: {
+                lat: latitude,
+                lng: longitude
+            },
+            country,
+            name: city,
+        }
+    };
+    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V3 + "/user/home", {}, data);
+}
+
+export function apiSetAction(auth, action) {
+    const data = {
+        action,
+    };
+    return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V3 + "/action", {}, data);
+}
+
+export function apiSetPushToken(auth, clientId, pushToken) {
+    // Set GCM push token
+    const data = {
+        client_id: clientId,
+        push_token: pushToken,
+    };
+    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V2 + "/users/pushToken", {}, data);
+}
+
+export function apiVerifyPush(auth, serverTime, verificationCode) {
+    // Verify GCM push
+    const data = {
+        server_time: serverTime,
+        verification_code: verificationCode,
+    };
+    return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V3 + "/user/verification/push", {}, data);
 }
 
 export function apiGetAccessToken(deviceUid, latitude, longitude, city, country) {

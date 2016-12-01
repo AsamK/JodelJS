@@ -1,7 +1,6 @@
 import {
     apiGetAccessToken,
     apiGetPostsCombo,
-    apiGetPost,
     apiUpVote,
     apiDownVote,
     apiAddPost,
@@ -26,6 +25,7 @@ import {
     apiGetFollowedChannelsMeta,
     apiGetPostsHashtagCombo,
     apiGetPostsHashtag
+    apiGetPostDetails
 } from "../../app/api";
 import {
     receivePost,
@@ -361,10 +361,12 @@ export function fetchMorePosts(section, sortType) {
 
 export function fetchPost(postId) {
     return (dispatch, getState) => {
-        apiGetPost(getAuth(getState), postId)
+        apiGetPostDetails(getAuth(getState), postId)
             .then(res => {
-                dispatch(receivePost(res.body))
-            },
+                    let post = res.body.details;
+                    post.children = res.body.replies;
+                    dispatch(receivePost(post))
+                },
                 err => handleNetworkErrors(dispatch, getState, err));
     }
 }

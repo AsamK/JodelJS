@@ -226,17 +226,18 @@ export function apiGetKarma(auth) {
 
 export function apiSetPlace(auth, latitude, longitude, city, country) {
     const data = {
-        "location": {
-            "loc_accuracy": 0.0,
-            "city": city,
-            "loc_coordinates": {
-                "lat": latitude,
-                "lng": longitude
+        location: {
+            loc_accuracy: 0.0,
+            city,
+            loc_coordinates: {
+                lat: latitude,
+                lng: longitude
             },
-            "country": country
+            country,
+            name: city,
         }
     };
-    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V2 + "/users/place", {}, data);
+    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V2 + "/users/location", {}, data);
 }
 
 export function apiGetAccessToken(deviceUid, latitude, longitude, city, country) {

@@ -9,20 +9,20 @@ const API_PATH_V2 = "/v2";
 const API_PATH_V3 = "/v3";
 
 function parseUrl(url) {
-    var parser = document.createElement('a');
+    const parser = document.createElement('a');
     parser.href = url;
     return parser;
 }
 
 function computeSignature(auth, method, url, timestamp, data) {
-    let u = parseUrl(url);
-    var path = u.pathname;
+    const u = parseUrl(url);
+    let path = u.pathname;
     if (!path.startsWith("/")) {
         path = "/" + path;
     }
     let raw = method + "%" + u.hostname + "%" + 443 + "%" + path + "%" + auth + "%" + timestamp + "%" + "" + "%" + data;
 
-    var hmac = crypto.createHmac('sha1', Settings.KEY);
+    const hmac = crypto.createHmac('sha1', Settings.KEY);
     hmac.setEncoding('hex');
     hmac.write(raw);
     hmac.end();
@@ -31,9 +31,9 @@ function computeSignature(auth, method, url, timestamp, data) {
 
 export function jodelRequest(auth, method, url, query, data) {
     return new Promise((resolve, reject) => {
-        let dataString = JSON.stringify(data);
-        let timestamp = new Date().toISOString();
-        let sig = computeSignature(auth, method, url, timestamp, dataString);
+        const dataString = JSON.stringify(data);
+        const timestamp = new Date().toISOString();
+        const sig = computeSignature(auth, method, url, timestamp, dataString);
 
         const req = request(method, url)
             .query(query)

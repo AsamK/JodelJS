@@ -2,7 +2,7 @@ import {RECEIVE_POSTS, INVALIDATE_POSTS, SWITCH_POST_SECTION, SET_IS_FETCHING} f
 import Immutable from "immutable";
 
 function uniq(a) {
-    var seen = {};
+    const seen = {};
     return a.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
 }
 

@@ -20,7 +20,7 @@ export default class SelectLocation extends PureComponent {
     };
 
     handleChangeLatitude(event) {
-        var number = Number.parseFloat(event.target.value);
+        const number = Number.parseFloat(event.target.value);
         if (isNaN(number) || number < -90 || number > 90) {
             return
         }
@@ -28,7 +28,7 @@ export default class SelectLocation extends PureComponent {
     }
 
     handleChangeLongitude(event) {
-        var number = Number.parseFloat(event.target.value.replace(',', '.'));
+        const number = Number.parseFloat(event.target.value.replace(',', '.'));
         if (isNaN(number) || number < -180 || number > 180) {
             return
         }

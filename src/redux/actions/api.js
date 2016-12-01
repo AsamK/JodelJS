@@ -24,7 +24,8 @@ import {
     apiUnfollowChannel,
     apiGetFollowedChannelsMeta,
     apiGetPostsHashtagCombo,
-    apiGetPostsHashtag
+    apiGetPostsHashtag,
+    apiGiveThanks,
     apiGetPostDetails
 } from "../../app/api";
 import {
@@ -73,6 +74,14 @@ export function downVote(postId, parentPostId) {
     return (dispatch, getState) => {
         apiDownVote(getAuth(getState), postId)
             .then(res => dispatch(receivePost(res.body.post)),
+                err => handleNetworkErrors(dispatch, getState, err));
+    }
+}
+
+export function giveThanks(postId, parentPostId) {
+    return (dispatch, getState) => {
+        apiGiveThanks(getAuth(getState), postId)
+            .then(res => dispatch(receivePost(parentPostId)),
                 err => handleNetworkErrors(dispatch, getState, err));
     }
 }

@@ -203,11 +203,15 @@ export function apiDeletePost(auth, postId) {
 }
 
 export function apiUpVote(auth, postId) {
-    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V2 + "/posts/" + postId + "/upvote", {}, {});
+    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V2 + "/posts/" + postId + "/upvote", {}, {reason_code: -1});
 }
 
 export function apiDownVote(auth, postId) {
-    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V2 + "/posts/" + postId + "/downvote", {}, {});
+    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V2 + "/posts/" + postId + "/downvote", {}, {reason_code: -1});
+}
+
+export function apiGiveThanks(auth, postId) {
+    return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V3 + "/posts/" + postId + "/giveThanks", {}, {});
 }
 
 export function apiPin(auth, postId) {

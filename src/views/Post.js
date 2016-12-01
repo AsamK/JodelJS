@@ -7,8 +7,8 @@ import Time from "./Time";
 import ChildInfo from "./ChildInfo";
 import Location from "./Location";
 import Message from "./Message";
-import {upVote, downVote, switchPostSection, selectPicture} from "../redux/actions";
-import {deletePost} from "../redux/actions/api";
+import {upVote, downVote, switchPostSection, selectPicture, deletePost, giveThanks} from "../redux/actions";
+import classnames from "classnames";
 
 class Post extends PureComponent {
     constructor(props) {
@@ -27,7 +27,13 @@ class Post extends PureComponent {
 
     upvote(e) {
         e.stopPropagation();
-        this.props.dispatch(upVote(this.props.post.get("post_id"), this.props.parentPostId));
+        const {dispatch, post, parentPostId} = this.props;
+        if (post.has('voted') && post.get("voted") == "up") {
+            // Give thanks
+            dispatch(giveThanks(post.get("post_id"), parentPostId));
+        } else {
+            dispatch(upVote(post.get("post_id"), parentPostId));
+        }
     }
 
     downvote(e) {
@@ -68,7 +74,7 @@ class Post extends PureComponent {
                 <Location location={post.getIn(["location", "name"])} distance={post.get("distance")}/>
                 <div className="author">
                     {author != undefined ?
-                        <div className={author}>
+                        <div className={classnames(author, {gotThanks: post.get("got_thanks")})}>
                             {author}
                         </div>
                         : ""}

@@ -81,7 +81,7 @@ export function downVote(postId, parentPostId) {
 export function giveThanks(postId, parentPostId) {
     return (dispatch, getState) => {
         apiGiveThanks(getAuth(getState), postId)
-            .then(res => dispatch(receivePost(parentPostId)),
+            .then(res => dispatch(fetchPost(parentPostId)),
                 err => handleNetworkErrors(dispatch, getState, err));
     }
 }

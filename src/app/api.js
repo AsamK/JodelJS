@@ -163,6 +163,33 @@ export function apiGetPostsChannel(auth, sortType, afterPostId, channel) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/channel/" + type, query, {});
 }
 
+export function apiGetPostsHashtagCombo(auth, hashtag, home = false) {
+    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/hashtag/combo", {hashtag, home}, {});
+}
+
+export function apiGetPostsHashtag(auth, sortType, afterPostId, hashtag, home = false) {
+    let type;
+    switch (sortType) {
+        case PostListSortTypes.RECENT:
+            type = "";
+            break;
+        case PostListSortTypes.DISCUSSED:
+            type = "discussed";
+            break;
+        case PostListSortTypes.POPULAR:
+            type = "popular";
+            break;
+        default:
+            throw "Unknown sort type";
+    }
+    let query = {
+        hashtag,
+        after: afterPostId,
+        home,
+    };
+    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/hashtag/" + type, query, {});
+}
+
 export function apiGetPost(auth, post_id) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/" + post_id, {}, {});
 }

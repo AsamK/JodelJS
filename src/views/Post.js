@@ -53,9 +53,12 @@ class Post extends PureComponent {
                              this.pressTimer = setTimeout(() => this.props.dispatch(selectPicture(post.get("post_id"))), 300);
                          }}></div>
                     :
-                    <Message message={post.get("message")} onHashtagClick={(e, hashtag)=> {
+                    <Message message={post.get("message")} onAtClick={(e, channel)=> {
                         e.stopPropagation();
-                        this.props.dispatch(switchPostSection("channel:" + hashtag));
+                        this.props.dispatch(switchPostSection("channel:" + channel));
+                    }} onHashtagClick={(e, hashtag)=> {
+                        e.stopPropagation();
+                        this.props.dispatch(switchPostSection("hashtag:" + hashtag));
                     }}/>
                 }
                 <Vote vote_count={post.get("vote_count")} voted={post.has('voted') ? post.get("voted") : ""}

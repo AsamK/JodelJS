@@ -23,7 +23,9 @@ import {
     apiGetRecommendedChannels,
     apiFollowChannel,
     apiUnfollowChannel,
-    apiGetFollowedChannelsMeta
+    apiGetFollowedChannelsMeta,
+    apiGetPostsHashtagCombo,
+    apiGetPostsHashtag
 } from "../../app/api";
 import {
     receivePost,
@@ -131,6 +133,20 @@ export function fetchPostsIfNeeded(section) {
                         dispatch(setIsFetching(section, false));
                         handleNetworkErrors(dispatch, getState, err);
                     });
+            }
+            if (section.startsWith("hashtag:")) {
+                let hashtag = section.substring(8);
+                apiGetPostsHashtagCombo(getAuth(getState), hashtag)
+                    .then(res => {
+                        dispatch(receivePosts(section, {
+                            recent: res.body.recent,
+                            discussed: res.body.replied,
+                            popular: res.body.voted
+                        }));
+                    }, err => {
+                        dispatch(setIsFetching(section, false));
+                        handleNetworkErrors(dispatch, getState, err);
+                    });
             } else {
                 switch (section) {
                     case "location":
@@ -223,6 +239,22 @@ export function fetchMorePosts(section, sortType) {
             }
             dispatch(setIsFetching(section));
             apiGetPostsChannel(getAuth(getState), sortType, afterId, channel)
+                .then(res => {
+                    let p = {};
+                    p[sortType] = res.body.posts;
+                    dispatch(receivePosts(section, p, true));
+                }, err => {
+                    dispatch(setIsFetching(section, false));
+                    handleNetworkErrors(dispatch, getState, err);
+                });
+        } else if (section.startsWith("hashtag:")) {
+            let hashtag = section.substring(8);
+            let afterId;
+            if (posts !== undefined) {
+                afterId = posts.get(posts.size - 1);
+            }
+            dispatch(setIsFetching(section));
+            apiGetPostsHashtag(getAuth(getState), sortType, afterId, hashtag)
                 .then(res => {
                     let p = {};
                     p[sortType] = res.body.posts;

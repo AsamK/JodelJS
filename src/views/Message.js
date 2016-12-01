@@ -5,25 +5,32 @@ import React, {Component} from "react";
 export default class Message extends Component {
     static propTypes = {
         message: React.PropTypes.string.isRequired,
+        onAtClick: React.PropTypes.func,
         onHashtagClick: React.PropTypes.func,
     };
 
     render() {
-        const {message, onHashtagClick, ...forwardProps} = this.props;
-        let hashReg = /([^@]*)@([^\s@]*)/mg;
+        const {message, onAtClick, onHashtagClick, ...forwardProps} = this.props;
+        let linkReg = /([^#@]*)([@#])([^\s#@]*)/mg;
         let previousIndex = 0;
         let messageParts = [];
         while (true) {
-            let regResult = hashReg.exec(message);
+            let regResult = linkReg.exec(message);
             if (regResult == null) {
                 messageParts.push(message.substring(previousIndex));
                 break;
             }
             messageParts.push(regResult[1]);
-            let hashtag = regResult[2];
-            messageParts.push(<a className="hashtag"
-                                 onClick={(e) => onHashtagClick(e, hashtag)}>@{hashtag}</a>);
-            previousIndex = hashReg.lastIndex;
+            if (regResult[2] == "@") {
+                let channel = regResult[3];
+                messageParts.push(<a className="hashtag"
+                                     onClick={(e) => onAtClick(e, channel)}>@{channel}</a>);
+            } else if (regResult[2] == "#") {
+                let hashtag = regResult[3];
+                messageParts.push(<a className="hashtag"
+                                     onClick={(e) => onHashtagClick(e, hashtag)}>#{hashtag}</a>);
+            }
+            previousIndex = linkReg.lastIndex;
         }
         return (
             <div className="postMessage">{messageParts}</div>

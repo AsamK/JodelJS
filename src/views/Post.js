@@ -71,7 +71,8 @@ class Post extends PureComponent {
                       upvote={this.upvote} downvote={this.downvote}/>
                 <Time time={post.get("created_at")}/>
                 <ChildInfo child_count={post.has('child_count') ? post.get("child_count") : 0}/>
-                <Location location={post.getIn(["location", "name"])} distance={post.get("distance")}/>
+                <Location location={post.getIn(["location", "name"])} distance={post.get("distance")}
+                          fromHome={post.get("from_home")}/>
                 <div className="author">
                     {author != undefined ?
                         <div className={classnames(author, {gotThanks: post.get("got_thanks")})}>

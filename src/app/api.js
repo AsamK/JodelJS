@@ -60,10 +60,12 @@ export function jodelRequest(auth, method, url, query, data) {
  return jodelRequest("GET", Settings.API_SERVER + API_PATH_V2 + "/posts/", {}, {});
  }*/
 
-export function apiGetPostsCombo(auth, latitude, longitude) {
-    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/location/combo", {
+export function apiGetPostsCombo(auth, latitude, longitude, stickies = true, home = false) {
+    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/location/combo", {
         lat: latitude,
-        lng: longitude
+        lng: longitude,
+        stickies,
+        home,
     }, {});
 }
 

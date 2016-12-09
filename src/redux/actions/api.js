@@ -13,7 +13,7 @@ import {
     apiGetPostsMine,
     apiRefreshAccessToken,
     apiDeletePost,
-    apiSetPlace,
+    apiSetLocation,
     apiGetPostsChannelCombo,
     apiGetPostsChannel,
     apiPin,
@@ -451,7 +451,7 @@ export function setLocation(latitude, longitude, city = undefined, country = "DE
         dispatch(_setLocation(latitude, longitude, city, country));
         let auth = getAuth(getState);
         if (auth !== undefined) {
-            apiSetPlace(auth, latitude, longitude, city, country)
+            apiSetLocation(auth, latitude, longitude, city, country)
                 .catch(err => {
                     handleNetworkErrors(dispatch, getState, err);
                 });

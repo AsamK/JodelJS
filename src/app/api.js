@@ -265,7 +265,7 @@ export function apiGetKarma(auth) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/users/karma", {}, {});
 }
 
-export function apiSetPlace(auth, latitude, longitude, city, country) {
+export function apiSetLocation(auth, latitude, longitude, city, country) {
     const data = {
         location: {
             loc_accuracy: 0.0,

@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import SelectLocation from "./SelectLocation";
 import {updateLocation, _setLocation, setUseBrowserLocation, setLocation, setHome} from "../redux/actions";
 import Settings from "../app/settings";
+import {getLocation} from "../redux/reducers";
 
 class AppSettings extends Component {
     constructor(props) {
@@ -70,10 +71,11 @@ class AppSettings extends Component {
 }
 
 const mapStateToProps = (state) => {
+    let loc = getLocation(state);
     return {
         deviceUid: state.account.get("deviceUid"),
-        latitude: state.viewState.getIn(["location", "latitude"]),
-        longitude: state.viewState.getIn(["location", "longitude"]),
+        latitude: loc.get("latitude"),
+        longitude: loc.get("longitude"),
         homeSet: state.account.getIn(["config", "home_set"]),
         homeName: state.account.getIn(["config", "home_name"]),
         useBrowserLocation: state.viewState.get("useBrowserLocation"),

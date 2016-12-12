@@ -21,6 +21,7 @@ import {
     _showSettings,
     _showAddPost
 } from "./actions/state";
+import {getLocation} from "./reducers";
 export * from "./actions/state";
 export * from "./actions/api";
 
@@ -85,8 +86,9 @@ export function updateLocation() {
         if (getState().viewState.get("useBrowserLocation") && "geolocation" in navigator) {
             /* geolocation is available */
             navigator.geolocation.getCurrentPosition(position => {
-                if (getState().viewState.getIn(["location", "latitude"]) !== position.coords.latitude ||
-                    getState().viewState.getIn(["location", "longitude"]) !== position.coords.longitude) {
+                let loc = getLocation(getState());
+                if (location.get("latitude") !== position.coords.latitude ||
+                    location.get("longitude") !== position.coords.longitude) {
                     dispatch(setLocation(position.coords.latitude, position.coords.longitude));
                     if (getState().account.getIn(["token", "access"]) !== undefined) {
                         dispatch(updatePosts());

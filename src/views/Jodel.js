@@ -25,6 +25,7 @@ import {
 } from "../redux/actions";
 import Immutable from "immutable";
 import {getPost, getChannel} from "../redux/reducers/entities";
+import {isLocationKnown} from "../redux/reducers";
 
 class Jodel extends Component {
     componentDidMount() {
@@ -161,7 +162,7 @@ const mapStateToProps = (state) => {
         selectedPost,
         selectedPicturePost,
         selectedChannel,
-        locationKnown: state.viewState.getIn(["location", "latitude"]) !== undefined,
+        locationKnown: isLocationKnown(state),
         settings: state.viewState.get("settings"),
         karma: state.account.get("karma"),
         deviceUid: state.account.get("deviceUid"),

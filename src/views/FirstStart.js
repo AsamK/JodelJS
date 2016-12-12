@@ -7,6 +7,7 @@ import SelectLocation from "./SelectLocation";
 import {createNewAccount, updateLocation, _setLocation, setUseBrowserLocation} from "../redux/actions";
 import {setDeviceUid} from "../redux/actions/api";
 import Settings from "../app/settings";
+import {getLocation} from "../redux/reducers";
 
 class FirstStart extends Component {
     constructor(props) {
@@ -79,10 +80,11 @@ class FirstStart extends Component {
 }
 
 const mapStateToProps = (state) => {
+    let loc = getLocation(state);
     return {
         deviceUid: state.account.get("deviceUid"),
-        latitude: state.viewState.getIn(["location", "latitude"]),
-        longitude: state.viewState.getIn(["location", "longitude"]),
+        latitude: loc.get("latitude"),
+        longitude: loc.get("longitude"),
         useBrowserLocation: state.viewState.get("useBrowserLocation"),
     }
 };

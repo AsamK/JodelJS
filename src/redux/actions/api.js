@@ -46,6 +46,7 @@ import {
     invalidatePosts
 } from "./state";
 import {setToken, setPermissionDenied, updatePosts} from "../actions";
+import {getLocation} from "../reducers";
 
 function handleNetworkErrors(dispatch, getState, err) {
     if (err.status === undefined) {
@@ -162,7 +163,8 @@ export function fetchPostsIfNeeded(section) {
             } else {
                 switch (section) {
                     case "location":
-                        apiGetPostsCombo(getAuth(getState), getState().viewState.getIn(["location", "latitude"]), getState().viewState.getIn(["location", "longitude"]))
+                        let loc = getLocation(getState());
+                        apiGetPostsCombo(getAuth(getState), location.get("latitude"), location.get("longitude"))
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.recent,
@@ -283,7 +285,8 @@ export function fetchMorePosts(section, sortType) {
                         afterId = posts.get(posts.size - 1);
                     }
                     dispatch(setIsFetching(section));
-                    apiGetPosts(getAuth(getState), sortType, afterId, getState().viewState.getIn(["location", "latitude"]), getState().viewState.getIn(["location", "longitude"]))
+                    let loc = getLocation(getState());
+                    apiGetPosts(getAuth(getState), sortType, afterId, loc.get("latitude"), loc.get("longitude"))
                         .then(res => {
                             let p = {};
                             p[sortType] = res.body.posts;
@@ -406,7 +409,7 @@ export function getConfig() {
 
 export function addPost(text, image, channel, ancestor, color = "FF9908") {
     return (dispatch, getState) => {
-        let loc = getState().viewState.get("location");
+        let loc = getLocation(getState());
         return apiAddPost(getAuth(getState), channel, ancestor, color, 0.0, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"), text, image)
             .then(res => {
                     if (ancestor != undefined) {
@@ -430,7 +433,7 @@ export function addPost(text, image, channel, ancestor, color = "FF9908") {
 
 export function setDeviceUid(deviceUid) {
     return (dispatch, getState) => {
-        const loc = getState().viewState.get("location");
+        let loc = getLocation(getState());
         apiGetAccessToken(deviceUid, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"))
             .then(res => {
                 dispatch(_setDeviceUID(deviceUid));

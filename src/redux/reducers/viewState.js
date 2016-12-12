@@ -39,8 +39,6 @@ export function migrateViewState(storedState, oldVersion) {
 function viewState(state = Immutable.Map({
     selectedPostId: null,
     selectedPicturePostId: null,
-    location: Immutable.Map({latitude: undefined, longitude: undefined, city: undefined, country: "DE"}),
-    useBrowserLocation: true,
     postSection: undefined,
     postListSortType: PostListSortTypes.RECENT,
     addPost: Immutable.Map({visible: false}),

@@ -83,12 +83,12 @@ export function selectPicture(postId, nohistory = false) {
 
 export function updateLocation() {
     return (dispatch, getState) => {
-        if (getState().viewState.get("useBrowserLocation") && "geolocation" in navigator) {
+        if (getState().settings.get("useBrowserLocation") && "geolocation" in navigator) {
             /* geolocation is available */
             navigator.geolocation.getCurrentPosition(position => {
                 let loc = getLocation(getState());
-                if (location.get("latitude") !== position.coords.latitude ||
-                    location.get("longitude") !== position.coords.longitude) {
+                if (loc.get("latitude") !== position.coords.latitude ||
+                    loc.get("longitude") !== position.coords.longitude) {
                     dispatch(setLocation(position.coords.latitude, position.coords.longitude));
                     if (getState().account.getIn(["token", "access"]) !== undefined) {
                         dispatch(updatePosts());

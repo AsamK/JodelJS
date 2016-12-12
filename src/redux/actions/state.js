@@ -196,6 +196,15 @@ export function setUseBrowserLocation(useBrowserLocation) {
     }
 }
 
+export const SET_USE_HOME_LOCATION = 'SET_USE_HOME_LOCATION';
+export function setUseHomeLocation(useHomeLocation) {
+    return {
+        type: SET_USE_HOME_LOCATION,
+        useHomeLocation,
+        receivedAt: Date.now()
+    }
+}
+
 export const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
 export function invalidatePosts(section) {
     return {

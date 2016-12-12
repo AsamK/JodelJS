@@ -78,7 +78,7 @@ const mapStateToProps = (state) => {
         longitude: loc.get("longitude"),
         homeSet: state.account.getIn(["config", "home_set"]),
         homeName: state.account.getIn(["config", "home_name"]),
-        useBrowserLocation: state.viewState.get("useBrowserLocation"),
+        useBrowserLocation: state.settings.get("useBrowserLocation"),
     }
 };
 

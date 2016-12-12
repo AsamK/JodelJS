@@ -323,7 +323,7 @@ export function apiVerifyPush(auth, serverTime, verificationCode) {
     return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V3 + "/user/verification/push", {}, data);
 }
 
-export function apiGetAccessToken(deviceUid, latitude, longitude, city, country) {
+export function apiGetAccessToken(deviceUid, latitude = 0.0, longitude = 0.0, city, country) {
     const data = {
         "client_id": Settings.CLIENT_ID,
         "device_uid": deviceUid,

@@ -164,7 +164,7 @@ export function fetchPostsIfNeeded(section) {
                 switch (section) {
                     case "location":
                         let loc = getLocation(getState());
-                        apiGetPostsCombo(getAuth(getState), location.get("latitude"), location.get("longitude"))
+                        apiGetPostsCombo(getAuth(getState), loc.get("latitude"), loc.get("longitude"))
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.recent,

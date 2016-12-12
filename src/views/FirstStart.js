@@ -85,7 +85,7 @@ const mapStateToProps = (state) => {
         deviceUid: state.account.get("deviceUid"),
         latitude: loc.get("latitude"),
         longitude: loc.get("longitude"),
-        useBrowserLocation: state.viewState.get("useBrowserLocation"),
+        useBrowserLocation: state.settings.get("useBrowserLocation"),
     }
 };
 

@@ -56,10 +56,10 @@ export default class SelectLocation extends PureComponent {
                     Standort vom Browser abfragen
                 </label>
                 {useBrowserLocation ? <div>
-                    <p>Aktueller
+                        <p>Aktueller
                         Standort: {latitude === undefined ? "(Unbekannt)" : latitude + ", " + longitude}</p>
-                    <a onClick={onLocationRequested}>Standort aktualisieren</a>
-                </div> : ""}
+                        <a onClick={onLocationRequested}>Standort aktualisieren</a>
+                    </div> : ""}
                 <label>
                     <input type="radio" value={MANUAL} checked={!useBrowserLocation}
                            onChange={this.handleChangeRadio}/>

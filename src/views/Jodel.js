@@ -169,12 +169,12 @@ const mapStateToProps = (state) => {
         followedChannels: followedChannels === undefined ? [] : followedChannels.map(c => getChannel(state, c)),
         recommendedChannels: state.account.get("recommendedChannels")
             .map(channel => followedChannels === undefined ? [] : followedChannels.reduce((v, c) => {
-                if (c.toLowerCase() === channel.toLowerCase()) {
-                    return undefined
-                } else {
-                    return v;
-                }
-            }, getChannel(state, channel)))
+                    if (c.toLowerCase() === channel.toLowerCase()) {
+                        return undefined
+                    } else {
+                        return v;
+                    }
+                }, getChannel(state, channel)))
             .filter(c => c !== undefined),
         channelListShown: state.viewState.getIn(["channelList", "visible"]),
     }

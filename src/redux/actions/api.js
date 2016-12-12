@@ -377,6 +377,7 @@ export function fetchPost(postId) {
             .then(res => {
                     let post = res.body.details;
                     post.children = res.body.replies;
+                    post.child_count = post.children.length;
                     dispatch(receivePost(post))
                 },
                 err => handleNetworkErrors(dispatch, getState, err));

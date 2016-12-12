@@ -1,6 +1,6 @@
 import React, {PureComponent} from "react";
 import {connect} from "react-redux";
-import {addPost} from "../redux/actions";
+import {addPost, switchPostSection} from "../redux/actions";
 import classnames from "classnames";
 import ColorPicker from "./ColorPicker";
 
@@ -20,6 +20,7 @@ export class AddPost extends PureComponent {
 
     static propTypes = {
         ancestor: React.PropTypes.string,
+        channel: React.PropTypes.string,
         visible: React.PropTypes.bool,
     };
 
@@ -44,35 +45,49 @@ export class AddPost extends PureComponent {
         sessionStorage.removeItem("messageDraft");
     }
 
+    handleAddPost(event) {
+        const {channel, ancestor} = this.props;
+        event.preventDefault();
+        if (this.state.message.trim() === '' && this.state.image === null) {
+            return
+        }
+        let encodedImage;
+        if (this.state.image !== null) {
+            const fileReader = new FileReader();
+            fileReader.onload = event => {
+                const url = event.target.result;
+                encodedImage = url.substr(url.indexOf(',') + 1);
+
+            };
+            fileReader.readAsDataURL(this.state.image);
+        }
+        const form = event.target;
+        this.sendAddPost(this.state.message, encodedImage, channel, ancestor, this.state.color, form);
+        window.history.back();
+    }
+
+    sendAddPost(message, encodedImage, channel, ancestor, color, form) {
+        this.props.dispatch(addPost(message, encodedImage, channel, ancestor, color)).then(
+            section => {
+                this.resetForm(form);
+                if (section != null) {
+                    this.props.dispatch(switchPostSection(section));
+                }
+            }
+        );
+    }
+
     render() {
-        const {channel, ancestor, visible, ...forwardProps} = this.props;
+        const {channel, ancestor, visible} = this.props;
 
         return (
             <div className={classnames("addPost", {visible})}>
-                {ancestor === null ? "Neuen Jodel schreiben" : "Jodel Kommentar schreiben"}:
-                <form onSubmit={e => {
-                    e.preventDefault();
-                    if (this.state.message.trim() === '' && this.state.image === null) {
-                        return
-                    }
-                    let form = e.target;
-                    if (this.state.image !== null) {
-                        let fileReader = new FileReader();
-                        fileReader.onload = event => {
-                            let url = event.target.result;
-                            let encodedImage = url.substr(url.indexOf(',') + 1);
-                            this.props.dispatch(addPost(this.state.message, encodedImage, channel, ancestor), this.state.color).then(
-                                res => this.resetForm(form)
-                            );
-                        };
-                        fileReader.readAsDataURL(this.state.image);
-                    } else {
-                        this.props.dispatch(addPost(this.state.message, undefined, channel, ancestor, this.state.color)).then(
-                            res => this.resetForm(form)
-                        );
-                    }
-                    window.history.back();
-                }}>
+                {ancestor === null ?
+                    "Neuen Jodel schreiben" + (channel != null ? " (Kanal: " + channel + ")" : "")
+                    :
+                    "Jodel Kommentar schreiben"
+                }:
+                <form onSubmit={this.handleAddPost.bind(this)}>
                     <textarea maxLength="230" value={this.state.message} onChange={event => {
                         this.setState({message: event.target.value});
                         sessionStorage.setItem("messageDraft", event.target.value);

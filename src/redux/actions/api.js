@@ -42,7 +42,8 @@ import {
     _setLocation,
     pinnedPost,
     setRecommendedChannels,
-    setChannelsMeta
+    setChannelsMeta,
+    invalidatePosts
 } from "./state";
 import {setToken, setPermissionDenied, updatePosts} from "../actions";
 
@@ -407,9 +408,19 @@ export function addPost(text, image, channel, ancestor, color = "FF9908") {
         let loc = getState().viewState.get("location");
         return apiAddPost(getAuth(getState), channel, ancestor, color, 0.0, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"), text, image)
             .then(res => {
-                    dispatch(receivePosts("location", {recent: res.body.posts}));
                     if (ancestor != undefined) {
                         dispatch(fetchPost(ancestor));
+                        return null;
+                    } else if (channel != undefined) {
+                        const section = "channel:" + channel;
+                        dispatch(invalidatePosts(section));
+                        dispatch(fetchPostsIfNeeded(section));
+                        return section;
+                    } else {
+                        const section = "location";
+                        dispatch(invalidatePosts(section));
+                        dispatch(fetchPostsIfNeeded(section));
+                        return section;
                     }
                 },
                 err => handleNetworkErrors(dispatch, getState, err));

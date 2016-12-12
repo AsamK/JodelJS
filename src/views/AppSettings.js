@@ -3,7 +3,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import SelectLocation from "./SelectLocation";
-import {updateLocation, _setLocation, setUseBrowserLocation, setLocation} from "../redux/actions";
+import {updateLocation, _setLocation, setUseBrowserLocation, setLocation, setHome} from "../redux/actions";
 import Settings from "../app/settings";
 
 class AppSettings extends Component {
@@ -42,7 +42,18 @@ class AppSettings extends Component {
                 Device UID:
             </p>
             <div className="deviceUid">{this.props.deviceUid}</div>
-            <p>Standort</p>
+            <p>
+                Standort:
+                {this.props.homeSet ?
+                    <span>(Heimat: {this.props.homeName})</span>
+                    :
+                    <button onClick={() => {
+                        this.props.dispatch(setHome(this.props.latitude, this.props.longitude));
+                  }}>
+                        Als Heimat setzen
+                    </button>
+                }
+            </p>
             <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
                             latitude={this.props.latitude} longitude={this.props.longitude}
                             onChange={this.locationChange}
@@ -63,6 +74,8 @@ const mapStateToProps = (state) => {
         deviceUid: state.account.get("deviceUid"),
         latitude: state.viewState.getIn(["location", "latitude"]),
         longitude: state.viewState.getIn(["location", "longitude"]),
+        homeSet: state.account.getIn(["config", "home_set"]),
+        homeName: state.account.getIn(["config", "home_name"]),
         useBrowserLocation: state.viewState.get("useBrowserLocation"),
     }
 };

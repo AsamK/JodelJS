@@ -26,7 +26,9 @@ import {
     apiGetPostsHashtagCombo,
     apiGetPostsHashtag,
     apiGiveThanks,
-    apiGetPostDetails
+    apiGetPostDetails,
+    apiSetHome,
+    apiSetAction
 } from "../../app/api";
 import {
     receivePost,
@@ -452,6 +454,24 @@ export function setLocation(latitude, longitude, city = undefined, country = "DE
         let auth = getAuth(getState);
         if (auth !== undefined) {
             apiSetLocation(auth, latitude, longitude, city, country)
+                .catch(err => {
+                    handleNetworkErrors(dispatch, getState, err);
+                });
+        }
+    }
+}
+
+export function setHome(latitude, longitude, city = undefined, country = "DE") {
+    return (dispatch, getState) => {
+        latitude = Math.round(latitude * 100) / 100;
+        longitude = Math.round(longitude * 100) / 100;
+        //dispatch(_setLocation(latitude, longitude, city, country));
+        let auth = getAuth(getState);
+        if (auth !== undefined) {
+            apiSetAction(auth, "SetHomeStarted")
+                .then(() => apiSetHome(auth, latitude, longitude, city, country))
+                .then(() => dispatch(getConfig()))
+                .then(() => apiSetAction(auth, "SetHomeCompleted"))
                 .catch(err => {
                     handleNetworkErrors(dispatch, getState, err);
                 });

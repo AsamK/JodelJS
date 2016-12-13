@@ -134,7 +134,7 @@ export function fetchPostsIfNeeded(section) {
             dispatch(setIsFetching(section));
             if (section.startsWith("channel:")) {
                 let channel = section.substring(8);
-                apiGetPostsChannelCombo(getAuth(getState), channel)
+                apiGetPostsChannelCombo(getAuth(getState), channel, getState().settings.get("useHomeLocation"))
                     .then(res => {
                         dispatch(receivePosts(section, {
                             recent: res.body.recent,
@@ -149,7 +149,7 @@ export function fetchPostsIfNeeded(section) {
             }
             if (section.startsWith("hashtag:")) {
                 let hashtag = section.substring(8);
-                apiGetPostsHashtagCombo(getAuth(getState), hashtag)
+                apiGetPostsHashtagCombo(getAuth(getState), hashtag, getState().settings.get("useHomeLocation"))
                     .then(res => {
                         dispatch(receivePosts(section, {
                             recent: res.body.recent,
@@ -164,7 +164,7 @@ export function fetchPostsIfNeeded(section) {
                 switch (section) {
                     case "location":
                         let loc = getLocation(getState());
-                        apiGetPostsCombo(getAuth(getState), loc.get("latitude"), loc.get("longitude"))
+                        apiGetPostsCombo(getAuth(getState), loc.get("latitude"), loc.get("longitude"), true, getState().settings.get("useHomeLocation"))
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.recent,
@@ -252,7 +252,7 @@ export function fetchMorePosts(section, sortType) {
                 afterId = posts.get(posts.size - 1);
             }
             dispatch(setIsFetching(section));
-            apiGetPostsChannel(getAuth(getState), sortType, afterId, channel)
+            apiGetPostsChannel(getAuth(getState), sortType, afterId, channel, getState().settings.get("useHomeLocation"))
                 .then(res => {
                     let p = {};
                     p[sortType] = res.body.posts;
@@ -268,7 +268,7 @@ export function fetchMorePosts(section, sortType) {
                 afterId = posts.get(posts.size - 1);
             }
             dispatch(setIsFetching(section));
-            apiGetPostsHashtag(getAuth(getState), sortType, afterId, hashtag)
+            apiGetPostsHashtag(getAuth(getState), sortType, afterId, hashtag, getState().settings.get("useHomeLocation"))
                 .then(res => {
                     let p = {};
                     p[sortType] = res.body.posts;
@@ -286,7 +286,7 @@ export function fetchMorePosts(section, sortType) {
                     }
                     dispatch(setIsFetching(section));
                     let loc = getLocation(getState());
-                    apiGetPosts(getAuth(getState), sortType, afterId, loc.get("latitude"), loc.get("longitude"))
+                    apiGetPosts(getAuth(getState), sortType, afterId, loc.get("latitude"), loc.get("longitude"), getState().settings.get("useHomeLocation"))
                         .then(res => {
                             let p = {};
                             p[sortType] = res.body.posts;
@@ -410,7 +410,7 @@ export function getConfig() {
 export function addPost(text, image, channel, ancestor, color = "FF9908") {
     return (dispatch, getState) => {
         let loc = getLocation(getState());
-        return apiAddPost(getAuth(getState), channel, ancestor, color, 0.0, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"), text, image)
+        return apiAddPost(getAuth(getState), channel, ancestor, color, 0.0, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"), text, image, getState().settings.get("useHomeLocation"))
             .then(res => {
                     if (ancestor != undefined) {
                         dispatch(fetchPost(ancestor));
@@ -496,7 +496,7 @@ export function setHome(latitude, longitude, city = undefined, country = "DE") {
 
 export function getRecommendedChannels() {
     return (dispatch, getState) => {
-        apiGetRecommendedChannels(getAuth(getState))
+        apiGetRecommendedChannels(getAuth(getState), getState().settings.get("useHomeLocation"))
             .then(res => {
                     dispatch(setRecommendedChannels(res.body.recommended));
                 },
@@ -511,7 +511,7 @@ export function getFollowedChannelsMeta() {
             let timestamp = getState().viewState.getIn(["channelsLastRead", c]);
             channels[c] = timestamp === undefined ? 0 : timestamp;
         });
-        apiGetFollowedChannelsMeta(getAuth(getState), channels)
+        apiGetFollowedChannelsMeta(getAuth(getState), channels, getState().settings.get("useHomeLocation"))
             .then(res => {
                     dispatch(setChannelsMeta(res.body.channels));
                 },

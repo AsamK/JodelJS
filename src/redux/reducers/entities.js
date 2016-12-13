@@ -13,10 +13,15 @@ function entitiesPost(state = Immutable.Map(), action) {
             }
             if (state.has(post.post_id)) {
                 const oldPost = state.get(post.post_id);
-                if (oldPost.has("children") && post.children !== undefined && post.children.length == 0) {
-                    // The old post has children and the new post has children, which however aren't included in the new data
-                    // -> keep old children
-                    post.children = oldPost.get("children");
+                if (oldPost.has("children") && post.children !== undefined) {
+                    if (action.append === true) {
+                        post.child_count += oldPost.get("children").count();
+                        post.children = oldPost.get("children").concat(post.children);
+                    } else if (post.children.length == 0) {
+                        // The old post has children and the new post has children, which however aren't included in the new data
+                        // -> keep old children
+                        post.children = oldPost.get("children");
+                    }
                 }
             }
             newState[post.post_id] = post;

@@ -196,10 +196,11 @@ export function apiGetPost(auth, post_id) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/posts/" + post_id, {}, {});
 }
 
-export function apiGetPostDetails(auth, post_id, details = true, reversed = false) {
+export function apiGetPostDetails(auth, post_id, details = true, nextReply, reversed = false) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/posts/" + post_id + "/details", {
         details: details,
-        reversed: reversed
+        reply: nextReply,
+        reversed: reversed,
     }, {});
 }
 

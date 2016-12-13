@@ -21,7 +21,8 @@ import {
     fetchMorePosts,
     showSettings,
     showChannelList,
-    switchPostSection
+    switchPostSection,
+    fetchMoreComments
 } from "../redux/actions";
 import Immutable from "immutable";
 import {getPost, getChannel} from "../redux/reducers/entities";
@@ -63,6 +64,10 @@ class Jodel extends Component {
         this.props.dispatch(fetchMorePosts());
     }
 
+    onLoadMoreComments() {
+        this.props.dispatch(fetchMoreComments());
+    }
+
     render() {
         if (this.props.deviceUid === undefined) {
             return <div className="jodel">
@@ -95,7 +100,8 @@ class Jodel extends Component {
                     <PostDetails post={selectedPost}
                                  onPostClick={this.refresh.bind(this)}
                                  onAddClick={this.handleAddCommentClick.bind(this)}
-                                 locationKnown={this.props.locationKnown}/>
+                                 locationKnown={this.props.locationKnown}
+                                 onLoadMore={this.onLoadMoreComments.bind(this)}/>
                 </div>
                 {this.props.selectedPicturePost !== null ?
                     <div className="bigPicture" onMouseUp={e => window.history.back()}>

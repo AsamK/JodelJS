@@ -47,6 +47,7 @@ import {
 } from "./state";
 import {setToken, setPermissionDenied, updatePosts} from "../actions";
 import {getLocation} from "../reducers";
+import {getPost} from "../reducers/entities";
 
 function handleNetworkErrors(dispatch, getState, err) {
     if (err.status === undefined) {
@@ -374,14 +375,31 @@ export function fetchMorePosts(section, sortType) {
     }
 }
 
-export function fetchPost(postId) {
+export function fetchMoreComments() {
     return (dispatch, getState) => {
-        apiGetPostDetails(getAuth(getState), postId)
+        const postId = getState().viewState.get("selectedPostId");
+        if (postId === undefined) {
+            return;
+        }
+        const post = getPost(getState(), postId);
+        if (post.has("next_reply")) {
+            let nextReply = post.get("next_reply");
+            if (nextReply != null) {
+                dispatch(fetchPost(postId, nextReply));
+            }
+        }
+    }
+}
+
+export function fetchPost(postId, nextReply) {
+    return (dispatch, getState) => {
+        apiGetPostDetails(getAuth(getState), postId, true, nextReply, false)
             .then(res => {
                     let post = res.body.details;
                     post.children = res.body.replies;
-                    post.child_count = post.children.length;
-                    dispatch(receivePost(post))
+                    post.child_count = post.children.length + res.body.remaining;
+                    post.next_reply = res.body.next;
+                    dispatch(receivePost(post, nextReply !== undefined))
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     }

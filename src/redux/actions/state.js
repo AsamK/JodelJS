@@ -79,12 +79,12 @@ export function receivePosts(section, postsBySortType, append = false) {
     return res;
 }
 
-export function receivePost(post) {
+export function receivePost(post, append = false) {
     return {
         type: RECEIVE_POSTS,
         entities: [post],
         receivedAt: Date.now(),
-        append: true,
+        append,
     }
 }
 

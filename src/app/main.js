@@ -18,6 +18,7 @@ import {
 import {refreshAccessToken} from "../redux/actions/api";
 import {migrateViewState, VIEW_STATE_VERSION} from "../redux/reducers/viewState";
 import {migrateAccount, ACCOUNT_VERSION} from "../redux/reducers/account";
+import {migrateSettings, SETTINGS_VERSION} from "../redux/reducers/settings";
 import ReactDOM from "react-dom";
 import DocumentTitle from "react-document-title";
 import {createStore, applyMiddleware} from "redux";
@@ -40,6 +41,12 @@ if (storedAccount) {
     persistedState.account = Immutable.fromJS(migrateAccount(JSON.parse(storedAccount), oldVersion));
 }
 
+let storedSettings = localStorage.getItem('settings');
+if (storedSettings) {
+    let oldVersion = parseInt(localStorage.getItem('settingsVersion'), 10);
+    persistedState.settings = Immutable.fromJS(migrateSettings(JSON.parse(storedSettings), oldVersion));
+}
+
 let store = createStore(
     JodelApp,
     persistedState,
@@ -54,6 +61,9 @@ store.subscribe(() => {
 
     localStorage.setItem('account', JSON.stringify(store.getState().account));
     localStorage.setItem('accountVersion', ACCOUNT_VERSION);
+
+    localStorage.setItem('settings', JSON.stringify(store.getState().settings));
+    localStorage.setItem('settingsVersion', SETTINGS_VERSION);
 });
 
 if (store.getState().account.getIn(["token", "access"]) === undefined) {

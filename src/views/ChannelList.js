@@ -11,6 +11,7 @@ export default class ChannelList extends Component {
     static propTypes = {
         channels: React.PropTypes.array.isRequired,
         recommendedChannels: React.PropTypes.array.isRequired,
+        localChannels: React.PropTypes.array.isRequired,
         onChannelClick: React.PropTypes.func.isRequired,
     };
 
@@ -24,7 +25,7 @@ export default class ChannelList extends Component {
     }
 
     render() {
-        const {channels, recommendedChannels, onChannelClick, ...forwardProps} = this.props;
+        const {channels, recommendedChannels, localChannels, onChannelClick, ...forwardProps} = this.props;
         const channelNodes = channels.map((channel) => {
                 return <div key={channel.get("channel")}
                             className={classnames("channelLink", {unread: channel.get("unread")})}
@@ -47,6 +48,17 @@ export default class ChannelList extends Component {
                 </div>
             }
         );
+        const localChannelNodes = localChannels.map((channel) => {
+                return <div key={channel.get("channel")}
+                            className={classnames("channelLink", {unread: channel.get("unread")})}
+                            onClick={() => onChannelClick(channel.get("channel"))}>
+                    <div className="title">@{channel.get("channel")}</div>
+                    {channel.has("followers") ?
+                        <div className="followers">{channel.get("followers")} Followers</div>
+                        : undefined}
+                </div>
+            }
+        );
         return (
             <div className="channelList">
                 <div className="channelListHeader">Kanäle(beta)</div>
@@ -56,6 +68,11 @@ export default class ChannelList extends Component {
                     : undefined
                 }
                 {recommendedChannelNodes}
+                {localChannelNodes.size > 0 ?
+                    <div className="channelListLocal">Lokale</div>
+                    : undefined
+                }
+                {localChannelNodes}
             </div>
         );
     }

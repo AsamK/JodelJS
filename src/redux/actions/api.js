@@ -544,7 +544,7 @@ export function getRecommendedChannels() {
     return (dispatch, getState) => {
         apiGetRecommendedChannels(getAuth(getState), getState().settings.get("useHomeLocation"))
             .then(res => {
-                    dispatch(setRecommendedChannels(res.body.recommended));
+                    dispatch(setRecommendedChannels(res.body.recommended, res.body.local));
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     }

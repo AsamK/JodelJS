@@ -142,11 +142,12 @@ export function _setConfig(config) {
 }
 
 export const SET_RECOMMENDED_CHANNELS = 'SET_RECOMMENDED_CHANNELS';
-export function setRecommendedChannels(recommendedChannels) {
+export function setRecommendedChannels(recommendedChannels, localChannels) {
     return {
         type: SET_RECOMMENDED_CHANNELS,
         recommendedChannels,
-        entitiesChannel: recommendedChannels,
+        localChannels,
+        entitiesChannel: [].concat(recommendedChannels).concat(localChannels),
     }
 }
 

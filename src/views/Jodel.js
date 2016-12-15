@@ -122,6 +122,7 @@ class Jodel extends Component {
                 <div className={classnames("channels", {channelListShown: this.props.channelListShown})}>
                     <ChannelList channels={this.props.followedChannels}
                                  recommendedChannels={this.props.recommendedChannels}
+                                 localChannels={this.props.localChannels}
                                  onChannelClick={(hashtag) => this.props.dispatch(switchPostSection("channel:" + hashtag))}/>
                 </div>
                 <Progress/>
@@ -184,6 +185,15 @@ const mapStateToProps = (state) => {
         useHomeLocation: state.settings.getIn(["useHomeLocation"]),
         followedChannels: followedChannels === undefined ? [] : followedChannels.map(c => getChannel(state, c)),
         recommendedChannels: state.account.get("recommendedChannels")
+            .map(channel => followedChannels === undefined ? [] : followedChannels.reduce((v, c) => {
+                    if (c.toLowerCase() === channel.toLowerCase()) {
+                        return undefined
+                    } else {
+                        return v;
+                    }
+                }, getChannel(state, channel)))
+            .filter(c => c !== undefined),
+        localChannels: state.account.get("localChannels")
             .map(channel => followedChannels === undefined ? [] : followedChannels.reduce((v, c) => {
                     if (c.toLowerCase() === channel.toLowerCase()) {
                         return undefined

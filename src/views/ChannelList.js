@@ -27,48 +27,15 @@ export default class ChannelList extends Component {
     render() {
         const {channels, recommendedChannels, localChannels, onChannelClick, ...forwardProps} = this.props;
         const channelNodes = channels.map((channel) => {
-                return <div key={channel.get("channel")}
-                            className={classnames("channelLink", {unread: channel.get("unread")})}
-                            onClick={() => onChannelClick(channel.get("channel"))}>
-                    {channel.has("image_url") && channel.has("image_url") != null ?
-                        <div className="channelPicture"
-                             style={{backgroundImage: "url(https:" + channel.get("image_url") + ")"}}></div>
-                        : undefined}
-                    <div className="title">@{channel.get("channel")}</div>
-                    {channel.has("followers") ?
-                        <div className="followers">{channel.get("followers")} Followers</div>
-                        : undefined}
-                </div>
+                return ChannelList.createChannelNode(channel, onChannelClick);
             }
         );
         const recommendedChannelNodes = recommendedChannels.map((channel) => {
-                return <div key={channel.get("channel")}
-                            className={classnames("channelLink", {unread: channel.get("unread")})}
-                            onClick={() => onChannelClick(channel.get("channel"))}>
-                    {channel.has("image_url") && channel.has("image_url") != null ?
-                        <div className="channelPicture"
-                             style={{backgroundImage: "url(https:" + channel.get("image_url") + ")"}}></div>
-                        : undefined}
-                    <div className="title">@{channel.get("channel")}</div>
-                    {channel.has("followers") ?
-                        <div className="followers">{channel.get("followers")} Followers</div>
-                        : undefined}
-                </div>
+                return ChannelList.createChannelNode(channel, onChannelClick);
             }
         );
         const localChannelNodes = localChannels.map((channel) => {
-                return <div key={channel.get("channel")}
-                            className={classnames("channelLink", {unread: channel.get("unread")})}
-                            onClick={() => onChannelClick(channel.get("channel"))}>
-                    {channel.has("image_url") && channel.has("image_url") != null ?
-                        <div className="channelPicture"
-                             style={{backgroundImage: "url(https:" + channel.get("image_url") + ")"}}></div>
-                        : undefined}
-                    <div className="title">@{channel.get("channel")}</div>
-                    {channel.has("followers") ?
-                        <div className="followers">{channel.get("followers")} Followers</div>
-                        : undefined}
-                </div>
+                return ChannelList.createChannelNode(channel, onChannelClick);
             }
         );
         return (
@@ -87,5 +54,23 @@ export default class ChannelList extends Component {
                 {localChannelNodes}
             </div>
         );
+    }
+
+    static createChannelNode(channel, onChannelClick) {
+        return <div key={channel.get("channel")}
+                    className={classnames("channelLink", {unread: channel.get("unread")})}
+                    onClick={() => onChannelClick(channel.get("channel"))}>
+            {channel.has("image_url") && channel.get("image_url") != null ?
+                <div className="channelPicture"
+                     style={{backgroundImage: "url(https:" + channel.get("image_url") + ")"}}></div>
+                : undefined}
+            <div className="title">@{channel.get("channel")}</div>
+            {channel.has("sponsored") && channel.get("sponsored") ?
+                <div> (Sponsored)</div>
+                : undefined}
+            {channel.has("followers") ?
+                <div className="followers">{channel.get("followers")} Followers</div>
+                : undefined}
+        </div>
     }
 };

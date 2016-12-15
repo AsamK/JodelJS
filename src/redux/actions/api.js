@@ -143,7 +143,11 @@ export function fetchPostsIfNeeded(section) {
                             discussed: res.body.replied,
                             popular: res.body.voted
                         }));
-                        dispatch(setChannelsMeta([{channel, followers: res.body.followers_count}]));
+                        dispatch(setChannelsMeta([{
+                            channel,
+                            followers: res.body.followers_count,
+                            sponsored: res.body.sponsored
+                        }]));
                     }, err => {
                         dispatch(setIsFetching(section, false));
                         handleNetworkErrors(dispatch, getState, err);

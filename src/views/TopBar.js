@@ -1,7 +1,8 @@
 import React from "react";
 import SectionLink from "./SectionLink";
+import classnames from "classnames";
 
-let TopBar = ({karma, showSettings, showChannelList}) => {
+let TopBar = ({karma, isHomeSet, useHomeLocation, showHome, showSettings, showChannelList}) => {
 
     return (
         <div className="topBar">
@@ -13,6 +14,12 @@ let TopBar = ({karma, showSettings, showChannelList}) => {
             <div className="sectionLink channelListLink" onClick={showChannelList}>
                 Kanäle
             </div>
+            {isHomeSet ?
+                <div className={classnames("sectionLink", "homeLink", {active: useHomeLocation})} onClick={showHome}>
+                    Heimat
+                </div>
+                : ""
+            }
             <div className="karma" onClick={showSettings}>
                 {karma > 0 ? "+" : ""}{karma}
                 <div className="subText">Mein Karma</div>

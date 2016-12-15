@@ -22,7 +22,8 @@ import {
     showSettings,
     showChannelList,
     switchPostSection,
-    fetchMoreComments
+    fetchMoreComments,
+    setUseHomeLocation
 } from "../redux/actions";
 import Immutable from "immutable";
 import {getPost, getChannel} from "../redux/reducers/entities";
@@ -82,7 +83,13 @@ class Jodel extends Component {
                         showSettings={() => this.props.dispatch(showSettings(true))}
                         showChannelList={() => {
                             this.props.dispatch(showChannelList(!this.props.channelListShown));
-                        }}/>
+                        }}
+                        isHomeSet={this.props.isHomeSet}
+                        useHomeLocation={this.props.useHomeLocation}
+                        showHome={() => {
+                            this.props.dispatch(setUseHomeLocation(!this.props.useHomeLocation));
+                        }}
+                />
                 <div className={classnames("list", {
                     postShown: this.props.selectedPost != null,
                     isChannel: this.props.selectedChannel !== undefined
@@ -173,6 +180,8 @@ const mapStateToProps = (state) => {
         karma: state.account.get("karma"),
         deviceUid: state.account.get("deviceUid"),
         isRegistered: state.account.getIn(["token", "access"]) !== undefined,
+        isHomeSet: state.account.getIn(["config", "home_set"]),
+        useHomeLocation: state.settings.getIn(["useHomeLocation"]),
         followedChannels: followedChannels === undefined ? [] : followedChannels.map(c => getChannel(state, c)),
         recommendedChannels: state.account.get("recommendedChannels")
             .map(channel => followedChannels === undefined ? [] : followedChannels.reduce((v, c) => {

@@ -3,20 +3,14 @@ require("babel-polyfill");
 
 import React, {Component} from "react";
 import {
-    showAddPost,
-    showSettings,
-    selectPicture,
-    showChannelList,
+    replaceViewState,
     switchPostSection,
-    selectPost,
     setPermissionDenied,
     fetchPostsIfNeeded,
     updateLocation,
-    getConfig,
-    switchPostListSortType
+    getConfig
 } from "../redux/actions";
 import {refreshAccessToken} from "../redux/actions/api";
-import {migrateViewState, VIEW_STATE_VERSION} from "../redux/reducers/viewState";
 import {migrateAccount, ACCOUNT_VERSION} from "../redux/reducers/account";
 import {migrateSettings, SETTINGS_VERSION} from "../redux/reducers/settings";
 import ReactDOM from "react-dom";
@@ -29,11 +23,6 @@ import JodelApp from "../redux/reducers";
 import Immutable from "immutable";
 
 let persistedState = {};
-let storedViewState = localStorage.getItem('viewState');
-if (storedViewState) {
-    let oldVersion = parseInt(localStorage.getItem('viewStateVersion'), 10);
-    persistedState.viewState = Immutable.fromJS(migrateViewState(JSON.parse(storedViewState), oldVersion));
-}
 
 let storedAccount = localStorage.getItem('account');
 if (storedAccount) {
@@ -54,17 +43,29 @@ let store = createStore(
         thunkMiddleware, // lets us use dispatch() functions
     )
 );
+store.dispatch({type: "INIT"});
+let userClickedBack = false;
+store.subscribe((() => {
+        let previousState = store.getState();
+        return () => {
+            let state = store.getState();
+            localStorage.setItem('account', JSON.stringify(state.account));
+            localStorage.setItem('accountVersion', ACCOUNT_VERSION);
 
-store.subscribe(() => {
-    localStorage.setItem('viewState', JSON.stringify(store.getState().viewState));
-    localStorage.setItem('viewStateVersion', VIEW_STATE_VERSION);
+            localStorage.setItem('settings', JSON.stringify(state.settings));
+            localStorage.setItem('settingsVersion', SETTINGS_VERSION);
 
-    localStorage.setItem('account', JSON.stringify(store.getState().account));
-    localStorage.setItem('accountVersion', ACCOUNT_VERSION);
-
-    localStorage.setItem('settings', JSON.stringify(store.getState().settings));
-    localStorage.setItem('settingsVersion', SETTINGS_VERSION);
-});
+            if (!previousState.viewState.equals(state.viewState)) {
+                if (userClickedBack) {
+                    userClickedBack = false;
+                } else {
+                    history.pushState(state.viewState.toJS(), "");
+                }
+            }
+            previousState = state;
+        }
+    })()
+);
 
 if (store.getState().account.getIn(["token", "access"]) === undefined) {
     if (store.getState().account.get("deviceUid") !== undefined) {
@@ -83,50 +84,15 @@ if (store.getState().account.getIn(["token", "access"]) === undefined) {
 store.dispatch(updateLocation());
 
 if (history.state === null) {
-    history.replaceState({
-        postSection: "location",
-        postListSortType: store.getState().viewState.get("postListSortType")
-    }, "");
+    history.replaceState(store.getState().viewState.toJS(), "");
     store.dispatch(switchPostSection("location"));
+} else {
+    store.dispatch(replaceViewState(history.state));
 }
 
 window.onpopstate = event => {
-    if (event.state.postSection !== undefined && event.state.postSection !== store.getState().viewState.get("postSection")) {
-        store.dispatch(switchPostSection(event.state.postSection, true));
-    }
-    if (event.state.postListSortType !== undefined && event.state.postListSortType !== store.getState().viewState.get("postListSortType")) {
-        store.dispatch(switchPostListSortType(event.state.postListSortType, true));
-    }
-    if (event.state.selectedPostId === undefined) {
-        event.state.selectedPostId = null;
-    }
-    if (event.state.selectedPostId !== store.getState().viewState.get("selectedPostId")) {
-        store.dispatch(selectPost(event.state.selectedPostId, true));
-    }
-    if (event.state.selectedPicturePostId === undefined) {
-        event.state.selectedPicturePostId = null;
-    }
-    if (event.state.selectedPicturePostId !== store.getState().viewState.get("selectedPicturePostId")) {
-        store.dispatch(selectPicture(event.state.selectedPicturePostId, true));
-    }
-    if (event.state.settingsVisible === undefined) {
-        event.state.settingsVisible = false;
-    }
-    if (event.state.settingsVisible !== store.getState().viewState.getIn(["settings", "visible"])) {
-        store.dispatch(showSettings(event.state.settingsVisible, true));
-    }
-    if (event.state.addPostVisible === undefined) {
-        event.state.addPostVisible = false;
-    }
-    if (event.state.addPostVisible !== store.getState().viewState.getIn(["addPost", "visible"])) {
-        store.dispatch(showAddPost(event.state.addPostVisible, true));
-    }
-    if (event.state.channelListVisible === undefined) {
-        event.state.channelListVisible = false;
-    }
-    if (event.state.channelListVisible !== store.getState().viewState.getIn(["channelList", "visible"])) {
-        store.dispatch(showChannelList(event.state.channelListVisible, true));
-    }
+    userClickedBack = true;
+    store.dispatch(replaceViewState(event.state));
 };
 
 ReactDOM.render(<Provider store={store}><DocumentTitle

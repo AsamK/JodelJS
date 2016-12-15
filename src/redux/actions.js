@@ -25,14 +25,11 @@ import {getLocation} from "./reducers";
 export * from "./actions/state";
 export * from "./actions/api";
 
-export function switchPostSection(section, nohistory = false) {
+export function switchPostSection(section) {
     return (dispatch, getState) => {
         if (getState().viewState.get("postSection") !== section) {
-            dispatch(switchPostListSortType(PostListSortTypes.RECENT, true));
+            dispatch(switchPostListSortType(PostListSortTypes.RECENT));
             dispatch(_switchPostSection(section));
-            if (!nohistory) {
-                history.pushState({postSection: section, postListSortType: PostListSortTypes.RECENT}, "");
-            }
         }
         dispatch(_selectPost(null));
         dispatch(_showChannelList(false));
@@ -41,13 +38,10 @@ export function switchPostSection(section, nohistory = false) {
     }
 }
 
-export function switchPostListSortType(sortType, nohistory = false) {
+export function switchPostListSortType(sortType) {
     return (dispatch, getState) => {
         if (getState().viewState.get("postListSortType") !== sortType) {
             dispatch(_switchPostListSortType(sortType));
-            if (!nohistory) {
-                history.replaceState(Object.assign(history.state, {postListSortType: sortType}), "");
-            }
         }
     }
 }
@@ -60,11 +54,8 @@ export function updatePosts() {
     }
 }
 
-export function selectPost(postId, nohistory = false) {
+export function selectPost(postId) {
     return (dispatch, getState) => {
-        if (postId != null && !nohistory && getState().viewState.get("selectedPostId") !== postId) {
-            history.pushState({selectedPostId: postId}, "");
-        }
         dispatch(_selectPost(postId));
         if (postId != null) {
             dispatch(updatePost(postId));
@@ -72,11 +63,8 @@ export function selectPost(postId, nohistory = false) {
     }
 }
 
-export function selectPicture(postId, nohistory = false) {
+export function selectPicture(postId) {
     return (dispatch, getState) => {
-        if (postId != null && !nohistory && getState().viewState.get("selectedPicturePostId") !== postId) {
-            history.pushState({selectedPicturePostId: postId}, "");
-        }
         dispatch(_selectPicture(postId));
     }
 }
@@ -157,30 +145,21 @@ export function setPermissionDenied(permissionDenied) {
     }
 }
 
-export function showAddPost(visible, nohistory = false) {
+export function showAddPost(visible) {
     return (dispatch, getState) => {
-        if (visible && !nohistory && getState().viewState.getIn(["addPost", "visible"]) !== visible) {
-            history.pushState({addPostVisible: visible}, "");
-        }
         dispatch(_showAddPost(visible));
     }
 }
 
-export function showSettings(visible, nohistory = false) {
+export function showSettings(visible) {
     return (dispatch, getState) => {
-        if (visible && !nohistory && getState().viewState.getIn(["settings", "visible"]) !== visible) {
-            history.pushState({settingsVisible: visible}, "");
-        }
         dispatch(_showSettings(visible));
     }
 }
 
-export function showChannelList(visible, nohistory = false) {
+export function showChannelList(visible) {
     return (dispatch, getState) => {
         if (visible) {
-            if (!nohistory && getState().viewState.getIn(["channelList", "visible"]) !== visible) {
-                history.pushState({channelListVisible: visible}, "");
-            }
             dispatch(getRecommendedChannels());
             dispatch(getFollowedChannelsMeta());
         }

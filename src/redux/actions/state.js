@@ -44,6 +44,14 @@ export function _showChannelList(visible) {
     }
 }
 
+export const REPLACE_VIEW_STATE = 'REPLACE_VIEW_STATE';
+export function replaceViewState(newViewState) {
+    return {
+        type: REPLACE_VIEW_STATE,
+        newViewState,
+    }
+}
+
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export function receivePosts(section, postsBySortType, append = false) {
     let res = {

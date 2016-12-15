@@ -554,7 +554,7 @@ export function getFollowedChannelsMeta() {
     return (dispatch, getState) => {
         let channels = {};
         getState().account.getIn(["config", "followed_channels"]).forEach(c => {
-            let timestamp = getState().viewState.getIn(["channelsLastRead", c]);
+            let timestamp = getState().settings.getIn(["channelsLastRead", c]);
             channels[c] = timestamp === undefined ? 0 : timestamp;
         });
         apiGetFollowedChannelsMeta(getAuth(getState), channels, getState().settings.get("useHomeLocation"))

@@ -15,8 +15,8 @@ export function migrateSettings(storedState, oldVersion) {
 function settings(state = Immutable.Map({
     location: Immutable.Map({latitude: undefined, longitude: undefined, city: undefined, country: "DE"}),
     useBrowserLocation: true,
-    channelsLastRead: Immutable.Map(),
     useHomeLocation: false,
+    channelsLastRead: Immutable.Map(),
 }), action) {
     switch (action.type) {
         case SET_LOCATION:

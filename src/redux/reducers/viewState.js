@@ -30,9 +30,6 @@ export function migrateViewState(storedState, oldVersion) {
     if (oldVersion < 7) {
         storedState.channelList = Immutable.Map({visible: false});
     }
-    if (oldVersion < 8) {
-        storedState.channelsLastRead = Immutable.Map();
-    }
     return storedState;
 }
 
@@ -44,7 +41,6 @@ function viewState(state = Immutable.Map({
     addPost: Immutable.Map({visible: false}),
     settings: Immutable.Map({visible: false}),
     channelList: Immutable.Map({visible: false}),
-    channelsLastRead: Immutable.Map(),
 }), action) {
     switch (action.type) {
         case SELECT_POST:
@@ -67,12 +63,6 @@ function viewState(state = Immutable.Map({
             return state.update("channelList", channelList => channelList.set("visible", action.visible));
         case SET_USE_BROWSER_LOCATION:
             return state.set("useBrowserLocation", action.useBrowserLocation);
-        case RECEIVE_POSTS:
-            if (action.section !== undefined && action.section.startsWith("channel:")) {
-                let channel = action.section.substring(8);
-                return state.setIn(["channelsLastRead", channel], action.receivedAt);
-            }
-            return state;
         default:
             return state
     }

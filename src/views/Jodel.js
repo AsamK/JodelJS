@@ -30,7 +30,7 @@ import {isLocationKnown} from "../redux/reducers";
 
 class Jodel extends Component {
     componentDidMount() {
-        this.timer = setInterval(this.refresh.bind(this), 10000);
+        this.timer = setInterval(this.refresh.bind(this), 20000);
     }
 
     componentWillUnmount() {

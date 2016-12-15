@@ -1,12 +1,12 @@
 import crypto from "crypto";
 import {
     fetchPostsIfNeeded,
-    fetchPost,
     getConfig,
     setDeviceUid,
     setLocation,
     getRecommendedChannels,
-    getFollowedChannelsMeta
+    getFollowedChannelsMeta,
+    updatePost
 } from "./actions/api";
 import {
     invalidatePosts,
@@ -67,7 +67,7 @@ export function selectPost(postId, nohistory = false) {
         }
         dispatch(_selectPost(postId));
         if (postId != null) {
-            dispatch(fetchPost(postId));
+            dispatch(updatePost(postId));
         }
     }
 }

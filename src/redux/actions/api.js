@@ -28,7 +28,8 @@ import {
     apiGiveThanks,
     apiGetPostDetails,
     apiSetHome,
-    apiSetAction
+    apiSetAction,
+    apiGetPost
 } from "../../app/api";
 import {
     receivePost,
@@ -86,7 +87,7 @@ export function downVote(postId, parentPostId) {
 export function giveThanks(postId, parentPostId) {
     return (dispatch, getState) => {
         apiGiveThanks(getAuth(getState), postId)
-            .then(res => dispatch(fetchPost(parentPostId)),
+            .then(res => dispatch(updatePost(parentPostId)),
                 err => handleNetworkErrors(dispatch, getState, err));
     }
 }
@@ -122,7 +123,7 @@ export function fetchPostsIfNeeded(section) {
     return (dispatch, getState) => {
         dispatch(getKarma());
         if (getState().viewState.get("selectedPostId") !== null) {
-            dispatch(fetchPost(getState().viewState.get("selectedPostId")));
+            dispatch(updatePost(getState().viewState.get("selectedPostId")));
         }
 
         if (section === undefined) {
@@ -391,6 +392,23 @@ export function fetchMoreComments() {
     }
 }
 
+export function updatePost(postId) {
+    return (dispatch, getState) => {
+        let post = getPost(getState(), postId);
+        if (post == undefined) {
+            dispatch(fetchPost(postId));
+        } else {
+            let count = post.get("child_count");
+            let children = post.get("children");
+            if (count == undefined || children == undefined || children.count() == 0) {
+                dispatch(fetchPost(postId));
+            } else if (children.count() == count) {
+                dispatch(fetchCompletePost(postId));
+            }
+        }
+    }
+}
+
 export function fetchPost(postId, nextReply) {
     return (dispatch, getState) => {
         apiGetPostDetails(getAuth(getState), postId, true, nextReply, false)
@@ -400,6 +418,16 @@ export function fetchPost(postId, nextReply) {
                     post.child_count = post.children.length + res.body.remaining;
                     post.next_reply = res.body.next;
                     dispatch(receivePost(post, nextReply !== undefined))
+                },
+                err => handleNetworkErrors(dispatch, getState, err));
+    }
+}
+
+export function fetchCompletePost(postId) {
+    return (dispatch, getState) => {
+        apiGetPost(getAuth(getState), postId)
+            .then(res => {
+                    dispatch(receivePost(res.body))
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     }
@@ -431,7 +459,7 @@ export function addPost(text, image, channel, ancestor, color = "FF9908") {
         return apiAddPost(getAuth(getState), channel, ancestor, color, 0.0, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"), text, image, getState().settings.get("useHomeLocation"))
             .then(res => {
                     if (ancestor != undefined) {
-                        dispatch(fetchPost(ancestor));
+                        dispatch(updatePost(ancestor));
                         return null;
                     } else if (channel != undefined) {
                         const section = "channel:" + channel;

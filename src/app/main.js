@@ -87,6 +87,7 @@ if (history.state === null) {
     history.replaceState(store.getState().viewState.toJS(), "");
     store.dispatch(switchPostSection("location"));
 } else {
+    userClickedBack = true;
     store.dispatch(replaceViewState(history.state));
 }
 

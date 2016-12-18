@@ -381,6 +381,7 @@ html, body, #content, .jodel, .postListContainer {
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 10;
   background-color: #eeeeee;
   text-align: center;
 
@@ -404,6 +405,7 @@ html, body, #content, .jodel, .postListContainer {
   top: 0;
   left: 0;
   right: 0;
+  z-index: 1;
   .karma {
     float: right;
     .subText {
@@ -411,16 +413,41 @@ html, body, #content, .jodel, .postListContainer {
     }
   }
 
-  .sectionLink {
-    cursor: pointer;
+  .barEntry {
     padding-top: 1em;
     padding-right: 1.3em;
     padding-bottom: 1em;
     height: 2em;
-    font-size: .5em;
     float: left;
+  }
+  .sectionLink {
+    cursor: pointer;
     &.active {
       background-color: #ccc;
+    }
+  }
+  .menu {
+    cursor: pointer;
+    &:before {
+      content: 'Menu';
+    }
+    &:focus .menuContent {
+      display: block;
+    }
+    .menuContent {
+      display: none;
+      position: absolute;
+      background-color: #eee;
+      list-style-type: none;
+      .menuEntry {
+        padding-top: 1em;
+        padding-right: 1.3em;
+        padding-bottom: 1em;
+        height: 2em;
+        &.active {
+          background-color: #ccc;
+        }
+      }
     }
   }
 }
@@ -474,6 +501,7 @@ a.hashtag {
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 10;
   background-color: black;
 
   img {

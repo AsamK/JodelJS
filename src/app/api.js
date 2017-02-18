@@ -266,6 +266,31 @@ export function apiGetKarma(auth) {
     return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V2 + "/users/karma", {}, {});
 }
 
+/**
+ * Request a link to the verification image captcha
+ * expected data from server: {key: String, image_url: String, image_size: Number}
+ * @param auth
+ * @returns {Promise}
+ */
+export function apiGetImageCaptcha(auth) {
+    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/user/verification/imageCaptcha", {}, {});
+}
+
+/**
+ * Send the user's answer back to the server
+ * expected data from server: {verified: Boolean}
+ * @param auth
+ * @param key{String}
+ * @param answer{Number[]}
+ * @returns {Promise}
+ */
+export function apiSendVerificationAnswer(auth, key, answer) {
+    return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V3 + "/user/verification/imageCaptcha", {}, {
+        answer,
+        key,
+    });
+}
+
 export function apiSetLocation(auth, latitude, longitude, city, country) {
     const data = {
         location: {

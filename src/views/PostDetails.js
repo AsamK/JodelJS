@@ -10,6 +10,7 @@ export default class PostDetails extends Component {
         super(props);
         this._onScroll = this._onScroll.bind(this);
     }
+
     static propTypes = {
         post: React.PropTypes.any.isRequired,
         locationKnown: React.PropTypes.bool.isRequired,
@@ -27,6 +28,7 @@ export default class PostDetails extends Component {
         }
         this._scrollable.scrollTop = 0;
     }
+
     componentDidMount() {
         this._scrollable.addEventListener('scroll', this._onScroll);
         this._scrollAtBottom = false;

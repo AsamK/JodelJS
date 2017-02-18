@@ -5,6 +5,7 @@ import viewState from "./reducers/viewState";
 import account from "./reducers/account";
 import settings from "./reducers/settings";
 import Immutable from "immutable";
+import imageCaptcha from "./reducers/imageCaptcha";
 
 const JodelApp = combineReducers({
     entities,
@@ -12,6 +13,7 @@ const JodelApp = combineReducers({
     viewState,
     account,
     settings,
+    imageCaptcha,
 });
 
 export function getLocation(store) {

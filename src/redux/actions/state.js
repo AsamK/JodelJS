@@ -230,3 +230,12 @@ export function setIsFetching(section, isFetching = true) {
         type: SET_IS_FETCHING,
     }
 }
+export const SET_IMAGE_CAPTCHA = 'SET_IMAGE_CAPTCHA';
+export function setImageCaptcha(key, imageUrl, imageWidth) {
+    return {
+        type: SET_IMAGE_CAPTCHA,
+        key,
+        imageUrl,
+        imageWidth,
+    }
+}

@@ -3,13 +3,16 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import SelectLocation from "./SelectLocation";
+import VerificationImageCaptcha from "./VerificationImageCaptcha";
 import {
     updateLocation,
     _setLocation,
     setUseBrowserLocation,
     setLocation,
     setHome,
-    setUseHomeLocation
+    setUseHomeLocation,
+    sendVerificationAnswer,
+    getImageCaptcha
 } from "../redux/actions";
 import Settings from "../app/settings";
 import {getLocation} from "../redux/reducers";
@@ -42,6 +45,12 @@ class AppSettings extends Component {
         latitude = Math.round(latitude * 100) / 100;
         longitude = Math.round(longitude * 100) / 100;
         this.props.dispatch(_setLocation(latitude, longitude));
+    }
+
+    componentDidMount() {
+        if (!this.props.verified) {
+            this.props.dispatch(getImageCaptcha());
+        }
     }
 
     showHome() {
@@ -79,6 +88,15 @@ class AppSettings extends Component {
                     </button>
                 }
             </div>
+            <div className="accountVerification">
+                {!this.props.verified ?
+                    <VerificationImageCaptcha imageUrl={this.props.imageUrl} imageWidth={this.props.imageWidth}
+                                              key={this.props.imageKey} onFinishedClick={answer => {
+                        this.props.dispatch(sendVerificationAnswer(answer));
+                    }
+                    }/>
+                    : "You're Jodel account has been verified."}
+            </div>
             <button onClick={() => {
                 this.props.dispatch(setLocation(this.props.latitude, this.props.longitude));
                 window.history.back();
@@ -97,8 +115,11 @@ const mapStateToProps = (state) => {
         longitude: loc.get("longitude"),
         homeSet: state.account.getIn(["config", "home_set"]),
         homeName: state.account.getIn(["config", "home_name"]),
+        verified: state.account.getIn(["config", "verified"]),
         useBrowserLocation: state.settings.get("useBrowserLocation"),
         useHomeLocation: state.settings.get("useHomeLocation"),
+        imageUrl: state.imageCaptcha.getIn(["image", "url"]),
+        imageWidth: state.imageCaptcha.getIn(["image", "width"]),
     }
 };
 

@@ -29,7 +29,9 @@ import {
     apiGetPostDetails,
     apiSetHome,
     apiSetAction,
-    apiGetPost
+    apiGetPost,
+    apiGetImageCaptcha,
+    apiSendVerificationAnswer
 } from "../../app/api";
 import {
     receivePost,
@@ -44,9 +46,10 @@ import {
     pinnedPost,
     setRecommendedChannels,
     setChannelsMeta,
-    invalidatePosts
+    invalidatePosts,
+    setImageCaptcha
 } from "./state";
-import {setToken, setPermissionDenied, updatePosts} from "../actions";
+import {setToken, setPermissionDenied, updatePosts, showSettings} from "../actions";
 import {getLocation} from "../reducers";
 import {getPost} from "../reducers/entities";
 
@@ -56,6 +59,9 @@ function handleNetworkErrors(dispatch, getState, err) {
     } else if (err.status === 401) {
         console.error("Permission denied, reregistering…");
         dispatch(setPermissionDenied(true));
+    } else if (err.status === 478) {
+        console.error("Request error: Account probably not verified " + err.status + " " + err.message + ": " + err.response.text);
+        dispatch(showSettings(true));
     } else {
         console.error("Request error: " + err.status + " " + err.message + ": " + err.response.text)
     }
@@ -580,6 +586,30 @@ export function followChannel(channel, follow = true) {
         fn(getAuth(getState), channel)
             .then(res => {
                     dispatch(getConfig()); // TODO
+                },
+                err => handleNetworkErrors(dispatch, getState, err));
+    }
+}
+
+export function getImageCaptcha() {
+    return (dispatch, getState) => {
+        apiGetImageCaptcha(getAuth(getState))
+            .then(res => {
+                    dispatch(setImageCaptcha(res.body.key, res.body.image_url, res.body.image_size));
+                },
+                err => handleNetworkErrors(dispatch, getState, err));
+    }
+}
+
+export function sendVerificationAnswer(answer) {
+    return (dispatch, getState) => {
+        apiSendVerificationAnswer(getAuth(getState), getState().imageCaptcha.get("key"), answer)
+            .then(res => {
+                    dispatch(getConfig());
+                    dispatch(setImageCaptcha(null, null, 0));
+                    if (!res.body.verified) {
+                        dispatch(getImageCaptcha());
+                    }
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     }

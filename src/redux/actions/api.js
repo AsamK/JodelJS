@@ -31,7 +31,8 @@ import {
     apiSetAction,
     apiGetPost,
     apiGetImageCaptcha,
-    apiSendVerificationAnswer
+    apiSendVerificationAnswer,
+    apiDeleteHome
 } from "../../app/api";
 import {
     receivePost,
@@ -549,6 +550,20 @@ export function setHome(latitude, longitude, city = undefined, country = "DE") {
         }
     }
 }
+
+export function deleteHome() {
+    return (dispatch, getState) => {
+        let auth = getAuth(getState);
+        if (auth !== undefined) {
+            apiDeleteHome(auth)
+                .then(() => dispatch(getConfig()))
+                .catch(err => {
+                    handleNetworkErrors(dispatch, getState, err);
+                });
+        }
+    }
+}
+
 
 export function getRecommendedChannels() {
     return (dispatch, getState) => {

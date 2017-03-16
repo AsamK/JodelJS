@@ -323,6 +323,10 @@ export function apiSetHome(auth, latitude, longitude, city, country) {
     return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V3 + "/user/home", {}, data);
 }
 
+export function apiDeleteHome(auth) {
+    return jodelRequest(auth, "DELETE", Settings.API_SERVER + API_PATH_V3 + "/user/home", {}, {});
+}
+
 // Possible actions: SetHomeStarted, SetHomeCompleted
 export function apiSetAction(auth, action) {
     const data = {

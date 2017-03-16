@@ -12,7 +12,8 @@ import {
     setHome,
     setUseHomeLocation,
     sendVerificationAnswer,
-    getImageCaptcha
+    getImageCaptcha,
+    deleteHome
 } from "../redux/actions";
 import Settings from "../app/settings";
 import {getLocation} from "../redux/reducers";
@@ -74,12 +75,22 @@ class AppSettings extends Component {
             />
             <div>
                 {this.props.homeSet ?
-                    <label>
-                        <input type="checkbox" className="homeLink"
-                               onChange={this.showHome} checked={this.props.useHomeLocation}>
-                        </input>
-                        Heimat ({this.props.homeName}) verwenden
-                    </label>
+                    <div>
+                        <label>
+                            <input type="checkbox" className="homeLink"
+                                   onChange={this.showHome} checked={this.props.useHomeLocation}>
+                            </input>
+                            Heimat ({this.props.homeName}) verwenden
+                        </label>
+                        {this.props.homeClearAllowed ?
+                            <button onClick={() => {
+                                this.props.dispatch(deleteHome());
+                            }}>
+                                Heimat löschen (nur einmal möglich)
+                            </button>
+                            : ""
+                        }
+                    </div>
                     :
                     <button onClick={() => {
                         this.props.dispatch(setHome(this.props.latitude, this.props.longitude));
@@ -115,6 +126,7 @@ const mapStateToProps = (state) => {
         longitude: loc.get("longitude"),
         homeSet: state.account.getIn(["config", "home_set"]),
         homeName: state.account.getIn(["config", "home_name"]),
+        homeClearAllowed: state.account.getIn(["config", "home_clear_allowed"]),
         verified: state.account.getIn(["config", "verified"]),
         useBrowserLocation: state.settings.get("useBrowserLocation"),
         useHomeLocation: state.settings.get("useHomeLocation"),

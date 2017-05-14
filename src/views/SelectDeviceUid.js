@@ -1,4 +1,5 @@
 import React, {PureComponent} from "react";
+import PropTypes from 'prop-types';
 
 const CREATE_NEW = "CREATE_NEW";
 const USE_EXISTING = "USE_EXISTING";
@@ -13,8 +14,8 @@ export default class SelectDeviceUid extends PureComponent {
     }
 
     static propTypes = {
-        deviceUid: React.PropTypes.string,
-        setDeviceUid: React.PropTypes.func.isRequired,
+        deviceUid: PropTypes.string,
+        setDeviceUid: PropTypes.func.isRequired,
     };
 
     componentDidMount() {

@@ -4,6 +4,7 @@ import React, {Component} from "react";
 import Post from "./Post";
 import PostList from "./PostList";
 import AddButton from "./AddButton";
+import PropTypes from 'prop-types';
 
 export default class PostDetails extends Component {
     constructor(props) {
@@ -12,11 +13,11 @@ export default class PostDetails extends Component {
     }
 
     static propTypes = {
-        post: React.PropTypes.any.isRequired,
-        locationKnown: React.PropTypes.bool.isRequired,
-        onAddClick: React.PropTypes.func.isRequired,
-        onPostClick: React.PropTypes.func.isRequired,
-        onLoadMore: React.PropTypes.func.isRequired,
+        post: PropTypes.any.isRequired,
+        locationKnown: PropTypes.bool.isRequired,
+        onAddClick: PropTypes.func.isRequired,
+        onPostClick: PropTypes.func.isRequired,
+        onLoadMore: PropTypes.func.isRequired,
     };
 
     componentDidUpdate(prevProps, prevState) {

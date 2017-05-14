@@ -2,12 +2,13 @@
 
 import React, {Component} from "react";
 import classnames from "classnames";
+import PropTypes from 'prop-types';
 
 export default class Location extends Component {
     static propTypes = {
-        distance: React.PropTypes.number.isRequired,
-        location: React.PropTypes.string.isRequired,
-        fromHome: React.PropTypes.bool,
+        distance: PropTypes.number.isRequired,
+        location: PropTypes.string.isRequired,
+        fromHome: PropTypes.bool,
     };
 
     render() {

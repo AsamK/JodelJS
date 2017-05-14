@@ -2,6 +2,7 @@
 
 import React, {Component} from "react";
 import classnames from "classnames";
+import PropTypes from 'prop-types';
 
 export default class ChannelList extends Component {
     constructor(props) {
@@ -9,10 +10,10 @@ export default class ChannelList extends Component {
     }
 
     static propTypes = {
-        channels: React.PropTypes.array.isRequired,
-        recommendedChannels: React.PropTypes.array.isRequired,
-        localChannels: React.PropTypes.array.isRequired,
-        onChannelClick: React.PropTypes.func.isRequired,
+        channels: PropTypes.array.isRequired,
+        recommendedChannels: PropTypes.array.isRequired,
+        localChannels: PropTypes.array.isRequired,
+        onChannelClick: PropTypes.func.isRequired,
     };
 
     componentDidMount() {

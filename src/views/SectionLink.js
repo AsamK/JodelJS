@@ -1,9 +1,10 @@
 'use strict';
 
-import React, {PropTypes} from "react";
+import React from "react";
 import {connect} from "react-redux";
 import {switchPostSection} from "../redux/actions";
 import classnames from "classnames";
+import PropTypes from 'prop-types';
 
 const SectionLink = ({section, active, onClick}) => {
     let name;

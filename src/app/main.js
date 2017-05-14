@@ -1,7 +1,7 @@
 'use strict';
 require("babel-polyfill");
 
-import React, {Component} from "react";
+import React from "react";
 import {
     replaceViewState,
     switchPostSection,

@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {addPost, switchPostSection} from "../redux/actions";
 import classnames from "classnames";
 import ColorPicker from "./ColorPicker";
+import PropTypes from 'prop-types';
 
 export class AddPost extends PureComponent {
     constructor(props) {
@@ -19,9 +20,9 @@ export class AddPost extends PureComponent {
     }
 
     static propTypes = {
-        ancestor: React.PropTypes.string,
-        channel: React.PropTypes.string,
-        visible: React.PropTypes.bool,
+        ancestor: PropTypes.string,
+        channel: PropTypes.string,
+        visible: PropTypes.bool,
     };
 
     handleChangeImage(event) {

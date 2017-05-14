@@ -9,6 +9,7 @@ import Location from "./Location";
 import Message from "./Message";
 import {upVote, downVote, switchPostSection, selectPicture, deletePost, giveThanks} from "../redux/actions";
 import classnames from "classnames";
+import PropTypes from 'prop-types';
 
 class Post extends PureComponent {
     constructor(props) {
@@ -19,10 +20,10 @@ class Post extends PureComponent {
     }
 
     static propTypes = {
-        post: React.PropTypes.any.isRequired,
-        parentPostId: React.PropTypes.string,
-        author: React.PropTypes.string,
-        onPostClick: React.PropTypes.func.isRequired
+        post: PropTypes.any.isRequired,
+        parentPostId: PropTypes.string,
+        author: PropTypes.string,
+        onPostClick: PropTypes.func.isRequired
     };
 
     upvote(e) {

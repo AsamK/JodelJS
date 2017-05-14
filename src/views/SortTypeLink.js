@@ -1,9 +1,10 @@
 'use strict';
 
-import React, {PropTypes} from "react";
+import React from "react";
 import {connect} from "react-redux";
 import {switchPostListSortType} from "../redux/actions";
 import classnames from "classnames";
+import PropTypes from 'prop-types';
 
 const SortTypeLink = ({sortType, active, onClick}) => (
     <div className={classnames("sortType", sortType.toLowerCase(), {active})} onClick={onClick}></div>

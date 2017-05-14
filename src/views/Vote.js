@@ -2,13 +2,14 @@
 
 import React, {Component} from "react";
 import classnames from "classnames";
+import PropTypes from 'prop-types';
 
 export default class Vote extends Component {
     static propTypes = {
-        vote_count: React.PropTypes.number.isRequired,
-        voted: React.PropTypes.string.isRequired,
-        upvote: React.PropTypes.func,
-        downvote: React.PropTypes.func
+        vote_count: PropTypes.number.isRequired,
+        voted: PropTypes.string.isRequired,
+        upvote: PropTypes.func,
+        downvote: PropTypes.func
     };
 
     render() {

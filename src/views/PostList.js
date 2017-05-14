@@ -2,6 +2,7 @@
 
 import React, {Component} from "react";
 import Post from "./Post";
+import PropTypes from 'prop-types';
 
 export default class PostList extends Component {
     constructor(props) {
@@ -11,13 +12,13 @@ export default class PostList extends Component {
     }
 
     static propTypes = {
-        posts: React.PropTypes.array.isRequired,
-        sortType: React.PropTypes.string,
-        section: React.PropTypes.string,
-        lastUpdated: React.PropTypes.number,
-        parentPost: React.PropTypes.any,
-        onPostClick: React.PropTypes.func.isRequired,
-        onLoadMore: React.PropTypes.func
+        posts: PropTypes.array.isRequired,
+        sortType: PropTypes.string,
+        section: PropTypes.string,
+        lastUpdated: PropTypes.number,
+        parentPost: PropTypes.any,
+        onPostClick: PropTypes.func.isRequired,
+        onLoadMore: PropTypes.func
     };
 
     _onPostClick(post) {

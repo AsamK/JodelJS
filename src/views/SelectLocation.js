@@ -1,4 +1,5 @@
 import React, {PureComponent} from "react";
+import PropTypes from 'prop-types';
 
 const USE_BROWSER_LOCATION = "USE_BROWSER_LOCATION";
 const MANUAL = "MANUAL";
@@ -12,11 +13,11 @@ export default class SelectLocation extends PureComponent {
     }
 
     static propTypes = {
-        latitude: React.PropTypes.number,
-        longitude: React.PropTypes.number,
-        useBrowserLocation: React.PropTypes.bool.isRequired,
-        onChange: React.PropTypes.func.isRequired,
-        onLocationRequested: React.PropTypes.func.isRequired,
+        latitude: PropTypes.number,
+        longitude: PropTypes.number,
+        useBrowserLocation: PropTypes.bool.isRequired,
+        onChange: PropTypes.func.isRequired,
+        onLocationRequested: PropTypes.func.isRequired,
     };
 
     handleChangeLatitude(event) {

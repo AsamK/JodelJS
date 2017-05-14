@@ -1,5 +1,6 @@
 import React, {PureComponent} from "react";
 import Settings from "../app/settings";
+import PropTypes from 'prop-types';
 
 export default class ColorPicker extends PureComponent {
     constructor(props) {
@@ -7,8 +8,8 @@ export default class ColorPicker extends PureComponent {
     }
 
     static propTypes = {
-        color: React.PropTypes.string,
-        onChange: React.PropTypes.func.isRequired,
+        color: PropTypes.string,
+        onChange: PropTypes.func.isRequired,
     };
 
     render() {

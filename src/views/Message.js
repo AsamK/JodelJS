@@ -1,12 +1,13 @@
 'use strict';
 
 import React, {Component} from "react";
+import PropTypes from 'prop-types';
 
 export default class Message extends Component {
     static propTypes = {
-        message: React.PropTypes.string.isRequired,
-        onAtClick: React.PropTypes.func,
-        onHashtagClick: React.PropTypes.func,
+        message: PropTypes.string.isRequired,
+        onAtClick: PropTypes.func,
+        onHashtagClick: PropTypes.func,
     };
 
     render() {

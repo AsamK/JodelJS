@@ -1,10 +1,11 @@
 'use strict';
 
 import React, {Component} from "react";
+import PropTypes from 'prop-types';
 
 export default class Time extends Component {
     static propTypes = {
-        time: React.PropTypes.string.isRequired,
+        time: PropTypes.string.isRequired,
     };
 
     componentDidMount() {

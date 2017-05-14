@@ -1,9 +1,10 @@
-import React, {PropTypes} from "react";
+import React from "react";
 import {connect} from "react-redux";
 import BackButton from "./BackButton";
 import {showChannelList, followChannel} from "../redux/actions";
 import classnames from "classnames";
 import {getChannel} from "../redux/reducers/entities";
+import PropTypes from 'prop-types';
 
 let ChannelTopBar = ({onBackClick, onFollowClick, channel, followerCount, followedName}) => {
     let isFollowing = followedName !== null;

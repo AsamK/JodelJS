@@ -1,6 +1,7 @@
 'use strict';
 
 import React, {Component} from "react";
+import PropTypes from 'prop-types';
 
 export default class VerificationImageCaptcha extends Component {
     constructor(props) {
@@ -11,9 +12,9 @@ export default class VerificationImageCaptcha extends Component {
     }
 
     static propTypes = {
-        imageUrl: React.PropTypes.string.isRequired,
-        imageWidth: React.PropTypes.number.isRequired,
-        onFinishedClick: React.PropTypes.func.isRequired,
+        imageUrl: PropTypes.string.isRequired,
+        imageWidth: PropTypes.number.isRequired,
+        onFinishedClick: PropTypes.func.isRequired,
     };
 
     onImageClick = (e) => {

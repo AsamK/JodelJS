@@ -1,8 +1,9 @@
-import React, {PropTypes} from "react";
+import React from "react";
 import {connect} from "react-redux";
 import BackButton from "./BackButton";
 import {selectPost, pin} from "../redux/actions";
 import classnames from "classnames";
+import PropTypes from 'prop-types';
 
 let PostTopBar = ({onBackClick, onPinClick, post}) => {
     let pinned = post.has("pinned") && post.get("pinned");

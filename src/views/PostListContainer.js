@@ -8,6 +8,7 @@ import AddButton from "./AddButton";
 import {connect} from "react-redux";
 import {getPost} from "../redux/reducers/entities";
 import {isLocationKnown} from "../redux/reducers";
+import PropTypes from 'prop-types';
 
 class PostListContainer extends Component {
     constructor(props) {
@@ -15,10 +16,10 @@ class PostListContainer extends Component {
     }
 
     static propTypes = {
-        onPostClick: React.PropTypes.func.isRequired,
-        onRefresh: React.PropTypes.func.isRequired,
-        onAddClick: React.PropTypes.func.isRequired,
-        onLoadMore: React.PropTypes.func.isRequired,
+        onPostClick: PropTypes.func.isRequired,
+        onRefresh: PropTypes.func.isRequired,
+        onAddClick: PropTypes.func.isRequired,
+        onLoadMore: PropTypes.func.isRequired,
     };
 
     render() {

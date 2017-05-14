@@ -1,56 +1,57 @@
 import {
-    apiGetAccessToken,
-    apiGetPostsCombo,
-    apiUpVote,
-    apiDownVote,
     apiAddPost,
-    apiGetPostsMineCombo,
-    apiGetPosts,
+    apiDeleteHome,
+    apiDeletePost,
+    apiDownVote,
+    apiFollowChannel,
+    apiGetAccessToken,
+    apiGetConfig,
+    apiGetFollowedChannelsMeta,
+    apiGetImageCaptcha,
     apiGetKarma,
+    apiGetNotifications,
+    apiGetPost,
+    apiGetPostDetails,
+    apiGetPosts,
+    apiGetPostsChannel,
+    apiGetPostsChannelCombo,
+    apiGetPostsCombo,
+    apiGetPostsHashtag,
+    apiGetPostsHashtagCombo,
+    apiGetPostsMine,
+    apiGetPostsMineCombo,
+    apiGetPostsMinePinned,
     apiGetPostsMineReplies,
     apiGetPostsMineVotes,
-    apiGetConfig,
-    apiGetPostsMine,
-    apiRefreshAccessToken,
-    apiDeletePost,
-    apiSetLocation,
-    apiGetPostsChannelCombo,
-    apiGetPostsChannel,
-    apiPin,
-    apiUnpin,
-    apiGetPostsMinePinned,
     apiGetRecommendedChannels,
-    apiFollowChannel,
-    apiUnfollowChannel,
-    apiGetFollowedChannelsMeta,
-    apiGetPostsHashtagCombo,
-    apiGetPostsHashtag,
     apiGiveThanks,
-    apiGetPostDetails,
-    apiSetHome,
-    apiSetAction,
-    apiGetPost,
-    apiGetImageCaptcha,
+    apiPin,
+    apiRefreshAccessToken,
     apiSendVerificationAnswer,
-    apiDeleteHome
+    apiSetAction,
+    apiSetHome,
+    apiSetLocation,
+    apiUnfollowChannel,
+    apiUnpin,
+    apiUpVote
 } from "../../app/api";
 import {
-    receivePost,
-    setIsFetching,
-    receivePosts,
-    _setKarma,
     _setConfig,
-    showAddPost,
     _setDeviceUID,
-    PostListSortTypes,
+    _setKarma,
     _setLocation,
-    pinnedPost,
-    setRecommendedChannels,
-    setChannelsMeta,
     invalidatePosts,
-    setImageCaptcha
+    pinnedPost,
+    PostListSortTypes,
+    receivePost,
+    receivePosts,
+    setChannelsMeta,
+    setImageCaptcha,
+    setIsFetching,
+    setRecommendedChannels,
+    showAddPost
 } from "./state";
-import {setToken, setPermissionDenied, updatePosts, showSettings} from "../actions";
+import {setPermissionDenied, setToken, showSettings, updatePosts} from "../actions";
 import {getLocation} from "../reducers";
 import {getPost} from "../reducers/entities";
 
@@ -78,15 +79,22 @@ export function deletePost(postId) {
 export function upVote(postId, parentPostId) {
     return (dispatch, getState) => {
         apiUpVote(getAuth(getState), postId)
-            .then(res => dispatch(receivePost(res.body.post)),
-                err => handleNetworkErrors(dispatch, getState, err));
+            .then(res => {
+                    dispatch(receivePost(res.body.post));
+                    dispatch(getKarma());
+                },
+                err => handleNetworkErrors(dispatch, getState, err)
+            );
     }
 }
 
 export function downVote(postId, parentPostId) {
     return (dispatch, getState) => {
         apiDownVote(getAuth(getState), postId)
-            .then(res => dispatch(receivePost(res.body.post)),
+            .then(res => {
+                    dispatch(receivePost(res.body.post));
+                    dispatch(getKarma());
+                },
                 err => handleNetworkErrors(dispatch, getState, err));
     }
 }
@@ -128,7 +136,6 @@ function shouldFetchPosts(section, state) {
 
 export function fetchPostsIfNeeded(section) {
     return (dispatch, getState) => {
-        dispatch(getKarma());
         if (getState().viewState.get("selectedPostId") !== null) {
             dispatch(updatePost(getState().viewState.get("selectedPostId")));
         }
@@ -414,7 +421,8 @@ export function updatePost(postId) {
             if (count == undefined || children == undefined || children.count() == 0) {
                 dispatch(fetchPost(postId));
             } else if (children.count() == count) {
-                dispatch(fetchCompletePost(postId));
+                //dispatch(fetchCompletePost(postId));
+                // TODO recursive fetch all children
             }
         }
     }
@@ -434,6 +442,11 @@ export function fetchPost(postId, nextReply) {
     }
 }
 
+/**
+ * @deprecated returned post doesn't contain recent features
+ * @param postId
+ * @returns {function(*=, *=)}
+ */
 export function fetchCompletePost(postId) {
     return (dispatch, getState) => {
         apiGetPost(getAuth(getState), postId)
@@ -537,7 +550,6 @@ export function setHome(latitude, longitude, city = undefined, country = "DE") {
     return (dispatch, getState) => {
         latitude = Math.round(latitude * 100) / 100;
         longitude = Math.round(longitude * 100) / 100;
-        //dispatch(_setLocation(latitude, longitude, city, country));
         let auth = getAuth(getState);
         if (auth !== undefined) {
             apiSetAction(auth, "SetHomeStarted")
@@ -625,6 +637,17 @@ export function sendVerificationAnswer(answer) {
                     if (!res.body.verified) {
                         dispatch(getImageCaptcha());
                     }
+                },
+                err => handleNetworkErrors(dispatch, getState, err));
+    }
+}
+
+
+export function getNotifications() {
+    return (dispatch, getState) => {
+        apiGetNotifications(getAuth(getState))
+            .then(res => {
+                    console.log(res.body);
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     }

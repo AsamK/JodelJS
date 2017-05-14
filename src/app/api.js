@@ -327,7 +327,7 @@ export function apiDeleteHome(auth) {
     return jodelRequest(auth, "DELETE", Settings.API_SERVER + API_PATH_V3 + "/user/home", {}, {});
 }
 
-// Possible actions: SetHomeStarted, SetHomeCompleted
+// Possible actions: SetHomeStarted, SetHomeCompleted, NewestFeedSelected, MostCommentedFeedSelected
 export function apiSetAction(auth, action) {
     const data = {
         action,
@@ -377,4 +377,47 @@ export function apiRefreshAccessToken(auth, distinctId, refreshToken) {
         "refresh_token": refreshToken,
     };
     return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V2 + "/users/refreshToken", {}, data);
+}
+
+export function apiIsNotificationAvailable(auth) {
+    return jodelRequest(auth, "GET", Settings.API_SERVER + API_PATH_V3 + "/user/notifications/new", {}, {});
+}
+
+export function apiGetNotifications(auth) {
+    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V3 + "/user/notifications", {}, {});
+}
+
+/**
+ * Set the user's language on the server
+ * @param auth
+ * @param language Language name in ISO 639-1 format, e.g. 'de'
+ * @returns {*}
+ */
+export function apiSetUserLanguage(auth, language) {
+    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V3 + "/user/language", {}, {language});
+}
+
+/**
+ * Set the user's language on the server
+ * @param {string} auth
+ * @param {string} userType User profile type, e.g. student
+ * @param {Number} [age] User's age
+ * @returns {*}
+ */
+export function apiSetUserProfile(auth, userType, age = 0) {
+    const data = {
+        age,
+        user_type: userType,
+    };
+    return jodelRequest(auth, "PUT", Settings.API_SERVER + API_PATH_V3 + "/user/profile", {}, data);
+}
+
+/**
+ * Share a post, the server generates a url that can be shared.
+ * @param {string} auth
+ * @param {number} postId The postId you want to share
+ * @returns {*} a server generated url
+ */
+export function apiSharePost(auth, postId) {
+    return jodelRequest(auth, "POST", Settings.API_SERVER + API_PATH_V3 + "/posts/" + postId + "/share", {}, {});
 }

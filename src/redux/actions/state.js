@@ -9,7 +9,7 @@ export function _switchPostListSortType(sortType) {
     return {
         type: SWITCH_POST_LIST_SORT_TYPE,
         sortType
-    }
+    };
 }
 
 export const SWITCH_POST_SECTION = 'SWITCH_POST_SECTION';
@@ -17,7 +17,7 @@ export function _switchPostSection(section) {
     return {
         type: SWITCH_POST_SECTION,
         section,
-    }
+    };
 }
 
 export const SHOW_ADD_POST = 'SHOW_ADD_POST';
@@ -25,7 +25,7 @@ export function _showAddPost(visible) {
     return {
         type: SHOW_ADD_POST,
         visible,
-    }
+    };
 }
 
 export const SHOW_SETTINGS = 'SHOW_SETTINGS';
@@ -33,7 +33,7 @@ export function _showSettings(visible) {
     return {
         type: SHOW_SETTINGS,
         visible,
-    }
+    };
 }
 
 export const SHOW_CHANNEL_LIST = 'SHOW_CHANNEL_LIST';
@@ -41,7 +41,7 @@ export function _showChannelList(visible) {
     return {
         type: SHOW_CHANNEL_LIST,
         visible,
-    }
+    };
 }
 
 export const REPLACE_VIEW_STATE = 'REPLACE_VIEW_STATE';
@@ -49,7 +49,7 @@ export function replaceViewState(newViewState) {
     return {
         type: REPLACE_VIEW_STATE,
         newViewState,
-    }
+    };
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
@@ -93,7 +93,7 @@ export function receivePost(post, append = false) {
         entities: [post],
         receivedAt: Date.now(),
         append,
-    }
+    };
 }
 
 export const PINNED_POST = 'PINNED_POST';
@@ -103,7 +103,7 @@ export function pinnedPost(postId, pinned, pinCount) {
         postId,
         pinned,
         pinCount,
-    }
+    };
 }
 
 export const SELECT_POST = 'SELECT_POST';
@@ -111,7 +111,7 @@ export function _selectPost(postId) {
     return {
         type: SELECT_POST,
         postId: postId,
-    }
+    };
 }
 
 export const SELECT_PICTURE = 'SELECT_PICTURE';
@@ -119,7 +119,7 @@ export function _selectPicture(postId) {
     return {
         type: SELECT_PICTURE,
         postId: postId,
-    }
+    };
 }
 
 
@@ -129,7 +129,7 @@ export function _setKarma(karma) {
         type: SET_KARMA,
         karma,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export const SET_CONFIG = 'SET_CONFIG';
@@ -138,7 +138,7 @@ export function _setConfig(config) {
         type: SET_CONFIG,
         config,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export const SET_RECOMMENDED_CHANNELS = 'SET_RECOMMENDED_CHANNELS';
@@ -148,7 +148,7 @@ export function setRecommendedChannels(recommendedChannels, localChannels) {
         recommendedChannels,
         localChannels,
         entitiesChannel: [].concat(recommendedChannels).concat(localChannels),
-    }
+    };
 }
 
 export const SET_CHANNELS_META = 'SET_CHANNELS_META';
@@ -156,7 +156,7 @@ export function setChannelsMeta(channels) {
     return {
         type: SET_CHANNELS_META,
         entitiesChannel: channels,
-    }
+    };
 }
 
 export const SET_DEVICE_UID = 'SET_DEVICE_UID';
@@ -164,7 +164,7 @@ export function _setDeviceUID(deviceUid) {
     return {
         type: SET_DEVICE_UID,
         deviceUid,
-    }
+    };
 }
 
 export const SET_PERMISSION_DENIED = 'SET_PERMISSION_DENIED';
@@ -172,7 +172,7 @@ export function _setPermissionDenied(permissionDenied) {
     return {
         type: SET_PERMISSION_DENIED,
         permissionDenied,
-    }
+    };
 }
 
 export const SET_TOKEN = 'SET_TOKEN';
@@ -184,16 +184,16 @@ export function _setToken(distinctId, accessToken, refreshToken, expirationDate,
         refreshToken,
         expirationDate,
         tokenType,
-    }
+    };
 }
 
 export const SET_LOCATION = 'SET_LOCATION';
-export function _setLocation(latitude, longitude, city, country = "DE") {
+export function _setLocation(latitude, longitude, city, country = 'DE') {
     return {
         type: SET_LOCATION,
         location: {latitude, longitude, city, country},
         receivedAt: Date.now()
-    }
+    };
 }
 
 export const SET_USE_BROWSER_LOCATION = 'SET_USE_BROWSER_LOCATION';
@@ -202,7 +202,7 @@ export function setUseBrowserLocation(useBrowserLocation) {
         type: SET_USE_BROWSER_LOCATION,
         useBrowserLocation,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export const SET_USE_HOME_LOCATION = 'SET_USE_HOME_LOCATION';
@@ -211,7 +211,7 @@ export function setUseHomeLocation(useHomeLocation) {
         type: SET_USE_HOME_LOCATION,
         useHomeLocation,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
@@ -219,7 +219,7 @@ export function invalidatePosts(section) {
     return {
         section,
         type: INVALIDATE_POSTS,
-    }
+    };
 }
 
 export const SET_IS_FETCHING = 'SET_IS_FETCHING';
@@ -228,7 +228,7 @@ export function setIsFetching(section, isFetching = true) {
         section,
         isFetching,
         type: SET_IS_FETCHING,
-    }
+    };
 }
 export const SET_IMAGE_CAPTCHA = 'SET_IMAGE_CAPTCHA';
 export function setImageCaptcha(key, imageUrl, imageWidth) {
@@ -237,5 +237,5 @@ export function setImageCaptcha(key, imageUrl, imageWidth) {
         key,
         imageUrl,
         imageWidth,
-    }
+    };
 }

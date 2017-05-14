@@ -1,13 +1,13 @@
 'use strict';
 
-import React from "react";
-import {connect} from "react-redux";
-import {switchPostListSortType} from "../redux/actions";
-import classnames from "classnames";
+import React from 'react';
+import {connect} from 'react-redux';
+import {switchPostListSortType} from '../redux/actions';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const SortTypeLink = ({sortType, active, onClick}) => (
-    <div className={classnames("sortType", sortType.toLowerCase(), {active})} onClick={onClick}></div>
+    <div className={classnames('sortType', sortType.toLowerCase(), {active})} onClick={onClick}></div>
 );
 
 SortTypeLink.propTypes = {
@@ -17,16 +17,16 @@ SortTypeLink.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        active: ownProps.sortType === state.viewState.get("postListSortType")
-    }
+        active: ownProps.sortType === state.viewState.get('postListSortType')
+    };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onClick: () => {
-            dispatch(switchPostListSortType(ownProps.sortType))
+            dispatch(switchPostListSortType(ownProps.sortType));
         }
-    }
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SortTypeLink);

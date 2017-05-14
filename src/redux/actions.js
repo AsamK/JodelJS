@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from 'crypto';
 import {
     fetchPostsIfNeeded,
     getConfig,
@@ -7,7 +7,7 @@ import {
     getRecommendedChannels,
     getFollowedChannelsMeta,
     updatePost
-} from "./actions/api";
+} from './actions/api';
 import {
     invalidatePosts,
     _switchPostListSortType,
@@ -20,14 +20,14 @@ import {
     _selectPicture,
     _showSettings,
     _showAddPost
-} from "./actions/state";
-import {getLocation} from "./reducers";
-export * from "./actions/state";
-export * from "./actions/api";
+} from './actions/state';
+import {getLocation} from './reducers';
+export * from './actions/state';
+export * from './actions/api';
 
 export function switchPostSection(section) {
     return (dispatch, getState) => {
-        if (getState().viewState.get("postSection") !== section) {
+        if (getState().viewState.get('postSection') !== section) {
             dispatch(switchPostListSortType(PostListSortTypes.RECENT));
             dispatch(_switchPostSection(section));
         }
@@ -35,23 +35,23 @@ export function switchPostSection(section) {
         dispatch(_showChannelList(false));
         dispatch(invalidatePosts(section));
         dispatch(fetchPostsIfNeeded(section));
-    }
+    };
 }
 
 export function switchPostListSortType(sortType) {
     return (dispatch, getState) => {
-        if (getState().viewState.get("postListSortType") !== sortType) {
+        if (getState().viewState.get('postListSortType') !== sortType) {
             dispatch(_switchPostListSortType(sortType));
         }
-    }
+    };
 }
 
 export function updatePosts() {
     return (dispatch, getState) => {
-        const section = getState().viewState.get("postSection");
+        const section = getState().viewState.get('postSection');
         dispatch(invalidatePosts(section));
         dispatch(fetchPostsIfNeeded(section));
-    }
+    };
 }
 
 export function selectPost(postId) {
@@ -60,41 +60,41 @@ export function selectPost(postId) {
         if (postId != null) {
             dispatch(updatePost(postId));
         }
-    }
+    };
 }
 
 export function selectPicture(postId) {
     return (dispatch, getState) => {
         dispatch(_selectPicture(postId));
-    }
+    };
 }
 
 export function updateLocation() {
     return (dispatch, getState) => {
-        if (getState().settings.get("useBrowserLocation") && "geolocation" in navigator) {
+        if (getState().settings.get('useBrowserLocation') && 'geolocation' in navigator) {
             /* geolocation is available */
             navigator.geolocation.getCurrentPosition(position => {
                 let loc = getLocation(getState());
-                if (loc.get("latitude") !== position.coords.latitude ||
-                    loc.get("longitude") !== position.coords.longitude) {
+                if (loc.get('latitude') !== position.coords.latitude ||
+                    loc.get('longitude') !== position.coords.longitude) {
                     dispatch(setLocation(position.coords.latitude, position.coords.longitude));
-                    if (getState().account.getIn(["token", "access"]) !== undefined) {
+                    if (getState().account.getIn(['token', 'access']) !== undefined) {
                         dispatch(updatePosts());
                     }
                 }
             }, err => {
                 // TODO do something useful
                 switch (err.code) {
-                    case err.PERMISSION_DENIED:
-                        break;
-                    case err.POSITION_UNAVAILABLE:
-                        break;
-                    case err.TIMEOUT:
-                        break;
+                case err.PERMISSION_DENIED:
+                    break;
+                case err.POSITION_UNAVAILABLE:
+                    break;
+                case err.TIMEOUT:
+                    break;
                 }
             });
         }
-    }
+    };
 }
 
 export function setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType) {
@@ -103,7 +103,7 @@ export function setToken(distinctId, accessToken, refreshToken, expirationDate, 
         dispatch(_setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType));
         dispatch(getConfig());
         dispatch(updatePosts());
-    }
+    };
 }
 
 // Gibt eine Zufallszahl zwischen min (inklusive) und max (exklusive) zurück
@@ -131,30 +131,30 @@ export function createNewAccount() {
     return (dispatch, getState) => {
         const deviceUid = randomValueHex(32);
         dispatch(setDeviceUid(deviceUid));
-    }
+    };
 }
 
 export function setPermissionDenied(permissionDenied) {
     return (dispatch, getState) => {
         let account = getState().account;
-        if (account.get("deviceUid") !== undefined && permissionDenied && !account.get("permissionDenied")) {
+        if (account.get('deviceUid') !== undefined && permissionDenied && !account.get('permissionDenied')) {
             dispatch(_setPermissionDenied(permissionDenied));
             // Reregister
-            dispatch(setDeviceUid(account.get("deviceUid")));
+            dispatch(setDeviceUid(account.get('deviceUid')));
         }
-    }
+    };
 }
 
 export function showAddPost(visible) {
     return (dispatch, getState) => {
         dispatch(_showAddPost(visible));
-    }
+    };
 }
 
 export function showSettings(visible) {
     return (dispatch, getState) => {
         dispatch(_showSettings(visible));
-    }
+    };
 }
 
 export function showChannelList(visible) {
@@ -164,5 +164,5 @@ export function showChannelList(visible) {
             dispatch(getFollowedChannelsMeta());
         }
         dispatch(_showChannelList(visible));
-    }
+    };
 }

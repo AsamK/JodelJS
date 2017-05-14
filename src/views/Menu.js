@@ -1,5 +1,5 @@
-import React from "react";
-import SectionLink from "./SectionLink";
+import React from 'react';
+import SectionLink from './SectionLink';
 
 let Menu = ({showSettings}) => {
 
@@ -25,7 +25,7 @@ let Menu = ({showSettings}) => {
                 </li>
             </ul>
         </div>
-    )
+    );
 };
 
-export default Menu
+export default Menu;

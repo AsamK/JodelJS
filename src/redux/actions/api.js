@@ -34,7 +34,7 @@ import {
     apiUnfollowChannel,
     apiUnpin,
     apiUpVote
-} from "../../app/api";
+} from '../../app/api';
 import {
     _setConfig,
     _setDeviceUID,
@@ -50,22 +50,22 @@ import {
     setIsFetching,
     setRecommendedChannels,
     showAddPost
-} from "./state";
-import {setPermissionDenied, setToken, showSettings, updatePosts} from "../actions";
-import {getLocation} from "../reducers";
-import {getPost} from "../reducers/entities";
+} from './state';
+import {setPermissionDenied, setToken, showSettings, updatePosts} from '../actions';
+import {getLocation} from '../reducers';
+import {getPost} from '../reducers/entities';
 
 function handleNetworkErrors(dispatch, getState, err) {
     if (err.status === undefined) {
-        console.error("No internet access or server down…");
+        console.error('No internet access or server down…');
     } else if (err.status === 401) {
-        console.error("Permission denied, reregistering…");
+        console.error('Permission denied, reregistering…');
         dispatch(setPermissionDenied(true));
     } else if (err.status === 478) {
-        console.error("Request error: Account probably not verified " + err.status + " " + err.message + ": " + err.response.text);
+        console.error('Request error: Account probably not verified ' + err.status + ' ' + err.message + ': ' + err.response.text);
         dispatch(showSettings(true));
     } else {
-        console.error("Request error: " + err.status + " " + err.message + ": " + err.response.text)
+        console.error('Request error: ' + err.status + ' ' + err.message + ': ' + err.response.text);
     }
 }
 export function deletePost(postId) {
@@ -73,30 +73,30 @@ export function deletePost(postId) {
         apiDeletePost(getAuth(getState), postId)
             .then(res => dispatch(updatePosts()),
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 export function upVote(postId, parentPostId) {
     return (dispatch, getState) => {
         apiUpVote(getAuth(getState), postId)
             .then(res => {
-                    dispatch(receivePost(res.body.post));
-                    dispatch(getKarma());
-                },
+                dispatch(receivePost(res.body.post));
+                dispatch(getKarma());
+            },
                 err => handleNetworkErrors(dispatch, getState, err)
             );
-    }
+    };
 }
 
 export function downVote(postId, parentPostId) {
     return (dispatch, getState) => {
         apiDownVote(getAuth(getState), postId)
             .then(res => {
-                    dispatch(receivePost(res.body.post));
-                    dispatch(getKarma());
-                },
+                dispatch(receivePost(res.body.post));
+                dispatch(getKarma());
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 export function giveThanks(postId, parentPostId) {
@@ -104,7 +104,7 @@ export function giveThanks(postId, parentPostId) {
         apiGiveThanks(getAuth(getState), postId)
             .then(res => dispatch(updatePost(parentPostId)),
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 export function pin(postId, pinned = true) {
@@ -117,40 +117,40 @@ export function pin(postId, pinned = true) {
         }
         fn(getAuth(getState), postId)
             .then(res => {
-                    dispatch(pinnedPost(postId, pinned, res.body.pin_count))
-                },
+                dispatch(pinnedPost(postId, pinned, res.body.pin_count));
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 function shouldFetchPosts(section, state) {
     const posts = state.postsBySection.get(section);
     if (posts === undefined) {
         return true;
-    } else if (posts.get("isFetching")) {
+    } else if (posts.get('isFetching')) {
         return false;
     } else {
-        return posts.get("didInvalidate");
+        return posts.get('didInvalidate');
     }
 }
 
 export function fetchPostsIfNeeded(section) {
     return (dispatch, getState) => {
-        if (getState().viewState.get("selectedPostId") !== null) {
-            dispatch(updatePost(getState().viewState.get("selectedPostId")));
+        if (getState().viewState.get('selectedPostId') !== null) {
+            dispatch(updatePost(getState().viewState.get('selectedPostId')));
         }
 
         if (section === undefined) {
-            section = getState().viewState.get("postSection");
+            section = getState().viewState.get('postSection');
             if (section === undefined) {
                 return;
             }
         }
         if (shouldFetchPosts(section, getState())) {
             dispatch(setIsFetching(section));
-            if (section.startsWith("channel:")) {
+            if (section.startsWith('channel:')) {
                 let channel = section.substring(8);
-                apiGetPostsChannelCombo(getAuth(getState), channel, getState().settings.get("useHomeLocation"))
+                apiGetPostsChannelCombo(getAuth(getState), channel, getState().settings.get('useHomeLocation'))
                     .then(res => {
                         dispatch(receivePosts(section, {
                             recent: res.body.recent,
@@ -167,9 +167,9 @@ export function fetchPostsIfNeeded(section) {
                         handleNetworkErrors(dispatch, getState, err);
                     });
             }
-            if (section.startsWith("hashtag:")) {
+            if (section.startsWith('hashtag:')) {
                 let hashtag = section.substring(8);
-                apiGetPostsHashtagCombo(getAuth(getState), hashtag, getState().settings.get("useHomeLocation"))
+                apiGetPostsHashtagCombo(getAuth(getState), hashtag, getState().settings.get('useHomeLocation'))
                     .then(res => {
                         dispatch(receivePosts(section, {
                             recent: res.body.recent,
@@ -182,79 +182,79 @@ export function fetchPostsIfNeeded(section) {
                     });
             } else {
                 switch (section) {
-                    case "location":
-                        let loc = getLocation(getState());
-                        apiGetPostsCombo(getAuth(getState), loc.get("latitude"), loc.get("longitude"), true, getState().settings.get("useHomeLocation"))
+                case 'location':
+                    let loc = getLocation(getState());
+                    apiGetPostsCombo(getAuth(getState), loc.get('latitude'), loc.get('longitude'), true, getState().settings.get('useHomeLocation'))
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.recent,
                                     discussed: res.body.replied,
                                     popular: res.body.voted
-                                }))
+                                }));
                             }, err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
                             });
-                        break;
-                    case "mine":
-                        apiGetPostsMineCombo(getAuth(getState))
+                    break;
+                case 'mine':
+                    apiGetPostsMineCombo(getAuth(getState))
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.recent,
                                     discussed: res.body.replied,
                                     popular: res.body.voted
-                                }))
+                                }));
                             }, err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
                             });
-                        break;
-                    case "mineReplies":
-                        apiGetPostsMineReplies(getAuth(getState), undefined, undefined)
+                    break;
+                case 'mineReplies':
+                    apiGetPostsMineReplies(getAuth(getState), undefined, undefined)
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.posts,
-                                }))
+                                }));
                             }, err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
                             });
-                        break;
-                    case "mineVotes":
-                        apiGetPostsMineVotes(getAuth(getState), undefined, undefined)
+                    break;
+                case 'mineVotes':
+                    apiGetPostsMineVotes(getAuth(getState), undefined, undefined)
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.posts,
-                                }))
+                                }));
                             }, err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
                             });
-                        break;
-                    case "minePinned":
-                        apiGetPostsMinePinned(getAuth(getState), undefined, undefined)
+                    break;
+                case 'minePinned':
+                    apiGetPostsMinePinned(getAuth(getState), undefined, undefined)
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     recent: res.body.posts,
-                                }))
+                                }));
                             }, err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
                             });
-                        break;
+                    break;
                 }
             }
         }
-    }
+    };
 }
 
 export function fetchMorePosts(section, sortType) {
     return (dispatch, getState) => {
         if (section == null) {
-            section = getState().viewState.get("postSection");
+            section = getState().viewState.get('postSection');
         }
         if (sortType == null) {
-            sortType = getState().viewState.get("postListSortType");
+            sortType = getState().viewState.get('postListSortType');
         }
         if (sortType == null || section == null) {
             return;
@@ -265,14 +265,14 @@ export function fetchMorePosts(section, sortType) {
         }
         const posts = postSection.get(sortType);
         let skip, limit;
-        if (section.startsWith("channel:")) {
+        if (section.startsWith('channel:')) {
             let channel = section.substring(8);
             let afterId;
             if (posts !== undefined) {
                 afterId = posts.get(posts.size - 1);
             }
             dispatch(setIsFetching(section));
-            apiGetPostsChannel(getAuth(getState), sortType, afterId, channel, getState().settings.get("useHomeLocation"))
+            apiGetPostsChannel(getAuth(getState), sortType, afterId, channel, getState().settings.get('useHomeLocation'))
                 .then(res => {
                     let p = {};
                     p[sortType] = res.body.posts;
@@ -281,14 +281,14 @@ export function fetchMorePosts(section, sortType) {
                     dispatch(setIsFetching(section, false));
                     handleNetworkErrors(dispatch, getState, err);
                 });
-        } else if (section.startsWith("hashtag:")) {
+        } else if (section.startsWith('hashtag:')) {
             let hashtag = section.substring(8);
             let afterId;
             if (posts !== undefined) {
                 afterId = posts.get(posts.size - 1);
             }
             dispatch(setIsFetching(section));
-            apiGetPostsHashtag(getAuth(getState), sortType, afterId, hashtag, getState().settings.get("useHomeLocation"))
+            apiGetPostsHashtag(getAuth(getState), sortType, afterId, hashtag, getState().settings.get('useHomeLocation'))
                 .then(res => {
                     let p = {};
                     p[sortType] = res.body.posts;
@@ -299,14 +299,14 @@ export function fetchMorePosts(section, sortType) {
                 });
         } else {
             switch (section) {
-                case "location":
-                    let afterId;
-                    if (posts !== undefined) {
-                        afterId = posts.get(posts.size - 1);
-                    }
-                    dispatch(setIsFetching(section));
-                    let loc = getLocation(getState());
-                    apiGetPosts(getAuth(getState), sortType, afterId, loc.get("latitude"), loc.get("longitude"), getState().settings.get("useHomeLocation"))
+            case 'location':
+                let afterId;
+                if (posts !== undefined) {
+                    afterId = posts.get(posts.size - 1);
+                }
+                dispatch(setIsFetching(section));
+                let loc = getLocation(getState());
+                apiGetPosts(getAuth(getState), sortType, afterId, loc.get('latitude'), loc.get('longitude'), getState().settings.get('useHomeLocation'))
                         .then(res => {
                             let p = {};
                             p[sortType] = res.body.posts;
@@ -315,14 +315,14 @@ export function fetchMorePosts(section, sortType) {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
                         });
-                    break;
-                case "mine":
-                    if (posts !== undefined) {
-                        skip = posts.size;
-                        limit = 10;
-                    }
-                    dispatch(setIsFetching(section));
-                    apiGetPostsMine(getAuth(getState), sortType, skip, limit)
+                break;
+            case 'mine':
+                if (posts !== undefined) {
+                    skip = posts.size;
+                    limit = 10;
+                }
+                dispatch(setIsFetching(section));
+                apiGetPostsMine(getAuth(getState), sortType, skip, limit)
                         .then(res => {
                             let p = {};
                             p[sortType] = res.body.posts;
@@ -331,17 +331,17 @@ export function fetchMorePosts(section, sortType) {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
                         });
-                    break;
-                case "mineReplies":
-                    if (sortType != PostListSortTypes.RECENT) {
-                        return;
-                    }
-                    if (posts !== undefined) {
-                        skip = posts.size;
-                        limit = 10;
-                    }
-                    dispatch(setIsFetching(section));
-                    apiGetPostsMineReplies(getAuth(getState), skip, limit)
+                break;
+            case 'mineReplies':
+                if (sortType != PostListSortTypes.RECENT) {
+                    return;
+                }
+                if (posts !== undefined) {
+                    skip = posts.size;
+                    limit = 10;
+                }
+                dispatch(setIsFetching(section));
+                apiGetPostsMineReplies(getAuth(getState), skip, limit)
                         .then(res => {
                             let p = {};
                             p[sortType] = res.body.posts;
@@ -350,17 +350,17 @@ export function fetchMorePosts(section, sortType) {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
                         });
-                    break;
-                case "mineVotes":
-                    if (sortType != PostListSortTypes.RECENT) {
-                        return;
-                    }
-                    if (posts !== undefined) {
-                        skip = posts.size;
-                        limit = 10;
-                    }
-                    dispatch(setIsFetching(section));
-                    apiGetPostsMineVotes(getAuth(getState), skip, limit)
+                break;
+            case 'mineVotes':
+                if (sortType != PostListSortTypes.RECENT) {
+                    return;
+                }
+                if (posts !== undefined) {
+                    skip = posts.size;
+                    limit = 10;
+                }
+                dispatch(setIsFetching(section));
+                apiGetPostsMineVotes(getAuth(getState), skip, limit)
                         .then(res => {
                             let p = {};
                             p[sortType] = res.body.posts;
@@ -369,17 +369,17 @@ export function fetchMorePosts(section, sortType) {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
                         });
-                    break;
-                case "minePinned":
-                    if (sortType != PostListSortTypes.RECENT) {
-                        return;
-                    }
-                    if (posts !== undefined) {
-                        skip = posts.size;
-                        limit = 10;
-                    }
-                    dispatch(setIsFetching(section));
-                    apiGetPostsMinePinned(getAuth(getState), skip, limit)
+                break;
+            case 'minePinned':
+                if (sortType != PostListSortTypes.RECENT) {
+                    return;
+                }
+                if (posts !== undefined) {
+                    skip = posts.size;
+                    limit = 10;
+                }
+                dispatch(setIsFetching(section));
+                apiGetPostsMinePinned(getAuth(getState), skip, limit)
                         .then(res => {
                             let p = {};
                             p[sortType] = res.body.posts;
@@ -388,26 +388,26 @@ export function fetchMorePosts(section, sortType) {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
                         });
-                    break;
+                break;
             }
         }
-    }
+    };
 }
 
 export function fetchMoreComments() {
     return (dispatch, getState) => {
-        const postId = getState().viewState.get("selectedPostId");
+        const postId = getState().viewState.get('selectedPostId');
         if (postId === undefined) {
             return;
         }
         const post = getPost(getState(), postId);
-        if (post.has("next_reply")) {
-            let nextReply = post.get("next_reply");
+        if (post.has('next_reply')) {
+            let nextReply = post.get('next_reply');
             if (nextReply != null) {
                 dispatch(fetchPost(postId, nextReply));
             }
         }
-    }
+    };
 }
 
 export function updatePost(postId) {
@@ -416,8 +416,8 @@ export function updatePost(postId) {
         if (post == undefined) {
             dispatch(fetchPost(postId));
         } else {
-            let count = post.get("child_count");
-            let children = post.get("children");
+            let count = post.get('child_count');
+            let children = post.get('children');
             if (count == undefined || children == undefined || children.count() == 0) {
                 dispatch(fetchPost(postId));
             } else if (children.count() == count) {
@@ -425,21 +425,21 @@ export function updatePost(postId) {
                 // TODO recursive fetch all children
             }
         }
-    }
+    };
 }
 
 export function fetchPost(postId, nextReply) {
     return (dispatch, getState) => {
         apiGetPostDetails(getAuth(getState), postId, true, nextReply, false)
             .then(res => {
-                    let post = res.body.details;
-                    post.children = res.body.replies;
-                    post.child_count = post.children.length + res.body.remaining;
-                    post.next_reply = res.body.next;
-                    dispatch(receivePost(post, nextReply !== undefined))
-                },
+                let post = res.body.details;
+                post.children = res.body.replies;
+                post.child_count = post.children.length + res.body.remaining;
+                post.next_reply = res.body.next;
+                dispatch(receivePost(post, nextReply !== undefined));
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 /**
@@ -451,87 +451,87 @@ export function fetchCompletePost(postId) {
     return (dispatch, getState) => {
         apiGetPost(getAuth(getState), postId)
             .then(res => {
-                    dispatch(receivePost(res.body))
-                },
+                dispatch(receivePost(res.body));
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 export function getKarma() {
     return (dispatch, getState) => {
         apiGetKarma(getAuth(getState))
             .then(res => {
-                    dispatch(_setKarma(res.body.karma))
-                },
+                dispatch(_setKarma(res.body.karma));
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 export function getConfig() {
     return (dispatch, getState) => {
         apiGetConfig(getAuth(getState))
             .then(res => {
-                    dispatch(_setConfig(res.body));
-                },
+                dispatch(_setConfig(res.body));
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
-export function addPost(text, image, channel, ancestor, color = "FF9908") {
+export function addPost(text, image, channel, ancestor, color = 'FF9908') {
     return (dispatch, getState) => {
         let loc = getLocation(getState());
-        return apiAddPost(getAuth(getState), channel, ancestor, color, 0.0, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"), text, image, getState().settings.get("useHomeLocation"))
+        return apiAddPost(getAuth(getState), channel, ancestor, color, 0.0, loc.get('latitude'), loc.get('longitude'), loc.get('city'), loc.get('country'), text, image, getState().settings.get('useHomeLocation'))
             .then(res => {
-                    if (ancestor != undefined) {
-                        dispatch(updatePost(ancestor));
-                        return null;
-                    } else if (channel != undefined) {
-                        const section = "channel:" + channel;
-                        dispatch(invalidatePosts(section));
-                        dispatch(fetchPostsIfNeeded(section));
-                        return section;
-                    } else {
-                        const section = "location";
-                        dispatch(invalidatePosts(section));
-                        dispatch(fetchPostsIfNeeded(section));
-                        return section;
-                    }
-                },
+                if (ancestor != undefined) {
+                    dispatch(updatePost(ancestor));
+                    return null;
+                } else if (channel != undefined) {
+                    const section = 'channel:' + channel;
+                    dispatch(invalidatePosts(section));
+                    dispatch(fetchPostsIfNeeded(section));
+                    return section;
+                } else {
+                    const section = 'location';
+                    dispatch(invalidatePosts(section));
+                    dispatch(fetchPostsIfNeeded(section));
+                    return section;
+                }
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 export function setDeviceUid(deviceUid) {
     return (dispatch, getState) => {
         let loc = getLocation(getState());
-        apiGetAccessToken(deviceUid, loc.get("latitude"), loc.get("longitude"), loc.get("city"), loc.get("country"))
+        apiGetAccessToken(deviceUid, loc.get('latitude'), loc.get('longitude'), loc.get('city'), loc.get('country'))
             .then(res => {
                 dispatch(_setDeviceUID(deviceUid));
                 dispatch(setToken(res.body.distinct_id, res.body.access_token, res.body.refresh_token, res.body.expiration_date, res.body.token_type));
             })
             .catch(err => {
-                console.error("Failed to register user." + err);
+                console.error('Failed to register user.' + err);
             });
-    }
+    };
 }
 
 export function refreshAccessToken() {
     return (dispatch, getState) => {
         const account = getState().account;
-        apiRefreshAccessToken(account.getIn(["token", "access"]), account.getIn(["token", "distinctId"]), account.getIn(["token", "refresh"]))
+        apiRefreshAccessToken(account.getIn(['token', 'access']), account.getIn(['token', 'distinctId']), account.getIn(['token', 'refresh']))
             .then(res => {
-                    if (res.body.upgraded === true) {
-                        dispatch(setToken(account.getIn(["token", "distinctId"]), res.body.access_token, account.getIn(["token", "refresh"]), res.body.expiration_date, res.body.token_type));
-                    }
-                },
+                if (res.body.upgraded === true) {
+                    dispatch(setToken(account.getIn(['token', 'distinctId']), res.body.access_token, account.getIn(['token', 'refresh']), res.body.expiration_date, res.body.token_type));
+                }
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 function getAuth(getState) {
-    return getState().account.getIn(["token", "access"]);
+    return getState().account.getIn(['token', 'access']);
 }
-export function setLocation(latitude, longitude, city = undefined, country = "DE") {
+export function setLocation(latitude, longitude, city = undefined, country = 'DE') {
     return (dispatch, getState) => {
         latitude = Math.round(latitude * 100) / 100;
         longitude = Math.round(longitude * 100) / 100;
@@ -543,24 +543,24 @@ export function setLocation(latitude, longitude, city = undefined, country = "DE
                     handleNetworkErrors(dispatch, getState, err);
                 });
         }
-    }
+    };
 }
 
-export function setHome(latitude, longitude, city = undefined, country = "DE") {
+export function setHome(latitude, longitude, city = undefined, country = 'DE') {
     return (dispatch, getState) => {
         latitude = Math.round(latitude * 100) / 100;
         longitude = Math.round(longitude * 100) / 100;
         let auth = getAuth(getState);
         if (auth !== undefined) {
-            apiSetAction(auth, "SetHomeStarted")
+            apiSetAction(auth, 'SetHomeStarted')
                 .then(() => apiSetHome(auth, latitude, longitude, city, country))
                 .then(() => dispatch(getConfig()))
-                .then(() => apiSetAction(auth, "SetHomeCompleted"))
+                .then(() => apiSetAction(auth, 'SetHomeCompleted'))
                 .catch(err => {
                     handleNetworkErrors(dispatch, getState, err);
                 });
         }
-    }
+    };
 }
 
 export function deleteHome() {
@@ -573,33 +573,33 @@ export function deleteHome() {
                     handleNetworkErrors(dispatch, getState, err);
                 });
         }
-    }
+    };
 }
 
 
 export function getRecommendedChannels() {
     return (dispatch, getState) => {
-        apiGetRecommendedChannels(getAuth(getState), getState().settings.get("useHomeLocation"))
+        apiGetRecommendedChannels(getAuth(getState), getState().settings.get('useHomeLocation'))
             .then(res => {
-                    dispatch(setRecommendedChannels(res.body.recommended, res.body.local));
-                },
+                dispatch(setRecommendedChannels(res.body.recommended, res.body.local));
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 export function getFollowedChannelsMeta() {
     return (dispatch, getState) => {
         let channels = {};
-        getState().account.getIn(["config", "followed_channels"]).forEach(c => {
-            let timestamp = getState().settings.getIn(["channelsLastRead", c]);
+        getState().account.getIn(['config', 'followed_channels']).forEach(c => {
+            let timestamp = getState().settings.getIn(['channelsLastRead', c]);
             channels[c] = timestamp === undefined ? 0 : timestamp;
         });
-        apiGetFollowedChannelsMeta(getAuth(getState), channels, getState().settings.get("useHomeLocation"))
+        apiGetFollowedChannelsMeta(getAuth(getState), channels, getState().settings.get('useHomeLocation'))
             .then(res => {
-                    dispatch(setChannelsMeta(res.body.channels));
-                },
+                dispatch(setChannelsMeta(res.body.channels));
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 export function followChannel(channel, follow = true) {
@@ -612,34 +612,34 @@ export function followChannel(channel, follow = true) {
         }
         fn(getAuth(getState), channel)
             .then(res => {
-                    dispatch(getConfig()); // TODO
-                },
+                dispatch(getConfig()); // TODO
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 export function getImageCaptcha() {
     return (dispatch, getState) => {
         apiGetImageCaptcha(getAuth(getState))
             .then(res => {
-                    dispatch(setImageCaptcha(res.body.key, res.body.image_url, res.body.image_size));
-                },
+                dispatch(setImageCaptcha(res.body.key, res.body.image_url, res.body.image_size));
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 export function sendVerificationAnswer(answer) {
     return (dispatch, getState) => {
-        apiSendVerificationAnswer(getAuth(getState), getState().imageCaptcha.get("key"), answer)
+        apiSendVerificationAnswer(getAuth(getState), getState().imageCaptcha.get('key'), answer)
             .then(res => {
-                    dispatch(getConfig());
-                    dispatch(setImageCaptcha(null, null, 0));
-                    if (!res.body.verified) {
-                        dispatch(getImageCaptcha());
-                    }
-                },
+                dispatch(getConfig());
+                dispatch(setImageCaptcha(null, null, 0));
+                if (!res.body.verified) {
+                    dispatch(getImageCaptcha());
+                }
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }
 
 
@@ -647,8 +647,8 @@ export function getNotifications() {
     return (dispatch, getState) => {
         apiGetNotifications(getAuth(getState))
             .then(res => {
-                    console.log(res.body);
-                },
+                console.log(res.body);
+            },
                 err => handleNetworkErrors(dispatch, getState, err));
-    }
+    };
 }

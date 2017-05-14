@@ -1,13 +1,13 @@
 'use strict';
 
-import React, {Component} from "react";
-import {connect} from "react-redux";
-import SelectDeviceUid from "./SelectDeviceUid";
-import SelectLocation from "./SelectLocation";
-import {createNewAccount, updateLocation, _setLocation, setUseBrowserLocation} from "../redux/actions";
-import {setDeviceUid} from "../redux/actions/api";
-import Settings from "../app/settings";
-import {getLocation} from "../redux/reducers";
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import SelectDeviceUid from './SelectDeviceUid';
+import SelectLocation from './SelectLocation';
+import {createNewAccount, updateLocation, _setLocation, setUseBrowserLocation} from '../redux/actions';
+import {setDeviceUid} from '../redux/actions/api';
+import Settings from '../app/settings';
+import {getLocation} from '../redux/reducers';
 
 class FirstStart extends Component {
     constructor(props) {
@@ -40,7 +40,7 @@ class FirstStart extends Component {
                 if (this.state.deviceUid === undefined) {
                     this.props.dispatch(createNewAccount());
                 } else if (this.state.deviceUid.length !== 64) {
-                    alert("Die Device UID muss aus genau 64 hexadezimal Ziffern bestehen.");
+                    alert('Die Device UID muss aus genau 64 hexadezimal Ziffern bestehen.');
                 } else {
                     this.props.dispatch(setDeviceUid(this.state.deviceUid));
                 }
@@ -70,7 +70,7 @@ class FirstStart extends Component {
                         </p>
                         <a onClick={this.updateLocation}>Erneut versuchen</a> oder oben den Standort manuell festlegen
                     </div>
-                    : ""}
+                    : ''}
                 <button type="submit" disabled={this.props.latitude === undefined}>
                     Jodeln beginnen
                 </button>
@@ -82,11 +82,11 @@ class FirstStart extends Component {
 const mapStateToProps = (state) => {
     let loc = getLocation(state);
     return {
-        deviceUid: state.account.get("deviceUid"),
-        latitude: loc.get("latitude"),
-        longitude: loc.get("longitude"),
-        useBrowserLocation: state.settings.get("useBrowserLocation"),
-    }
+        deviceUid: state.account.get('deviceUid'),
+        latitude: loc.get('latitude'),
+        longitude: loc.get('longitude'),
+        useBrowserLocation: state.settings.get('useBrowserLocation'),
+    };
 };
 
 export default connect(mapStateToProps)(FirstStart);

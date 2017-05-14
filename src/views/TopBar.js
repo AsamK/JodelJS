@@ -1,6 +1,6 @@
-import React from "react";
-import SectionLink from "./SectionLink";
-import Menu from "./Menu";
+import React from 'react';
+import SectionLink from './SectionLink';
+import Menu from './Menu';
 
 let TopBar = ({karma, showSettings, showChannelList}) => {
 
@@ -16,11 +16,11 @@ let TopBar = ({karma, showSettings, showChannelList}) => {
                 Kanäle
             </div>
             <div className="karma" onClick={showSettings}>
-                {(karma > 0 ? "+" : "") + karma}
+                {(karma > 0 ? '+' : '') + karma}
                 <div className="subText">Mein Karma</div>
             </div>
         </div>
-    )
+    );
 };
 
-export default TopBar
+export default TopBar;

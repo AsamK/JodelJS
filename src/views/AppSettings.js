@@ -1,9 +1,9 @@
 'use strict';
 
-import React, {Component} from "react";
-import {connect} from "react-redux";
-import SelectLocation from "./SelectLocation";
-import VerificationImageCaptcha from "./VerificationImageCaptcha";
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import SelectLocation from './SelectLocation';
+import VerificationImageCaptcha from './VerificationImageCaptcha';
 import {
     updateLocation,
     _setLocation,
@@ -14,9 +14,9 @@ import {
     sendVerificationAnswer,
     getImageCaptcha,
     deleteHome
-} from "../redux/actions";
-import Settings from "../app/settings";
-import {getLocation} from "../redux/reducers";
+} from '../redux/actions';
+import Settings from '../app/settings';
+import {getLocation} from '../redux/reducers';
 
 class AppSettings extends Component {
     constructor(props) {
@@ -55,7 +55,7 @@ class AppSettings extends Component {
     }
 
     showHome() {
-        this.props.dispatch(setUseHomeLocation(!this.props.useHomeLocation))
+        this.props.dispatch(setUseHomeLocation(!this.props.useHomeLocation));
     }
 
     render() {
@@ -88,13 +88,13 @@ class AppSettings extends Component {
                             }}>
                                 Heimat löschen (nur einmal möglich)
                             </button>
-                            : ""
+                            : ''
                         }
                     </div>
                     :
                     <button onClick={() => {
                         this.props.dispatch(setHome(this.props.latitude, this.props.longitude));
-                  }}>
+                    }}>
                         Als Heimat setzen
                     </button>
                 }
@@ -103,10 +103,10 @@ class AppSettings extends Component {
                 {!this.props.verified ?
                     <VerificationImageCaptcha imageUrl={this.props.imageUrl} imageWidth={this.props.imageWidth}
                                               key={this.props.imageKey} onFinishedClick={answer => {
-                        this.props.dispatch(sendVerificationAnswer(answer));
-                    }
+                                                  this.props.dispatch(sendVerificationAnswer(answer));
+                                              }
                     }/>
-                    : "You're Jodel account has been verified."}
+                    : 'You\'re Jodel account has been verified.'}
             </div>
             <button onClick={() => {
                 this.props.dispatch(setLocation(this.props.latitude, this.props.longitude));
@@ -121,18 +121,18 @@ class AppSettings extends Component {
 const mapStateToProps = (state) => {
     let loc = getLocation(state);
     return {
-        deviceUid: state.account.get("deviceUid"),
-        latitude: loc.get("latitude"),
-        longitude: loc.get("longitude"),
-        homeSet: state.account.getIn(["config", "home_set"]),
-        homeName: state.account.getIn(["config", "home_name"]),
-        homeClearAllowed: state.account.getIn(["config", "home_clear_allowed"]),
-        verified: state.account.getIn(["config", "verified"]),
-        useBrowserLocation: state.settings.get("useBrowserLocation"),
-        useHomeLocation: state.settings.get("useHomeLocation"),
-        imageUrl: state.imageCaptcha.getIn(["image", "url"]),
-        imageWidth: state.imageCaptcha.getIn(["image", "width"]),
-    }
+        deviceUid: state.account.get('deviceUid'),
+        latitude: loc.get('latitude'),
+        longitude: loc.get('longitude'),
+        homeSet: state.account.getIn(['config', 'home_set']),
+        homeName: state.account.getIn(['config', 'home_name']),
+        homeClearAllowed: state.account.getIn(['config', 'home_clear_allowed']),
+        verified: state.account.getIn(['config', 'verified']),
+        useBrowserLocation: state.settings.get('useBrowserLocation'),
+        useHomeLocation: state.settings.get('useHomeLocation'),
+        imageUrl: state.imageCaptcha.getIn(['image', 'url']),
+        imageWidth: state.imageCaptcha.getIn(['image', 'width']),
+    };
 };
 
 export default connect(mapStateToProps)(AppSettings);

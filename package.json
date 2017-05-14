@@ -25,6 +25,8 @@
     "babelify": "~7.3.0",
     "browserify": "~14.3.0",
     "envify": "~4.0.0",
+    "eslint": "^3.19.0",
+    "eslint-plugin-react": "^7.0.1",
     "fsmonitor": "~0.2.4",
     "less": "~2.7.2",
     "less-plugin-autoprefix": "~1.5.1",

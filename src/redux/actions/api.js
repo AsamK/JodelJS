@@ -31,10 +31,11 @@ import {
     apiSetAction,
     apiSetHome,
     apiSetLocation,
+    apiSharePost,
     apiUnfollowChannel,
     apiUnpin,
     apiUpVote
-} from '../../app/api';
+} from "../../app/api";
 import {
     _setConfig,
     _setDeviceUID,
@@ -50,10 +51,10 @@ import {
     setIsFetching,
     setRecommendedChannels,
     showAddPost
-} from './state';
-import {setPermissionDenied, setToken, showSettings, updatePosts} from '../actions';
-import {getLocation} from '../reducers';
-import {getPost} from '../reducers/entities';
+} from "./state";
+import {setPermissionDenied, setToken, showSettings, updatePosts} from "../actions";
+import {getLocation} from "../reducers";
+import {getPost} from "../reducers/entities";
 
 function handleNetworkErrors(dispatch, getState, err) {
     if (err.status === undefined) {
@@ -436,6 +437,7 @@ export function fetchPost(postId, nextReply) {
                 post.children = res.body.replies;
                 post.child_count = post.children.length + res.body.remaining;
                 post.next_reply = res.body.next;
+                post.shareable = res.body.shareable;
                 dispatch(receivePost(post, nextReply !== undefined));
             },
                 err => handleNetworkErrors(dispatch, getState, err));
@@ -642,13 +644,22 @@ export function sendVerificationAnswer(answer) {
     };
 }
 
-
 export function getNotifications() {
     return (dispatch, getState) => {
         apiGetNotifications(getAuth(getState))
             .then(res => {
                 console.log(res.body);
             },
+                err => handleNetworkErrors(dispatch, getState, err));
+    };
+}
+
+export function sharePost(postId) {
+    return (dispatch, getState) => {
+        apiSharePost(getAuth(getState), postId)
+            .then(res => {
+                    alert(res.body.url)
+                },
                 err => handleNetworkErrors(dispatch, getState, err));
     };
 }

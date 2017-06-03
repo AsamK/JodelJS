@@ -3,7 +3,7 @@ import {SET_IMAGE_CAPTCHA} from "../actions/state";
 
 export default function imageCaptcha(state = Immutable.Map({
     key: null,
-    image: Immutable.Map({null, null}),
+    image: Immutable.Map({url: null, width: null}),
 }), action) {
     switch (action.type) {
         case SET_IMAGE_CAPTCHA:

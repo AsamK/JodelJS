@@ -1,0 +1,20 @@
+import React from 'react';
+const Settings = {};
+
+// Android client id
+Settings.CLIENT_ID = '81e8a76e-1e02-4d17-9ba0-8a7020261b26';
+
+// Client type and Key for signed requests
+Settings.CLIENT_TYPE = 'android_4.42.1';
+Settings.KEY = 'bJYlFZkrnLpLMVisrbstPDNsaYHPbzcKRSpqtjtt';
+
+// API Server and Path
+Settings.API_SERVER = 'https://api.go-tellm.com/api';
+
+// Default location, if browser location is not available
+Settings.DEFAULT_LOCATION = {latitude: undefined, longitude: undefined};
+
+// Colors for posts, the Server prevents other colors
+Settings.POST_COLORS = ['06A3CB', 'DD5F5F', 'FFBA00', 'FF9908', '8ABDB0', '9EC41C'];
+
+export default Settings;

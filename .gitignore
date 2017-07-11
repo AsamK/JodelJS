@@ -4,4 +4,4 @@ node_modules/
 build/
 build-debug/
 .idea/
-/src/app/settings.js
+/src/app/settings.ts

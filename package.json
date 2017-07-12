@@ -4,6 +4,7 @@
   "dependencies": {
     "@types/react": "^15.0.37",
     "@types/react-dom": "^15.5.1",
+    "@types/react-redux": "^4.4.46",
     "@types/superagent": "^3.5.2",
     "babel-polyfill": "^6.23.0",
     "classnames": "^2.2.5",

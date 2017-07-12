@@ -14,9 +14,9 @@ export const entities = combineReducers({
 });
 
 function posts(state = Immutable.Map<string, any>(), action) {
-    if (action.entities !== undefined) {
+    if (action.payload && action.payload.entities !== undefined) {
         let newState = {};
-        action.entities.forEach((post) => {
+        action.payload.entities.forEach((post) => {
             if (post.children !== undefined) {
                 post.children = post.children.map(child => {
                     newState[child.post_id] = child;
@@ -58,8 +58,8 @@ function channels(state = Immutable.Map(), action) {
     }
     switch (action.type) {
     case RECEIVE_POSTS:
-        if (action.section !== undefined && action.section.startsWith('channel:')) {
-            let channel = action.section.substring(8);
+        if (action.payload.section !== undefined && action.payload.section.startsWith('channel:')) {
+            let channel = action.payload.section.substring(8);
             return state.setIn([channel, 'unread'], false);
         }
         return state;

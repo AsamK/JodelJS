@@ -166,7 +166,7 @@ function getEmptyPost() {
     });
 }
 
-const mapStateToProps = (state: IJodelAppStore) => {
+const mapStateToProps = (state: IJodelAppStore, ownProps) => {
     let selectedPicturePost = getPost(state, state.viewState.get('selectedPicturePostId'));
     if (selectedPicturePost === undefined) {
         selectedPicturePost = null;

@@ -54,46 +54,50 @@ export function replaceViewState(newViewState) {
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
-export function receivePosts(section, postsBySortType, append = false) {
-    let res = {
-        type: RECEIVE_POSTS,
+export function receivePosts(section, postsBySortType, append = false): IJodelAction {
+    const payload = {
         section,
         postsBySortType: [],
         entities: [],
-        receivedAt: Date.now(),
         append,
     };
 
     if (postsBySortType.recent !== undefined) {
-        res.entities = res.entities.concat(postsBySortType.recent);
-        res.postsBySortType.push({
+        payload.entities = payload.entities.concat(postsBySortType.recent);
+        payload.postsBySortType.push({
             sortType: PostListSortTypes.RECENT,
             posts: postsBySortType.recent.map(post => post.post_id),
         });
     }
     if (postsBySortType.discussed !== undefined) {
-        res.entities = res.entities.concat(postsBySortType.discussed);
-        res.postsBySortType.push({
+        payload.entities = payload.entities.concat(postsBySortType.discussed);
+        payload.postsBySortType.push({
             sortType: PostListSortTypes.DISCUSSED,
             posts: postsBySortType.discussed.map(post => post.post_id),
         });
     }
     if (postsBySortType.popular !== undefined) {
-        res.entities = res.entities.concat(postsBySortType.popular);
-        res.postsBySortType.push({
+        payload.entities = payload.entities.concat(postsBySortType.popular);
+        payload.postsBySortType.push({
             sortType: PostListSortTypes.POPULAR,
             posts: postsBySortType.popular.map(post => post.post_id),
         });
     }
-    return res;
+    return {
+        type: RECEIVE_POSTS,
+        receivedAt: Date.now(),
+        payload,
+    };
 }
 
 export function receivePost(post, append = false) {
     return {
         type: RECEIVE_POSTS,
-        entities: [post],
         receivedAt: Date.now(),
-        append,
+        payload: {
+            entities: [post],
+            append,
+        },
     };
 }
 
@@ -224,17 +228,19 @@ export function setUseHomeLocation(useHomeLocation) {
 export const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
 export function invalidatePosts(section) {
     return {
-        section,
         type: INVALIDATE_POSTS,
+        payload: {section},
     };
 }
 
 export const SET_IS_FETCHING = 'SET_IS_FETCHING';
 export function setIsFetching(section, isFetching = true) {
     return {
-        section,
-        isFetching,
         type: SET_IS_FETCHING,
+        payload: {
+            section,
+            isFetching,
+        },
     };
 }
 export const SET_IMAGE_CAPTCHA = 'SET_IMAGE_CAPTCHA';

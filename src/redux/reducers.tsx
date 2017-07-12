@@ -2,18 +2,18 @@ import * as Immutable from 'immutable';
 import {combineReducers} from 'redux';
 import {account, IAccountStore} from './reducers/account';
 import {entities, IEntitiesStore} from './reducers/entities';
-import imageCaptcha from './reducers/imageCaptcha';
-import postsBySection from './reducers/postsBySection';
+import {IImageCaptchaStore, imageCaptcha} from './reducers/imageCaptcha';
+import {postsBySection, IPostsBySectionStore} from './reducers/postsBySection';
 import settings from './reducers/settings';
 import viewState from './reducers/viewState';
 
 export interface IJodelAppStore {
     entities: IEntitiesStore,
-    postsBySection: any,
+    postsBySection: IPostsBySectionStore,
     viewState: any,
     account: IAccountStore,
     settings: any,
-    imageCaptcha: any,
+    imageCaptcha: IImageCaptchaStore,
 }
 
 export const JodelApp = combineReducers<IJodelAppStore>({

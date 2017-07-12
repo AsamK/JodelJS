@@ -132,7 +132,7 @@ class AppSettings extends Component<AppSettingsProps> {
     }
 }
 
-const mapStateToProps = (state: IJodelAppStore) => {
+const mapStateToProps = (state: IJodelAppStore, ownProps) => {
     let loc = getLocation(state);
     return {
         deviceUid: state.account.deviceUid,
@@ -144,8 +144,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
         verified: state.account.config.verified,
         useBrowserLocation: state.settings.get('useBrowserLocation'),
         useHomeLocation: state.settings.get('useHomeLocation'),
-        imageUrl: state.imageCaptcha.getIn(['image', 'url']),
-        imageWidth: state.imageCaptcha.getIn(['image', 'width']),
+        image: state.imageCaptcha.image,
     };
 };
 

@@ -124,14 +124,14 @@ export function pin(postId, pinned = true): ThunkAction<void, IJodelAppStore, vo
     };
 }
 
-function shouldFetchPosts(section, state) {
+function shouldFetchPosts(section, state: IJodelAppStore) {
     const posts = state.postsBySection.get(section);
     if (posts === undefined) {
         return true;
-    } else if (posts.get('isFetching')) {
+    } else if (posts.isFetching) {
         return false;
     } else {
-        return posts.get('didInvalidate');
+        return posts.didInvalidate;
     }
 }
 
@@ -265,7 +265,7 @@ export function fetchMorePosts(section?: string, sortType?): ThunkAction<void, I
         if (postSection === undefined || postSection.isFetching) {
             return;
         }
-        const posts = postSection.get(sortType);
+        const posts = postSection.postsBySortType.get(sortType);
         let skip, limit;
         if (section.startsWith('channel:')) {
             let channel = section.substring(8);
@@ -633,7 +633,7 @@ export function getImageCaptcha(): ThunkAction<void, IJodelAppStore, void> {
 
 export function sendVerificationAnswer(answer): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        apiSendVerificationAnswer(getAuth(getState()), getState().imageCaptcha.get('key'), answer)
+        apiSendVerificationAnswer(getAuth(getState()), getState().imageCaptcha.key, answer)
             .then(res => {
                     dispatch(getConfig());
                     dispatch(setImageCaptcha(null, null, 0));

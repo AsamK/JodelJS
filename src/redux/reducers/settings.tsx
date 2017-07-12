@@ -24,8 +24,8 @@ function settings(state = Immutable.Map<string, any>({
     case SET_USE_BROWSER_LOCATION:
         return state.set('useBrowserLocation', action.useBrowserLocation);
     case RECEIVE_POSTS:
-        if (action.section !== undefined && action.section.startsWith('channel:')) {
-            let channel = action.section.substring(8);
+        if (action.payload.section !== undefined && action.payload.section.startsWith('channel:')) {
+            let channel = action.payload.section.substring(8);
             return state.setIn(['channelsLastRead', channel], action.receivedAt);
         }
         return state;

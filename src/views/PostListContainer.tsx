@@ -42,13 +42,11 @@ class PostListContainer extends Component<PostListContainerProps> {
     }
 }
 
-const mapStateToProps = (state: IJodelAppStore) => {
+const mapStateToProps = (state: IJodelAppStore, ownProps) => {
     const section = state.viewState.get('postSection');
     const sortType = state.viewState.get('postListSortType');
-    let posts = state.postsBySection.getIn([section, sortType]);
-    if (posts === undefined) {
-        posts = [];
-    }
+    const postsSection = state.postsBySection.get(section);
+    const posts = postsSection !== undefined && postsSection.postsBySortType.has(sortType) ? postsSection.postsBySortType.get(sortType) : Immutable.List<string>([]);
     return {
         lastUpdated: state.postsBySection.getIn([section, 'lastUpdated']),
         posts: posts.map(post_id => getPost(state, post_id)),

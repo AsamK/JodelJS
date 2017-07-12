@@ -2,6 +2,7 @@ import * as NProgress from 'nprogress';
 import * as React from 'react';
 import {Component} from 'react';
 import {connect} from 'react-redux';
+import {IJodelAppStore} from '../redux/reducers';
 
 interface ProgressProps {
     isFetching: boolean
@@ -35,7 +36,7 @@ class Progress extends Component<ProgressProps> {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: IJodelAppStore, ownProps) {
     let isFetching = state.postsBySection.getIn([state.viewState.get('postSection'), 'isFetching']);
     return {isFetching: isFetching === undefined ? false : isFetching};
 }

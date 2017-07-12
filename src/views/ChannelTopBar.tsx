@@ -2,6 +2,7 @@ import * as classnames from 'classnames';
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {followChannel} from '../redux/actions';
+import {IJodelAppStore} from '../redux/reducers';
 import {getChannel} from '../redux/reducers/entities';
 import BackButton from './BackButton';
 
@@ -29,11 +30,11 @@ let ChannelTopBar = ({onFollowClick, channel, followerCount, followedName}: Chan
     );
 };
 
-const mapStateToProps = (state, ownProps) => {
-    let followers = getChannel(state, ownProps.channel).get('followers');
+const mapStateToProps = (state: IJodelAppStore, ownProps) => {
+    let followers = getChannel(state, ownProps.channels).get('followers');
     return {
-        followedName: state.account.getIn(['config', 'followed_channels']).reduce((v, c) => {
-            if (c.toLowerCase() === ownProps.channel.toLowerCase()) {
+        followedName: state.account.config.followed_channels.reduce((v, c) => {
+            if (c.toLowerCase() === ownProps.channels.toLowerCase()) {
                 return c;
             } else {
                 return v;

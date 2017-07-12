@@ -1,7 +1,19 @@
 import * as Immutable from 'immutable';
-import {PINNED_POST, RECEIVE_POSTS} from '../actions';
+import {combineReducers} from 'redux';
 
-function entitiesPost(state = Immutable.Map<string, any>(), action) {
+import {PINNED_POST, RECEIVE_POSTS} from '../actions';
+import {IJodelAppStore} from '../reducers';
+
+export interface IEntitiesStore {
+    posts: any
+    channels: any
+}
+export const entities = combineReducers({
+    posts,
+    channels,
+});
+
+function posts(state = Immutable.Map<string, any>(), action) {
     if (action.entities !== undefined) {
         let newState = {};
         action.entities.forEach((post) => {
@@ -36,11 +48,11 @@ function entitiesPost(state = Immutable.Map<string, any>(), action) {
     }
 }
 
-function entitiesChannel(state = Immutable.Map(), action) {
-    if (action.entitiesChannel !== undefined) {
+function channels(state = Immutable.Map(), action) {
+    if (action.channels !== undefined) {
         let newState = {};
-        action.entitiesChannel.forEach((channel) => {
-            newState[channel.channel] = channel;
+        action.channels.forEach((channel) => {
+            newState[channel.channels] = channel;
         });
         state = state.mergeDeep(newState);
     }
@@ -56,20 +68,12 @@ function entitiesChannel(state = Immutable.Map(), action) {
     }
 }
 
-function entities(state = Immutable.Map<string, any>(), action) {
-    state = state.update('posts', posts => entitiesPost(posts, action));
-    state = state.update('channels', channels => entitiesChannel(channels, action));
-    return state;
+export function getPost(state: IJodelAppStore, postId: string) {
+    return state.entities.posts.get(postId);
 }
 
-export default entities;
-
-export function getPost(state, postId) {
-    return state.entities.getIn(['posts', postId]);
-}
-
-export function getChannel(state, channel) {
-    let c = state.entities.getIn(['channels', channel]);
+export function getChannel(state: IJodelAppStore, channel: string) {
+    let c = state.entities.channels.get(channel);
     if (c === undefined) {
         return Immutable.Map({channel});
     }

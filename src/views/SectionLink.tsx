@@ -2,6 +2,7 @@ import * as classnames from 'classnames';
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {switchPostSection} from '../redux/actions';
+import {IJodelAppStore} from '../redux/reducers';
 
 interface SectionLinkProps {
     active: boolean
@@ -31,7 +32,7 @@ const SectionLink = ({section, active, onClick}: SectionLinkProps) => {
     return <div className={classnames('sectionLink', section.toLowerCase(), {active})} onClick={onClick}>{name}</div>;
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: IJodelAppStore, ownProps) => {
     return {
         active: ownProps.section === state.viewState.get('postSection'),
     };

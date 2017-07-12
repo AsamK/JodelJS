@@ -3,7 +3,7 @@ import * as React from 'react';
 import {Component, MouseEvent} from 'react';
 import {connect} from 'react-redux';
 import {PostListSortTypes} from '../redux/actions';
-import {isLocationKnown} from '../redux/reducers';
+import {IJodelAppStore, isLocationKnown} from '../redux/reducers';
 import {getPost} from '../redux/reducers/entities';
 import AddButton from './AddButton';
 import PostList from './PostList';
@@ -42,7 +42,7 @@ class PostListContainer extends Component<PostListContainerProps> {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: IJodelAppStore) => {
     const section = state.viewState.get('postSection');
     const sortType = state.viewState.get('postListSortType');
     let posts = state.postsBySection.getIn([section, sortType]);

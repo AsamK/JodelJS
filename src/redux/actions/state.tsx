@@ -1,3 +1,4 @@
+import {IJodelAction} from '../../interfaces/IJodelAction';
 export const PostListSortTypes = {
     RECENT: 'recent',
     DISCUSSED: 'discussed',
@@ -127,7 +128,7 @@ export const SET_KARMA = 'SET_KARMA';
 export function _setKarma(karma) {
     return {
         type: SET_KARMA,
-        karma,
+        payload: {karma},
         receivedAt: Date.now(),
     };
 }
@@ -136,7 +137,7 @@ export const SET_CONFIG = 'SET_CONFIG';
 export function _setConfig(config) {
     return {
         type: SET_CONFIG,
-        config,
+        payload: {config},
         receivedAt: Date.now(),
     };
 }
@@ -145,8 +146,10 @@ export const SET_RECOMMENDED_CHANNELS = 'SET_RECOMMENDED_CHANNELS';
 export function setRecommendedChannels(recommendedChannels, localChannels) {
     return {
         type: SET_RECOMMENDED_CHANNELS,
-        recommendedChannels,
-        localChannels,
+        payload: {
+            recommendedChannels,
+            localChannels,
+        },
         entitiesChannel: [].concat(recommendedChannels).concat(localChannels),
     };
 }
@@ -160,10 +163,10 @@ export function setChannelsMeta(channels) {
 }
 
 export const SET_DEVICE_UID = 'SET_DEVICE_UID';
-export function _setDeviceUID(deviceUid) {
+export function _setDeviceUID(deviceUid): IJodelAction {
     return {
         type: SET_DEVICE_UID,
-        deviceUid,
+        payload: {deviceUid},
     };
 }
 
@@ -171,19 +174,23 @@ export const SET_PERMISSION_DENIED = 'SET_PERMISSION_DENIED';
 export function _setPermissionDenied(permissionDenied) {
     return {
         type: SET_PERMISSION_DENIED,
-        permissionDenied,
+        payload: {permissionDenied},
     };
 }
 
 export const SET_TOKEN = 'SET_TOKEN';
-export function _setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType) {
+export function _setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType): IJodelAction {
     return {
         type: SET_TOKEN,
-        distinctId,
-        accessToken,
-        refreshToken,
-        expirationDate,
-        tokenType,
+        payload: {
+            token: {
+                distinctId,
+                refresh: refreshToken,
+                access: accessToken,
+                expirationDate,
+                type: tokenType,
+            },
+        },
     };
 }
 

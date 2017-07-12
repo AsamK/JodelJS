@@ -21,11 +21,13 @@ import {
     invalidatePosts,
     PostListSortTypes
 } from './actions/state';
-import {getLocation} from './reducers';
+import {getLocation, IJodelAppStore} from './reducers';
+import {ThunkAction} from 'redux-thunk';
+import {IJodelAction} from '../interfaces/IJodelAction';
 export * from './actions/state';
 export * from './actions/api';
 
-export function switchPostSection(section) {
+export function switchPostSection(section): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         if (getState().viewState.get('postSection') !== section) {
             dispatch(switchPostListSortType(PostListSortTypes.RECENT));
@@ -38,7 +40,7 @@ export function switchPostSection(section) {
     };
 }
 
-export function switchPostListSortType(sortType) {
+export function switchPostListSortType(sortType): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         if (getState().viewState.get('postListSortType') !== sortType) {
             dispatch(_switchPostListSortType(sortType));
@@ -46,7 +48,7 @@ export function switchPostListSortType(sortType) {
     };
 }
 
-export function updatePosts() {
+export function updatePosts(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         const section = getState().viewState.get('postSection');
         dispatch(invalidatePosts(section));
@@ -54,7 +56,7 @@ export function updatePosts() {
     };
 }
 
-export function selectPost(postId) {
+export function selectPost(postId): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         dispatch(_selectPost(postId));
         if (postId != null) {
@@ -63,13 +65,13 @@ export function selectPost(postId) {
     };
 }
 
-export function selectPicture(postId) {
+export function selectPicture(postId): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         dispatch(_selectPicture(postId));
     };
 }
 
-export function updateLocation() {
+export function updateLocation(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         if (getState().settings.get('useBrowserLocation') && 'geolocation' in navigator) {
             /* geolocation is available */
@@ -78,7 +80,7 @@ export function updateLocation() {
                 if (loc.get('latitude') !== position.coords.latitude ||
                     loc.get('longitude') !== position.coords.longitude) {
                     dispatch(setLocation(position.coords.latitude, position.coords.longitude));
-                    if (getState().account.getIn(['token', 'access']) !== undefined) {
+                    if (getState().account.token.access !== undefined) {
                         dispatch(updatePosts());
                     }
                 }
@@ -97,7 +99,7 @@ export function updateLocation() {
     };
 }
 
-export function setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType) {
+export function setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         // TODO clear cached posts
         dispatch(_setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType));
@@ -127,37 +129,37 @@ function randomValueHex(byteCount) {
     return rawBytes.toString('hex'); // convert to hexadecimal format
 }
 
-export function createNewAccount() {
+export function createNewAccount(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         const deviceUid = randomValueHex(32);
         dispatch(setDeviceUid(deviceUid));
     };
 }
 
-export function setPermissionDenied(permissionDenied) {
+export function setPermissionDenied(permissionDenied): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         let account = getState().account;
-        if (account.get('deviceUid') !== undefined && permissionDenied && !account.get('permissionDenied')) {
+        if (account.deviceUid !== undefined && permissionDenied && !account.permissionDenied) {
             dispatch(_setPermissionDenied(permissionDenied));
             // Reregister
-            dispatch(setDeviceUid(account.get('deviceUid')));
+            dispatch(setDeviceUid(account.deviceUid));
         }
     };
 }
 
-export function showAddPost(visible) {
+export function showAddPost(visible): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         dispatch(_showAddPost(visible));
     };
 }
 
-export function showSettings(visible) {
+export function showSettings(visible): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         dispatch(_showSettings(visible));
     };
 }
 
-export function showChannelList(visible) {
+export function showChannelList(visible): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         if (visible) {
             dispatch(getRecommendedChannels());

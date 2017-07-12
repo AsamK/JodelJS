@@ -16,7 +16,7 @@ import {
     updateLocation
 } from '../redux/actions';
 import {refreshAccessToken} from '../redux/actions/api';
-import JodelApp from '../redux/reducers';
+import {IJodelAppStore, JodelApp} from '../redux/reducers';
 import {ACCOUNT_VERSION, migrateAccount} from '../redux/reducers/account';
 import {migrateSettings, SETTINGS_VERSION} from '../redux/reducers/settings';
 import Jodel from '../views/Jodel';
@@ -26,7 +26,7 @@ let persistedState: any = {};
 let storedAccount = localStorage.getItem('account');
 if (storedAccount) {
     let oldVersion = parseInt(localStorage.getItem('accountVersion'), 10);
-    persistedState.account = Immutable.fromJS(migrateAccount(JSON.parse(storedAccount), oldVersion));
+    persistedState.account = migrateAccount(JSON.parse(storedAccount), oldVersion);
 }
 
 let storedSettings = localStorage.getItem('settings');
@@ -35,7 +35,7 @@ if (storedSettings) {
     persistedState.settings = Immutable.fromJS(migrateSettings(JSON.parse(storedSettings), oldVersion));
 }
 
-let store = createStore(
+let store = createStore<IJodelAppStore>(
     JodelApp,
     persistedState,
     applyMiddleware(
@@ -66,14 +66,14 @@ store.subscribe((() => {
     })(),
 );
 
-if (store.getState().account.getIn(['token', 'access']) === undefined) {
-    if (store.getState().account.get('deviceUid') !== undefined) {
+if (store.getState().account.token.access === null) {
+    if (store.getState().account.deviceUid !== undefined) {
         store.dispatch(setPermissionDenied(true));
     }
 } else {
     const now = new Date().getTime() / 1000;
     let timeToExpire = 60 * 60 * 24 * 4;
-    if (now > store.getState().account.getIn(['token', 'expirationDate']) - timeToExpire) {
+    if (now > store.getState().account.token.expirationDate - timeToExpire) {
         store.dispatch(refreshAccessToken());
     } else {
         store.dispatch(getConfig());

@@ -4,6 +4,7 @@ import {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import {addPost, switchPostSection} from '../redux/actions';
 import ColorPicker from './ColorPicker';
+import {IJodelAppStore} from '../redux/reducers';
 
 export interface AddPostComponentProps {
     ancestor: string
@@ -126,7 +127,7 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: IJodelAppStore) => {
     let channel;
     if (state.viewState.get('selectedPostId') == null) {
         let section = state.viewState.get('postSection');

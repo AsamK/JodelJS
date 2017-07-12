@@ -3,6 +3,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {pin} from '../redux/actions';
 import {sharePost} from '../redux/actions/api';
+import {IJodelAppStore} from '../redux/reducers';
 import BackButton from './BackButton';
 
 export interface PostTopBarProps {
@@ -33,7 +34,7 @@ let PostTopBar = ({onBackClick, onPinClick, onShareClick, post}) => {
     );
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: IJodelAppStore, ownProps) => {
     return {};
 };
 
@@ -43,11 +44,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             window.history.back();
         },
         onPinClick: () => {
-            let isPinned = ownProps.post.has('pinned') && ownProps.post.get('pinned');
-            dispatch(pin(ownProps.post.get('post_id'), !isPinned));
+            let isPinned = ownProps.posts.has('pinned') && ownProps.posts.get('pinned');
+            dispatch(pin(ownProps.posts.get('post_id'), !isPinned));
         },
         onShareClick: () => {
-            dispatch(sharePost(ownProps.post.get('post_id')));
+            dispatch(sharePost(ownProps.posts.get('post_id')));
         },
     };
 };

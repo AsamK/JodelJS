@@ -1,13 +1,22 @@
 import * as Immutable from 'immutable';
 import {combineReducers} from 'redux';
-import account from './reducers/account';
-import entities from './reducers/entities';
+import {account, IAccountStore} from './reducers/account';
+import {entities, IEntitiesStore} from './reducers/entities';
 import imageCaptcha from './reducers/imageCaptcha';
 import postsBySection from './reducers/postsBySection';
 import settings from './reducers/settings';
 import viewState from './reducers/viewState';
 
-const JodelApp = combineReducers({
+export interface IJodelAppStore {
+    entities: IEntitiesStore,
+    postsBySection: any,
+    viewState: any,
+    account: IAccountStore,
+    settings: any,
+    imageCaptcha: any,
+}
+
+export const JodelApp = combineReducers<IJodelAppStore>({
     entities,
     postsBySection,
     viewState,
@@ -33,5 +42,3 @@ export function isLocationKnown(store) {
     const loc = getLocation(store);
     return loc != undefined && loc.get('latitude') != undefined;
 }
-
-export default JodelApp;

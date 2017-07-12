@@ -14,7 +14,7 @@ import {
     switchPostSection,
     updatePosts,
 } from '../redux/actions';
-import {isLocationKnown} from '../redux/reducers';
+import {IJodelAppStore, isLocationKnown} from '../redux/reducers';
 import {getChannel, getPost} from '../redux/reducers/entities';
 import {AddPost} from './AddPost';
 import AppSettings from './AppSettings';
@@ -166,7 +166,7 @@ function getEmptyPost() {
     });
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: IJodelAppStore) => {
     let selectedPicturePost = getPost(state, state.viewState.get('selectedPicturePostId'));
     if (selectedPicturePost === undefined) {
         selectedPicturePost = null;
@@ -182,7 +182,7 @@ const mapStateToProps = (state) => {
     if (section != null && section.startsWith('channel:')) {
         selectedChannel = section.substring(8);
     }
-    let followedChannels = state.account.getIn(['config', 'followed_channels']);
+    let followedChannels = state.account.config.followed_channels;
     return {
         section,
         selectedPost,
@@ -190,11 +190,11 @@ const mapStateToProps = (state) => {
         selectedChannel,
         locationKnown: isLocationKnown(state),
         settings: state.viewState.get('settings'),
-        karma: state.account.get('karma'),
-        deviceUid: state.account.get('deviceUid'),
-        isRegistered: state.account.getIn(['token', 'access']) !== undefined,
+        karma: state.account.karma,
+        deviceUid: state.account.deviceUid,
+        isRegistered: state.account.token.access !== undefined,
         followedChannels: followedChannels === undefined ? [] : followedChannels.map(c => getChannel(state, c)),
-        recommendedChannels: state.account.get('recommendedChannels')
+        recommendedChannels: state.account.recommendedChannels
             .map(channel => followedChannels === undefined ? [] : followedChannels.reduce((v, c) => {
                 if (c.toLowerCase() === channel.toLowerCase()) {
                     return undefined;
@@ -203,7 +203,7 @@ const mapStateToProps = (state) => {
                 }
             }, getChannel(state, channel)))
             .filter(c => c !== undefined),
-        localChannels: state.account.get('localChannels')
+        localChannels: state.account.localChannels
             .map(channel => followedChannels === undefined ? [] : followedChannels.reduce((v, c) => {
                 if (c.toLowerCase() === channel.toLowerCase()) {
                     return undefined;

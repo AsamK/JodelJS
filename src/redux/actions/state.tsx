@@ -1,60 +1,59 @@
+import {IConfig} from '../../interfaces/IConfig';
 import {IJodelAction} from '../../interfaces/IJodelAction';
-export const PostListSortTypes = {
-    RECENT: 'recent',
-    DISCUSSED: 'discussed',
-    POPULAR: 'popular',
-};
+import {PostListSortType} from '../../interfaces/PostListSortType';
+import {Section} from '../../interfaces/Section';
+import {IViewStateStore} from '../reducers/viewState';
 
 export const SWITCH_POST_LIST_SORT_TYPE = 'SWITCH_POST_LIST_CONTAINER_STATE';
-export function _switchPostListSortType(sortType) {
+export function _switchPostListSortType(sortType: PostListSortType): IJodelAction {
     return {
         type: SWITCH_POST_LIST_SORT_TYPE,
-        sortType,
+        payload: {sortType},
     };
 }
 
 export const SWITCH_POST_SECTION = 'SWITCH_POST_SECTION';
-export function _switchPostSection(section) {
+export function _switchPostSection(section: Section): IJodelAction {
     return {
         type: SWITCH_POST_SECTION,
-        section,
+        payload: {section},
     };
 }
 
 export const SHOW_ADD_POST = 'SHOW_ADD_POST';
-export function _showAddPost(visible) {
+export function _showAddPost(visible: boolean): IJodelAction {
     return {
         type: SHOW_ADD_POST,
-        visible,
+        payload: {visible},
     };
 }
 
 export const SHOW_SETTINGS = 'SHOW_SETTINGS';
-export function _showSettings(visible) {
+export function _showSettings(visible: boolean): IJodelAction {
     return {
         type: SHOW_SETTINGS,
-        visible,
+        payload: {visible},
     };
 }
 
 export const SHOW_CHANNEL_LIST = 'SHOW_CHANNEL_LIST';
-export function _showChannelList(visible) {
+export function _showChannelList(visible: boolean): IJodelAction {
     return {
         type: SHOW_CHANNEL_LIST,
-        visible,
+        payload: {visible},
     };
 }
 
 export const REPLACE_VIEW_STATE = 'REPLACE_VIEW_STATE';
-export function replaceViewState(newViewState) {
+export function replaceViewState(newViewState: IViewStateStore): IJodelAction {
     return {
         type: REPLACE_VIEW_STATE,
-        newViewState,
+        payload: {newViewState},
     };
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
-export function receivePosts(section, postsBySortType, append = false): IJodelAction {
+export function receivePosts(section: Section, postsBySortType, append = false): IJodelAction {
     const payload = {
         section,
         postsBySortType: [],
@@ -65,21 +64,21 @@ export function receivePosts(section, postsBySortType, append = false): IJodelAc
     if (postsBySortType.recent !== undefined) {
         payload.entities = payload.entities.concat(postsBySortType.recent);
         payload.postsBySortType.push({
-            sortType: PostListSortTypes.RECENT,
+            sortType: PostListSortType.RECENT,
             posts: postsBySortType.recent.map(post => post.post_id),
         });
     }
     if (postsBySortType.discussed !== undefined) {
         payload.entities = payload.entities.concat(postsBySortType.discussed);
         payload.postsBySortType.push({
-            sortType: PostListSortTypes.DISCUSSED,
+            sortType: PostListSortType.DISCUSSED,
             posts: postsBySortType.discussed.map(post => post.post_id),
         });
     }
     if (postsBySortType.popular !== undefined) {
         payload.entities = payload.entities.concat(postsBySortType.popular);
         payload.postsBySortType.push({
-            sortType: PostListSortTypes.POPULAR,
+            sortType: PostListSortType.POPULAR,
             posts: postsBySortType.popular.map(post => post.post_id),
         });
     }
@@ -90,7 +89,7 @@ export function receivePosts(section, postsBySortType, append = false): IJodelAc
     };
 }
 
-export function receivePost(post, append = false) {
+export function receivePost(post, append = false): IJodelAction {
     return {
         type: RECEIVE_POSTS,
         receivedAt: Date.now(),
@@ -102,34 +101,36 @@ export function receivePost(post, append = false) {
 }
 
 export const PINNED_POST = 'PINNED_POST';
-export function pinnedPost(postId, pinned, pinCount) {
+export function pinnedPost(postId: string, pinned: boolean, pinCount: number): IJodelAction {
     return {
         type: PINNED_POST,
-        postId,
-        pinned,
-        pinCount,
+        payload: {
+            postId,
+            pinned,
+            pinCount,
+        },
     };
 }
 
 export const SELECT_POST = 'SELECT_POST';
-export function _selectPost(postId) {
+export function _selectPost(postId: string): IJodelAction {
     return {
         type: SELECT_POST,
-        postId: postId,
+        payload: {postId},
     };
 }
 
 export const SELECT_PICTURE = 'SELECT_PICTURE';
-export function _selectPicture(postId) {
+export function _selectPicture(postId: string) {
     return {
         type: SELECT_PICTURE,
-        postId: postId,
+        payload: {postId},
     };
 }
 
 
 export const SET_KARMA = 'SET_KARMA';
-export function _setKarma(karma) {
+export function _setKarma(karma: number): IJodelAction {
     return {
         type: SET_KARMA,
         payload: {karma},
@@ -138,7 +139,7 @@ export function _setKarma(karma) {
 }
 
 export const SET_CONFIG = 'SET_CONFIG';
-export function _setConfig(config) {
+export function _setConfig(config: IConfig): IJodelAction {
     return {
         type: SET_CONFIG,
         payload: {config},
@@ -147,22 +148,24 @@ export function _setConfig(config) {
 }
 
 export const SET_RECOMMENDED_CHANNELS = 'SET_RECOMMENDED_CHANNELS';
-export function setRecommendedChannels(recommendedChannels, localChannels) {
+export function setRecommendedChannels(recommendedChannels, localChannels): IJodelAction {
     return {
         type: SET_RECOMMENDED_CHANNELS,
         payload: {
             recommendedChannels,
             localChannels,
+            entitiesChannel: [].concat(recommendedChannels).concat(localChannels),
         },
-        entitiesChannel: [].concat(recommendedChannels).concat(localChannels),
     };
 }
 
 export const SET_CHANNELS_META = 'SET_CHANNELS_META';
-export function setChannelsMeta(channels) {
+export function setChannelsMeta(channels): IJodelAction {
     return {
         type: SET_CHANNELS_META,
-        entitiesChannel: channels,
+        payload: {
+            entitiesChannel: channels,
+        },
     };
 }
 
@@ -175,7 +178,7 @@ export function _setDeviceUID(deviceUid): IJodelAction {
 }
 
 export const SET_PERMISSION_DENIED = 'SET_PERMISSION_DENIED';
-export function _setPermissionDenied(permissionDenied) {
+export function _setPermissionDenied(permissionDenied: boolean): IJodelAction {
     return {
         type: SET_PERMISSION_DENIED,
         payload: {permissionDenied},
@@ -183,7 +186,7 @@ export function _setPermissionDenied(permissionDenied) {
 }
 
 export const SET_TOKEN = 'SET_TOKEN';
-export function _setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType): IJodelAction {
+export function _setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number, tokenType: string): IJodelAction {
     return {
         type: SET_TOKEN,
         payload: {
@@ -199,34 +202,40 @@ export function _setToken(distinctId, accessToken, refreshToken, expirationDate,
 }
 
 export const SET_LOCATION = 'SET_LOCATION';
-export function _setLocation(latitude, longitude, city, country = 'DE') {
+export function _setLocation(latitude: number, longitude: number, city: string, country = 'DE'): IJodelAction {
     return {
         type: SET_LOCATION,
-        location: {latitude, longitude, city, country},
         receivedAt: Date.now(),
+        payload: {
+            location: {latitude, longitude, city, country},
+        },
     };
 }
 
 export const SET_USE_BROWSER_LOCATION = 'SET_USE_BROWSER_LOCATION';
-export function setUseBrowserLocation(useBrowserLocation) {
+export function setUseBrowserLocation(useBrowserLocation: boolean): IJodelAction {
     return {
         type: SET_USE_BROWSER_LOCATION,
-        useBrowserLocation,
         receivedAt: Date.now(),
+        payload: {
+            useBrowserLocation,
+        },
     };
 }
 
 export const SET_USE_HOME_LOCATION = 'SET_USE_HOME_LOCATION';
-export function setUseHomeLocation(useHomeLocation) {
+export function setUseHomeLocation(useHomeLocation: boolean): IJodelAction {
     return {
         type: SET_USE_HOME_LOCATION,
-        useHomeLocation,
         receivedAt: Date.now(),
+        payload: {
+            useHomeLocation,
+        },
     };
 }
 
 export const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
-export function invalidatePosts(section) {
+export function invalidatePosts(section: Section): IJodelAction {
     return {
         type: INVALIDATE_POSTS,
         payload: {section},
@@ -234,7 +243,7 @@ export function invalidatePosts(section) {
 }
 
 export const SET_IS_FETCHING = 'SET_IS_FETCHING';
-export function setIsFetching(section, isFetching = true) {
+export function setIsFetching(section: Section, isFetching = true): IJodelAction {
     return {
         type: SET_IS_FETCHING,
         payload: {
@@ -244,11 +253,13 @@ export function setIsFetching(section, isFetching = true) {
     };
 }
 export const SET_IMAGE_CAPTCHA = 'SET_IMAGE_CAPTCHA';
-export function setImageCaptcha(key, imageUrl, imageWidth) {
+export function setImageCaptcha(key: string, imageUrl: string, imageWidth: number): IJodelAction {
     return {
         type: SET_IMAGE_CAPTCHA,
-        key,
-        imageUrl,
-        imageWidth,
+        payload: {
+            key,
+            imageUrl,
+            imageWidth,
+        },
     };
 }

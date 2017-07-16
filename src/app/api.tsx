@@ -1,7 +1,7 @@
 import * as crypto from 'crypto';
 import * as request from 'superagent';
 import Settings from '../app/settings';
-import {PostListSortTypes} from '../redux/actions';
+import {PostListSortType} from '../interfaces/PostListSortType';
 
 const API_PATH_V2 = '/v2';
 const API_PATH_V3 = '/v3';
@@ -70,13 +70,13 @@ export function apiGetPostsCombo(auth, latitude, longitude, stickies = true, hom
 export function apiGetPosts(auth, sortType, afterPostId, latitude, longitude, home = false) {
     let type;
     switch (sortType) {
-    case PostListSortTypes.RECENT:
+    case PostListSortType.RECENT:
         type = '';
         break;
-    case PostListSortTypes.DISCUSSED:
+    case PostListSortType.DISCUSSED:
         type = 'discussed';
         break;
-    case PostListSortTypes.POPULAR:
+    case PostListSortType.POPULAR:
         type = 'popular';
         break;
     default:
@@ -97,13 +97,13 @@ export function apiGetPostsMineCombo(auth) {
 export function apiGetPostsMine(auth, sortType, skip, limit) {
     let type;
     switch (sortType) {
-    case PostListSortTypes.RECENT:
+    case PostListSortType.RECENT:
         type = '';
         break;
-    case PostListSortTypes.DISCUSSED:
+    case PostListSortType.DISCUSSED:
         type = 'discussed';
         break;
-    case PostListSortTypes.POPULAR:
+    case PostListSortType.POPULAR:
         type = 'popular';
         break;
     default:
@@ -143,13 +143,13 @@ export function apiGetPostsChannelCombo(auth, channel, home = false) {
 export function apiGetPostsChannel(auth, sortType, afterPostId, channel, home = false) {
     let type;
     switch (sortType) {
-    case PostListSortTypes.RECENT:
+    case PostListSortType.RECENT:
         type = '';
         break;
-    case PostListSortTypes.DISCUSSED:
+    case PostListSortType.DISCUSSED:
         type = 'discussed';
         break;
-    case PostListSortTypes.POPULAR:
+    case PostListSortType.POPULAR:
         type = 'popular';
         break;
     default:
@@ -170,13 +170,13 @@ export function apiGetPostsHashtagCombo(auth, hashtag, home = false) {
 export function apiGetPostsHashtag(auth, sortType, afterPostId, hashtag, home = false) {
     let type;
     switch (sortType) {
-    case PostListSortTypes.RECENT:
+    case PostListSortType.RECENT:
         type = '';
         break;
-    case PostListSortTypes.DISCUSSED:
+    case PostListSortType.DISCUSSED:
         type = 'discussed';
         break;
-    case PostListSortTypes.POPULAR:
+    case PostListSortType.POPULAR:
         type = 'popular';
         break;
     default:

@@ -24,7 +24,7 @@ const posts = combineReducers<IPostSection>({
     postsBySortType,
 });
 
-function isFetching(state = false, action: IJodelAction): boolean {
+function isFetching(state = false, action: IJodelAction): typeof state {
     switch (action.type) {
     case RECEIVE_POSTS:
         return false;
@@ -35,7 +35,7 @@ function isFetching(state = false, action: IJodelAction): boolean {
     }
 }
 
-function didInvalidate(state = false, action: IJodelAction): boolean {
+function didInvalidate(state = false, action: IJodelAction): typeof state {
     switch (action.type) {
     case RECEIVE_POSTS:
         if (action.payload.append) {
@@ -49,7 +49,7 @@ function didInvalidate(state = false, action: IJodelAction): boolean {
     }
 }
 
-function lastUpdated(state: number = null, action: IJodelAction): number {
+function lastUpdated(state: number = null, action: IJodelAction): typeof state {
     switch (action.type) {
     case RECEIVE_POSTS:
         return action.receivedAt;
@@ -58,7 +58,7 @@ function lastUpdated(state: number = null, action: IJodelAction): number {
     }
 }
 
-function postsBySortType(state = Immutable.Map<string, Immutable.List<string>>({}), action: IJodelAction) {
+function postsBySortType(state = Immutable.Map<string, Immutable.List<string>>({}), action: IJodelAction): typeof state {
     switch (action.type) {
     case RECEIVE_POSTS:
         let newState: any = {};
@@ -75,7 +75,7 @@ function postsBySortType(state = Immutable.Map<string, Immutable.List<string>>({
     }
 }
 
-export function postsBySection(state: IPostsBySectionStore = Immutable.Map<string, any>({}), action: IJodelAction): IPostsBySectionStore {
+export function postsBySection(state: IPostsBySectionStore = Immutable.Map<string, any>({}), action: IJodelAction): typeof state {
     switch (action.type) {
     case RECEIVE_POSTS:
     case INVALIDATE_POSTS:

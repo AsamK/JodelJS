@@ -34,7 +34,7 @@ const SectionLink = ({section, active, onClick}: SectionLinkProps) => {
 
 const mapStateToProps = (state: IJodelAppStore, ownProps) => {
     return {
-        active: ownProps.section === state.viewState.get('postSection'),
+        active: ownProps.section === state.viewState.postSection,
     };
 };
 

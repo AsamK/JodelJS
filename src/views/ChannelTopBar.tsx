@@ -1,6 +1,6 @@
 import * as classnames from 'classnames';
 import * as React from 'react';
-import {connect} from 'react-redux';
+import {connect, Dispatch} from 'react-redux';
 import {followChannel} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 import {getChannel} from '../redux/reducers/entities';
@@ -30,11 +30,11 @@ let ChannelTopBar = ({onFollowClick, channel, followerCount, followedName}: Chan
     );
 };
 
-const mapStateToProps = (state: IJodelAppStore, ownProps) => {
-    let followers = getChannel(state, ownProps.channels).get('followers');
+const mapStateToProps = (state: IJodelAppStore, ownProps: Partial<ChannelTopBarProps>) => {
+    let followers = getChannel(state, ownProps.channel).get('followers');
     return {
         followedName: state.account.config.followed_channels.reduce((v, c) => {
-            if (c.toLowerCase() === ownProps.channels.toLowerCase()) {
+            if (c.toLowerCase() === ownProps.channel.toLowerCase()) {
                 return c;
             } else {
                 return v;
@@ -44,7 +44,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps) => {
     };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: Partial<ChannelTopBarProps>) => {
     return {
         onFollowClick: (channel, follow) => {
             dispatch(followChannel(channel, follow));

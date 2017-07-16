@@ -32,7 +32,7 @@ if (storedAccount) {
 let storedSettings = localStorage.getItem('settings');
 if (storedSettings) {
     let oldVersion = parseInt(localStorage.getItem('settingsVersion'), 10);
-    persistedState.settings = Immutable.fromJS(migrateSettings(JSON.parse(storedSettings), oldVersion));
+    persistedState.settings = migrateSettings(JSON.parse(storedSettings), oldVersion);
 }
 
 let store = createStore<IJodelAppStore>(
@@ -42,7 +42,6 @@ let store = createStore<IJodelAppStore>(
         thunkMiddleware, // lets us use dispatch() functions
     ),
 );
-store.dispatch({type: 'INIT'});
 let userClickedBack = false;
 store.subscribe((() => {
         let previousState = store.getState();
@@ -54,11 +53,11 @@ store.subscribe((() => {
             localStorage.setItem('settings', JSON.stringify(state.settings));
             localStorage.setItem('settingsVersion', SETTINGS_VERSION.toString());
 
-            if (!previousState.viewState.equals(state.viewState)) {
+            if (previousState.viewState !== state.viewState) {
                 if (userClickedBack) {
                     userClickedBack = false;
                 } else {
-                    history.pushState(state.viewState.toJS(), '');
+                    history.pushState(state.viewState, '');
                 }
             }
             previousState = state;
@@ -83,7 +82,7 @@ if (store.getState().account.token.access === null) {
 store.dispatch(updateLocation());
 
 if (history.state === null) {
-    history.replaceState(store.getState().viewState.toJS(), '');
+    history.replaceState(store.getState().viewState, '');
     store.dispatch(switchPostSection('location'));
 } else {
     userClickedBack = true;

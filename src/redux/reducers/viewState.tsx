@@ -1,4 +1,7 @@
-import * as Immutable from 'immutable';
+import {combineReducers} from 'redux';
+
+import {IJodelAction} from '../../interfaces/IJodelAction';
+import {Section, SectionEnum} from '../../interfaces/Section';
 import {
     REPLACE_VIEW_STATE,
     SELECT_PICTURE,
@@ -9,39 +12,100 @@ import {
     SWITCH_POST_LIST_SORT_TYPE,
     SWITCH_POST_SECTION,
 } from '../actions';
-import {PostListSortTypes} from '../actions/state';
+import {PostListSortType} from '../../interfaces/PostListSortType';
 
-function viewState(state = Immutable.Map<string, any>({
-    selectedPostId: null,
-    selectedPicturePostId: null,
-    postSection: 'location',
-    postListSortType: PostListSortTypes.RECENT,
-    addPost: Immutable.Map({visible: false}),
-    settings: Immutable.Map({visible: false}),
-    channelList: Immutable.Map({visible: false}),
-}), action) {
+export interface IVisible {
+    visible: boolean
+}
+
+export interface IViewStateStore {
+    selectedPostId: string | null
+    selectedPicturePostId: string | null
+    postSection: Section
+    postListSortType: PostListSortType
+    addPost: IVisible
+    settings: IVisible
+    channelList: IVisible
+}
+
+export function viewState(state: IViewStateStore, action: IJodelAction): IViewStateStore {
+    switch (action.type) {
+    case REPLACE_VIEW_STATE:
+        return {...state, ...action.payload.newViewState};
+    default:
+        return viewStateCombined(state, action);
+    }
+}
+
+const viewStateCombined = combineReducers<IViewStateStore>({
+    selectedPostId,
+    selectedPicturePostId,
+    postSection,
+    postListSortType,
+    addPost,
+    settings,
+    channelList,
+});
+
+function selectedPostId(state: string = null, action: IJodelAction): typeof state {
     switch (action.type) {
     case SELECT_POST:
-        return state.set('selectedPostId', action.postId);
-    case SELECT_PICTURE:
-        return state.set('selectedPicturePostId', action.postId);
-    case SWITCH_POST_LIST_SORT_TYPE:
-        return state.set('postListSortType', action.sortType);
-    case SWITCH_POST_SECTION:
-        return state.set('postSection', action.section);
-    case SHOW_ADD_POST:
-        return state.update('addPost', addPost => addPost.merge({
-            visible: action.visible,
-        }));
-    case SHOW_SETTINGS:
-        return state.update('settings', settings => settings.set('visible', action.visible));
-    case SHOW_CHANNEL_LIST:
-        return state.update('channelList', channelList => channelList.set('visible', action.visible));
-    case REPLACE_VIEW_STATE:
-        return state.merge(action.newViewState);
+        return action.payload.postId;
     default:
         return state;
     }
 }
 
-export default viewState;
+function selectedPicturePostId(state: string = null, action: IJodelAction): typeof state {
+    switch (action.type) {
+    case SELECT_PICTURE:
+        return action.payload.postId;
+    default:
+        return state;
+    }
+}
+
+function postSection(state = SectionEnum.LOCATION, action: IJodelAction): typeof state {
+    switch (action.type) {
+    case SWITCH_POST_SECTION:
+        return action.payload.section;
+    default:
+        return state;
+    }
+}
+
+function postListSortType(state = PostListSortType.RECENT, action: IJodelAction): typeof state {
+    switch (action.type) {
+    case SWITCH_POST_LIST_SORT_TYPE:
+        return action.payload.sortType;
+    default:
+        return state;
+    }
+}
+
+function addPost(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
+    switch (action.type) {
+    case SHOW_ADD_POST:
+        return {visible: action.payload.visible};
+    default:
+        return state;
+    }
+}
+
+function settings(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
+    switch (action.type) {
+    case SHOW_SETTINGS:
+        return {visible: action.payload.visible};
+    default:
+        return state;
+    }
+}
+
+function channelList(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
+    switch (action.type) {
+    case SHOW_CHANNEL_LIST:
+        return {visible: action.payload.visible};
+    default:
+        return state;
+    }
+}

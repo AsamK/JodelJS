@@ -33,13 +33,13 @@ class Post extends PureComponent<PostProps> {
             // Give thanks
             dispatch(giveThanks(post.get('post_id'), parentPostId));
         } else {
-            dispatch(upVote(post.get('post_id'), parentPostId));
+            dispatch(upVote(post.get('post_id')));
         }
     }
 
     downvote(e) {
         e.stopPropagation();
-        this.props.dispatch(downVote(this.props.post.get('post_id'), this.props.parentPostId));
+        this.props.dispatch(downVote(this.props.post.get('post_id')));
     }
 
     render() {

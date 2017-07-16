@@ -14,7 +14,7 @@ import {
 } from '../actions';
 
 export const ACCOUNT_VERSION = 3;
-export function migrateAccount(storedState, oldVersion) {
+export function migrateAccount(storedState: IAccountStore, oldVersion: number): IAccountStore {
     storedState.permissionDenied = false;
     if (oldVersion < 2) {
         storedState.recommendedChannels = Immutable.List();
@@ -28,8 +28,8 @@ export function migrateAccount(storedState, oldVersion) {
 export interface IAccountStore {
     karma: number,
     deviceUid: string,
-    token: IToken,
-    config: IConfig,
+    token: IToken | null,
+    config: IConfig | null,
     permissionDenied: boolean,
     recommendedChannels: Immutable.List<any>
     localChannels: Immutable.List<any>
@@ -45,7 +45,7 @@ export const account = combineReducers<IAccountStore>({
     localChannels,
 });
 
-function karma(state = 0, action: IJodelAction): number {
+function karma(state = 0, action: IJodelAction): typeof state {
     switch (action.type) {
     case SET_KARMA:
         return action.payload.karma;
@@ -54,7 +54,7 @@ function karma(state = 0, action: IJodelAction): number {
     }
 }
 
-function deviceUid(state: string = null, action: IJodelAction): string {
+function deviceUid(state: string = null, action: IJodelAction): typeof state {
     switch (action.type) {
     case SET_DEVICE_UID:
         return action.payload.deviceUid;
@@ -63,7 +63,7 @@ function deviceUid(state: string = null, action: IJodelAction): string {
     }
 }
 
-function token(state: IToken = null, action: IJodelAction): IToken {
+function token(state: IToken = null, action: IJodelAction): typeof state {
     switch (action.type) {
     case SET_TOKEN:
         return action.payload.token;
@@ -72,7 +72,7 @@ function token(state: IToken = null, action: IJodelAction): IToken {
     }
 }
 
-function config(state: any = null, action: IJodelAction): any {
+function config(state: any = null, action: IJodelAction): typeof state {
     switch (action.type) {
     case SET_CONFIG:
         return action.payload.config;
@@ -81,7 +81,7 @@ function config(state: any = null, action: IJodelAction): any {
     }
 }
 
-function permissionDenied(state: boolean = false, action: IJodelAction): boolean {
+function permissionDenied(state: boolean = false, action: IJodelAction): typeof state {
     switch (action.type) {
     case SET_TOKEN:
         return false;
@@ -92,19 +92,19 @@ function permissionDenied(state: boolean = false, action: IJodelAction): boolean
     }
 }
 
-function recommendedChannels(state = Immutable.List<any>(), action: IJodelAction): Immutable.List<any> {
+function recommendedChannels(state = Immutable.List<any>(), action: IJodelAction): typeof state {
     switch (action.type) {
     case SET_RECOMMENDED_CHANNELS:
-        return Immutable.List(action.payload.recommendedChannels.map(c => c.channels));
+        return Immutable.List(action.payload.recommendedChannels.map(c => c.channel));
     default:
         return state;
     }
 }
 
-function localChannels(state = Immutable.List<any>(), action: IJodelAction): Immutable.List<any> {
+function localChannels(state = Immutable.List<any>(), action: IJodelAction): typeof state {
     switch (action.type) {
     case SET_RECOMMENDED_CHANNELS:
-        return Immutable.List(action.payload.localChannels.map(c => c.channels));
+        return Immutable.List(action.payload.localChannels.map(c => c.channel));
     default:
         return state;
     }

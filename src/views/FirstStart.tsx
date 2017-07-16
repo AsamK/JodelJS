@@ -94,9 +94,9 @@ const mapStateToProps = (state: IJodelAppStore) => {
     let loc = getLocation(state);
     return {
         deviceUid: state.account.deviceUid,
-        latitude: loc.get('latitude'),
-        longitude: loc.get('longitude'),
-        useBrowserLocation: state.settings.get('useBrowserLocation'),
+        latitude: loc ? loc.latitude : undefined,
+        longitude: loc ? loc.longitude : undefined,
+        useBrowserLocation: state.settings.useBrowserLocation,
     };
 };
 

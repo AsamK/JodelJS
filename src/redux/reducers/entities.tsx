@@ -3,17 +3,19 @@ import {combineReducers} from 'redux';
 
 import {PINNED_POST, RECEIVE_POSTS} from '../actions';
 import {IJodelAppStore} from '../reducers';
+import {IJodelAction} from '../../interfaces/IJodelAction';
 
 export interface IEntitiesStore {
-    posts: any
-    channels: any
+    posts: Immutable.Map<string, any>
+    channels: Immutable.Map<string, any>
 }
+
 export const entities = combineReducers({
     posts,
     channels,
 });
 
-function posts(state = Immutable.Map<string, any>(), action) {
+function posts(state = Immutable.Map<string, any>(), action: IJodelAction): typeof state {
     if (action.payload && action.payload.entities !== undefined) {
         let newState = {};
         action.payload.entities.forEach((post) => {
@@ -26,7 +28,7 @@ function posts(state = Immutable.Map<string, any>(), action) {
             if (state.has(post.post_id)) {
                 const oldPost = state.get(post.post_id);
                 if (oldPost.has('children') && post.children !== undefined) {
-                    if (action.append === true) {
+                    if (action.payload.append === true) {
                         post.child_count += oldPost.get('children').count();
                         post.children = oldPost.get('children').concat(post.children);
                     } else if (post.children.length == 0) {
@@ -42,19 +44,17 @@ function posts(state = Immutable.Map<string, any>(), action) {
     }
     switch (action.type) {
     case PINNED_POST:
-        return state.update(action.postId, post => post.set('pinned', action.pinned).set('pin_count', action.pinCount));
+        return state.update(action.payload.postId, post => post.set('pinned', action.payload.pinned).set('pin_count', action.payload.pinCount));
     default:
         return state;
     }
 }
 
-function channels(state = Immutable.Map(), action) {
-    if (action.channels !== undefined) {
-        let newState = {};
-        action.channels.forEach((channel) => {
-            newState[channel.channels] = channel;
+function channels(state = Immutable.Map(), action: IJodelAction): typeof state {
+    if (action.payload && action.payload.entitiesChannels !== undefined) {
+        action.payload.entitiesChannels.forEach((channel) => {
+            state = state.set(channel.channels, channel);
         });
-        state = state.mergeDeep(newState);
     }
     switch (action.type) {
     case RECEIVE_POSTS:

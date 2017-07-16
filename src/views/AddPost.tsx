@@ -129,16 +129,16 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
 
 const mapStateToProps = (state: IJodelAppStore) => {
     let channel;
-    if (state.viewState.get('selectedPostId') == null) {
-        let section = state.viewState.get('postSection');
+    if (state.viewState.selectedPostId == null) {
+        let section = state.viewState.postSection;
         if (section != null && section.startsWith('channel:')) {
             channel = section.substring(8);
         }
     }
     return {
-        ancestor: state.viewState.get('selectedPostId'),
+        ancestor: state.viewState.selectedPostId,
         channel,
-        visible: state.viewState.getIn(['addPost', 'visible']),
+        visible: state.viewState.addPost.visible,
     };
 };
 

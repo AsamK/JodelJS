@@ -16,7 +16,7 @@ const SortTypeLink = ({sortType, active, onClick}: SortTypeLinkProps) => (
 
 const mapStateToProps = (state: IJodelAppStore, ownProps) => {
     return {
-        active: ownProps.sortType === state.viewState.get('postListSortType'),
+        active: ownProps.sortType === state.viewState.postListSortType,
     };
 };
 

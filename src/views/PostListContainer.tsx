@@ -2,7 +2,8 @@ import * as Immutable from 'immutable';
 import * as React from 'react';
 import {Component, MouseEvent} from 'react';
 import {connect} from 'react-redux';
-import {PostListSortTypes} from '../redux/actions';
+import {PostListSortType} from '../interfaces/PostListSortType';
+
 import {IJodelAppStore, isLocationKnown} from '../redux/reducers';
 import {getPost} from '../redux/reducers/entities';
 import AddButton from './AddButton';
@@ -33,9 +34,9 @@ class PostListContainer extends Component<PostListContainerProps> {
                           onPostClick={onPostClick} onLoadMore={onLoadMore}/>
                 {locationKnown ? <AddButton onClick={onAddClick}/> : ''}
                 <div className="sortTypes">
-                    <SortTypeLink sortType={PostListSortTypes.RECENT}/>
-                    <SortTypeLink sortType={PostListSortTypes.DISCUSSED}/>
-                    <SortTypeLink sortType={PostListSortTypes.POPULAR}/>
+                    <SortTypeLink sortType={PostListSortType.RECENT}/>
+                    <SortTypeLink sortType={PostListSortType.DISCUSSED}/>
+                    <SortTypeLink sortType={PostListSortType.POPULAR}/>
                 </div>
             </div>
         );
@@ -43,8 +44,8 @@ class PostListContainer extends Component<PostListContainerProps> {
 }
 
 const mapStateToProps = (state: IJodelAppStore, ownProps) => {
-    const section = state.viewState.get('postSection');
-    const sortType = state.viewState.get('postListSortType');
+    const section = state.viewState.postSection;
+    const sortType = state.viewState.postListSortType;
     const postsSection = state.postsBySection.get(section);
     const posts = postsSection !== undefined && postsSection.postsBySortType.has(sortType) ? postsSection.postsBySortType.get(sortType) : Immutable.List<string>([]);
     return {

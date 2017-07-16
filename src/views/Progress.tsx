@@ -37,8 +37,10 @@ class Progress extends Component<ProgressProps> {
 }
 
 function mapStateToProps(state: IJodelAppStore, ownProps) {
-    let isFetching = state.postsBySection.getIn([state.viewState.get('postSection'), 'isFetching']);
-    return {isFetching: isFetching === undefined ? false : isFetching};
+    let postSection = state.postsBySection.get(state.viewState.postSection);
+    return {
+        isFetching: postSection === undefined ? false : postSection.isFetching
+    };
 }
 
 export default connect(mapStateToProps)(Progress);

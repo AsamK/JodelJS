@@ -26,6 +26,8 @@ import PostListContainer from './PostListContainer';
 import PostTopBar from './PostTopBar';
 import Progress from './Progress';
 import TopBar from './TopBar';
+import {ISettingsStore} from '../redux/reducers/settings';
+import {IVisible} from '../redux/reducers/viewState';
 
 export interface JodelProps {
     section: string
@@ -33,7 +35,7 @@ export interface JodelProps {
     selectedPicturePost: any
     selectedChannel: string
     locationKnown: boolean
-    settings: any
+    settings: IVisible
     karma: number
     deviceUid: string
     isRegistered: boolean
@@ -91,7 +93,7 @@ class Jodel extends Component<JodelProps> {
             return <div className="jodel">
                 <FirstStart/>
             </div>;
-        } else if (this.props.settings.get('visible')) {
+        } else if (this.props.settings.visible) {
             return <AppSettings/>;
         } else {
             let selectedPost = this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost();
@@ -167,17 +169,17 @@ function getEmptyPost() {
 }
 
 const mapStateToProps = (state: IJodelAppStore, ownProps) => {
-    let selectedPicturePost = getPost(state, state.viewState.get('selectedPicturePostId'));
+    let selectedPicturePost = getPost(state, state.viewState.selectedPicturePostId);
     if (selectedPicturePost === undefined) {
         selectedPicturePost = null;
     }
-    let selectedPost = getPost(state, state.viewState.get('selectedPostId'));
+    let selectedPost = getPost(state, state.viewState.selectedPostId);
     if (selectedPost === undefined) {
         selectedPost = null;
     } else if (selectedPost.has('children')) {
         selectedPost = selectedPost.set('children', selectedPost.get('children').map((child) => getPost(state, child)));
     }
-    let section = state.viewState.get('postSection');
+    let section = state.viewState.postSection;
     let selectedChannel;
     if (section != null && section.startsWith('channel:')) {
         selectedChannel = section.substring(8);
@@ -189,7 +191,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps) => {
         selectedPicturePost,
         selectedChannel,
         locationKnown: isLocationKnown(state),
-        settings: state.viewState.get('settings'),
+        settings: state.viewState.settings,
         karma: state.account.karma,
         deviceUid: state.account.deviceUid,
         isRegistered: state.account.token.access !== undefined,
@@ -212,7 +214,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps) => {
                 }
             }, getChannel(state, channel)))
             .filter(c => c !== undefined),
-        channelListShown: state.viewState.getIn(['channelList', 'visible']),
+        channelListShown: state.viewState.channelList.visible,
     };
 };
 

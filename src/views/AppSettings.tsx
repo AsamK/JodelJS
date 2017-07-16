@@ -136,14 +136,14 @@ const mapStateToProps = (state: IJodelAppStore, ownProps) => {
     let loc = getLocation(state);
     return {
         deviceUid: state.account.deviceUid,
-        latitude: loc.get('latitude'),
-        longitude: loc.get('longitude'),
+        latitude: loc ? loc.latitude : undefined,
+        longitude: loc ? loc.longitude : undefined,
         homeSet: state.account.config.home_set,
         homeName: state.account.config.home_name,
         homeClearAllowed: state.account.config.home_clear_allowed,
         verified: state.account.config.verified,
-        useBrowserLocation: state.settings.get('useBrowserLocation'),
-        useHomeLocation: state.settings.get('useHomeLocation'),
+        useBrowserLocation: state.settings.useBrowserLocation,
+        useHomeLocation: state.settings.useHomeLocation,
         image: state.imageCaptcha.image,
     };
 };

@@ -1,4 +1,8 @@
 import * as crypto from 'crypto';
+import {ThunkAction} from 'redux-thunk';
+
+import {PostListSortType} from '../interfaces/PostListSortType';
+import {Section} from '../interfaces/Section';
 import {
     fetchPostsIfNeeded,
     getConfig,
@@ -6,7 +10,7 @@ import {
     getRecommendedChannels,
     setDeviceUid,
     setLocation,
-    updatePost
+    updatePost,
 } from './actions/api';
 import {
     _selectPicture,
@@ -19,18 +23,16 @@ import {
     _switchPostListSortType,
     _switchPostSection,
     invalidatePosts,
-    PostListSortTypes
 } from './actions/state';
 import {getLocation, IJodelAppStore} from './reducers';
-import {ThunkAction} from 'redux-thunk';
-import {IJodelAction} from '../interfaces/IJodelAction';
+
 export * from './actions/state';
 export * from './actions/api';
 
-export function switchPostSection(section): ThunkAction<void, IJodelAppStore, void> {
+export function switchPostSection(section: Section): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        if (getState().viewState.get('postSection') !== section) {
-            dispatch(switchPostListSortType(PostListSortTypes.RECENT));
+        if (getState().viewState.postSection !== section) {
+            dispatch(switchPostListSortType(PostListSortType.RECENT));
             dispatch(_switchPostSection(section));
         }
         dispatch(_selectPost(null));
@@ -40,9 +42,9 @@ export function switchPostSection(section): ThunkAction<void, IJodelAppStore, vo
     };
 }
 
-export function switchPostListSortType(sortType): ThunkAction<void, IJodelAppStore, void> {
+export function switchPostListSortType(sortType: PostListSortType): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        if (getState().viewState.get('postListSortType') !== sortType) {
+        if (getState().viewState.postListSortType !== sortType) {
             dispatch(_switchPostListSortType(sortType));
         }
     };
@@ -50,13 +52,13 @@ export function switchPostListSortType(sortType): ThunkAction<void, IJodelAppSto
 
 export function updatePosts(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        const section = getState().viewState.get('postSection');
+        const section = getState().viewState.postSection;
         dispatch(invalidatePosts(section));
         dispatch(fetchPostsIfNeeded(section));
     };
 }
 
-export function selectPost(postId): ThunkAction<void, IJodelAppStore, void> {
+export function selectPost(postId: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         dispatch(_selectPost(postId));
         if (postId != null) {
@@ -65,7 +67,7 @@ export function selectPost(postId): ThunkAction<void, IJodelAppStore, void> {
     };
 }
 
-export function selectPicture(postId): ThunkAction<void, IJodelAppStore, void> {
+export function selectPicture(postId: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         dispatch(_selectPicture(postId));
     };
@@ -73,14 +75,16 @@ export function selectPicture(postId): ThunkAction<void, IJodelAppStore, void> {
 
 export function updateLocation(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        if (getState().settings.get('useBrowserLocation') && 'geolocation' in navigator) {
+        if (getState().settings.useBrowserLocation && 'geolocation' in navigator) {
             /* geolocation is available */
             navigator.geolocation.getCurrentPosition(position => {
-                let loc = getLocation(getState());
-                if (loc.get('latitude') !== position.coords.latitude ||
-                    loc.get('longitude') !== position.coords.longitude) {
+
+                const state = getState();
+                let loc = getLocation(state);
+                if (!loc || loc.latitude !== position.coords.latitude ||
+                    loc.longitude !== position.coords.longitude) {
                     dispatch(setLocation(position.coords.latitude, position.coords.longitude));
-                    if (getState().account.token.access !== undefined) {
+                    if (state.account.token && state.account.token.access !== undefined) {
                         dispatch(updatePosts());
                     }
                 }
@@ -99,7 +103,7 @@ export function updateLocation(): ThunkAction<void, IJodelAppStore, void> {
     };
 }
 
-export function setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType): ThunkAction<void, IJodelAppStore, void> {
+export function setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number, tokenType: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         // TODO clear cached posts
         dispatch(_setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType));
@@ -110,21 +114,20 @@ export function setToken(distinctId, accessToken, refreshToken, expirationDate, 
 
 // Gibt eine Zufallszahl zwischen min (inklusive) und max (exklusive) zurück
 // Die Verwendung von Math.round() erzeugt keine gleichmäßige Verteilung!
-function getRandomInt(min, max) {
+function getRandomInt(min: number, max: number) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function randomValueHex(byteCount) {
-    let rawBytes;
+function randomValueHex(byteCount: number) {
+    let rawBytes: Buffer;
     try {
         rawBytes = crypto.randomBytes(byteCount);
     } catch (e) {
         // Old browser, insecure but works
-        rawBytes = new Uint8Array(byteCount);
-        rawBytes = rawBytes.map(i => getRandomInt(0, 256));
-        rawBytes = Buffer.from(rawBytes);
+        const byteArray = new Uint8Array(byteCount).map(i => getRandomInt(0, 256));
+        rawBytes = new Buffer(byteArray);
     }
     return rawBytes.toString('hex'); // convert to hexadecimal format
 }
@@ -136,9 +139,9 @@ export function createNewAccount(): ThunkAction<void, IJodelAppStore, void> {
     };
 }
 
-export function setPermissionDenied(permissionDenied): ThunkAction<void, IJodelAppStore, void> {
+export function setPermissionDenied(permissionDenied: boolean): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        let account = getState().account;
+        const account = getState().account;
         if (account.deviceUid !== undefined && permissionDenied && !account.permissionDenied) {
             dispatch(_setPermissionDenied(permissionDenied));
             // Reregister
@@ -147,19 +150,19 @@ export function setPermissionDenied(permissionDenied): ThunkAction<void, IJodelA
     };
 }
 
-export function showAddPost(visible): ThunkAction<void, IJodelAppStore, void> {
+export function showAddPost(visible: boolean): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         dispatch(_showAddPost(visible));
     };
 }
 
-export function showSettings(visible): ThunkAction<void, IJodelAppStore, void> {
+export function showSettings(visible: boolean): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         dispatch(_showSettings(visible));
     };
 }
 
-export function showChannelList(visible): ThunkAction<void, IJodelAppStore, void> {
+export function showChannelList(visible: boolean): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         if (visible) {
             dispatch(getRecommendedChannels());

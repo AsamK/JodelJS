@@ -1,7 +1,6 @@
 require('babel-polyfill');
 
 import * as React from 'react';
-import * as DocumentTitle from 'react-document-title';
 import * as ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
@@ -12,13 +11,14 @@ import {
     replaceViewState,
     setPermissionDenied,
     switchPostSection,
-    updateLocation
+    updateLocation,
 } from '../redux/actions';
 import {refreshAccessToken} from '../redux/actions/api';
 import {IJodelAppStore, JodelApp} from '../redux/reducers';
 import {ACCOUNT_VERSION, migrateAccount} from '../redux/reducers/account';
 import {migrateSettings, SETTINGS_VERSION} from '../redux/reducers/settings';
-import Jodel from '../views/Jodel';
+import {Jodel} from '../views/Jodel';
+import DocumentTitle = require('react-document-title/index');
 
 let persistedState: Partial<IJodelAppStore> = {};
 
@@ -36,7 +36,7 @@ if (storedSettings) {
 
 let store = createStore<IJodelAppStore>(
     JodelApp,
-    persistedState as any,
+    persistedState as IJodelAppStore,
     applyMiddleware(
         thunkMiddleware, // lets us use dispatch() functions
     ),

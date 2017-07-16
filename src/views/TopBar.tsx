@@ -1,9 +1,15 @@
 import * as React from 'react';
-import Menu from './Menu';
-import SectionLink from './SectionLink';
 
-let TopBar = ({karma, showSettings, showChannelList}) => {
+import {Menu} from './Menu';
+import {SectionLink} from './SectionLink';
 
+interface ITopBarProps {
+    karma: number
+    showSettings: () => void
+    showChannelList: () => void
+}
+
+export function TopBar({karma, showSettings, showChannelList}: ITopBarProps) {
     return (
         <div className="topBar">
             <div className="barEntry">
@@ -21,6 +27,4 @@ let TopBar = ({karma, showSettings, showChannelList}) => {
             </div>
         </div>
     );
-};
-
-export default TopBar;
+}

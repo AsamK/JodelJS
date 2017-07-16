@@ -3,7 +3,7 @@ import {IJodelAction} from '../../interfaces/IJodelAction';
 import {INVALIDATE_POSTS, RECEIVE_POSTS, SET_IS_FETCHING} from '../actions';
 
 function uniq(a: string[]): string[] {
-    const seen = {};
+    const seen: {[key: string]: boolean} = {};
     return a.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
 }
 

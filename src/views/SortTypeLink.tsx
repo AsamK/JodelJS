@@ -1,26 +1,32 @@
 import * as classnames from 'classnames';
 import * as React from 'react';
-import {connect} from 'react-redux';
+import {connect, Dispatch} from 'react-redux';
+
+import {PostListSortType} from '../interfaces/PostListSortType';
 import {switchPostListSortType} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 
 interface SortTypeLinkProps {
+    sortType: PostListSortType
+}
+
+interface SortTypeLinkComponentProps extends SortTypeLinkProps {
     active: boolean
-    sortType: string
+    sortType: PostListSortType
     onClick: () => void
 }
 
-const SortTypeLink = ({sortType, active, onClick}: SortTypeLinkProps) => (
+const SortTypeLinkComponent = ({sortType, active, onClick}: SortTypeLinkComponentProps) => (
     <div className={classnames('sortType', sortType.toLowerCase(), {active})} onClick={onClick}/>
 );
 
-const mapStateToProps = (state: IJodelAppStore, ownProps) => {
+const mapStateToProps = (state: IJodelAppStore, ownProps: SortTypeLinkProps) => {
     return {
         active: ownProps.sortType === state.viewState.postListSortType,
     };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: SortTypeLinkProps) => {
     return {
         onClick: () => {
             dispatch(switchPostListSortType(ownProps.sortType));
@@ -28,4 +34,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SortTypeLink);
+export const SortTypeLink = connect(mapStateToProps, mapDispatchToProps)(SortTypeLinkComponent);

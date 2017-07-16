@@ -2,17 +2,18 @@ import * as crypto from 'crypto';
 import * as request from 'superagent';
 import Settings from '../app/settings';
 import {PostListSortType} from '../interfaces/PostListSortType';
+import {Color} from '../interfaces/Color';
 
 const API_PATH_V2 = '/v2';
 const API_PATH_V3 = '/v3';
 
-function parseUrl(url) {
+function parseUrl(url: string) {
     const parser = document.createElement('a');
     parser.href = url;
     return parser;
 }
 
-function computeSignature(auth, method, url, timestamp, data) {
+function computeSignature(auth: string, method: string, url: string, timestamp: string, data: string) {
     const u = parseUrl(url);
     let path = u.pathname;
     if (!path.startsWith('/')) {
@@ -27,7 +28,7 @@ function computeSignature(auth, method, url, timestamp, data) {
     return hmac.read();
 }
 
-export function jodelRequest(auth, method, url, query, data) {
+export function jodelRequest(auth: string, method: string, url: string, query: object | string, data: any) {
     return new Promise<request.Response>((resolve, reject) => {
         const dataString = JSON.stringify(data);
         const timestamp = new Date().toISOString();
@@ -58,7 +59,7 @@ export function jodelRequest(auth, method, url, query, data) {
  return jodelRequest("GET", Settings.API_SERVER + API_PATH_V2 + "/posts/", {}, {});
  }*/
 
-export function apiGetPostsCombo(auth, latitude, longitude, stickies = true, home = false) {
+export function apiGetPostsCombo(auth: string, latitude: number, longitude: number, stickies = true, home = false) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/location/combo', {
         lat: latitude,
         lng: longitude,
@@ -67,7 +68,7 @@ export function apiGetPostsCombo(auth, latitude, longitude, stickies = true, hom
     }, {});
 }
 
-export function apiGetPosts(auth, sortType, afterPostId, latitude, longitude, home = false) {
+export function apiGetPosts(auth: string, sortType: PostListSortType, afterPostId: string, latitude: number, longitude: number, home = false) {
     let type;
     switch (sortType) {
     case PostListSortType.RECENT:
@@ -90,11 +91,11 @@ export function apiGetPosts(auth, sortType, afterPostId, latitude, longitude, ho
     }, {});
 }
 
-export function apiGetPostsMineCombo(auth) {
+export function apiGetPostsMineCombo(auth: string) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/combo', {}, {});
 }
 
-export function apiGetPostsMine(auth, sortType, skip, limit) {
+export function apiGetPostsMine(auth: string, sortType: PostListSortType, skip: number, limit: number) {
     let type;
     switch (sortType) {
     case PostListSortType.RECENT:
@@ -115,32 +116,32 @@ export function apiGetPostsMine(auth, sortType, skip, limit) {
     }, {});
 }
 
-export function apiGetPostsMineReplies(auth, skip, limit) {
+export function apiGetPostsMineReplies(auth: string, skip: number, limit: number) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/replies', {
         skip,
         limit,
     }, {});
 }
 
-export function apiGetPostsMinePinned(auth, skip, limit) {
+export function apiGetPostsMinePinned(auth: string, skip: number, limit: number) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/pinned', {
         skip,
         limit,
     }, {});
 }
 
-export function apiGetPostsMineVotes(auth, skip, limit) {
+export function apiGetPostsMineVotes(auth: string, skip: number, limit: number) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/votes', {
         skip,
         limit,
     }, {});
 }
 
-export function apiGetPostsChannelCombo(auth, channel, home = false) {
+export function apiGetPostsChannelCombo(auth: string, channel: string, home = false) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/channel/combo', {channel, home}, {});
 }
 
-export function apiGetPostsChannel(auth, sortType, afterPostId, channel, home = false) {
+export function apiGetPostsChannel(auth: string, sortType: PostListSortType, afterPostId: string, channel: string, home = false) {
     let type;
     switch (sortType) {
     case PostListSortType.RECENT:
@@ -163,11 +164,11 @@ export function apiGetPostsChannel(auth, sortType, afterPostId, channel, home = 
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/channel/' + type, query, {});
 }
 
-export function apiGetPostsHashtagCombo(auth, hashtag, home = false) {
+export function apiGetPostsHashtagCombo(auth: string, hashtag: string, home = false) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/hashtag/combo', {hashtag, home}, {});
 }
 
-export function apiGetPostsHashtag(auth, sortType, afterPostId, hashtag, home = false) {
+export function apiGetPostsHashtag(auth: string, sortType: PostListSortType, afterPostId: string, hashtag: string, home = false) {
     let type;
     switch (sortType) {
     case PostListSortType.RECENT:
@@ -190,11 +191,11 @@ export function apiGetPostsHashtag(auth, sortType, afterPostId, hashtag, home = 
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/hashtag/' + type, query, {});
 }
 
-export function apiGetPost(auth, post_id) {
+export function apiGetPost(auth: string, post_id: string) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/' + post_id, {}, {});
 }
 
-export function apiGetPostDetails(auth, post_id, details = true, nextReply, reversed = false) {
+export function apiGetPostDetails(auth: string, post_id: string, details = true, nextReply: string, reversed = false) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/' + post_id + '/details', {
         details: details,
         reply: nextReply,
@@ -202,48 +203,48 @@ export function apiGetPostDetails(auth, post_id, details = true, nextReply, reve
     }, {});
 }
 
-export function apiDeletePost(auth, postId) {
+export function apiDeletePost(auth: string, postId: string) {
     return jodelRequest(auth, 'DELETE', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId, {}, {});
 }
 
-export function apiUpVote(auth, postId) {
+export function apiUpVote(auth: string, postId: string) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/upvote', {}, {reason_code: -1});
 }
 
-export function apiDownVote(auth, postId) {
+export function apiDownVote(auth: string, postId: string) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/downvote', {}, {reason_code: -1});
 }
 
-export function apiGiveThanks(auth, postId) {
+export function apiGiveThanks(auth: string, postId: string) {
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/' + postId + '/giveThanks', {}, {});
 }
 
-export function apiPin(auth, postId) {
+export function apiPin(auth: string, postId: string) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/pin', {}, {});
 }
 
-export function apiUnpin(auth, postId) {
+export function apiUnpin(auth: string, postId: string) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/unpin', {}, {});
 }
 
-export function apiFollowChannel(auth, channel) {
+export function apiFollowChannel(auth: string, channel: string) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/followChannel', {channel}, {});
 }
 
-export function apiUnfollowChannel(auth, channel) {
+export function apiUnfollowChannel(auth: string, channel: string) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/unfollowChannel', {channel}, {});
 }
 
-export function apiGetRecommendedChannels(auth, home = false) {
+export function apiGetRecommendedChannels(auth: string, home = false) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/recommendedChannels', {home}, {});
 }
 
-export function apiGetFollowedChannelsMeta(auth, channels, home = false) {
+export function apiGetFollowedChannelsMeta(auth: string, channels: {[channelName: string]: number}, home = false) {
     // Format: {"channelName": timestamp, "channel2": timestamp2}
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/user/followedChannelsMeta', {home}, channels);
 }
 
-export function apiAddPost(auth, channel, ancestorPostId, color, loc_accuracy, latitude, longitude, city, country, message, image, toHome = false) {
+export function apiAddPost(auth: string, channel: string, ancestorPostId: string, color: Color, loc_accuracy: number, latitude: number, longitude: number, city: string, country: string, message: string, image: string, toHome = false) {
     // image must be base64 encoded string
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/', {}, {
         channel,
@@ -256,11 +257,11 @@ export function apiAddPost(auth, channel, ancestorPostId, color, loc_accuracy, l
     });
 }
 
-export function apiGetConfig(auth) {
+export function apiGetConfig(auth: string) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/config', {}, {});
 }
 
-export function apiGetKarma(auth) {
+export function apiGetKarma(auth: string) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/users/karma', {}, {});
 }
 
@@ -270,26 +271,23 @@ export function apiGetKarma(auth) {
  * @param auth
  * @returns {Promise}
  */
-export function apiGetImageCaptcha(auth) {
+export function apiGetImageCaptcha(auth: string) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/verification/imageCaptcha', {}, {});
 }
 
 /**
  * Send the user's answer back to the server
  * expected data from server: {verified: Boolean}
- * @param auth
- * @param key{String}
- * @param answer{Number[]}
  * @returns {Promise}
  */
-export function apiSendVerificationAnswer(auth, key, answer) {
+export function apiSendVerificationAnswer(auth: string, key: string, answer: number[]) {
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/user/verification/imageCaptcha', {}, {
         answer,
         key,
     });
 }
 
-export function apiSetLocation(auth, latitude, longitude, city, country) {
+export function apiSetLocation(auth: string, latitude: number, longitude: number, city: string, country: string) {
     const data = {
         location: {
             loc_accuracy: 0.0,
@@ -305,7 +303,7 @@ export function apiSetLocation(auth, latitude, longitude, city, country) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/users/location', {}, data);
 }
 
-export function apiSetHome(auth, latitude, longitude, city, country) {
+export function apiSetHome(auth: string, latitude: number, longitude: number, city: string, country: string) {
     const data = {
         location: {
             loc_accuracy: 0.0,
@@ -321,19 +319,20 @@ export function apiSetHome(auth, latitude, longitude, city, country) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/home', {}, data);
 }
 
-export function apiDeleteHome(auth) {
+export function apiDeleteHome(auth: string) {
     return jodelRequest(auth, 'DELETE', Settings.API_SERVER + API_PATH_V3 + '/user/home', {}, {});
 }
 
-// Possible actions: SetHomeStarted, SetHomeCompleted, NewestFeedSelected, MostCommentedFeedSelected
-export function apiSetAction(auth, action) {
+export type ApiAction = 'SetHomeStarted' | 'SetHomeCompleted' | 'NewestFeedSelected' | 'MostCommentedFeedSelected'
+
+export function apiSetAction(auth: string, action: ApiAction) {
     const data = {
         action,
     };
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/action', {}, data);
 }
 
-export function apiSetPushToken(auth, clientId, pushToken) {
+export function apiSetPushToken(auth: string, clientId: string, pushToken: string) {
     // Set GCM push token
     const data = {
         client_id: clientId,
@@ -342,7 +341,7 @@ export function apiSetPushToken(auth, clientId, pushToken) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/users/pushToken', {}, data);
 }
 
-export function apiVerifyPush(auth, serverTime, verificationCode) {
+export function apiVerifyPush(auth: string, serverTime: number, verificationCode: string) {
     // Verify GCM push
     const data = {
         server_time: serverTime,
@@ -351,7 +350,7 @@ export function apiVerifyPush(auth, serverTime, verificationCode) {
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/user/verification/push', {}, data);
 }
 
-export function apiGetAccessToken(deviceUid, latitude = 0.0, longitude = 0.0, city, country) {
+export function apiGetAccessToken(deviceUid: string, latitude = 0.0, longitude = 0.0, city: string, country: string) {
     const data = {
         'client_id': Settings.CLIENT_ID,
         'device_uid': deviceUid,
@@ -368,7 +367,7 @@ export function apiGetAccessToken(deviceUid, latitude = 0.0, longitude = 0.0, ci
     return jodelRequest(undefined, 'POST', Settings.API_SERVER + API_PATH_V2 + '/users/', {}, data);
 }
 
-export function apiRefreshAccessToken(auth, distinctId, refreshToken) {
+export function apiRefreshAccessToken(auth: string, distinctId: string, refreshToken: string) {
     const data = {
         'current_client_id': Settings.CLIENT_ID,
         'distinct_id': distinctId,
@@ -377,11 +376,11 @@ export function apiRefreshAccessToken(auth, distinctId, refreshToken) {
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V2 + '/users/refreshToken', {}, data);
 }
 
-export function apiIsNotificationAvailable(auth) {
+export function apiIsNotificationAvailable(auth: string) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/notifications/new', {}, {});
 }
 
-export function apiGetNotifications(auth) {
+export function apiGetNotifications(auth: string) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/notifications', {}, {});
 }
 
@@ -389,12 +388,12 @@ export function apiGetNotifications(auth) {
  * Set the user's language on the server
  * @param auth
  * @param language Language name in ISO 639-1 format, e.g. 'de'
- * @returns {*}
  */
-export function apiSetUserLanguage(auth, language) {
+export function apiSetUserLanguage(auth: string, language: string) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/language', {}, {language});
 }
 
+export type UserType = 'student' // | ...
 /**
  * Set the user's language on the server
  * @param {string} auth
@@ -402,7 +401,7 @@ export function apiSetUserLanguage(auth, language) {
  * @param {Number} [age] User's age
  * @returns {*}
  */
-export function apiSetUserProfile(auth, userType, age = 0) {
+export function apiSetUserProfile(auth: string, userType: UserType, age = 0) {
     const data = {
         age,
         user_type: userType,
@@ -416,6 +415,6 @@ export function apiSetUserProfile(auth, userType, age = 0) {
  * @param {number} postId The postId you want to share
  * @returns {*} a server generated url
  */
-export function apiSharePost(auth, postId) {
+export function apiSharePost(auth: string, postId: string) {
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/' + postId + '/share', {}, {});
 }

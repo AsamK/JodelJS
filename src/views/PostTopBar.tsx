@@ -8,9 +8,9 @@ import BackButton from './BackButton';
 import {IPost} from '../interfaces/IPost';
 
 export interface PostTopBarProps {
-    onBackClick: () => void
-    onPinClick: () => void
-    onShareClick: () => void
+    onBackClick?: () => void
+    onPinClick?: () => void
+    onShareClick?: () => void
     post: IPost
 }
 
@@ -35,7 +35,7 @@ let PostTopBar = ({onBackClick, onPinClick, onShareClick, post}: PostTopBarProps
     );
 };
 
-const mapStateToProps = (state: IJodelAppStore, ownProps) => {
+const mapStateToProps = (state: IJodelAppStore) => {
     return {};
 };
 

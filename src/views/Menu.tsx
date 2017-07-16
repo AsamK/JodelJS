@@ -1,8 +1,9 @@
 import * as React from 'react';
-import SectionLink from './SectionLink';
+import {MouseEvent} from 'react';
 
-let Menu = ({showSettings}) => {
+import {SectionLink} from './SectionLink';
 
+export function Menu({showSettings}: { showSettings: (e: MouseEvent<HTMLDivElement>) => void }) {
     return (
         <div className="menu" tabIndex={99999999}>
             <ul className="menuContent">
@@ -26,6 +27,4 @@ let Menu = ({showSettings}) => {
             </ul>
         </div>
     );
-};
-
-export default Menu;
+}

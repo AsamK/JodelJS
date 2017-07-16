@@ -1,19 +1,19 @@
 import * as React from 'react';
 import {Component} from 'react';
-import {connect} from 'react-redux';
+import {connect, Dispatch} from 'react-redux';
 import Settings from '../app/settings';
 import {_setLocation, createNewAccount, setUseBrowserLocation, updateLocation} from '../redux/actions';
 import {setDeviceUid} from '../redux/actions/api';
 import {getLocation, IJodelAppStore} from '../redux/reducers';
-import SelectDeviceUid from './SelectDeviceUid';
-import SelectLocation from './SelectLocation';
+import {SelectDeviceUid} from './SelectDeviceUid';
+import {SelectLocation} from './SelectLocation';
 
 export interface FirstStartProps {
     deviceUid: string
     latitude: number
     longitude: number
     useBrowserLocation: boolean
-    dispatch: any
+    dispatch: Dispatch<IJodelAppStore>
 }
 
 export interface FirstStartState {
@@ -21,7 +21,7 @@ export interface FirstStartState {
 }
 
 class FirstStart extends Component<FirstStartProps, FirstStartState> {
-    constructor(props) {
+    constructor(props: FirstStartProps) {
         super(props);
         this.state = {deviceUid: undefined};
         this.setDeviceUid = this.setDeviceUid.bind(this);
@@ -35,7 +35,7 @@ class FirstStart extends Component<FirstStartProps, FirstStartState> {
     componentWillUnmount() {
     }
 
-    setDeviceUid(deviceUid) {
+    setDeviceUid(deviceUid: string) {
         this.setState({deviceUid: deviceUid});
     }
 
@@ -63,10 +63,10 @@ class FirstStart extends Component<FirstStartProps, FirstStartState> {
                                 onChange={(useBrowserLocation, latitude, longitude) => {
                                     this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
                                     if (!useBrowserLocation) {
-                                        if (latitude === undefined) {
+                                        if (!latitude) {
                                             latitude = Settings.DEFAULT_LOCATION.latitude;
                                         }
-                                        if (longitude === undefined) {
+                                        if (!longitude) {
                                             longitude = Settings.DEFAULT_LOCATION.longitude;
                                         }
                                     }
@@ -82,7 +82,7 @@ class FirstStart extends Component<FirstStartProps, FirstStartState> {
                         <a onClick={this.updateLocation}>Erneut versuchen</a> oder oben den Standort manuell festlegen
                     </div>
                     : ''}
-                <button type="submit" disabled={this.props.latitude === undefined}>
+                <button type="submit" disabled={!this.props.latitude}>
                     Jodeln beginnen
                 </button>
             </form>

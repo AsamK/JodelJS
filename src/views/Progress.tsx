@@ -1,11 +1,12 @@
 import * as NProgress from 'nprogress';
 import * as React from 'react';
 import {Component} from 'react';
-import {connect} from 'react-redux';
+import {connect, Dispatch} from 'react-redux';
 import {IJodelAppStore} from '../redux/reducers';
 
 interface ProgressProps {
     isFetching: boolean
+    dispatch: Dispatch<IJodelAppStore>
 }
 
 class Progress extends Component<ProgressProps> {
@@ -13,7 +14,7 @@ class Progress extends Component<ProgressProps> {
         shown: false,
     };
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: ProgressProps) {
         if (nextProps.isFetching) {
             setTimeout(() => {
                 if (this.props.isFetching && !this.state.shown) {
@@ -27,7 +28,7 @@ class Progress extends Component<ProgressProps> {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps: ProgressProps) {
         return false;
     }
 
@@ -36,10 +37,10 @@ class Progress extends Component<ProgressProps> {
     }
 }
 
-function mapStateToProps(state: IJodelAppStore, ownProps) {
+function mapStateToProps(state: IJodelAppStore): Partial<ProgressProps> {
     let postSection = state.postsBySection[state.viewState.postSection];
     return {
-        isFetching: postSection === undefined ? false : postSection.isFetching
+        isFetching: postSection === undefined ? false : postSection.isFetching,
     };
 }
 

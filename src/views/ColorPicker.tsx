@@ -1,15 +1,16 @@
 import * as React from 'react';
-import {PureComponent} from 'react';
+import {ChangeEvent, PureComponent} from 'react';
 
 import Settings from '../app/settings';
+import {Color} from '../interfaces/Color';
 
 export interface ColorPickerProps {
-    color: string;
-    onChange: any;
+    color: Color;
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default class ColorPicker extends PureComponent<ColorPickerProps> {
-    constructor(props) {
+    constructor(props: ColorPickerProps) {
         super(props);
     }
 

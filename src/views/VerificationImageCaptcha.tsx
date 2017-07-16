@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Component} from 'react';
+import {Component, MouseEvent} from 'react';
 
 export interface VerificationImageCaptchaProps {
     imageUrl: string;
@@ -11,18 +11,18 @@ interface VerificationImageCaptchaState {
     clickedImages: number[];
 }
 
-export default class VerificationImageCaptcha extends Component<VerificationImageCaptchaProps, VerificationImageCaptchaState> {
-    constructor(props) {
+export class VerificationImageCaptcha extends Component<VerificationImageCaptchaProps, VerificationImageCaptchaState> {
+    constructor(props: VerificationImageCaptchaProps) {
         super(props);
         this.state = {
             clickedImages: [],
         };
     }
 
-    onImageClick = (e) => {
+    onImageClick = (e: MouseEvent<HTMLImageElement>) => {
         const {imageWidth} = this.props;
 
-        const actualHeight = e.target.height;
+        const actualHeight = (e.target as HTMLElement).offsetHeight;
         // This assumes the individual images are squares
         const scaleFactor = imageWidth / actualHeight;
         const imgIndex = Math.floor(scaleFactor * e.nativeEvent.offsetX / imageWidth);

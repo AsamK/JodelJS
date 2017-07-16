@@ -2,10 +2,12 @@
   "name": "JodelJS",
   "description": "Jodel webapp",
   "dependencies": {
-    "@types/react": "^15.0.37",
+    "@types/classnames": "^2.2.0",
+    "@types/nprogress": "0.0.29",
+    "@types/react": "^15.0.38",
     "@types/react-dom": "^15.5.1",
     "@types/react-redux": "^4.4.46",
-    "@types/superagent": "^3.5.2",
+    "@types/superagent": "^3.5.3",
     "babel-polyfill": "^6.23.0",
     "classnames": "^2.2.5",
     "nprogress": "^0.2.0",
@@ -13,7 +15,7 @@
     "react-document-title": "^2.0.3",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
-    "redux": "^3.7.1",
+    "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "source-map-loader": "^0.2.1",
     "superagent": "^3.5.2"
@@ -37,11 +39,11 @@
     "less-plugin-npm-import": "~2.1.0",
     "normalize.css": "~7.0.0",
     "npm-check-updates": "^2.12.1",
-    "ts-loader": "^2.2.2",
-    "typescript": "^2.4.1",
-    "uglify-js": "^3.0.24",
+    "ts-loader": "^2.3.1",
+    "typescript": "^2.4.2",
+    "uglify-js": "^3.0.25",
     "watchify": "~3.9.0",
-    "webpack": "^3.1.0"
+    "webpack": "^3.3.0"
   },
   "scripts": {
     "start": "mkdir -p build-debug && cp -r img build-debug/ && cp src/index.htm build-debug/ && npm run watch-js & npm run watch-css",

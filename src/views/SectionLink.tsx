@@ -1,16 +1,17 @@
 import * as classnames from 'classnames';
 import * as React from 'react';
-import {connect} from 'react-redux';
+import {connect, Dispatch} from 'react-redux';
+
 import {switchPostSection} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 
 interface SectionLinkProps {
-    active: boolean
+    active?: boolean
     section: string
-    onClick: () => void
+    onClick?: () => void
 }
 
-const SectionLink = ({section, active, onClick}: SectionLinkProps) => {
+const SectionLinkComponent = ({section, active, onClick}: SectionLinkProps) => {
     let name;
     switch (section) {
     case 'location':
@@ -32,13 +33,13 @@ const SectionLink = ({section, active, onClick}: SectionLinkProps) => {
     return <div className={classnames('sectionLink', section.toLowerCase(), {active})} onClick={onClick}>{name}</div>;
 };
 
-const mapStateToProps = (state: IJodelAppStore, ownProps) => {
+const mapStateToProps = (state: IJodelAppStore, ownProps: SectionLinkProps) => {
     return {
         active: ownProps.section === state.viewState.postSection,
     };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: SectionLinkProps) => {
     return {
         onClick: () => {
             dispatch(switchPostSection(ownProps.section));
@@ -46,4 +47,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SectionLink);
+export const SectionLink = connect(mapStateToProps, mapDispatchToProps)(SectionLinkComponent);

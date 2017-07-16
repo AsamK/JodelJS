@@ -31,7 +31,7 @@ export const settings = combineReducers<ISettingsStore>({
     channelsLastRead,
 });
 
-function location(state = null, action: IJodelAction): typeof state {
+function location(state: ILocation | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
     case SET_LOCATION:
         return {...state, ...action.payload.location};

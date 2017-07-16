@@ -46,7 +46,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: Partial<ChannelTopBarP
 
 const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: Partial<ChannelTopBarProps>) => {
     return {
-        onFollowClick: (channel, follow) => {
+        onFollowClick: (channel: string, follow: boolean) => {
             dispatch(followChannel(channel, follow));
         },
     };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {PureComponent} from 'react';
+import {ChangeEvent, PureComponent} from 'react';
 
 const USE_BROWSER_LOCATION = 'USE_BROWSER_LOCATION';
 const MANUAL = 'MANUAL';
@@ -12,15 +12,15 @@ export interface SelectLocationProps {
     onLocationRequested: () => void;
 }
 
-export default class SelectLocation extends PureComponent<SelectLocationProps> {
-    constructor(props) {
+export class SelectLocation extends PureComponent<SelectLocationProps> {
+    constructor(props: SelectLocationProps) {
         super(props);
         this.handleChangeLatitude = this.handleChangeLatitude.bind(this);
         this.handleChangeLongitude = this.handleChangeLongitude.bind(this);
         this.handleChangeRadio = this.handleChangeRadio.bind(this);
     }
 
-    handleChangeLatitude(event) {
+    handleChangeLatitude(event: ChangeEvent<HTMLInputElement>) {
         const number = Number.parseFloat(event.target.value);
         if (isNaN(number) || number < -90 || number > 90) {
             return;
@@ -28,7 +28,7 @@ export default class SelectLocation extends PureComponent<SelectLocationProps> {
         this.props.onChange(this.props.useBrowserLocation, number, this.props.longitude);
     }
 
-    handleChangeLongitude(event) {
+    handleChangeLongitude(event: ChangeEvent<HTMLInputElement>) {
         const number = Number.parseFloat(event.target.value.replace(',', '.'));
         if (isNaN(number) || number < -180 || number > 180) {
             return;
@@ -36,7 +36,7 @@ export default class SelectLocation extends PureComponent<SelectLocationProps> {
         this.props.onChange(this.props.useBrowserLocation, this.props.latitude, number);
     }
 
-    handleChangeRadio(event) {
+    handleChangeRadio(event: ChangeEvent<HTMLInputElement>) {
         switch (event.target.value) {
         case USE_BROWSER_LOCATION:
             this.props.onChange(true, this.props.latitude, this.props.longitude);
@@ -58,7 +58,7 @@ export default class SelectLocation extends PureComponent<SelectLocationProps> {
                 </label>
                 {useBrowserLocation ? <div>
                     <p>Aktueller
-                        Standort: {latitude === undefined ? '(Unbekannt)' : latitude + ', ' + longitude}</p>
+                        Standort: {!latitude ? '(Unbekannt)' : latitude + ', ' + longitude}</p>
                     <a onClick={onLocationRequested}>Standort aktualisieren</a>
                 </div> : ''}
                 <label>

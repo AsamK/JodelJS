@@ -1,9 +1,10 @@
 import {IChannel} from '../../interfaces/IChannel';
 import {IConfig} from '../../interfaces/IConfig';
-import {IJodelAction} from '../../interfaces/IJodelAction';
+import {IJodelAction, IPayload} from '../../interfaces/IJodelAction';
 import {PostListSortType} from '../../interfaces/PostListSortType';
 import {Section} from '../../interfaces/Section';
 import {IViewStateStore} from '../reducers/viewState';
+import {IApiPost} from '../../interfaces/IPost';
 
 export const SWITCH_POST_LIST_SORT_TYPE = 'SWITCH_POST_LIST_CONTAINER_STATE';
 export function _switchPostListSortType(sortType: PostListSortType): IJodelAction {
@@ -54,8 +55,8 @@ export function replaceViewState(newViewState: IViewStateStore): IJodelAction {
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
-export function receivePosts(section: Section, postsBySortType, append = false): IJodelAction {
-    const payload = {
+export function receivePosts(section: Section, postsBySortType: {[sortType: string]: IApiPost[]}, append = false): IJodelAction {
+    const payload: IPayload = {
         section,
         postsBySortType: [],
         entities: [],
@@ -90,7 +91,7 @@ export function receivePosts(section: Section, postsBySortType, append = false):
     };
 }
 
-export function receivePost(post, append = false): IJodelAction {
+export function receivePost(post: IApiPost, append = false): IJodelAction {
     return {
         type: RECEIVE_POSTS,
         receivedAt: Date.now(),
@@ -160,7 +161,7 @@ export function setRecommendedChannels(recommendedChannels: IChannel[]): IJodelA
 }
 
 export const SET_LOCAL_CHANNELS = 'SET_LOCAL_CHANNELS';
-export function setLocalChannels(localChannels): IJodelAction {
+export function setLocalChannels(localChannels: IChannel[]): IJodelAction {
     return {
         type: SET_LOCAL_CHANNELS,
         payload: {
@@ -171,7 +172,7 @@ export function setLocalChannels(localChannels): IJodelAction {
 }
 
 export const SET_CHANNELS_META = 'SET_CHANNELS_META';
-export function setChannelsMeta(channels): IJodelAction {
+export function setChannelsMeta(channels: IChannel[]): IJodelAction {
     return {
         type: SET_CHANNELS_META,
         payload: {
@@ -181,7 +182,7 @@ export function setChannelsMeta(channels): IJodelAction {
 }
 
 export const SET_DEVICE_UID = 'SET_DEVICE_UID';
-export function _setDeviceUID(deviceUid): IJodelAction {
+export function _setDeviceUID(deviceUid: string): IJodelAction {
     return {
         type: SET_DEVICE_UID,
         payload: {deviceUid},

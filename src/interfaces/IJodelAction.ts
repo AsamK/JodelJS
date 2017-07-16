@@ -9,7 +9,7 @@ import {IToken} from './IToken';
 import {PostListSortType} from './PostListSortType';
 import {Section} from './Section';
 
-interface IPayload {
+export interface IPayload {
     entities?: IApiPost[]
     entitiesChannels?: IChannel[]
     section?: Section
@@ -40,4 +40,3 @@ export interface IJodelAction extends Action {
     payload?: IPayload
     receivedAt?: number
 }
-// export type IJodelAction = any;

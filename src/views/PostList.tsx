@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {Component} from 'react';
-import {IPost} from '../interfaces/IPost';
 
-import Post from './Post';
+import {IPost} from '../interfaces/IPost';
+import {Post} from './Post';
 
 export interface PostListProps {
     posts: IPost[]
     sortType?: string
     section?: string
-    lastUpdated?: Date
+    lastUpdated?: number
     parentPost?: IPost
     onPostClick: (post: IPost) => void
     onLoadMore?: () => void
@@ -19,13 +19,13 @@ export default class PostList extends Component<PostListProps> {
 
     private _scrollable: HTMLElement;
 
-    constructor(props) {
+    constructor(props: PostListProps) {
         super(props);
         this._onPostClick = this._onPostClick.bind(this);
         this._onScroll = this._onScroll.bind(this);
     }
 
-    _onPostClick(post) {
+    _onPostClick(post: IPost) {
         this.props.onPostClick(post);
     }
 
@@ -34,7 +34,7 @@ export default class PostList extends Component<PostListProps> {
         this._scrollAtBottom = false;
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps: PostListProps) {
         if (prevProps.sortType != this.props.sortType || prevProps.section != this.props.section || prevProps.lastUpdated != this.props.lastUpdated) {
             this._scrollable.scrollTop = 0;
         }
@@ -44,7 +44,7 @@ export default class PostList extends Component<PostListProps> {
         this._scrollable.removeEventListener('scroll', this._onScroll);
     }
 
-    _onScroll(event) {
+    _onScroll() {
         if (!this._scrollable || !this.props.onLoadMore) {
             return;
         }

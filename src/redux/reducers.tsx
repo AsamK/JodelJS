@@ -30,7 +30,7 @@ export function getLocation(store: IJodelAppStore): ILocation | null {
     return store.settings.location;
 }
 
-export function isLocationKnown(store: IJodelAppStore) {
+export function isLocationKnown(store: IJodelAppStore): boolean {
     const loc = getLocation(store);
-    return loc && loc.latitude;
+    return loc && loc.latitude != null;
 }

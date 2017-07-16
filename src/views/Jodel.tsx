@@ -2,6 +2,8 @@ import * as classnames from 'classnames';
 import * as React from 'react';
 import {Component} from 'react';
 import {connect, Dispatch} from 'react-redux';
+
+import {IChannel} from '../interfaces/IChannel';
 import {IPost} from '../interfaces/IPost';
 import {
     fetchMoreComments,
@@ -23,11 +25,10 @@ import ChannelList from './ChannelList';
 import ChannelTopBar from './ChannelTopBar';
 import FirstStart from './FirstStart';
 import PostDetails from './PostDetails';
-import PostListContainer from './PostListContainer';
+import {PostListContainer} from './PostListContainer';
 import PostTopBar from './PostTopBar';
 import Progress from './Progress';
-import TopBar from './TopBar';
-import {IChannel} from '../interfaces/IChannel';
+import {TopBar} from './TopBar';
 
 export interface JodelProps {
     section: string
@@ -47,7 +48,7 @@ export interface JodelProps {
     dispatch: Dispatch<IJodelAppStore>
 }
 
-class Jodel extends Component<JodelProps> {
+class JodelComponent extends Component<JodelProps> {
     private timer: number;
 
     componentDidMount() {
@@ -73,11 +74,11 @@ class Jodel extends Component<JodelProps> {
         this.props.dispatch(selectPost(post != null ? post.post_id : null));
     }
 
-    handleAddClick(post) {
+    handleAddClick() {
         this.props.dispatch(showAddPost(true));
     }
 
-    handleAddCommentClick(post) {
+    handleAddCommentClick() {
         this.props.dispatch(showAddPost(true));
     }
 
@@ -162,7 +163,7 @@ function getEmptyPost(): IPost {
     };
 }
 
-const mapStateToProps = (state: IJodelAppStore, ownProps) => {
+const mapStateToProps = (state: IJodelAppStore): Partial<JodelProps> => {
     let selectedPicturePost = getPost(state, state.viewState.selectedPicturePostId);
     if (selectedPicturePost === undefined) {
         selectedPicturePost = null;
@@ -193,25 +194,13 @@ const mapStateToProps = (state: IJodelAppStore, ownProps) => {
         isRegistered: state.account.token.access !== undefined,
         followedChannels: followedChannels === undefined ? [] : followedChannels.map(c => getChannel(state, c)),
         recommendedChannels: state.account.recommendedChannels
-            .map(channel => followedChannels === undefined ? [] : followedChannels.reduce((v, c) => {
-                if (c.toLowerCase() === channel.toLowerCase()) {
-                    return undefined;
-                } else {
-                    return v;
-                }
-            }, getChannel(state, channel)))
-            .filter(c => c !== undefined),
+            .filter(channel => !followedChannels ? true : !followedChannels.find(c => c.toLowerCase() === channel.toLowerCase()))
+            .map(channel => getChannel(state, channel)),
         localChannels: state.account.localChannels
-            .map(channel => followedChannels === undefined ? [] : followedChannels.reduce((v, c) => {
-                if (c.toLowerCase() === channel.toLowerCase()) {
-                    return undefined;
-                } else {
-                    return v;
-                }
-            }, getChannel(state, channel)))
-            .filter(c => c !== undefined),
+            .filter(channel => !followedChannels ? true : !followedChannels.find(c => c.toLowerCase() === channel.toLowerCase()))
+            .map(channel => getChannel(state, channel)),
         channelListShown: state.viewState.channelList.visible,
     };
 };
 
-export default connect(mapStateToProps)(Jodel);
+export const Jodel = connect(mapStateToProps)(JodelComponent);

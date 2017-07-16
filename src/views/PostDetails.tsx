@@ -1,9 +1,10 @@
 import * as React from 'react';
 import {Component, MouseEvent} from 'react';
+
+import {IPost} from '../interfaces/IPost';
 import AddButton from './AddButton';
-import Post from './Post';
+import {Post} from './Post';
 import PostList from './PostList';
-import {IApiPost, IPost} from '../interfaces/IPost';
 
 export interface PostDetailsProps {
     post: IPost
@@ -19,12 +20,12 @@ export default class PostDetails extends Component<PostDetailsProps> {
 
     private _scrollable: HTMLElement;
 
-    constructor(props) {
+    constructor(props: PostDetailsProps) {
         super(props);
         this._onScroll = this._onScroll.bind(this);
     }
 
-    componentDidUpdate(prevProps: PostDetailsProps, prevState) {
+    componentDidUpdate(prevProps: PostDetailsProps) {
         if (this.props.post === null) {
             return;
         } else if (prevProps.post !== null && prevProps.post.post_id === this.props.post.post_id) {
@@ -43,7 +44,7 @@ export default class PostDetails extends Component<PostDetailsProps> {
         this._scrollable.removeEventListener('scroll', this._onScroll);
     }
 
-    _onScroll(event) {
+    _onScroll() {
         if (!this._scrollable || !this.props.onLoadMore) {
             return;
         }

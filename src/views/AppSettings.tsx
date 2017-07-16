@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Component} from 'react';
-import {connect} from 'react-redux';
+import {connect, Dispatch} from 'react-redux';
+
 import Settings from '../app/settings';
 import {
     _setLocation,
@@ -14,8 +15,8 @@ import {
     updateLocation,
 } from '../redux/actions';
 import {getLocation, IJodelAppStore} from '../redux/reducers';
-import SelectLocation from './SelectLocation';
-import VerificationImageCaptcha from './VerificationImageCaptcha';
+import {SelectLocation} from './SelectLocation';
+import {VerificationImageCaptcha} from './VerificationImageCaptcha';
 
 export interface AppSettingsProps {
     deviceUid: string;
@@ -29,11 +30,11 @@ export interface AppSettingsProps {
     useHomeLocation: boolean;
     imageUrl: string;
     imageWidth: number;
-    dispatch: any;
+    dispatch: Dispatch<IJodelAppStore>;
 }
 
 class AppSettings extends Component<AppSettingsProps> {
-    constructor(props) {
+    constructor(props: AppSettingsProps) {
         super(props);
         this.updateLocation = this.updateLocation.bind(this);
         this.locationChange = this.locationChange.bind(this);
@@ -44,16 +45,16 @@ class AppSettings extends Component<AppSettingsProps> {
         this.props.dispatch(updateLocation());
     }
 
-    locationChange(useBrowserLocation, latitude, longitude) {
+    locationChange(useBrowserLocation: boolean, latitude: number, longitude: number) {
         this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
         if (useBrowserLocation && !this.props.useBrowserLocation) {
             this.updateLocation();
         }
         if (!useBrowserLocation) {
-            if (latitude === undefined) {
+            if (!latitude) {
                 latitude = Settings.DEFAULT_LOCATION.latitude;
             }
-            if (longitude === undefined) {
+            if (!longitude) {
                 longitude = Settings.DEFAULT_LOCATION.longitude;
             }
         }
@@ -132,7 +133,7 @@ class AppSettings extends Component<AppSettingsProps> {
     }
 }
 
-const mapStateToProps = (state: IJodelAppStore, ownProps) => {
+const mapStateToProps = (state: IJodelAppStore): Partial<AppSettingsProps> => {
     let loc = getLocation(state);
     return {
         deviceUid: state.account.deviceUid,
@@ -144,7 +145,8 @@ const mapStateToProps = (state: IJodelAppStore, ownProps) => {
         verified: state.account.config.verified,
         useBrowserLocation: state.settings.useBrowserLocation,
         useHomeLocation: state.settings.useHomeLocation,
-        image: state.imageCaptcha.image,
+        imageUrl: state.imageCaptcha.image ? state.imageCaptcha.image.url : null,
+        imageWidth: state.imageCaptcha.image ? state.imageCaptcha.image.width : null,
     };
 };
 

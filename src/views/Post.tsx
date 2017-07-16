@@ -1,47 +1,56 @@
 import * as classnames from 'classnames';
 import * as React from 'react';
-import {PureComponent} from 'react';
-import {connect} from 'react-redux';
+import {MouseEvent, PureComponent} from 'react';
+import {connect, Dispatch} from 'react-redux';
+
+import {IPost} from '../interfaces/IPost';
 import {deletePost, downVote, giveThanks, selectPicture, switchPostSection, upVote} from '../redux/actions';
+import {IJodelAppStore} from '../redux/reducers';
 import ChildInfo from './ChildInfo';
 import Location from './Location';
 import Message from './Message';
 import Time from './Time';
 import Vote from './Vote';
-import {IPost} from '../interfaces/IPost';
 
 export interface PostProps {
     post: IPost
-    parentPostId: string
-    author: string
+    parentPostId?: string
+    author?: string
     onPostClick: () => void
-    dispatch: any
 }
 
-class Post extends PureComponent<PostProps> {
+interface PostComponentProps extends PostProps {
+    selectPicture: () => void
+    deletePost: () => void
+    downVote: () => void
+    upVote: () => void
+    giveThanks: () => void
+    switchToHashtag: (hashtag: string) => void
+    switchToChannel: (channel: string) => void
+}
+
+export class PostComponent extends PureComponent<PostComponentProps> {
     private pressTimer: number;
 
-    constructor(props) {
+    constructor(props: PostComponentProps) {
         super(props);
-        this.upvote = this.upvote.bind(this);
-        this.downvote = this.downvote.bind(this);
     }
 
-    upvote(e) {
+    private upvote = (e: MouseEvent<HTMLElement>) => {
         e.stopPropagation();
-        const {dispatch, post, parentPostId} = this.props;
+        const {post, parentPostId} = this.props;
         if (post.voted === 'up') {
-            // Give thanks
-            dispatch(giveThanks(post.post_id, parentPostId));
+            // Already upvoted -> Give thanks
+            this.props.giveThanks();
         } else {
-            dispatch(upVote(post.post_id));
+            this.props.upVote();
         }
-    }
+    };
 
-    downvote(e) {
+    private downvote = (e: MouseEvent<HTMLElement>) => {
         e.stopPropagation();
-        this.props.dispatch(downVote(this.props.post.post_id));
-    }
+        this.props.downVote();
+    };
 
     render() {
         const {post, author, onPostClick} = this.props;
@@ -54,19 +63,19 @@ class Post extends PureComponent<PostProps> {
                          onContextMenu={e => {
                              e.preventDefault();
                              clearTimeout(this.pressTimer);
-                             this.props.dispatch(selectPicture(post.post_id));
+                             this.props.selectPicture();
                          }}
                          onMouseDown={e => {
                              clearTimeout(this.pressTimer);
-                             this.pressTimer = window.setTimeout(() => this.props.dispatch(selectPicture(post.post_id)), 300);
+                             this.pressTimer = window.setTimeout(() => this.props.selectPicture(), 300);
                          }}/>
                     :
                     <Message message={post.message} onAtClick={(e, channel) => {
                         e.stopPropagation();
-                        this.props.dispatch(switchPostSection('channel:' + channel));
+                        this.props.switchToChannel(channel);
                     }} onHashtagClick={(e, hashtag) => {
                         e.stopPropagation();
-                        this.props.dispatch(switchPostSection('hashtag:' + hashtag));
+                        this.props.switchToHashtag(hashtag);
                     }}/>
                 }
                 <Vote vote_count={post.vote_count} voted={post.voted ? post.voted : ''}
@@ -76,7 +85,7 @@ class Post extends PureComponent<PostProps> {
                 <Location location={post.location.name} distance={post.distance}
                           fromHome={post.from_home}/>
                 <div className="author">
-                    {author != undefined ?
+                    {author ?
                         <div className={classnames(author, {gotThanks: post.got_thanks})}>
                             {author}
                         </div>
@@ -84,11 +93,27 @@ class Post extends PureComponent<PostProps> {
                 </div>
                 {post.post_own === 'own' ? <a onClick={e => {
                     e.stopPropagation();
-                    this.props.dispatch(deletePost(post.post_id));
+                    this.props.deletePost();
                 }}>delete</a> : ''}
             </div>
         );
     }
 }
 
-export default connect()(Post);
+const mapStateToProps = (state: IJodelAppStore) => {
+    return {};
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: PostProps) => {
+    return {
+        selectPicture: () => dispatch(selectPicture(ownProps.post.post_id)),
+        deletePost: () => dispatch(deletePost(ownProps.post.post_id)),
+        downVote: () => dispatch(downVote(ownProps.post.post_id)),
+        upVote: () => dispatch(upVote(ownProps.post.post_id)),
+        giveThanks: () => dispatch(giveThanks(ownProps.post.post_id, ownProps.parentPostId)),
+        switchToHashtag: (hashtag: string) => dispatch(switchPostSection('hashtag:' + hashtag)),
+        switchToChannel: (channel: string) => dispatch(switchPostSection('channel:' + channel)),
+    };
+};
+
+export const Post = connect(mapStateToProps, mapDispatchToProps)(PostComponent);

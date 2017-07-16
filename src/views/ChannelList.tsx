@@ -11,19 +11,6 @@ export interface ChannelListProps {
 }
 
 export default class ChannelList extends Component<ChannelListProps> {
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() {
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-    }
-
-    componentWillUnmount() {
-    }
-
     render() {
         const {channels, recommendedChannels, localChannels, onChannelClick} = this.props;
         const channelNodes = channels.map((channel) => {
@@ -56,7 +43,7 @@ export default class ChannelList extends Component<ChannelListProps> {
         );
     }
 
-    static createChannelNode(channel: IChannel, onChannelClick) {
+    static createChannelNode(channel: IChannel, onChannelClick: (channel: string) => void) {
         return <div key={channel.channel}
                     className={classnames('channelLink', {unread: channel.unread})}
                     onClick={() => onChannelClick(channel.channel)}>

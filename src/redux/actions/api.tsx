@@ -39,6 +39,7 @@ import {
     apiUnpin,
     apiUpVote,
 } from '../../app/api';
+import {IApiPost} from '../../interfaces/IPost';
 import {PostListSortType} from '../../interfaces/PostListSortType';
 import {Section, SectionEnum} from '../../interfaces/Section';
 import {setPermissionDenied, setToken, showSettings, updatePosts} from '../actions';
@@ -55,11 +56,12 @@ import {
     receivePosts,
     setChannelsMeta,
     setImageCaptcha,
-    setIsFetching, setLocalChannels,
+    setIsFetching,
+    setLocalChannels,
     setRecommendedChannels,
 } from './state';
 
-function handleNetworkErrors(dispatch: Dispatch<IJodelAppStore>, getState: () => IJodelAppStore, err) {
+function handleNetworkErrors(dispatch: Dispatch<IJodelAppStore>, getState: () => IJodelAppStore, err: any) {
     if (err.status === undefined) {
         console.error('No internet access or server down…');
     } else if (err.status === 401) {
@@ -72,6 +74,7 @@ function handleNetworkErrors(dispatch: Dispatch<IJodelAppStore>, getState: () =>
         console.error('Request error: ' + err.status + ' ' + err.message + ': ' + err.response.text);
     }
 }
+
 export function deletePost(postId: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         apiDeletePost(getAuth(getState()), postId)
@@ -279,7 +282,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
             dispatch(setIsFetching(section));
             apiGetPostsChannel(getAuth(getState()), sortType, afterId, channel, getState().settings.useHomeLocation)
                 .then(res => {
-                    let p = {};
+                    let p: { [sortType: string]: IApiPost[] } = {};
                     p[sortType] = res.body.posts;
                     dispatch(receivePosts(section, p, true));
                 }, err => {
@@ -295,7 +298,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
             dispatch(setIsFetching(section));
             apiGetPostsHashtag(getAuth(getState()), sortType, afterId, hashtag, getState().settings.useHomeLocation)
                 .then(res => {
-                    let p = {};
+                    let p: { [sortType: string]: IApiPost[] } = {};
                     p[sortType] = res.body.posts;
                     dispatch(receivePosts(section, p, true));
                 }, err => {
@@ -313,7 +316,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
                 let loc = getLocation(getState());
                 apiGetPosts(getAuth(getState()), sortType, afterId, loc ? loc.latitude : undefined, loc ? loc.longitude : undefined, getState().settings.useHomeLocation)
                     .then(res => {
-                        let p = {};
+                        let p: { [sortType: string]: IApiPost[] } = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
                     }, err => {
@@ -329,7 +332,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
                 dispatch(setIsFetching(section));
                 apiGetPostsMine(getAuth(getState()), sortType, skip, limit)
                     .then(res => {
-                        let p = {};
+                        let p: { [sortType: string]: IApiPost[] } = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
                     }, err => {
@@ -348,7 +351,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
                 dispatch(setIsFetching(section));
                 apiGetPostsMineReplies(getAuth(getState()), skip, limit)
                     .then(res => {
-                        let p = {};
+                        let p: { [sortType: string]: IApiPost[] } = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
                     }, err => {
@@ -367,7 +370,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
                 dispatch(setIsFetching(section));
                 apiGetPostsMineVotes(getAuth(getState()), skip, limit)
                     .then(res => {
-                        let p = {};
+                        let p: { [sortType: string]: IApiPost[] } = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
                     }, err => {
@@ -386,7 +389,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
                 dispatch(setIsFetching(section));
                 apiGetPostsMinePinned(getAuth(getState()), skip, limit)
                     .then(res => {
-                        let p = {};
+                        let p: { [sortType: string]: IApiPost[] } = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
                     }, err => {
@@ -434,7 +437,7 @@ export function updatePost(postId: string): ThunkAction<void, IJodelAppStore, vo
     };
 }
 
-export function fetchPost(postId: string, nextReply?): ThunkAction<void, IJodelAppStore, void> {
+export function fetchPost(postId: string, nextReply?: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         apiGetPostDetails(getAuth(getState()), postId, true, nextReply, false)
             .then(res => {
@@ -483,7 +486,7 @@ export function getConfig(): ThunkAction<void, IJodelAppStore, void> {
     };
 }
 
-export function addPost(text: string, image: string, channel: string, ancestor: string, color = 'FF9908'): ThunkAction<void, IJodelAppStore, void> {
+export function addPost(text: string, image: string, channel: string, ancestor: string, color = 'FF9908'): ThunkAction<Promise<Section>, IJodelAppStore, void> {
     return (dispatch, getState) => {
         let loc = getLocation(getState());
         return apiAddPost(getAuth(getState()), channel, ancestor, color, 0.0, loc ? loc.latitude : undefined, loc ? loc.longitude : undefined, loc ? loc.city : undefined, loc ? loc.country : undefined, text, image, getState().settings.useHomeLocation)
@@ -503,7 +506,10 @@ export function addPost(text: string, image: string, channel: string, ancestor: 
                         return section;
                     }
                 },
-                err => handleNetworkErrors(dispatch, getState, err));
+                err => {
+                    handleNetworkErrors(dispatch, getState, err);
+                    return null;
+                });
     };
 }
 
@@ -537,6 +543,7 @@ export function refreshAccessToken(): ThunkAction<void, IJodelAppStore, void> {
 function getAuth(state: IJodelAppStore) {
     return state.account.token.access;
 }
+
 export function setLocation(latitude: number, longitude: number, city: string = undefined, country = 'DE'): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         latitude = Math.round(latitude * 100) / 100;
@@ -552,7 +559,7 @@ export function setLocation(latitude: number, longitude: number, city: string = 
     };
 }
 
-export function setHome(latitude: number, longitude: number, city: number = undefined, country = 'DE'): ThunkAction<void, IJodelAppStore, void> {
+export function setHome(latitude: number, longitude: number, city: string = undefined, country = 'DE'): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         latitude = Math.round(latitude * 100) / 100;
         longitude = Math.round(longitude * 100) / 100;
@@ -596,7 +603,7 @@ export function getRecommendedChannels(): ThunkAction<void, IJodelAppStore, void
 
 export function getFollowedChannelsMeta(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        let channels = {};
+        let channels: { [channelName: string]: number } = {};
         getState().account.config.followed_channels.forEach(c => {
             let timestamp = getState().settings.channelsLastRead[c];
             channels[c] = timestamp === undefined ? 0 : timestamp;

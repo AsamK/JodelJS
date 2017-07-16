@@ -1,3 +1,4 @@
+import {Color} from './Color';
 export interface IApiLocation {
     name: string
 }
@@ -19,7 +20,7 @@ export interface IPost {
     post_own: string
     vote_count: number
     location: IApiLocation
-    color: string
+    color: Color
     voted?: 'up' | 'down'
     from_home?: boolean
     got_thanks?: boolean
@@ -45,7 +46,7 @@ export interface IApiPost {
     post_own: string
     vote_count: number
     location: IApiLocation
-    color: string
+    color: Color
     voted?: 'up' | 'down'
     from_home?: boolean
 }

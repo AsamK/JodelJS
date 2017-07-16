@@ -1,26 +1,28 @@
 import * as classnames from 'classnames';
 import * as React from 'react';
-import {PureComponent} from 'react';
-import {connect} from 'react-redux';
+import {ChangeEvent, FormEvent, PureComponent} from 'react';
+import {connect, Dispatch} from 'react-redux';
+import {Color} from '../interfaces/Color';
 import {addPost, switchPostSection} from '../redux/actions';
-import ColorPicker from './ColorPicker';
 import {IJodelAppStore} from '../redux/reducers';
+import ColorPicker from './ColorPicker';
 
 export interface AddPostComponentProps {
     ancestor: string
     channel: string
     visible: boolean
-    dispatch: any
+    dispatch: Dispatch<IJodelAppStore>
 }
+
 export interface AddPostComponentState {
     imageUrl: string
     message: string
     image: File
-    color: string
+    color: Color
 }
 
 export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPostComponentState> {
-    constructor(props) {
+    constructor(props: AddPostComponentProps) {
         super(props);
         const messageDraft = sessionStorage.getItem('messageDraft');
         this.state = {
@@ -33,28 +35,29 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
         this.resetForm = this.resetForm.bind(this);
     }
 
-    handleChangeImage(event) {
+    handleChangeImage(event: ChangeEvent<HTMLInputElement>) {
         if (this.state.imageUrl !== null) {
             window.URL.revokeObjectURL(this.state.imageUrl);
         }
-        if (event.target.files.length === 0) {
+        const input: HTMLInputElement = event.target;
+        if (input.files.length === 0) {
             this.setState({image: null, imageUrl: null});
             return;
         }
-        this.setState({image: event.target.files[0]});
+        this.setState({image: input.files[0]});
         if ('URL' in window && 'createObjectURL' in window.URL) {
-            let url = window.URL.createObjectURL(event.target.files[0]);
+            let url = window.URL.createObjectURL(input.files[0]);
             this.setState({imageUrl: url});
         }
     }
 
-    resetForm(form) {
+    resetForm(form: HTMLFormElement) {
         this.setState({message: '', image: null, imageUrl: null});
         form.reset();
         sessionStorage.removeItem('messageDraft');
     }
 
-    handleAddPost(event) {
+    handleAddPost(event: FormEvent<HTMLFormElement>) {
         const {channel, ancestor} = this.props;
         event.preventDefault();
         if (this.state.message.trim() === '' && this.state.image === null) {
@@ -70,12 +73,14 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
             };
             fileReader.readAsDataURL(this.state.image);
         }
-        const form = event.target;
-        this.sendAddPost(this.state.message, encodedImage, channel, ancestor, this.state.color, form);
+        if (event.target instanceof HTMLFormElement) {
+            const form = event.target;
+            this.sendAddPost(this.state.message, encodedImage, channel, ancestor, this.state.color, form);
+        }
         window.history.back();
     }
 
-    sendAddPost(message, encodedImage, channel, ancestor, color, form) {
+    sendAddPost(message: string, encodedImage: string, channel: string, ancestor: string, color: Color, form: HTMLFormElement) {
         this.props.dispatch(addPost(message, encodedImage, channel, ancestor, color)).then(
             section => {
                 this.resetForm(form);
@@ -89,6 +94,7 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
     render() {
         const {channel, ancestor, visible} = this.props;
 
+        const MAX_POST_CHARS = 230;
         return (
             <div className={classnames('addPost', {visible})}>
                 {ancestor === null ?
@@ -97,18 +103,18 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
                     'Jodel Kommentar schreiben'
                 }:
                 <form onSubmit={this.handleAddPost.bind(this)}>
-                    <textarea maxLength={230} value={this.state.message} onChange={event => {
+                    <textarea maxLength={MAX_POST_CHARS} value={this.state.message} onChange={event => {
                         this.setState({message: event.target.value});
                         sessionStorage.setItem('messageDraft', event.target.value);
                     }}/>
-                    Noch {230 - this.state.message.length} Zeichen
+                    Noch {MAX_POST_CHARS - this.state.message.length} Zeichen
                     <div className="image">
                         Bild Jodeln:
                         <input type="file" accept="image/*" onChange={this.handleChangeImage}/>
                         {this.state.imageUrl !== null ?
                             <img src={this.state.imageUrl} alt={this.state.image.name}/> : ''}
                     </div>
-                    {ancestor === null ? <ColorPicker color={this.state.color} onChange={(e) => {
+                    {ancestor === null ? <ColorPicker color={this.state.color} onChange={e => {
                         this.setState({color: e.target.value});
                     }}/> : ''}
                     <button type="submit">
@@ -117,7 +123,7 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
                     <button onClick={e => {
                         e.preventDefault();
                         window.history.back();
-                        this.resetForm((e.target as HTMLElement).parentNode);
+                        this.resetForm((e.target as HTMLElement).parentElement as HTMLFormElement);
                     }}>
                         Abbrechen
                     </button>

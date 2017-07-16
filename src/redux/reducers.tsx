@@ -4,8 +4,9 @@ import {account, IAccountStore} from './reducers/account';
 import {entities, IEntitiesStore} from './reducers/entities';
 import {IImageCaptchaStore, imageCaptcha} from './reducers/imageCaptcha';
 import {IPostsBySectionStore, postsBySection} from './reducers/postsBySection';
-import {ILocation, ISettingsStore, settings} from './reducers/settings';
+import {ISettingsStore, settings} from './reducers/settings';
 import {IViewStateStore, viewState} from './reducers/viewState';
+import {ILocation} from '../interfaces/ILocation';
 
 export interface IJodelAppStore {
     entities: IEntitiesStore,

@@ -65,7 +65,7 @@ function selectedPicturePostId(state: string = null, action: IJodelAction): type
     }
 }
 
-function postSection(state = SectionEnum.LOCATION, action: IJodelAction): typeof state {
+function postSection(state: Section = SectionEnum.LOCATION, action: IJodelAction): typeof state {
     switch (action.type) {
     case SWITCH_POST_SECTION:
         return action.payload.section;

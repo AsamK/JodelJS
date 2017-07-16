@@ -1,32 +1,33 @@
 import * as classnames from 'classnames';
 import * as React from 'react';
-import {connect} from 'react-redux';
+import {connect, Dispatch} from 'react-redux';
 import {pin} from '../redux/actions';
 import {sharePost} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
 import BackButton from './BackButton';
+import {IPost} from '../interfaces/IPost';
 
 export interface PostTopBarProps {
     onBackClick: () => void
     onPinClick: () => void
     onShareClick: () => void
-    post: any
+    post: IPost
 }
 
-let PostTopBar = ({onBackClick, onPinClick, onShareClick, post}) => {
-    let pinned = post.has('pinned') && post.get('pinned');
+let PostTopBar = ({onBackClick, onPinClick, onShareClick, post}: PostTopBarProps) => {
+    let pinned = post.pinned && post.pinned;
     return (
         <div className="postTopBar">
             <BackButton onClick={onBackClick}/>
-            {post.has('shareable') && post.get('shareable') ?
+            {post.shareable && post.shareable ?
                 <div className="share">
-                    {post.has('share_count') && post.get('share_count') > 0 ? post.get('share_count') : ''}
+                    {post.share_count && post.share_count > 0 ? post.share_count : ''}
                     <div className="shareButton" onClick={onShareClick}>
                     </div>
                 </div>
                 : ''}
             <div className="pin">
-                {post.has('pin_count') && post.get('pin_count') > 0 ? post.get('pin_count') : ''}
+                {post.pin_count && post.pin_count > 0 ? post.pin_count : ''}
                 <div className={classnames('pinButton', {pinned})} onClick={onPinClick}>
                 </div>
             </div>
@@ -38,17 +39,17 @@ const mapStateToProps = (state: IJodelAppStore, ownProps) => {
     return {};
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: PostTopBarProps) => {
     return {
         onBackClick: () => {
             window.history.back();
         },
         onPinClick: () => {
-            let isPinned = ownProps.posts.has('pinned') && ownProps.posts.get('pinned');
-            dispatch(pin(ownProps.posts.get('post_id'), !isPinned));
+            let isPinned = ownProps.post.pinned && ownProps.post.pinned;
+            dispatch(pin(ownProps.post.post_id, !isPinned));
         },
         onShareClick: () => {
-            dispatch(sharePost(ownProps.posts.get('post_id')));
+            dispatch(sharePost(ownProps.post.post_id));
         },
     };
 };

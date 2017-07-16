@@ -8,7 +8,6 @@
     "@types/superagent": "^3.5.2",
     "babel-polyfill": "^6.23.0",
     "classnames": "^2.2.5",
-    "immutable": "^3.8.1",
     "nprogress": "^0.2.0",
     "react": "^15.6.1",
     "react-document-title": "^2.0.3",

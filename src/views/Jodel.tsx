@@ -1,8 +1,8 @@
 import * as classnames from 'classnames';
-import * as Immutable from 'immutable';
 import * as React from 'react';
 import {Component} from 'react';
-import {connect} from 'react-redux';
+import {connect, Dispatch} from 'react-redux';
+import {IPost} from '../interfaces/IPost';
 import {
     fetchMoreComments,
     fetchMorePosts,
@@ -16,6 +16,7 @@ import {
 } from '../redux/actions';
 import {IJodelAppStore, isLocationKnown} from '../redux/reducers';
 import {getChannel, getPost} from '../redux/reducers/entities';
+import {IVisible} from '../redux/reducers/viewState';
 import {AddPost} from './AddPost';
 import AppSettings from './AppSettings';
 import ChannelList from './ChannelList';
@@ -26,24 +27,24 @@ import PostListContainer from './PostListContainer';
 import PostTopBar from './PostTopBar';
 import Progress from './Progress';
 import TopBar from './TopBar';
-import {ISettingsStore} from '../redux/reducers/settings';
-import {IVisible} from '../redux/reducers/viewState';
+import {IChannel} from '../interfaces/IChannel';
 
 export interface JodelProps {
     section: string
-    selectedPost: any
-    selectedPicturePost: any
+    selectedPost: IPost
+    selectedPostChildren: IPost[]
+    selectedPicturePost: IPost
     selectedChannel: string
     locationKnown: boolean
     settings: IVisible
     karma: number
     deviceUid: string
     isRegistered: boolean
-    followedChannels: Immutable.List<any>
-    recommendedChannels: Immutable.List<any>
-    localChannels: Immutable.List<any>
+    followedChannels: IChannel[]
+    recommendedChannels: IChannel[]
+    localChannels: IChannel[]
     channelListShown: boolean
-    dispatch: any
+    dispatch: Dispatch<IJodelAppStore>
 }
 
 class Jodel extends Component<JodelProps> {
@@ -68,8 +69,8 @@ class Jodel extends Component<JodelProps> {
         this.props.dispatch(fetchPostsIfNeeded());
     }
 
-    handleClick(post) {
-        this.props.dispatch(selectPost(post != null ? post.get('post_id') : null));
+    handleClick(post: IPost) {
+        this.props.dispatch(selectPost(post != null ? post.post_id : null));
     }
 
     handleAddClick(post) {
@@ -119,6 +120,7 @@ class Jodel extends Component<JodelProps> {
                 <div className={classnames('detail', {postShown: this.props.selectedPost != null})}>
                     <PostTopBar post={selectedPost}/>
                     <PostDetails post={selectedPost}
+                                 postChildren={this.props.selectedPostChildren}
                                  onPostClick={this.refresh.bind(this)}
                                  onAddClick={this.handleAddCommentClick.bind(this)}
                                  locationKnown={this.props.locationKnown}
@@ -126,10 +128,10 @@ class Jodel extends Component<JodelProps> {
                 </div>
                 {this.props.selectedPicturePost !== null ?
                     <div className="bigPicture" onMouseUp={e => window.history.back()}>
-                        <img alt={this.props.selectedPicturePost.get('message')}
-                             src={'https:' + this.props.selectedPicturePost.get('thumbnail_url')}/>
-                        <img alt={this.props.selectedPicturePost.get('message')}
-                             src={'https:' + this.props.selectedPicturePost.get('image_url')}/>
+                        <img alt={this.props.selectedPicturePost.message}
+                             src={'https:' + this.props.selectedPicturePost.thumbnail_url}/>
+                        <img alt={this.props.selectedPicturePost.message}
+                             src={'https:' + this.props.selectedPicturePost.image_url}/>
                     </div>
                     : ''}
                 <AddPost/>
@@ -145,27 +147,19 @@ class Jodel extends Component<JodelProps> {
     }
 }
 
-function getEmptyPost() {
-    return Immutable.fromJS({
-        'updated_at': '0000-00-00T00:00:00.000Z',
-        'tags': [],
-        'user_handle': '',
-        'ptp_post': true,
-        'team_vote_count': 0,
-        'up_votes': [],
-        'message': '',
-        'distance': 0,
-        'sum_votes_count': 0,
-        'discovered_by': 0,
-        'created_at': '0000-00-00T00:00:00.000Z',
-        'post_own': 'team',
-        'down_votes': [],
-        'discovered': 0,
-        'vote_count': 0,
-        'post_id': '',
-        'location': {'name': '', 'loc_coordinates': {'lng': 0, 'lat': 0}},
-        'color': '000000',
-    });
+function getEmptyPost(): IPost {
+    return {
+        updated_at: '0000-00-00T00:00:00.000Z',
+        user_handle: '',
+        message: '',
+        distance: 0,
+        created_at: '0000-00-00T00:00:00.000Z',
+        post_own: 'team',
+        vote_count: 0,
+        post_id: '',
+        location: {'name': ''},
+        color: '000000',
+    };
 }
 
 const mapStateToProps = (state: IJodelAppStore, ownProps) => {
@@ -173,11 +167,12 @@ const mapStateToProps = (state: IJodelAppStore, ownProps) => {
     if (selectedPicturePost === undefined) {
         selectedPicturePost = null;
     }
-    let selectedPost = getPost(state, state.viewState.selectedPostId);
+    let selectedPost: IPost = getPost(state, state.viewState.selectedPostId);
+    let selectedPostChildren: IPost[];
     if (selectedPost === undefined) {
         selectedPost = null;
-    } else if (selectedPost.has('children')) {
-        selectedPost = selectedPost.set('children', selectedPost.get('children').map((child) => getPost(state, child)));
+    } else if (selectedPost.children) {
+        selectedPostChildren = selectedPost.children.map(child => getPost(state, child));
     }
     let section = state.viewState.postSection;
     let selectedChannel;
@@ -188,6 +183,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps) => {
     return {
         section,
         selectedPost,
+        selectedPostChildren,
         selectedPicturePost,
         selectedChannel,
         locationKnown: isLocationKnown(state),

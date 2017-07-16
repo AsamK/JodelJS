@@ -1,6 +1,5 @@
 require('babel-polyfill');
 
-import * as Immutable from 'immutable';
 import * as React from 'react';
 import * as DocumentTitle from 'react-document-title';
 import * as ReactDOM from 'react-dom';
@@ -21,7 +20,7 @@ import {ACCOUNT_VERSION, migrateAccount} from '../redux/reducers/account';
 import {migrateSettings, SETTINGS_VERSION} from '../redux/reducers/settings';
 import Jodel from '../views/Jodel';
 
-let persistedState: any = {};
+let persistedState: Partial<IJodelAppStore> = {};
 
 let storedAccount = localStorage.getItem('account');
 if (storedAccount) {
@@ -37,7 +36,7 @@ if (storedSettings) {
 
 let store = createStore<IJodelAppStore>(
     JodelApp,
-    persistedState,
+    persistedState as any,
     applyMiddleware(
         thunkMiddleware, // lets us use dispatch() functions
     ),

@@ -31,7 +31,7 @@ let ChannelTopBar = ({onFollowClick, channel, followerCount, followedName}: Chan
 };
 
 const mapStateToProps = (state: IJodelAppStore, ownProps: Partial<ChannelTopBarProps>) => {
-    let followers = getChannel(state, ownProps.channel).get('followers');
+    let followers = getChannel(state, ownProps.channel).followers;
     return {
         followedName: state.account.config.followed_channels.reduce((v, c) => {
             if (c.toLowerCase() === ownProps.channel.toLowerCase()) {

@@ -1,7 +1,7 @@
-import * as Immutable from 'immutable';
 import {combineReducers} from 'redux';
 
 import {IJodelAction} from '../../interfaces/IJodelAction';
+import {ILocation} from '../../interfaces/ILocation';
 import {RECEIVE_POSTS, SET_LOCATION, SET_USE_BROWSER_LOCATION, SET_USE_HOME_LOCATION} from '../actions';
 
 export const SETTINGS_VERSION = 1;
@@ -14,22 +14,14 @@ export function migrateSettings(storedState: ISettingsStore, oldVersion: number)
             storedState.location.longitude = undefined;
         }
     }
-    storedState.channelsLastRead = Immutable.Map(storedState.channelsLastRead);
     return storedState;
-}
-
-export interface ILocation {
-    latitude: number
-    longitude: number
-    city: string
-    country: string
 }
 
 export interface ISettingsStore {
     location: ILocation | null
     useBrowserLocation: boolean
     useHomeLocation: boolean
-    channelsLastRead: Immutable.Map<string, number>
+    channelsLastRead: { [key: string]: number }
 }
 
 export const settings = combineReducers<ISettingsStore>({
@@ -66,12 +58,15 @@ function useHomeLocation(state = false, action: IJodelAction): typeof state {
     }
 }
 
-function channelsLastRead(state = Immutable.Map<string, number>({}), action: IJodelAction): typeof state {
+function channelsLastRead(state: { [key: string]: number } = {}, action: IJodelAction): typeof state {
     switch (action.type) {
     case RECEIVE_POSTS:
         if (action.payload.section !== undefined && action.payload.section.startsWith('channel:')) {
             let channel = action.payload.section.substring(8);
-            return state.set(channel, action.receivedAt);
+            return {
+                ...state,
+                [channel]: action.receivedAt,
+            };
         }
         return state;
     default:

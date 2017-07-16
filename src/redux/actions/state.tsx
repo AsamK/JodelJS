@@ -1,3 +1,4 @@
+import {IChannel} from '../../interfaces/IChannel';
 import {IConfig} from '../../interfaces/IConfig';
 import {IJodelAction} from '../../interfaces/IJodelAction';
 import {PostListSortType} from '../../interfaces/PostListSortType';
@@ -148,13 +149,23 @@ export function _setConfig(config: IConfig): IJodelAction {
 }
 
 export const SET_RECOMMENDED_CHANNELS = 'SET_RECOMMENDED_CHANNELS';
-export function setRecommendedChannels(recommendedChannels, localChannels): IJodelAction {
+export function setRecommendedChannels(recommendedChannels: IChannel[]): IJodelAction {
     return {
         type: SET_RECOMMENDED_CHANNELS,
         payload: {
-            recommendedChannels,
-            localChannels,
-            entitiesChannel: [].concat(recommendedChannels).concat(localChannels),
+            channelNames: recommendedChannels.map(c => c.channel),
+            entitiesChannels: recommendedChannels,
+        },
+    };
+}
+
+export const SET_LOCAL_CHANNELS = 'SET_LOCAL_CHANNELS';
+export function setLocalChannels(localChannels): IJodelAction {
+    return {
+        type: SET_LOCAL_CHANNELS,
+        payload: {
+            channelNames: localChannels.map(c => c.channel),
+            entitiesChannels: localChannels,
         },
     };
 }
@@ -164,7 +175,7 @@ export function setChannelsMeta(channels): IJodelAction {
     return {
         type: SET_CHANNELS_META,
         payload: {
-            entitiesChannel: channels,
+            entitiesChannels: channels,
         },
     };
 }

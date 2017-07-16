@@ -55,7 +55,7 @@ import {
     receivePosts,
     setChannelsMeta,
     setImageCaptcha,
-    setIsFetching,
+    setIsFetching, setLocalChannels,
     setRecommendedChannels,
 } from './state';
 
@@ -84,7 +84,7 @@ export function upVote(postId: string): ThunkAction<void, IJodelAppStore, void> 
     return (dispatch, getState) => {
         apiUpVote(getAuth(getState()), postId)
             .then(res => {
-                    dispatch(receivePost(res.body.posts));
+                    dispatch(receivePost(res.body.post));
                     dispatch(getKarma());
                 },
                 err => handleNetworkErrors(dispatch, getState, err),
@@ -96,7 +96,7 @@ export function downVote(postId: string): ThunkAction<void, IJodelAppStore, void
     return (dispatch, getState) => {
         apiDownVote(getAuth(getState()), postId)
             .then(res => {
-                    dispatch(receivePost(res.body.posts));
+                    dispatch(receivePost(res.body.post));
                     dispatch(getKarma());
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
@@ -128,7 +128,7 @@ export function pin(postId: string, pinned = true): ThunkAction<void, IJodelAppS
 }
 
 function shouldFetchPosts(section: Section, state: IJodelAppStore): boolean {
-    const posts = state.postsBySection.get(section);
+    const posts = state.postsBySection[section];
     if (posts === undefined) {
         return true;
     } else if (posts.isFetching) {
@@ -264,17 +264,17 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
         if (sortType == null || section == null) {
             return;
         }
-        const postSection = getState().postsBySection.get(section);
+        const postSection = getState().postsBySection[section];
         if (postSection === undefined || postSection.isFetching) {
             return;
         }
-        const posts = postSection.postsBySortType.get(sortType);
+        const posts = postSection.postsBySortType[sortType];
         let skip, limit;
         if (section.startsWith('channel:')) {
             let channel = section.substring(8);
             let afterId;
             if (posts !== undefined) {
-                afterId = posts.get(posts.size - 1);
+                afterId = posts[posts.length - 1];
             }
             dispatch(setIsFetching(section));
             apiGetPostsChannel(getAuth(getState()), sortType, afterId, channel, getState().settings.useHomeLocation)
@@ -290,7 +290,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
             let hashtag = section.substring(8);
             let afterId;
             if (posts !== undefined) {
-                afterId = posts.get(posts.size - 1);
+                afterId = posts[posts.length - 1];
             }
             dispatch(setIsFetching(section));
             apiGetPostsHashtag(getAuth(getState()), sortType, afterId, hashtag, getState().settings.useHomeLocation)
@@ -307,7 +307,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
             case SectionEnum.LOCATION:
                 let afterId;
                 if (posts !== undefined) {
-                    afterId = posts.get(posts.size - 1);
+                    afterId = posts[posts.length - 1];
                 }
                 dispatch(setIsFetching(section));
                 let loc = getLocation(getState());
@@ -323,7 +323,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
                 break;
             case SectionEnum.MINE:
                 if (posts !== undefined) {
-                    skip = posts.size;
+                    skip = posts.length;
                     limit = 10;
                 }
                 dispatch(setIsFetching(section));
@@ -342,7 +342,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
                     return;
                 }
                 if (posts !== undefined) {
-                    skip = posts.size;
+                    skip = posts.length;
                     limit = 10;
                 }
                 dispatch(setIsFetching(section));
@@ -361,7 +361,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
                     return;
                 }
                 if (posts !== undefined) {
-                    skip = posts.size;
+                    skip = posts.length;
                     limit = 10;
                 }
                 dispatch(setIsFetching(section));
@@ -380,7 +380,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
                     return;
                 }
                 if (posts !== undefined) {
-                    skip = posts.size;
+                    skip = posts.length;
                     limit = 10;
                 }
                 dispatch(setIsFetching(section));
@@ -406,8 +406,8 @@ export function fetchMoreComments(): ThunkAction<void, IJodelAppStore, void> {
             return;
         }
         const post = getPost(getState(), postId);
-        if (post.has('next_reply')) {
-            let nextReply = post.get('next_reply');
+        if (post.next_reply) {
+            let nextReply = post.next_reply;
             if (nextReply != null) {
                 dispatch(fetchPost(postId, nextReply));
             }
@@ -421,11 +421,12 @@ export function updatePost(postId: string): ThunkAction<void, IJodelAppStore, vo
         if (post == undefined) {
             dispatch(fetchPost(postId));
         } else {
-            let count = post.get('child_count');
-            let children = post.get('children');
-            if (count == undefined || children == undefined || children.count() == 0) {
+            let count = post.child_count;
+            let children = post.children;
+            if (count == undefined || children == undefined || children.length == 0) {
                 dispatch(fetchPost(postId));
-            } else if (children.count() == count) {
+            } else if (children.length == count) {
+                dispatch(fetchPost(postId));
                 //dispatch(fetchCompletePost(postId));
                 // TODO recursive fetch all children
             }
@@ -586,7 +587,8 @@ export function getRecommendedChannels(): ThunkAction<void, IJodelAppStore, void
     return (dispatch, getState) => {
         apiGetRecommendedChannels(getAuth(getState()), getState().settings.useHomeLocation)
             .then(res => {
-                    dispatch(setRecommendedChannels(res.body.recommended, res.body.local));
+                    dispatch(setRecommendedChannels(res.body.recommended));
+                    dispatch(setLocalChannels(res.body.local));
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     };
@@ -596,7 +598,7 @@ export function getFollowedChannelsMeta(): ThunkAction<void, IJodelAppStore, voi
     return (dispatch, getState) => {
         let channels = {};
         getState().account.config.followed_channels.forEach(c => {
-            let timestamp = getState().settings.channelsLastRead.get(c);
+            let timestamp = getState().settings.channelsLastRead[c];
             channels[c] = timestamp === undefined ? 0 : timestamp;
         });
         apiGetFollowedChannelsMeta(getAuth(getState()), channels, getState().settings.useHomeLocation)

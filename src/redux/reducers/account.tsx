@@ -1,4 +1,3 @@
-import * as Immutable from 'immutable';
 import {combineReducers} from 'redux';
 
 import {IConfig} from '../../interfaces/IConfig';
@@ -12,27 +11,28 @@ import {
     SET_RECOMMENDED_CHANNELS,
     SET_TOKEN,
 } from '../actions';
+import {SET_LOCAL_CHANNELS} from '../actions/state';
 
 export const ACCOUNT_VERSION = 3;
 export function migrateAccount(storedState: IAccountStore, oldVersion: number): IAccountStore {
     storedState.permissionDenied = false;
     if (oldVersion < 2) {
-        storedState.recommendedChannels = Immutable.List();
+        storedState.recommendedChannels = [];
     }
     if (oldVersion < 3) {
-        storedState.localChannels = Immutable.List();
+        storedState.localChannels = [];
     }
     return storedState;
 }
 
 export interface IAccountStore {
-    karma: number,
-    deviceUid: string,
-    token: IToken | null,
-    config: IConfig | null,
-    permissionDenied: boolean,
-    recommendedChannels: Immutable.List<any>
-    localChannels: Immutable.List<any>
+    karma: number
+    deviceUid: string
+    token: IToken | null
+    config: IConfig | null
+    permissionDenied: boolean
+    recommendedChannels: string[]
+    localChannels: string[]
 }
 
 export const account = combineReducers<IAccountStore>({
@@ -72,7 +72,7 @@ function token(state: IToken = null, action: IJodelAction): typeof state {
     }
 }
 
-function config(state: any = null, action: IJodelAction): typeof state {
+function config(state: IConfig = null, action: IJodelAction): typeof state {
     switch (action.type) {
     case SET_CONFIG:
         return action.payload.config;
@@ -92,19 +92,19 @@ function permissionDenied(state: boolean = false, action: IJodelAction): typeof 
     }
 }
 
-function recommendedChannels(state = Immutable.List<any>(), action: IJodelAction): typeof state {
+function recommendedChannels(state: string[] = [], action: IJodelAction): typeof state {
     switch (action.type) {
     case SET_RECOMMENDED_CHANNELS:
-        return Immutable.List(action.payload.recommendedChannels.map(c => c.channel));
+        return action.payload.channelNames;
     default:
         return state;
     }
 }
 
-function localChannels(state = Immutable.List<any>(), action: IJodelAction): typeof state {
+function localChannels(state: string[] = [], action: IJodelAction): typeof state {
     switch (action.type) {
-    case SET_RECOMMENDED_CHANNELS:
-        return Immutable.List(action.payload.localChannels.map(c => c.channel));
+    case SET_LOCAL_CHANNELS:
+        return action.payload.channelNames;
     default:
         return state;
     }

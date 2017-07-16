@@ -8,9 +8,10 @@ import Location from './Location';
 import Message from './Message';
 import Time from './Time';
 import Vote from './Vote';
+import {IPost} from '../interfaces/IPost';
 
 export interface PostProps {
-    post: any
+    post: IPost
     parentPostId: string
     author: string
     onPostClick: () => void
@@ -29,38 +30,38 @@ class Post extends PureComponent<PostProps> {
     upvote(e) {
         e.stopPropagation();
         const {dispatch, post, parentPostId} = this.props;
-        if (post.has('voted') && post.get('voted') == 'up') {
+        if (post.voted === 'up') {
             // Give thanks
-            dispatch(giveThanks(post.get('post_id'), parentPostId));
+            dispatch(giveThanks(post.post_id, parentPostId));
         } else {
-            dispatch(upVote(post.get('post_id')));
+            dispatch(upVote(post.post_id));
         }
     }
 
     downvote(e) {
         e.stopPropagation();
-        this.props.dispatch(downVote(this.props.post.get('post_id')));
+        this.props.dispatch(downVote(this.props.post.post_id));
     }
 
     render() {
         const {post, author, onPostClick} = this.props;
         return (
-            <div className="post" style={{backgroundColor: '#' + post.get('color')}} onClick={onPostClick}>
-                {post.has('thumbnail_url') ?
+            <div className="post" style={{backgroundColor: '#' + post.color}} onClick={onPostClick}>
+                {post.thumbnail_url ?
                     <div className="postPicture"
-                         style={{backgroundImage: 'url(https:' + post.get('thumbnail_url') + ')'}}
+                         style={{backgroundImage: 'url(https:' + post.thumbnail_url + ')'}}
                          onMouseUp={e => clearTimeout(this.pressTimer)}
                          onContextMenu={e => {
                              e.preventDefault();
                              clearTimeout(this.pressTimer);
-                             this.props.dispatch(selectPicture(post.get('post_id')));
+                             this.props.dispatch(selectPicture(post.post_id));
                          }}
                          onMouseDown={e => {
                              clearTimeout(this.pressTimer);
-                             this.pressTimer = window.setTimeout(() => this.props.dispatch(selectPicture(post.get('post_id'))), 300);
+                             this.pressTimer = window.setTimeout(() => this.props.dispatch(selectPicture(post.post_id)), 300);
                          }}/>
                     :
-                    <Message message={post.get('message')} onAtClick={(e, channel) => {
+                    <Message message={post.message} onAtClick={(e, channel) => {
                         e.stopPropagation();
                         this.props.dispatch(switchPostSection('channel:' + channel));
                     }} onHashtagClick={(e, hashtag) => {
@@ -68,22 +69,22 @@ class Post extends PureComponent<PostProps> {
                         this.props.dispatch(switchPostSection('hashtag:' + hashtag));
                     }}/>
                 }
-                <Vote vote_count={post.get('vote_count')} voted={post.has('voted') ? post.get('voted') : ''}
+                <Vote vote_count={post.vote_count} voted={post.voted ? post.voted : ''}
                       upvote={this.upvote} downvote={this.downvote}/>
-                <Time time={post.get('created_at')}/>
-                <ChildInfo child_count={post.has('child_count') ? post.get('child_count') : 0}/>
-                <Location location={post.getIn(['location', 'name'])} distance={post.get('distance')}
-                          fromHome={post.get('from_home')}/>
+                <Time time={post.created_at}/>
+                <ChildInfo child_count={post.child_count ? post.child_count : 0}/>
+                <Location location={post.location.name} distance={post.distance}
+                          fromHome={post.from_home}/>
                 <div className="author">
                     {author != undefined ?
-                        <div className={classnames(author, {gotThanks: post.get('got_thanks')})}>
+                        <div className={classnames(author, {gotThanks: post.got_thanks})}>
                             {author}
                         </div>
                         : ''}
                 </div>
-                {post.get('post_own') === 'own' ? <a onClick={e => {
+                {post.post_own === 'own' ? <a onClick={e => {
                     e.stopPropagation();
-                    this.props.dispatch(deletePost(post.get('post_id')));
+                    this.props.dispatch(deletePost(post.post_id));
                 }}>delete</a> : ''}
             </div>
         );

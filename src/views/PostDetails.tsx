@@ -3,9 +3,11 @@ import {Component, MouseEvent} from 'react';
 import AddButton from './AddButton';
 import Post from './Post';
 import PostList from './PostList';
+import {IApiPost, IPost} from '../interfaces/IPost';
 
 export interface PostDetailsProps {
-    post: any
+    post: IPost
+    postChildren: IPost[]
     locationKnown: boolean
     onAddClick: (e: MouseEvent<HTMLElement>) => void
     onPostClick: () => void
@@ -22,10 +24,10 @@ export default class PostDetails extends Component<PostDetailsProps> {
         this._onScroll = this._onScroll.bind(this);
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps: PostDetailsProps, prevState) {
         if (this.props.post === null) {
             return;
-        } else if (prevProps.post !== null && prevProps.post.get('post_id') === this.props.post.get('post_id')) {
+        } else if (prevProps.post !== null && prevProps.post.post_id === this.props.post.post_id) {
             this._scrollAtBottom = false;
             return;
         }
@@ -55,8 +57,8 @@ export default class PostDetails extends Component<PostDetailsProps> {
     }
 
     render() {
-        const {post, locationKnown, onPostClick, onAddClick} = this.props;
-        const childPosts = post.has('children') ? post.get('children') : [];
+        const {post, postChildren, locationKnown, onPostClick, onAddClick} = this.props;
+        const childPosts = postChildren ? postChildren : [];
 
         return (
             <div className="postDetails" ref={(c) => this._scrollable = c}>

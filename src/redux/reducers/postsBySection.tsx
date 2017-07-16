@@ -1,9 +1,8 @@
-import * as Immutable from 'immutable';
 import {combineReducers} from 'redux';
 import {IJodelAction} from '../../interfaces/IJodelAction';
-import {INVALIDATE_POSTS, RECEIVE_POSTS, SET_IS_FETCHING, SWITCH_POST_SECTION} from '../actions';
+import {INVALIDATE_POSTS, RECEIVE_POSTS, SET_IS_FETCHING} from '../actions';
 
-function uniq(a) {
+function uniq(a: string[]): string[] {
     const seen = {};
     return a.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
 }
@@ -12,10 +11,29 @@ export interface IPostSection {
     isFetching: boolean
     didInvalidate: boolean
     lastUpdated: number
-    postsBySortType: Immutable.Map<string, Immutable.List<string>>
+    postsBySortType: IPostsBySortType
 }
 
-export type IPostsBySectionStore = Immutable.Map<string, IPostSection>;
+export type IPostsBySortType = { [key: string]: Array<string> }
+
+export type IPostsBySectionStore = { [key: string]: IPostSection };
+
+export function postsBySection(state: IPostsBySectionStore = {}, action: IJodelAction): typeof state {
+    switch (action.type) {
+    case RECEIVE_POSTS:
+    case INVALIDATE_POSTS:
+    case SET_IS_FETCHING:
+        if (!action.payload.section) {
+            return state;
+        }
+        return {
+            ...state,
+            [action.payload.section]: posts(state[action.payload.section], action),
+        };
+    default:
+        return state;
+    }
+}
 
 const posts = combineReducers<IPostSection>({
     isFetching,
@@ -58,32 +76,19 @@ function lastUpdated(state: number = null, action: IJodelAction): typeof state {
     }
 }
 
-function postsBySortType(state = Immutable.Map<string, Immutable.List<string>>({}), action: IJodelAction): typeof state {
+function postsBySortType(state: IPostsBySortType = {}, action: IJodelAction): typeof state {
     switch (action.type) {
     case RECEIVE_POSTS:
-        let newState: any = {};
+        let newState: typeof state = {};
         if (action.payload.append) {
-            action.payload.postsBySortType.forEach(p => newState[p.sortType] = uniq(state.get(p.sortType).concat(p.posts)));
+            action.payload.postsBySortType.forEach(p => newState[p.sortType] = uniq([...state[p.sortType], ...p.posts]));
         } else {
-            newState.didInvalidate = false;
-            newState.lastUpdated = action.receivedAt;
-            action.payload.postsBySortType.forEach(p => newState[p.sortType] = Immutable.List<string>(p.posts));
+            action.payload.postsBySortType.forEach(p => newState[p.sortType] = p.posts);
         }
-        return state.merge(newState);
-    default:
-        return state;
-    }
-}
-
-export function postsBySection(state: IPostsBySectionStore = Immutable.Map<string, any>({}), action: IJodelAction): typeof state {
-    switch (action.type) {
-    case RECEIVE_POSTS:
-    case INVALIDATE_POSTS:
-    case SET_IS_FETCHING:
-        if (!action.payload.section) {
-            return state;
-        }
-        return state.set(action.payload.section, posts(state.get(action.payload.section), action));
+        return {
+            ...state,
+            ...newState,
+        };
     default:
         return state;
     }

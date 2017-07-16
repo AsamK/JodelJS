@@ -1,13 +1,14 @@
-import * as Immutable from 'immutable';
 import {combineReducers} from 'redux';
+import {IChannel} from '../../interfaces/IChannel';
+import {IJodelAction} from '../../interfaces/IJodelAction';
+import {IApiPost, IPost} from '../../interfaces/IPost';
 
 import {PINNED_POST, RECEIVE_POSTS} from '../actions';
 import {IJodelAppStore} from '../reducers';
-import {IJodelAction} from '../../interfaces/IJodelAction';
 
 export interface IEntitiesStore {
-    posts: Immutable.Map<string, any>
-    channels: Immutable.Map<string, any>
+    posts: { [key: string]: IPost }
+    channels: { [key: string]: IChannel }
 }
 
 export const entities = combineReducers({
@@ -15,52 +16,73 @@ export const entities = combineReducers({
     channels,
 });
 
-function posts(state = Immutable.Map<string, any>(), action: IJodelAction): typeof state {
+function convertApiPostToPost(post: IApiPost): IPost {
+    const newChildren = post.children !== undefined ? post.children.map(child => child.post_id) : undefined;
+    return {...post, children: newChildren};
+}
+
+function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): typeof state {
     if (action.payload && action.payload.entities !== undefined) {
-        let newState = {};
-        action.payload.entities.forEach((post) => {
-            if (post.children !== undefined) {
-                post.children = post.children.map(child => {
-                    newState[child.post_id] = child;
-                    return child.post_id;
-                });
-            }
-            if (state.has(post.post_id)) {
-                const oldPost = state.get(post.post_id);
-                if (oldPost.has('children') && post.children !== undefined) {
-                    if (action.payload.append === true) {
-                        post.child_count += oldPost.get('children').count();
-                        post.children = oldPost.get('children').concat(post.children);
-                    } else if (post.children.length == 0) {
-                        // The old post has children and the new post has children, which however aren't included in the new data
-                        // -> keep old children
-                        post.children = oldPost.get('children');
-                    }
+        let newState: typeof state = {};
+        action.payload.entities.forEach((post: IApiPost) => {
+            post.children.forEach((child: IApiPost) => newState[child.post_id] = convertApiPostToPost(child));
+
+            const newPost = convertApiPostToPost(post);
+            const oldPost = state[post.post_id];
+            if (oldPost && oldPost.children && newPost.children) {
+                if (action.payload.append === true) {
+                    return {
+                        ...post,
+                        child_count: post.child_count + oldPost.children.length,
+                        children: [...oldPost.children, ...newPost.children],
+                    };
+                } else if (post.children.length == 0) {
+                    // The old post has children and the new post has children, which however aren't included in the new data
+                    // -> keep old children
+                    return {...post, children: oldPost.children};
                 }
             }
-            newState[post.post_id] = post;
+            newState[post.post_id] = newPost;
         });
-        state = state.merge(newState);
+        state = {...state, ...newState};
     }
     switch (action.type) {
     case PINNED_POST:
-        return state.update(action.payload.postId, post => post.set('pinned', action.payload.pinned).set('pin_count', action.payload.pinCount));
+        return {
+            ...state,
+            [action.payload.postId]: {
+                ...state[action.payload.postId],
+                pinned: action.payload.pinned,
+                pin_count: action.payload.pinCount,
+            },
+        };
     default:
         return state;
     }
 }
 
-function channels(state = Immutable.Map(), action: IJodelAction): typeof state {
+function channels(state: { [key: string]: IChannel } = {}, action: IJodelAction): typeof state {
     if (action.payload && action.payload.entitiesChannels !== undefined) {
+        let newState: typeof state = {};
         action.payload.entitiesChannels.forEach((channel) => {
-            state = state.set(channel.channels, channel);
+            newState[channel.channel] = channel;
         });
+        state = {
+            ...state,
+            ...newState,
+        };
     }
     switch (action.type) {
     case RECEIVE_POSTS:
         if (action.payload.section !== undefined && action.payload.section.startsWith('channel:')) {
-            let channel = action.payload.section.substring(8);
-            return state.setIn([channel, 'unread'], false);
+            let channelName = action.payload.section.substring(8);
+            return {
+                ...state,
+                [channelName]: {
+                    ...state[channelName],
+                    unread: false,
+                },
+            };
         }
         return state;
     default:
@@ -68,14 +90,14 @@ function channels(state = Immutable.Map(), action: IJodelAction): typeof state {
     }
 }
 
-export function getPost(state: IJodelAppStore, postId: string) {
-    return state.entities.posts.get(postId);
+export function getPost(state: IJodelAppStore, postId: string): IPost {
+    return state.entities.posts[postId];
 }
 
-export function getChannel(state: IJodelAppStore, channel: string) {
-    let c = state.entities.channels.get(channel);
+export function getChannel(state: IJodelAppStore, channel: string): IChannel {
+    let c = state.entities.channels[channel];
     if (c === undefined) {
-        return Immutable.Map({channel});
+        return {channel};
     }
     return c;
 }

@@ -1,16 +1,16 @@
-import * as Immutable from 'immutable';
 import * as React from 'react';
 import {Component} from 'react';
+import {IPost} from '../interfaces/IPost';
 
 import Post from './Post';
 
 export interface PostListProps {
-    posts: Immutable.List<any>
+    posts: IPost[]
     sortType?: string
     section?: string
     lastUpdated?: Date
-    parentPost?: any
-    onPostClick: (post: any) => void
+    parentPost?: IPost
+    onPostClick: (post: IPost) => void
     onLoadMore?: () => void
 }
 
@@ -62,14 +62,14 @@ export default class PostList extends Component<PostListProps> {
         const postNodes = posts.map((post) => {
                 let author, parentPostId;
                 if (parentPost) {
-                    parentPostId = parentPost.id;
-                    if (post.get('user_handle') === 'oj') {
+                    parentPostId = parentPost.post_id;
+                    if (post.user_handle === 'oj') {
                         author = 'OJ';
-                    } else if (post.has('replier')) {
-                        author = 'C' + post.get('replier');
+                    } else if (post.replier) {
+                        author = 'C' + post.replier;
                     }
                 }
-                return <Post key={post.get('post_id')} post={post} parentPostId={parentPostId}
+                return <Post key={post.post_id} post={post} parentPostId={parentPostId}
                              onPostClick={() => onPostClick(post)} author={author}/>;
             },
         );

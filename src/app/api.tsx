@@ -1,8 +1,9 @@
-import * as crypto from 'crypto';
+import * as createHmac from 'create-hmac';
 import * as request from 'superagent';
+
 import Settings from '../app/settings';
-import {PostListSortType} from '../interfaces/PostListSortType';
 import {Color} from '../interfaces/Color';
+import {PostListSortType} from '../interfaces/PostListSortType';
 
 const API_PATH_V2 = '/v2';
 const API_PATH_V3 = '/v3';
@@ -21,7 +22,7 @@ function computeSignature(auth: string, method: string, url: string, timestamp: 
     }
     let raw = method + '%' + u.hostname + '%' + 443 + '%' + path + '%' + auth + '%' + timestamp + '%' + '' + '%' + data;
 
-    const hmac = crypto.createHmac('sha1', Settings.KEY);
+    const hmac = createHmac('sha1', Settings.KEY);
     hmac.setEncoding('hex');
     hmac.write(raw);
     hmac.end();
@@ -239,7 +240,7 @@ export function apiGetRecommendedChannels(auth: string, home = false) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/recommendedChannels', {home}, {});
 }
 
-export function apiGetFollowedChannelsMeta(auth: string, channels: {[channelName: string]: number}, home = false) {
+export function apiGetFollowedChannelsMeta(auth: string, channels: { [channelName: string]: number }, home = false) {
     // Format: {"channelName": timestamp, "channel2": timestamp2}
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/user/followedChannelsMeta', {home}, channels);
 }

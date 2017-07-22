@@ -1,4 +1,4 @@
-import * as crypto from 'crypto';
+import * as randomBytes from 'randombytes';
 import {ThunkAction} from 'redux-thunk';
 
 import {PostListSortType} from '../interfaces/PostListSortType';
@@ -123,7 +123,7 @@ function getRandomInt(min: number, max: number) {
 function randomValueHex(byteCount: number) {
     let rawBytes: Buffer;
     try {
-        rawBytes = crypto.randomBytes(byteCount);
+        rawBytes = randomBytes(byteCount);
     } catch (e) {
         // Old browser, insecure but works
         const byteArray = new Uint8Array(byteCount).map(i => getRandomInt(0, 256));

@@ -180,7 +180,7 @@ const mapStateToProps = (state: IJodelAppStore): Partial<JodelProps> => {
     if (section != null && section.startsWith('channel:')) {
         selectedChannel = section.substring(8);
     }
-    let followedChannels = state.account.config.followed_channels;
+    let followedChannels = state.account.config ? state.account.config.followed_channels : undefined;
     return {
         section,
         selectedPost,
@@ -191,7 +191,7 @@ const mapStateToProps = (state: IJodelAppStore): Partial<JodelProps> => {
         settings: state.viewState.settings,
         karma: state.account.karma,
         deviceUid: state.account.deviceUid,
-        isRegistered: state.account.token.access !== undefined,
+        isRegistered: state.account.token !== null,
         followedChannels: followedChannels === undefined ? [] : followedChannels.map(c => getChannel(state, c)),
         recommendedChannels: state.account.recommendedChannels
             .filter(channel => !followedChannels ? true : !followedChannels.find(c => c.toLowerCase() === channel.toLowerCase()))

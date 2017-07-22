@@ -1,8 +1,18 @@
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+const isProduction = (process.argv.indexOf('-p') !== -1);
+
+const extractLess = new ExtractTextPlugin({
+//    filename: "[name].[contenthash].css",
+    filename: 'main.css',
+    disable: !isProduction
+});
+
 module.exports = {
     entry: "./src/app/main.tsx",
     output: {
         filename: "main.js",
-        path: __dirname + "/build-debug"
+        path: __dirname + "/dist"
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -16,10 +26,74 @@ module.exports = {
     module: {
         rules: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
-            { test: /\.tsx?$/, loader: "ts-loader" },
+            {
+                test: /\.tsx?$/,
+                loader: "ts-loader"
+            },
 
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+            {
+                enforce: "pre",
+                test: /\.js$/,
+                loader: "source-map-loader"
+            },
+            {
+                test: /\.css$/,
+                use: extractLess.extract({
+                    use: [{
+                        loader: "css-loader",
+                        options: {
+                            // https://github.com/webpack-contrib/css-loader#importloaders
+                            importLoaders: 0
+                        }
+                    }, {
+                        loader: "postcss-loader",
+                        options: {
+                            plugins: (loader) => [
+                                require('autoprefixer')(),
+                            ]
+                        }
+                    }],
+                    // use style-loader in development
+                    fallback: "style-loader"
+                })
+            },
+            {
+                test: /\.less$/,
+                use: extractLess.extract({
+                    //resolve-url-loader may be chained before less-loader if necessary
+                    use: [{
+                        loader: "css-loader",
+                        options: {
+                            // https://github.com/webpack-contrib/css-loader#importloaders
+                            importLoaders: 0
+                        }
+                    }, {
+                        loader: "postcss-loader",
+                        options: {
+                            plugins: (loader) => [
+                                require('autoprefixer')(),
+                            ]
+                        }
+                    }, {
+                        loader: "less-loader"
+                    }],
+                    // use style-loader in development
+                    fallback: "style-loader"
+                })
+            },
+            {
+                test: /\.svg$/,
+                loader: 'svg-inline-loader?classPrefix'
+            }
         ]
     },
+    plugins: [
+        extractLess
+    ],
+
+    devServer: {
+        inline: true,
+        contentBase: "dist"
+    }
 };

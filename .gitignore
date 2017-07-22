@@ -1,7 +1,6 @@
 node_modules/
 *.swp
 *~
-build/
-build-debug/
+dist/
 .idea/
 /src/app/settings.ts

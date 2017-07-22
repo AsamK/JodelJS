@@ -1,5 +1,7 @@
 require('babel-polyfill');
 
+require('../../style/main.less');
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
@@ -75,14 +77,15 @@ store.subscribe((() => {
     })(),
 );
 
-if (store.getState().account.token.access === null) {
-    if (store.getState().account.deviceUid !== undefined) {
+const account = store.getState().account;
+if (!account.token || !account.token.access) {
+    if (account.deviceUid) {
         store.dispatch(setPermissionDenied(true));
     }
 } else {
     const now = new Date().getTime() / 1000;
     let timeToExpire = 60 * 60 * 24 * 4;
-    if (now > store.getState().account.token.expirationDate - timeToExpire) {
+    if (now > account.token.expirationDate - timeToExpire) {
         store.dispatch(refreshAccessToken());
     } else {
         store.dispatch(getConfig());

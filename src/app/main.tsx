@@ -3,7 +3,7 @@ require('babel-polyfill');
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import {applyMiddleware, createStore} from 'redux';
+import {applyMiddleware, createStore, Middleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import {
     fetchPostsIfNeeded,
@@ -34,11 +34,22 @@ if (storedSettings) {
     persistedState.settings = migrateSettings(JSON.parse(storedSettings), oldVersion);
 }
 
+const reduxMiddlewares: Middleware[] = [
+    thunkMiddleware, // lets us use dispatch() functions
+];
+
+if (process.env.NODE_ENV !== 'production') {
+    // Freeze redux state in development to prevent accidental modifications
+    // Disable in production to improve performance
+    const freeze = require('redux-freeze');
+    reduxMiddlewares.push(freeze);
+}
+
 let store = createStore<IJodelAppStore>(
     JodelApp,
     persistedState as IJodelAppStore,
     applyMiddleware(
-        thunkMiddleware, // lets us use dispatch() functions
+        ...reduxMiddlewares
     ),
 );
 let userClickedBack = false;

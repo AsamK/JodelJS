@@ -1,5 +1,5 @@
 // TODO maybe add Channel to enum and add additional selectedChannel state
-export type Section = SectionEnum | string
+export type Section = SectionEnum | string;
 
 export enum SectionEnum {
     LOCATION = 'location',

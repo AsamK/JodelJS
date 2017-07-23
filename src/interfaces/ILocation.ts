@@ -1,9 +1,9 @@
 export interface IGeoCoordinates {
-    latitude: number
-    longitude: number
+    latitude: number;
+    longitude: number;
 }
 
 export interface ILocation extends IGeoCoordinates {
-    city: string
-    country: string
+    city: string;
+    country: string;
 }

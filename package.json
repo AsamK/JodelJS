@@ -43,6 +43,7 @@
     "style-loader": "^0.18.2",
     "svg-inline-loader": "^0.8.0",
     "ts-loader": "^2.3.1",
+    "tslint": "^5.5.0",
     "typescript": "^2.4.2",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.3.0",
@@ -51,6 +52,7 @@
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack -p",
-    "updatepackages": "ncu -u -a"
+    "updatepackages": "ncu -u -a",
+    "lint": "tslint 'src/**/*.ts'"
   }
 }

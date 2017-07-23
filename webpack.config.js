@@ -1,8 +1,9 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const isProduction = (process.argv.indexOf('-p') !== -1);
 
-const extractLess = new ExtractTextPlugin({
+const extractText = new ExtractTextPlugin({
 //    filename: "[name].[contenthash].css",
     filename: 'main.css',
     disable: !isProduction
@@ -11,7 +12,7 @@ const extractLess = new ExtractTextPlugin({
 module.exports = {
     entry: "./src/app/main.tsx",
     output: {
-        filename: "main.js",
+        filename: "[name].[chunkhash].js",
         path: __dirname + "/dist"
     },
 
@@ -39,7 +40,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: extractLess.extract({
+                use: extractText.extract({
                     use: [{
                         loader: "css-loader",
                         options: {
@@ -60,7 +61,7 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                use: extractLess.extract({
+                use: extractText.extract({
                     //resolve-url-loader may be chained before less-loader if necessary
                     use: [{
                         loader: "css-loader",
@@ -89,7 +90,10 @@ module.exports = {
         ]
     },
     plugins: [
-        extractLess
+        extractText,
+        new HtmlWebpackPlugin({
+            template: 'src/index.html'
+        })
     ],
 
     devServer: {

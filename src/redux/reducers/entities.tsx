@@ -22,16 +22,17 @@ function convertApiPostToPost(post: IApiPost): IPost {
 }
 
 function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): typeof state {
-    if (action.payload && action.payload.entities !== undefined) {
+    const payload = action.payload;
+    if (payload && payload.entities !== undefined) {
         let newState: typeof state = {};
-        action.payload.entities.forEach((post: IApiPost) => {
+        payload.entities.forEach((post: IApiPost) => {
             post.children.forEach((child: IApiPost) => newState[child.post_id] = convertApiPostToPost(child));
 
-            const newPost = convertApiPostToPost(post);
             const oldPost = state[post.post_id];
+            let newPost = convertApiPostToPost(post);
             if (oldPost && oldPost.children && newPost.children) {
-                if (action.payload.append === true) {
-                    return {
+                if (payload.append === true) {
+                    newPost = {
                         ...post,
                         child_count: post.child_count + oldPost.children.length,
                         children: [...oldPost.children, ...newPost.children],
@@ -39,7 +40,7 @@ function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): type
                 } else if (post.children.length == 0) {
                     // The old post has children and the new post has children, which however aren't included in the new data
                     // -> keep old children
-                    return {...post, children: oldPost.children};
+                    newPost = {...post, children: oldPost.children};
                 }
             }
             newState[post.post_id] = newPost;
@@ -48,12 +49,15 @@ function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): type
     }
     switch (action.type) {
     case PINNED_POST:
+        if (!payload || !payload.postId) {
+            return state;
+        }
         return {
             ...state,
-            [action.payload.postId]: {
-                ...state[action.payload.postId],
-                pinned: action.payload.pinned,
-                pin_count: action.payload.pinCount,
+            [payload.postId]: {
+                ...state[payload.postId],
+                pinned: payload.pinned,
+                pin_count: payload.pinCount,
             },
         };
     default:
@@ -74,6 +78,9 @@ function channels(state: { [key: string]: IChannel } = {}, action: IJodelAction)
     }
     switch (action.type) {
     case RECEIVE_POSTS:
+        if (!action.payload) {
+            return state;
+        }
         if (action.payload.section !== undefined && action.payload.section.startsWith('channel:')) {
             let channelName = action.payload.section.substring(8);
             return {
@@ -90,8 +97,8 @@ function channels(state: { [key: string]: IChannel } = {}, action: IJodelAction)
     }
 }
 
-export function getPost(state: IJodelAppStore, postId: string): IPost {
-    return state.entities.posts[postId];
+export function getPost(state: IJodelAppStore, postId: string): IPost | null {
+    return state.entities.posts[postId] || null;
 }
 
 export function getChannel(state: IJodelAppStore, channel: string): IChannel {

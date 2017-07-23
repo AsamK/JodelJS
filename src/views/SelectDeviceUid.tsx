@@ -5,8 +5,8 @@ const CREATE_NEW = 'CREATE_NEW';
 const USE_EXISTING = 'USE_EXISTING';
 
 export interface SelectDeviceUidProps {
-    deviceUid: string
-    setDeviceUid: (deviceUid: string) => void
+    deviceUid: string | null
+    setDeviceUid: (deviceUid: string | null) => void
 }
 
 export interface SelectDeviceUidState {
@@ -17,10 +17,10 @@ export interface SelectDeviceUidState {
 export class SelectDeviceUid extends PureComponent<SelectDeviceUidProps, SelectDeviceUidState> {
     constructor(props: SelectDeviceUidProps) {
         super(props);
-        this.setState({
+        this.state = {
             radioState: CREATE_NEW,
-            deviceUid: props.deviceUid === undefined ? '' : props.deviceUid,
-        });
+            deviceUid: !props.deviceUid ? '' : props.deviceUid,
+        };
         this.handleChangeText = this.handleChangeText.bind(this);
         this.handleChangeRadio = this.handleChangeRadio.bind(this);
     }
@@ -39,7 +39,7 @@ export class SelectDeviceUid extends PureComponent<SelectDeviceUidProps, SelectD
     handleChangeRadio(event: ChangeEvent<HTMLInputElement>) {
         switch (event.target.value) {
         case CREATE_NEW:
-            this.props.setDeviceUid(undefined);
+            this.props.setDeviceUid(null);
             break;
         case USE_EXISTING:
             this.props.setDeviceUid(this.state.deviceUid);
@@ -64,10 +64,10 @@ export class SelectDeviceUid extends PureComponent<SelectDeviceUidProps, SelectD
                 {this.state.radioState === USE_EXISTING ?
                     <label>
                         Device UID des bestehenden Kontos:
-                        <input type="text" value={this.props.deviceUid} onChange={this.handleChangeText}/>
+                        <input type="text" value={this.state.deviceUid} onChange={this.handleChangeText}/>
                     </label>
                     : ''}
             </div>
         );
     }
-};
+}

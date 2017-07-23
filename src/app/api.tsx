@@ -14,13 +14,13 @@ function parseUrl(url: string) {
     return parser;
 }
 
-function computeSignature(auth: string, method: string, url: string, timestamp: string, data: string) {
+function computeSignature(auth: string | undefined, method: string, url: string, timestamp: string, data: string) {
     const u = parseUrl(url);
     let path = u.pathname;
     if (!path.startsWith('/')) {
         path = '/' + path;
     }
-    let raw = method + '%' + u.hostname + '%' + 443 + '%' + path + '%' + auth + '%' + timestamp + '%' + '' + '%' + data;
+    let raw = method + '%' + u.hostname + '%' + 443 + '%' + path + '%' + (auth || '') + '%' + timestamp + '%' + '' + '%' + data;
 
     const hmac = createHmac('sha1', Settings.KEY);
     hmac.setEncoding('hex');
@@ -29,7 +29,7 @@ function computeSignature(auth: string, method: string, url: string, timestamp: 
     return hmac.read();
 }
 
-export function jodelRequest(auth: string, method: string, url: string, query: object | string, data: any) {
+export function jodelRequest(auth: string | undefined, method: string, url: string, query: object | string, data: any) {
     return new Promise<request.Response>((resolve, reject) => {
         const dataString = JSON.stringify(data);
         const timestamp = new Date().toISOString();
@@ -39,13 +39,17 @@ export function jodelRequest(auth: string, method: string, url: string, query: o
             .query(query)
             .type('json')
             .set('Accept', 'application/json')
-            .set('Authorization', auth !== '' ? 'Bearer ' + auth : undefined)
             .set('X-Client-Type', Settings.CLIENT_TYPE)
             .set('X-Api-Version', '0.2')
             .set('X-Timestamp', timestamp)
-            .set('X-Authorization', sig != null ? 'HMAC ' + sig.toString() : undefined)
-            .set('Content-Type', 'application/json; charset=UTF-8')
-            .send(dataString)
+            .set('X-Authorization', 'HMAC ' + sig.toString())
+            .set('Content-Type', 'application/json; charset=UTF-8');
+
+        if (auth) {
+            req.set('Authorization', 'Bearer ' + auth);
+        }
+
+        req.send(dataString)
             .end((err, res) => {
                 if (err) {
                     reject(err);
@@ -69,7 +73,7 @@ export function apiGetPostsCombo(auth: string, latitude: number, longitude: numb
     }, {});
 }
 
-export function apiGetPosts(auth: string, sortType: PostListSortType, afterPostId: string, latitude: number, longitude: number, home = false) {
+export function apiGetPosts(auth: string, sortType: PostListSortType, afterPostId: string | undefined, latitude: number, longitude: number, home = false) {
     let type;
     switch (sortType) {
     case PostListSortType.RECENT:
@@ -96,7 +100,7 @@ export function apiGetPostsMineCombo(auth: string) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/combo', {}, {});
 }
 
-export function apiGetPostsMine(auth: string, sortType: PostListSortType, skip: number, limit: number) {
+export function apiGetPostsMine(auth: string, sortType: PostListSortType, skip?: number, limit?: number) {
     let type;
     switch (sortType) {
     case PostListSortType.RECENT:
@@ -117,21 +121,21 @@ export function apiGetPostsMine(auth: string, sortType: PostListSortType, skip: 
     }, {});
 }
 
-export function apiGetPostsMineReplies(auth: string, skip: number, limit: number) {
+export function apiGetPostsMineReplies(auth: string, skip?: number, limit?: number) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/replies', {
         skip,
         limit,
     }, {});
 }
 
-export function apiGetPostsMinePinned(auth: string, skip: number, limit: number) {
+export function apiGetPostsMinePinned(auth: string, skip?: number, limit?: number) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/pinned', {
         skip,
         limit,
     }, {});
 }
 
-export function apiGetPostsMineVotes(auth: string, skip: number, limit: number) {
+export function apiGetPostsMineVotes(auth: string, skip?: number, limit?: number) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/votes', {
         skip,
         limit,
@@ -142,7 +146,7 @@ export function apiGetPostsChannelCombo(auth: string, channel: string, home = fa
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/channel/combo', {channel, home}, {});
 }
 
-export function apiGetPostsChannel(auth: string, sortType: PostListSortType, afterPostId: string, channel: string, home = false) {
+export function apiGetPostsChannel(auth: string, sortType: PostListSortType, afterPostId: string | undefined, channel: string, home = false) {
     let type;
     switch (sortType) {
     case PostListSortType.RECENT:
@@ -169,7 +173,7 @@ export function apiGetPostsHashtagCombo(auth: string, hashtag: string, home = fa
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/hashtag/combo', {hashtag, home}, {});
 }
 
-export function apiGetPostsHashtag(auth: string, sortType: PostListSortType, afterPostId: string, hashtag: string, home = false) {
+export function apiGetPostsHashtag(auth: string, sortType: PostListSortType, afterPostId: string | undefined, hashtag: string, home = false) {
     let type;
     switch (sortType) {
     case PostListSortType.RECENT:
@@ -196,7 +200,7 @@ export function apiGetPost(auth: string, post_id: string) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/' + post_id, {}, {});
 }
 
-export function apiGetPostDetails(auth: string, post_id: string, details = true, nextReply: string, reversed = false) {
+export function apiGetPostDetails(auth: string, post_id: string, details = true, nextReply: string | undefined, reversed = false) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/' + post_id + '/details', {
         details: details,
         reply: nextReply,
@@ -245,7 +249,7 @@ export function apiGetFollowedChannelsMeta(auth: string, channels: { [channelNam
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/user/followedChannelsMeta', {home}, channels);
 }
 
-export function apiAddPost(auth: string, channel: string, ancestorPostId: string, color: Color, loc_accuracy: number, latitude: number, longitude: number, city: string, country: string, message: string, image: string, toHome = false) {
+export function apiAddPost(auth: string, channel: string | undefined, ancestorPostId: string | undefined, color: Color | undefined, loc_accuracy: number, latitude: number, longitude: number, city: string, country: string, message: string, image: string | undefined, toHome = false) {
     // image must be base64 encoded string
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/', {}, {
         channel,

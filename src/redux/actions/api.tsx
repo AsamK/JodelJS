@@ -106,11 +106,16 @@ export function downVote(postId: string): ThunkAction<void, IJodelAppStore, void
     };
 }
 
-export function giveThanks(postId: string, parentPostId: string): ThunkAction<void, IJodelAppStore, void> {
+export function giveThanks(postId: string, parentPostId?: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         apiGiveThanks(getAuth(getState()), postId)
-            .then(res => dispatch(updatePost(parentPostId)),
-                err => handleNetworkErrors(dispatch, getState, err));
+            .then(res => {
+                    if (parentPostId) {
+                        dispatch(updatePost(parentPostId));
+                    }
+                },
+                err => handleNetworkErrors(dispatch, getState, err),
+            );
     };
 }
 
@@ -141,18 +146,15 @@ function shouldFetchPosts(section: Section, state: IJodelAppStore): boolean {
     }
 }
 
-export function fetchPostsIfNeeded(section?: Section): ThunkAction<void, IJodelAppStore, void> {
+export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        if (getState().viewState.selectedPostId !== null) {
-            dispatch(updatePost(getState().viewState.selectedPostId));
+        const postId = getState().viewState.selectedPostId;
+        if (postId !== null) {
+            dispatch(updatePost(postId));
         }
 
-        if (section === undefined) {
-            section = getState().viewState.postSection;
-            if (section === undefined) {
-                return;
-            }
-        }
+        const section = sectionToFetch ? sectionToFetch : getState().viewState.postSection;
+
         if (shouldFetchPosts(section, getState())) {
             dispatch(setIsFetching(section));
             if (section.startsWith('channel:')) {
@@ -192,7 +194,10 @@ export function fetchPostsIfNeeded(section?: Section): ThunkAction<void, IJodelA
                 switch (section) {
                 case SectionEnum.LOCATION:
                     let loc = getLocation(getState());
-                    apiGetPostsCombo(getAuth(getState()), loc ? loc.latitude : undefined, loc ? loc.longitude : undefined, true, getState().settings.useHomeLocation)
+                    if (!loc) {
+                        break;
+                    }
+                    apiGetPostsCombo(getAuth(getState()), loc.latitude, loc.longitude, true, getState().settings.useHomeLocation)
                         .then(res => {
                             dispatch(receivePosts(section, {
                                 recent: res.body.recent,
@@ -218,7 +223,7 @@ export function fetchPostsIfNeeded(section?: Section): ThunkAction<void, IJodelA
                         });
                     break;
                 case SectionEnum.MINE_REPLIES:
-                    apiGetPostsMineReplies(getAuth(getState()), undefined, undefined)
+                    apiGetPostsMineReplies(getAuth(getState()))
                         .then(res => {
                             dispatch(receivePosts(section, {
                                 recent: res.body.posts,
@@ -229,7 +234,7 @@ export function fetchPostsIfNeeded(section?: Section): ThunkAction<void, IJodelA
                         });
                     break;
                 case SectionEnum.MINE_VOTES:
-                    apiGetPostsMineVotes(getAuth(getState()), undefined, undefined)
+                    apiGetPostsMineVotes(getAuth(getState()))
                         .then(res => {
                             dispatch(receivePosts(section, {
                                 recent: res.body.posts,
@@ -240,7 +245,7 @@ export function fetchPostsIfNeeded(section?: Section): ThunkAction<void, IJodelA
                         });
                     break;
                 case SectionEnum.MINE_PINNED:
-                    apiGetPostsMinePinned(getAuth(getState()), undefined, undefined)
+                    apiGetPostsMinePinned(getAuth(getState()))
                         .then(res => {
                             dispatch(receivePosts(section, {
                                 recent: res.body.posts,
@@ -256,29 +261,19 @@ export function fetchPostsIfNeeded(section?: Section): ThunkAction<void, IJodelA
     };
 }
 
-export function fetchMorePosts(section?: Section, sortType?: PostListSortType): ThunkAction<void, IJodelAppStore, void> {
+export function fetchMorePosts(sectionToFetch?: Section, sortTypeToFetch?: PostListSortType): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        if (section == null) {
-            section = getState().viewState.postSection;
-        }
-        if (sortType == null) {
-            sortType = getState().viewState.postListSortType;
-        }
-        if (sortType == null || section == null) {
-            return;
-        }
+        const section = sectionToFetch ? sectionToFetch : getState().viewState.postSection;
+        const sortType = sortTypeToFetch ? sortTypeToFetch : getState().viewState.postListSortType;
+
         const postSection = getState().postsBySection[section];
-        if (postSection === undefined || postSection.isFetching) {
+        if (!postSection || postSection.isFetching) {
             return;
         }
         const posts = postSection.postsBySortType[sortType];
-        let skip, limit;
         if (section.startsWith('channel:')) {
             let channel = section.substring(8);
-            let afterId;
-            if (posts !== undefined) {
-                afterId = posts[posts.length - 1];
-            }
+            const afterId = posts ? posts[posts.length - 1] : undefined;
             dispatch(setIsFetching(section));
             apiGetPostsChannel(getAuth(getState()), sortType, afterId, channel, getState().settings.useHomeLocation)
                 .then(res => {
@@ -306,6 +301,7 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
                     handleNetworkErrors(dispatch, getState, err);
                 });
         } else {
+            let skip, limit;
             switch (section) {
             case SectionEnum.LOCATION:
                 let afterId;
@@ -314,7 +310,10 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
                 }
                 dispatch(setIsFetching(section));
                 let loc = getLocation(getState());
-                apiGetPosts(getAuth(getState()), sortType, afterId, loc ? loc.latitude : undefined, loc ? loc.longitude : undefined, getState().settings.useHomeLocation)
+                if (!loc) {
+                    break;
+                }
+                apiGetPosts(getAuth(getState()), sortType, afterId, loc.latitude, loc.longitude, getState().settings.useHomeLocation)
                     .then(res => {
                         let p: { [sortType: string]: IApiPost[] } = {};
                         p[sortType] = res.body.posts;
@@ -405,11 +404,11 @@ export function fetchMorePosts(section?: Section, sortType?: PostListSortType): 
 export function fetchMoreComments(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         const postId = getState().viewState.selectedPostId;
-        if (postId === undefined) {
+        if (!postId) {
             return;
         }
         const post = getPost(getState(), postId);
-        if (post.next_reply) {
+        if (post && post.next_reply) {
             let nextReply = post.next_reply;
             if (nextReply != null) {
                 dispatch(fetchPost(postId, nextReply));
@@ -486,10 +485,13 @@ export function getConfig(): ThunkAction<void, IJodelAppStore, void> {
     };
 }
 
-export function addPost(text: string, image: string, channel: string, ancestor: string, color = 'FF9908'): ThunkAction<Promise<Section>, IJodelAppStore, void> {
+export function addPost(text: string, image?: string, channel?: string, ancestor?: string, color = 'FF9908'): ThunkAction<Promise<Section | null>, IJodelAppStore, void> {
     return (dispatch, getState) => {
         let loc = getLocation(getState());
-        return apiAddPost(getAuth(getState()), channel, ancestor, color, 0.0, loc ? loc.latitude : undefined, loc ? loc.longitude : undefined, loc ? loc.city : undefined, loc ? loc.country : undefined, text, image, getState().settings.useHomeLocation)
+        if (!loc) {
+            return Promise.reject('No location available to post');
+        }
+        return apiAddPost(getAuth(getState()), channel, ancestor, color, 0.0, loc.latitude, loc.longitude, loc.city, loc.country, text, image, getState().settings.useHomeLocation)
             .then(res => {
                     if (ancestor != undefined) {
                         dispatch(updatePost(ancestor));
@@ -516,7 +518,10 @@ export function addPost(text: string, image: string, channel: string, ancestor: 
 export function setDeviceUid(deviceUid: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         let loc = getLocation(getState());
-        apiGetAccessToken(deviceUid, loc ? loc.latitude : undefined, loc ? loc.longitude : undefined, loc ? loc.city : undefined, loc ? loc.country : undefined)
+        if (!loc) {
+            return;
+        }
+        apiGetAccessToken(deviceUid, loc.latitude, loc.longitude, loc.city, loc.country)
             .then(res => {
                 dispatch(_setDeviceUID(deviceUid));
                 dispatch(setToken(res.body.distinct_id, res.body.access_token, res.body.refresh_token, res.body.expiration_date, res.body.token_type));
@@ -530,8 +535,14 @@ export function setDeviceUid(deviceUid: string): ThunkAction<void, IJodelAppStor
 export function refreshAccessToken(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         const account = getState().account;
+        if (!account.token) {
+            return;
+        }
         apiRefreshAccessToken(account.token.access, account.token.distinctId, account.token.refresh)
             .then(res => {
+                    if (!account.token) {
+                        return;
+                    }
                     if (res.body.upgraded === true) {
                         dispatch(setToken(account.token.distinctId, res.body.access_token, account.token.refresh, res.body.expiration_date, res.body.token_type));
                     }
@@ -541,17 +552,19 @@ export function refreshAccessToken(): ThunkAction<void, IJodelAppStore, void> {
 }
 
 function getAuth(state: IJodelAppStore) {
+    if (!state.account.token) {
+        return '';
+    }
     return state.account.token.access;
 }
 
-export function setLocation(latitude: number, longitude: number, city: string = undefined, country = 'DE'): ThunkAction<void, IJodelAppStore, void> {
+export function setLocation(latitude: number, longitude: number, city: string = '', country = 'DE'): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         latitude = Math.round(latitude * 100) / 100;
         longitude = Math.round(longitude * 100) / 100;
         dispatch(_setLocation(latitude, longitude, city, country));
-        let auth = getAuth(getState());
-        if (auth !== undefined) {
-            apiSetLocation(auth, latitude, longitude, city, country)
+        if (getState().account.token) {
+            apiSetLocation(getAuth(getState()), latitude, longitude, city, country)
                 .catch(err => {
                     handleNetworkErrors(dispatch, getState, err);
                 });
@@ -559,33 +572,28 @@ export function setLocation(latitude: number, longitude: number, city: string = 
     };
 }
 
-export function setHome(latitude: number, longitude: number, city: string = undefined, country = 'DE'): ThunkAction<void, IJodelAppStore, void> {
+export function setHome(latitude: number, longitude: number, city: string = '', country = 'DE'): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         latitude = Math.round(latitude * 100) / 100;
         longitude = Math.round(longitude * 100) / 100;
-        let auth = getAuth(getState());
-        if (auth !== undefined) {
-            apiSetAction(auth, 'SetHomeStarted')
-                .then(() => apiSetHome(auth, latitude, longitude, city, country))
-                .then(() => dispatch(getConfig()))
-                .then(() => apiSetAction(auth, 'SetHomeCompleted'))
-                .catch(err => {
-                    handleNetworkErrors(dispatch, getState, err);
-                });
-        }
+        const auth = getAuth(getState());
+        apiSetAction(auth, 'SetHomeStarted')
+            .then(() => apiSetHome(auth, latitude, longitude, city, country))
+            .then(() => dispatch(getConfig()))
+            .then(() => apiSetAction(auth, 'SetHomeCompleted'))
+            .catch(err => {
+                handleNetworkErrors(dispatch, getState, err);
+            });
     };
 }
 
 export function deleteHome(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        let auth = getAuth(getState());
-        if (auth !== undefined) {
-            apiDeleteHome(auth)
-                .then(() => dispatch(getConfig()))
-                .catch(err => {
-                    handleNetworkErrors(dispatch, getState, err);
-                });
-        }
+        apiDeleteHome(getAuth(getState()))
+            .then(() => dispatch(getConfig()))
+            .catch(err => {
+                handleNetworkErrors(dispatch, getState, err);
+            });
     };
 }
 
@@ -604,7 +612,11 @@ export function getRecommendedChannels(): ThunkAction<void, IJodelAppStore, void
 export function getFollowedChannelsMeta(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         let channels: { [channelName: string]: number } = {};
-        getState().account.config.followed_channels.forEach(c => {
+        const config = getState().account.config;
+        if (!config) {
+            return;
+        }
+        config.followed_channels.forEach(c => {
             let timestamp = getState().settings.channelsLastRead[c];
             channels[c] = timestamp === undefined ? 0 : timestamp;
         });
@@ -644,10 +656,14 @@ export function getImageCaptcha(): ThunkAction<void, IJodelAppStore, void> {
 
 export function sendVerificationAnswer(answer: number[]): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        apiSendVerificationAnswer(getAuth(getState()), getState().imageCaptcha.key, answer)
+        const imageCaptchaKey = getState().imageCaptcha.key;
+        if (!imageCaptchaKey) {
+            return;
+        }
+        apiSendVerificationAnswer(getAuth(getState()), imageCaptchaKey, answer)
             .then(res => {
                     dispatch(getConfig());
-                    dispatch(setImageCaptcha(null, null, 0));
+                    dispatch(setImageCaptcha(null, null, null));
                     if (!res.body.verified) {
                         dispatch(getImageCaptcha());
                     }

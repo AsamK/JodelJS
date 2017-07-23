@@ -8,7 +8,7 @@ import PostList from './PostList';
 
 export interface PostDetailsProps {
     post: IPost
-    postChildren: IPost[]
+    postChildren: IPost[] | null
     locationKnown: boolean
     onAddClick: (e: MouseEvent<HTMLElement>) => void
     onPostClick: () => void
@@ -18,7 +18,7 @@ export interface PostDetailsProps {
 export default class PostDetails extends Component<PostDetailsProps> {
     private _scrollAtBottom: boolean;
 
-    private _scrollable: HTMLElement;
+    private _scrollable: HTMLElement | null;
 
     constructor(props: PostDetailsProps) {
         super(props);
@@ -32,16 +32,22 @@ export default class PostDetails extends Component<PostDetailsProps> {
             this._scrollAtBottom = false;
             return;
         }
-        this._scrollable.scrollTop = 0;
+        if (this._scrollable) {
+            this._scrollable.scrollTop = 0;
+        }
     }
 
     componentDidMount() {
-        this._scrollable.addEventListener('scroll', this._onScroll);
+        if (this._scrollable) {
+            this._scrollable.addEventListener('scroll', this._onScroll);
+        }
         this._scrollAtBottom = false;
     }
 
     componentWillUnmount() {
-        this._scrollable.removeEventListener('scroll', this._onScroll);
+        if (this._scrollable) {
+            this._scrollable.removeEventListener('scroll', this._onScroll);
+        }
     }
 
     _onScroll() {

@@ -26,13 +26,13 @@ let persistedState: Partial<IJodelAppStore> = {};
 
 let storedAccount = localStorage.getItem('account');
 if (storedAccount) {
-    let oldVersion = parseInt(localStorage.getItem('accountVersion'), 10);
+    let oldVersion = parseInt(localStorage.getItem('accountVersion') || '0', 10);
     persistedState.account = migrateAccount(JSON.parse(storedAccount), oldVersion);
 }
 
 let storedSettings = localStorage.getItem('settings');
 if (storedSettings) {
-    let oldVersion = parseInt(localStorage.getItem('settingsVersion'), 10);
+    let oldVersion = parseInt(localStorage.getItem('settingsVersion') || '0', 10);
     persistedState.settings = migrateSettings(JSON.parse(storedSettings), oldVersion);
 }
 

@@ -1,7 +1,9 @@
 import * as React from 'react';
 import {Component} from 'react';
 import {connect, Dispatch} from 'react-redux';
+
 import Settings from '../app/settings';
+import {ILocation} from '../interfaces/ILocation';
 import {_setLocation, createNewAccount, setUseBrowserLocation, updateLocation} from '../redux/actions';
 import {setDeviceUid} from '../redux/actions/api';
 import {getLocation, IJodelAppStore} from '../redux/reducers';
@@ -9,30 +11,26 @@ import {SelectDeviceUid} from './SelectDeviceUid';
 import {SelectLocation} from './SelectLocation';
 
 export interface FirstStartProps {
-    deviceUid: string
-    latitude: number
-    longitude: number
+    deviceUid: string | null
+    location: ILocation | null
     useBrowserLocation: boolean
     dispatch: Dispatch<IJodelAppStore>
 }
 
 export interface FirstStartState {
-    deviceUid: string
+    deviceUid: string | null
 }
 
 class FirstStart extends Component<FirstStartProps, FirstStartState> {
     constructor(props: FirstStartProps) {
         super(props);
-        this.state = {deviceUid: undefined};
+        this.state = {deviceUid: null};
         this.setDeviceUid = this.setDeviceUid.bind(this);
         this.updateLocation = this.updateLocation.bind(this);
     }
 
     componentDidMount() {
         this.setState({deviceUid: this.props.deviceUid});
-    }
-
-    componentWillUnmount() {
     }
 
     setDeviceUid(deviceUid: string) {
@@ -48,7 +46,7 @@ class FirstStart extends Component<FirstStartProps, FirstStartState> {
             <h1>Willkommen bei der inoffiziellen Jodel Web App</h1>
             <form onSubmit={e => {
                 e.preventDefault();
-                if (this.state.deviceUid === undefined) {
+                if (!this.state.deviceUid) {
                     this.props.dispatch(createNewAccount());
                 } else if (this.state.deviceUid.length !== 64) {
                     alert('Die Device UID muss aus genau 64 hexadezimal Ziffern bestehen.');
@@ -59,22 +57,23 @@ class FirstStart extends Component<FirstStartProps, FirstStartState> {
                 <SelectDeviceUid deviceUid={this.state.deviceUid} setDeviceUid={this.setDeviceUid}/>
                 <p>Standort</p>
                 <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
-                                latitude={this.props.latitude} longitude={this.props.longitude}
-                                onChange={(useBrowserLocation, latitude, longitude) => {
+                                location={this.props.location}
+                                onChange={(useBrowserLocation, location) => {
                                     this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
-                                    if (!useBrowserLocation) {
-                                        if (!latitude) {
-                                            latitude = Settings.DEFAULT_LOCATION.latitude;
+                                    if (!location) {
+                                        if (useBrowserLocation) {
+                                            return;
                                         }
-                                        if (!longitude) {
-                                            longitude = Settings.DEFAULT_LOCATION.longitude;
-                                        }
+                                        location = {
+                                            latitude: Settings.DEFAULT_LOCATION.latitude,
+                                            longitude: Settings.DEFAULT_LOCATION.longitude,
+                                        };
                                     }
-                                    this.props.dispatch(_setLocation(latitude, longitude, undefined));
+                                    this.props.dispatch(_setLocation(location.latitude, location.longitude));
                                 }}
                                 onLocationRequested={this.updateLocation}
                 />
-                {this.props.latitude === undefined ?
+                {!this.props.location ?
                     <div className="locationError">
                         <p>Zum erstmaligen Anmelden muss der aktuelle Standort bekannt sein.
                             Die Standort Abfrage war jedoch noch nicht erfolgreich.
@@ -82,7 +81,7 @@ class FirstStart extends Component<FirstStartProps, FirstStartState> {
                         <a onClick={this.updateLocation}>Erneut versuchen</a> oder oben den Standort manuell festlegen
                     </div>
                     : ''}
-                <button type="submit" disabled={!this.props.latitude}>
+                <button type="submit" disabled={!this.props.location}>
                     Jodeln beginnen
                 </button>
             </form>
@@ -94,8 +93,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
     let loc = getLocation(state);
     return {
         deviceUid: state.account.deviceUid,
-        latitude: loc ? loc.latitude : undefined,
-        longitude: loc ? loc.longitude : undefined,
+        location: loc,
         useBrowserLocation: state.settings.useBrowserLocation,
     };
 };

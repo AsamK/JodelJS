@@ -83,7 +83,7 @@ export class PostComponent extends PureComponent<PostComponentProps> {
                 <Time time={post.created_at}/>
                 <ChildInfo child_count={post.child_count ? post.child_count : 0}/>
                 <Location location={post.location.name} distance={post.distance}
-                          fromHome={post.from_home}/>
+                          fromHome={post.from_home || false}/>
                 <div className="author">
                     {author ?
                         <div className={classnames(author, {gotThanks: post.got_thanks})}>

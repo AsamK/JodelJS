@@ -10,7 +10,7 @@ function uniq(a: string[]): string[] {
 export interface IPostSection {
     isFetching: boolean
     didInvalidate: boolean
-    lastUpdated: number
+    lastUpdated: number | null
     postsBySortType: IPostsBySortType
 }
 
@@ -23,7 +23,7 @@ export function postsBySection(state: IPostsBySectionStore = {}, action: IJodelA
     case RECEIVE_POSTS:
     case INVALIDATE_POSTS:
     case SET_IS_FETCHING:
-        if (!action.payload.section) {
+        if (!action.payload || !action.payload.section) {
             return state;
         }
         return {
@@ -47,7 +47,10 @@ function isFetching(state = false, action: IJodelAction): typeof state {
     case RECEIVE_POSTS:
         return false;
     case SET_IS_FETCHING:
-        return action.payload.isFetching;
+        if (!action.payload) {
+            return state;
+        }
+        return action.payload.isFetching || false;
     default:
         return state;
     }
@@ -56,7 +59,7 @@ function isFetching(state = false, action: IJodelAction): typeof state {
 function didInvalidate(state = false, action: IJodelAction): typeof state {
     switch (action.type) {
     case RECEIVE_POSTS:
-        if (action.payload.append) {
+        if (!action.payload || action.payload.append) {
             return state;
         }
         return false;
@@ -67,10 +70,10 @@ function didInvalidate(state = false, action: IJodelAction): typeof state {
     }
 }
 
-function lastUpdated(state: number = null, action: IJodelAction): typeof state {
+function lastUpdated(state: number | null= null, action: IJodelAction): typeof state {
     switch (action.type) {
     case RECEIVE_POSTS:
-        return action.receivedAt;
+        return action.receivedAt || null;
     default:
         return state;
     }
@@ -80,6 +83,9 @@ function postsBySortType(state: IPostsBySortType = {}, action: IJodelAction): ty
     switch (action.type) {
     case RECEIVE_POSTS:
         let newState: typeof state = {};
+        if (!action.payload || !action.payload.postsBySortType) {
+            return state;
+        }
         if (action.payload.append) {
             action.payload.postsBySortType.forEach(p => newState[p.sortType] = uniq([...state[p.sortType], ...p.posts]));
         } else {

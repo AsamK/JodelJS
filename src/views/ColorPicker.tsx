@@ -5,7 +5,7 @@ import Settings from '../app/settings';
 import {Color} from '../interfaces/Color';
 
 export interface ColorPickerProps {
-    color: Color;
+    color?: Color;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 

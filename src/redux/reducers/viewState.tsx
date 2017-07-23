@@ -31,6 +31,9 @@ export interface IViewStateStore {
 export function viewState(state: IViewStateStore, action: IJodelAction): IViewStateStore {
     switch (action.type) {
     case REPLACE_VIEW_STATE:
+        if (!action.payload) {
+            return state;
+        }
         return {...state, ...action.payload.newViewState};
     default:
         return viewStateCombined(state, action);
@@ -47,19 +50,25 @@ const viewStateCombined = combineReducers<IViewStateStore>({
     channelList,
 });
 
-function selectedPostId(state: string = null, action: IJodelAction): typeof state {
+function selectedPostId(state: string | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
     case SELECT_POST:
-        return action.payload.postId;
+        if (!action.payload) {
+            return state;
+        }
+        return action.payload.postId || null;
     default:
         return state;
     }
 }
 
-function selectedPicturePostId(state: string = null, action: IJodelAction): typeof state {
+function selectedPicturePostId(state: string | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
     case SELECT_PICTURE:
-        return action.payload.postId;
+        if (!action.payload) {
+            return state;
+        }
+        return action.payload.postId || null;
     default:
         return state;
     }
@@ -68,7 +77,10 @@ function selectedPicturePostId(state: string = null, action: IJodelAction): type
 function postSection(state: Section = SectionEnum.LOCATION, action: IJodelAction): typeof state {
     switch (action.type) {
     case SWITCH_POST_SECTION:
-        return action.payload.section;
+        if (!action.payload) {
+            return state;
+        }
+        return action.payload.section || SectionEnum.LOCATION;
     default:
         return state;
     }
@@ -77,7 +89,10 @@ function postSection(state: Section = SectionEnum.LOCATION, action: IJodelAction
 function postListSortType(state = PostListSortType.RECENT, action: IJodelAction): typeof state {
     switch (action.type) {
     case SWITCH_POST_LIST_SORT_TYPE:
-        return action.payload.sortType;
+        if (!action.payload) {
+            return state;
+        }
+        return action.payload.sortType || PostListSortType.RECENT;
     default:
         return state;
     }
@@ -86,7 +101,10 @@ function postListSortType(state = PostListSortType.RECENT, action: IJodelAction)
 function addPost(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
     switch (action.type) {
     case SHOW_ADD_POST:
-        return {visible: action.payload.visible};
+        if (!action.payload) {
+            return state;
+        }
+        return {visible: action.payload.visible || false};
     default:
         return state;
     }
@@ -95,7 +113,10 @@ function addPost(state: IVisible = {visible: false}, action: IJodelAction): type
 function settings(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
     switch (action.type) {
     case SHOW_SETTINGS:
-        return {visible: action.payload.visible};
+        if (!action.payload) {
+            return state;
+        }
+        return {visible: action.payload.visible || false};
     default:
         return state;
     }
@@ -104,7 +125,10 @@ function settings(state: IVisible = {visible: false}, action: IJodelAction): typ
 function channelList(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
     switch (action.type) {
     case SHOW_CHANNEL_LIST:
-        return {visible: action.payload.visible};
+        if (!action.payload) {
+            return state;
+        }
+        return {visible: action.payload.visible || false};
     default:
         return state;
     }

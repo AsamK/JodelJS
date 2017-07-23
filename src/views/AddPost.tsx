@@ -15,10 +15,10 @@ export interface AddPostComponentProps {
 }
 
 export interface AddPostComponentState {
-    imageUrl: string
+    imageUrl: string | undefined
     message: string
-    image: File
-    color: Color
+    image: File | undefined
+    color: Color | undefined
 }
 
 export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPostComponentState> {
@@ -27,8 +27,8 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
         const messageDraft = sessionStorage.getItem('messageDraft');
         this.state = {
             message: messageDraft !== null ? messageDraft : '',
-            image: null,
-            imageUrl: null,
+            image: undefined,
+            imageUrl: undefined,
             color: undefined,
         };
         this.handleChangeImage = this.handleChangeImage.bind(this);
@@ -36,12 +36,12 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
     }
 
     handleChangeImage(event: ChangeEvent<HTMLInputElement>) {
-        if (this.state.imageUrl !== null) {
+        if (this.state.imageUrl) {
             window.URL.revokeObjectURL(this.state.imageUrl);
         }
         const input: HTMLInputElement = event.target;
-        if (input.files.length === 0) {
-            this.setState({image: null, imageUrl: null});
+        if (!input.files || input.files.length === 0) {
+            this.setState({image: undefined, imageUrl: undefined});
             return;
         }
         this.setState({image: input.files[0]});
@@ -52,7 +52,7 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
     }
 
     resetForm(form: HTMLFormElement) {
-        this.setState({message: '', image: null, imageUrl: null});
+        this.setState({message: '', image: undefined, imageUrl: undefined});
         form.reset();
         sessionStorage.removeItem('messageDraft');
     }
@@ -64,7 +64,7 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
             return;
         }
         let encodedImage;
-        if (this.state.image !== null) {
+        if (this.state.image) {
             const fileReader = new FileReader();
             fileReader.onload = () => {
                 const url = fileReader.result;
@@ -80,7 +80,7 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
         window.history.back();
     }
 
-    sendAddPost(message: string, encodedImage: string, channel: string, ancestor: string, color: Color, form: HTMLFormElement) {
+    sendAddPost(message: string, encodedImage: string | undefined, channel: string, ancestor: string, color: Color | undefined, form: HTMLFormElement) {
         this.props.dispatch(addPost(message, encodedImage, channel, ancestor, color)).then(
             section => {
                 this.resetForm(form);
@@ -111,7 +111,7 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
                     <div className="image">
                         Bild Jodeln:
                         <input type="file" accept="image/*" onChange={this.handleChangeImage}/>
-                        {this.state.imageUrl !== null ?
+                        {this.state.imageUrl && this.state.image ?
                             <img src={this.state.imageUrl} alt={this.state.image.name}/> : ''}
                     </div>
                     {ancestor === null ? <ColorPicker color={this.state.color} onChange={e => {

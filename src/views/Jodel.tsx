@@ -26,20 +26,20 @@ import ChannelTopBar from './ChannelTopBar';
 import FirstStart from './FirstStart';
 import PostDetails from './PostDetails';
 import {PostListContainer} from './PostListContainer';
-import PostTopBar from './PostTopBar';
+import {PostTopBar} from './PostTopBar';
 import Progress from './Progress';
 import {TopBar} from './TopBar';
 
 export interface JodelProps {
     section: string
-    selectedPost: IPost
-    selectedPostChildren: IPost[]
-    selectedPicturePost: IPost
+    selectedPost: IPost | null
+    selectedPostChildren: IPost[] | null
+    selectedPicturePost: IPost | null
     selectedChannel: string
     locationKnown: boolean
     settings: IVisible
     karma: number
-    deviceUid: string
+    deviceUid: string | null
     isRegistered: boolean
     followedChannels: IChannel[]
     recommendedChannels: IChannel[]
@@ -91,7 +91,7 @@ class JodelComponent extends Component<JodelProps> {
     }
 
     render() {
-        if (this.props.deviceUid === undefined) {
+        if (!this.props.deviceUid) {
             return <div className="jodel">
                 <FirstStart/>
             </div>;
@@ -110,7 +110,7 @@ class JodelComponent extends Component<JodelProps> {
                     postShown: this.props.selectedPost != null,
                     isChannel: this.props.selectedChannel !== undefined,
                 })}>
-                    {this.props.selectedChannel !== undefined ?
+                    {this.props.selectedChannel ?
                         <ChannelTopBar channel={this.props.selectedChannel}/>
                         : undefined
                     }
@@ -127,7 +127,7 @@ class JodelComponent extends Component<JodelProps> {
                                  locationKnown={this.props.locationKnown}
                                  onLoadMore={this.onLoadMoreComments.bind(this)}/>
                 </div>
-                {this.props.selectedPicturePost !== null ?
+                {this.props.selectedPicturePost ?
                     <div className="bigPicture" onMouseUp={e => window.history.back()}>
                         <img alt={this.props.selectedPicturePost.message}
                              src={'https:' + this.props.selectedPicturePost.thumbnail_url}/>
@@ -164,16 +164,19 @@ function getEmptyPost(): IPost {
 }
 
 const mapStateToProps = (state: IJodelAppStore): Partial<JodelProps> => {
-    let selectedPicturePost = getPost(state, state.viewState.selectedPicturePostId);
-    if (selectedPicturePost === undefined) {
-        selectedPicturePost = null;
+    let selectedPicturePost = null;
+    if (state.viewState.selectedPicturePostId) {
+        selectedPicturePost = getPost(state, state.viewState.selectedPicturePostId);
     }
-    let selectedPost: IPost = getPost(state, state.viewState.selectedPostId);
-    let selectedPostChildren: IPost[];
-    if (selectedPost === undefined) {
-        selectedPost = null;
-    } else if (selectedPost.children) {
-        selectedPostChildren = selectedPost.children.map(child => getPost(state, child));
+    let selectedPost = null;
+    if (state.viewState.selectedPostId) {
+        selectedPost = getPost(state, state.viewState.selectedPostId);
+    }
+    let selectedPostChildren: IPost[] | null;
+    if (selectedPost && selectedPost.children) {
+        selectedPostChildren = selectedPost.children.map(child => getPost(state, child) as IPost);
+    } else {
+        selectedPostChildren = null
     }
     let section = state.viewState.postSection;
     let selectedChannel;

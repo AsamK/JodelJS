@@ -30,17 +30,13 @@ let ChannelTopBar = ({onFollowClick, channel, followerCount, followedName}: Chan
     );
 };
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: Partial<ChannelTopBarProps>) => {
-    let followers = getChannel(state, ownProps.channel).followers;
+const mapStateToProps = (state: IJodelAppStore, ownProps: ChannelTopBarProps) => {
+    const followers = getChannel(state, ownProps.channel).followers;
     return {
-        followedName: state.account.config.followed_channels.reduce((v, c) => {
-            if (c.toLowerCase() === ownProps.channel.toLowerCase()) {
-                return c;
-            } else {
-                return v;
-            }
-        }, null),
-        followerCount: followers === undefined ? 0 : followers,
+        followedName: state.account.config
+            ? state.account.config.followed_channels.find(c => c.toLowerCase() === ownProps.channel.toLowerCase()) || null
+            : null,
+        followerCount: !followers ? 0 : followers,
     };
 };
 

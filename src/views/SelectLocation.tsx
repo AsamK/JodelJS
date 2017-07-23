@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {ChangeEvent, PureComponent} from 'react';
+import {IGeoCoordinates} from '../interfaces/ILocation';
 
 const USE_BROWSER_LOCATION = 'USE_BROWSER_LOCATION';
 const MANUAL = 'MANUAL';
 
 export interface SelectLocationProps {
-    latitude: number;
-    longitude: number;
+    location: IGeoCoordinates | null;
     useBrowserLocation: boolean;
-    onChange: (useBrowserLocation: boolean, latitude: number, longitude: number) => void;
+    onChange: (useBrowserLocation: boolean, location: IGeoCoordinates | null) => void;
     onLocationRequested: () => void;
 }
 
@@ -21,34 +21,38 @@ export class SelectLocation extends PureComponent<SelectLocationProps> {
     }
 
     handleChangeLatitude(event: ChangeEvent<HTMLInputElement>) {
-        const number = Number.parseFloat(event.target.value);
+        let number = Number.parseFloat(event.target.value);
         if (isNaN(number) || number < -90 || number > 90) {
             return;
         }
-        this.props.onChange(this.props.useBrowserLocation, number, this.props.longitude);
+        number = Math.round(number * 100) / 100;
+        const longitude = this.props.location ? this.props.location.longitude : 0;
+        this.props.onChange(this.props.useBrowserLocation, {latitude: number, longitude});
     }
 
     handleChangeLongitude(event: ChangeEvent<HTMLInputElement>) {
-        const number = Number.parseFloat(event.target.value.replace(',', '.'));
+        let number = Number.parseFloat(event.target.value.replace(',', '.'));
         if (isNaN(number) || number < -180 || number > 180) {
             return;
         }
-        this.props.onChange(this.props.useBrowserLocation, this.props.latitude, number);
+        number = Math.round(number * 100) / 100;
+        const latitude = this.props.location ? this.props.location.latitude : 0;
+        this.props.onChange(this.props.useBrowserLocation, {latitude, longitude: number});
     }
 
     handleChangeRadio(event: ChangeEvent<HTMLInputElement>) {
         switch (event.target.value) {
         case USE_BROWSER_LOCATION:
-            this.props.onChange(true, this.props.latitude, this.props.longitude);
+            this.props.onChange(true, this.props.location);
             break;
         case MANUAL:
-            this.props.onChange(false, this.props.latitude, this.props.longitude);
+            this.props.onChange(false, this.props.location);
             break;
         }
     }
 
     render() {
-        const {latitude, longitude, useBrowserLocation, onLocationRequested} = this.props;
+        const {location, useBrowserLocation, onLocationRequested} = this.props;
         return (
             <div className="selectLocation">
                 <label>
@@ -58,7 +62,7 @@ export class SelectLocation extends PureComponent<SelectLocationProps> {
                 </label>
                 {useBrowserLocation ? <div>
                     <p>Aktueller
-                        Standort: {!latitude ? '(Unbekannt)' : latitude + ', ' + longitude}</p>
+                        Standort: {!location ? '(Unbekannt)' : location.latitude + ', ' + location.longitude}</p>
                     <a onClick={onLocationRequested}>Standort aktualisieren</a>
                 </div> : ''}
                 <label>
@@ -70,12 +74,14 @@ export class SelectLocation extends PureComponent<SelectLocationProps> {
                     <div>
                         <label>
                             Breitengrad:
-                            <input type="number" min="-90" max="90" step="0.01" value={latitude}
+                            <input type="number" min="-90" max="90" step="0.01"
+                                   value={location ? location.latitude : ''}
                                    onChange={this.handleChangeLatitude}/>
                         </label>
                         <label>
                             Längengrad:
-                            <input type="number" min="-180" max="180" step="0.01" value={longitude}
+                            <input type="number" min="-180" max="180" step="0.01"
+                                   value={location ? location.longitude : ''}
                                    onChange={this.handleChangeLongitude}/>
                         </label>
                     </div>
@@ -83,4 +89,4 @@ export class SelectLocation extends PureComponent<SelectLocationProps> {
             </div>
         );
     }
-};
+}

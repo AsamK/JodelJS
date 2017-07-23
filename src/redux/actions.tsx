@@ -58,7 +58,7 @@ export function updatePosts(): ThunkAction<void, IJodelAppStore, void> {
     };
 }
 
-export function selectPost(postId: string): ThunkAction<void, IJodelAppStore, void> {
+export function selectPost(postId: string | null): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         dispatch(_selectPost(postId));
         if (postId != null) {
@@ -142,7 +142,7 @@ export function createNewAccount(): ThunkAction<void, IJodelAppStore, void> {
 export function setPermissionDenied(permissionDenied: boolean): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         const account = getState().account;
-        if (account.deviceUid !== undefined && permissionDenied && !account.permissionDenied) {
+        if (account.deviceUid && permissionDenied && !account.permissionDenied) {
             dispatch(_setPermissionDenied(permissionDenied));
             // Reregister
             dispatch(setDeviceUid(account.deviceUid));

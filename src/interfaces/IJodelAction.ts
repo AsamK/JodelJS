@@ -14,7 +14,7 @@ export interface IPayload {
     entitiesChannels?: IChannel[]
     section?: Section
     append?: boolean
-    postId?: string
+    postId?: string | null
     pinned?: boolean
     pinCount?: number
     karma?: number
@@ -27,9 +27,9 @@ export interface IPayload {
     useBrowserLocation?: boolean
     useHomeLocation?: boolean
     isFetching?: boolean
-    key?: string
-    imageUrl?: string
-    imageWidth?: number
+    key?: string | null
+    imageUrl?: string | null
+    imageWidth?: number | null
     sortType?: PostListSortType
     visible?: boolean
     newViewState?: IViewStateStore

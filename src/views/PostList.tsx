@@ -17,7 +17,7 @@ export interface PostListProps {
 export default class PostList extends Component<PostListProps> {
     private _scrollAtBottom: boolean;
 
-    private _scrollable: HTMLElement;
+    private _scrollable: HTMLElement | null;
 
     constructor(props: PostListProps) {
         super(props);
@@ -30,18 +30,24 @@ export default class PostList extends Component<PostListProps> {
     }
 
     componentDidMount() {
-        this._scrollable.addEventListener('scroll', this._onScroll);
+        if (this._scrollable) {
+            this._scrollable.addEventListener('scroll', this._onScroll);
+        }
         this._scrollAtBottom = false;
     }
 
     componentDidUpdate(prevProps: PostListProps) {
         if (prevProps.sortType != this.props.sortType || prevProps.section != this.props.section || prevProps.lastUpdated != this.props.lastUpdated) {
-            this._scrollable.scrollTop = 0;
+            if (this._scrollable) {
+                this._scrollable.scrollTop = 0;
+            }
         }
     }
 
     componentWillUnmount() {
-        this._scrollable.removeEventListener('scroll', this._onScroll);
+        if (this._scrollable) {
+            this._scrollable.removeEventListener('scroll', this._onScroll);
+        }
     }
 
     _onScroll() {

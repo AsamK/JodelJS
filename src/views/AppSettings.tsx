@@ -3,6 +3,7 @@ import {Component} from 'react';
 import {connect, Dispatch} from 'react-redux';
 
 import Settings from '../app/settings';
+import {IGeoCoordinates, ILocation} from '../interfaces/ILocation';
 import {
     _setLocation,
     deleteHome,
@@ -19,22 +20,24 @@ import {SelectLocation} from './SelectLocation';
 import {VerificationImageCaptcha} from './VerificationImageCaptcha';
 
 export interface AppSettingsProps {
-    deviceUid: string;
-    latitude: number;
-    longitude: number;
-    homeSet: boolean;
-    homeName: string;
-    homeClearAllowed: boolean;
-    verified: boolean;
-    useBrowserLocation: boolean;
-    useHomeLocation: boolean;
-    imageUrl: string;
-    imageWidth: number;
-    dispatch: Dispatch<IJodelAppStore>;
+    deviceUid: string | null
+    location: ILocation | null
+    homeSet: boolean
+    homeName: string | null
+    homeClearAllowed: boolean
+    verified: boolean
+    useBrowserLocation: boolean
+    useHomeLocation: boolean
+    imageUrl: string | null
+    imageWidth: number | null
 }
 
-class AppSettings extends Component<AppSettingsProps> {
-    constructor(props: AppSettingsProps) {
+interface AppSettingsComponentProps extends AppSettingsProps {
+    dispatch: Dispatch<IJodelAppStore>
+}
+
+class AppSettings extends Component<AppSettingsComponentProps> {
+    constructor(props: AppSettingsComponentProps) {
         super(props);
         this.updateLocation = this.updateLocation.bind(this);
         this.locationChange = this.locationChange.bind(this);
@@ -45,22 +48,21 @@ class AppSettings extends Component<AppSettingsProps> {
         this.props.dispatch(updateLocation());
     }
 
-    locationChange(useBrowserLocation: boolean, latitude: number, longitude: number) {
+    locationChange(useBrowserLocation: boolean, location: IGeoCoordinates | null) {
         this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
         if (useBrowserLocation && !this.props.useBrowserLocation) {
             this.updateLocation();
         }
-        if (!useBrowserLocation) {
-            if (!latitude) {
-                latitude = Settings.DEFAULT_LOCATION.latitude;
+        if (!location) {
+            if (useBrowserLocation) {
+                return;
             }
-            if (!longitude) {
-                longitude = Settings.DEFAULT_LOCATION.longitude;
-            }
+            location = {
+                latitude: Settings.DEFAULT_LOCATION.latitude,
+                longitude: Settings.DEFAULT_LOCATION.longitude,
+            };
         }
-        latitude = Math.round(latitude * 100) / 100;
-        longitude = Math.round(longitude * 100) / 100;
-        this.props.dispatch(_setLocation(latitude, longitude, undefined));
+        this.props.dispatch(_setLocation(location.latitude, location.longitude));
     }
 
     componentDidMount() {
@@ -84,7 +86,7 @@ class AppSettings extends Component<AppSettingsProps> {
                 Standort:
             </p>
             <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
-                            latitude={this.props.latitude} longitude={this.props.longitude}
+                            location={this.props.location}
                             onChange={this.locationChange}
                             onLocationRequested={this.updateLocation}
             />
@@ -106,16 +108,20 @@ class AppSettings extends Component<AppSettingsProps> {
                             : ''
                         }
                     </div>
-                    :
-                    <button onClick={() => {
-                        this.props.dispatch(setHome(this.props.latitude, this.props.longitude));
-                    }}>
-                        Als Heimat setzen
-                    </button>
+                    : this.props.location ?
+                        <button onClick={() => {
+                            if (!this.props.location) {
+                                return;
+                            }
+                            this.props.dispatch(setHome(this.props.location.latitude, this.props.location.longitude));
+                        }}>
+                            Als Heimat setzen
+                        </button>
+                        : ''
                 }
             </div>
             <div className="accountVerification">
-                {!this.props.verified ?
+                {!this.props.verified && this.props.imageUrl && this.props.imageWidth ?
                     <VerificationImageCaptcha imageUrl={this.props.imageUrl} imageWidth={this.props.imageWidth}
                                               onFinishedClick={answer => {
                                                   this.props.dispatch(sendVerificationAnswer(answer));
@@ -124,7 +130,9 @@ class AppSettings extends Component<AppSettingsProps> {
                     : 'You\'re Jodel account has been verified.'}
             </div>
             <button onClick={() => {
-                this.props.dispatch(setLocation(this.props.latitude, this.props.longitude));
+                if (this.props.location) {
+                    this.props.dispatch(setLocation(this.props.location.latitude, this.props.location.longitude));
+                }
                 window.history.back();
             }}>
                 Schließen
@@ -133,16 +141,15 @@ class AppSettings extends Component<AppSettingsProps> {
     }
 }
 
-const mapStateToProps = (state: IJodelAppStore): Partial<AppSettingsProps> => {
+const mapStateToProps = (state: IJodelAppStore): AppSettingsProps => {
     let loc = getLocation(state);
     return {
         deviceUid: state.account.deviceUid,
-        latitude: loc ? loc.latitude : undefined,
-        longitude: loc ? loc.longitude : undefined,
-        homeSet: state.account.config.home_set,
-        homeName: state.account.config.home_name,
-        homeClearAllowed: state.account.config.home_clear_allowed,
-        verified: state.account.config.verified,
+        location: loc,
+        homeSet: state.account.config ? state.account.config.home_set : false,
+        homeName: state.account.config ? state.account.config.home_name : null,
+        homeClearAllowed: state.account.config ? state.account.config.home_clear_allowed : false,
+        verified: state.account.config ? state.account.config.verified : false,
         useBrowserLocation: state.settings.useBrowserLocation,
         useHomeLocation: state.settings.useHomeLocation,
         imageUrl: state.imageCaptcha.image ? state.imageCaptcha.image.url : null,

@@ -6,7 +6,7 @@ export interface TimeProps {
 }
 
 export default class Time extends Component<TimeProps> {
-    private timer: number;
+    private timer?: number;
 
     componentDidMount() {
         this.timer = setInterval(this.tick.bind(this), 1000);
@@ -17,7 +17,9 @@ export default class Time extends Component<TimeProps> {
     }
 
     componentWillUnmount() {
-        clearInterval(this.timer);
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
         this.timer = undefined;
     }
 

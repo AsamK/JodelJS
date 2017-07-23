@@ -8,13 +8,16 @@ import BackButton from './BackButton';
 import {IPost} from '../interfaces/IPost';
 
 export interface PostTopBarProps {
-    onBackClick?: () => void
-    onPinClick?: () => void
-    onShareClick?: () => void
     post: IPost
 }
 
-let PostTopBar = ({onBackClick, onPinClick, onShareClick, post}: PostTopBarProps) => {
+export interface PostTopBarComponentProps extends PostTopBarProps {
+    onBackClick: () => void
+    onPinClick: () => void
+    onShareClick: () => void
+}
+
+let PostTopBarComponent = ({onBackClick, onPinClick, onShareClick, post}: PostTopBarComponentProps) => {
     let pinned = post.pinned && post.pinned;
     return (
         <div className="postTopBar">
@@ -54,4 +57,4 @@ const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: PostTo
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostTopBar);
+export const PostTopBar = connect(mapStateToProps, mapDispatchToProps)(PostTopBarComponent);

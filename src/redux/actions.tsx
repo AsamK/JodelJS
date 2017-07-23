@@ -126,8 +126,11 @@ function randomValueHex(byteCount: number) {
         rawBytes = randomBytes(byteCount);
     } catch (e) {
         // Old browser, insecure but works
-        const byteArray = new Uint8Array(byteCount).map(i => getRandomInt(0, 256));
-        rawBytes = new Buffer(byteArray);
+        const byteArray = [];
+        for (let i = 0; i < byteCount; ++i) {
+            byteArray.push(getRandomInt(0, 256));
+        }
+        rawBytes = new Buffer(new Uint8Array(byteArray));
     }
     return rawBytes.toString('hex'); // convert to hexadecimal format
 }

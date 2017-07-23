@@ -1,6 +1,4 @@
-require('babel-polyfill');
-
-require('../../style/main.less');
+(window as any).Uint8Array = require("typedarray").Uint8Array;
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';

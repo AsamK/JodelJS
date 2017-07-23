@@ -17,7 +17,7 @@ export const entities = combineReducers({
 });
 
 function convertApiPostToPost(post: IApiPost): IPost {
-    const newChildren = post.children !== undefined ? post.children.map(child => child.post_id) : undefined;
+    const newChildren = post.children ? post.children.map(child => child.post_id) : undefined;
     return {...post, children: newChildren};
 }
 
@@ -26,21 +26,23 @@ function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): type
     if (payload && payload.entities !== undefined) {
         let newState: typeof state = {};
         payload.entities.forEach((post: IApiPost) => {
-            post.children.forEach((child: IApiPost) => newState[child.post_id] = convertApiPostToPost(child));
+            if (post.children) {
+                post.children.forEach((child: IApiPost) => newState[child.post_id] = convertApiPostToPost(child));
+            }
 
             const oldPost = state[post.post_id];
             let newPost = convertApiPostToPost(post);
             if (oldPost && oldPost.children && newPost.children) {
                 if (payload.append === true) {
                     newPost = {
-                        ...post,
-                        child_count: post.child_count + oldPost.children.length,
+                        ...newPost,
+                        child_count: (newPost.child_count ? newPost.child_count : 0) + (oldPost.children ? oldPost.children.length : 0),
                         children: [...oldPost.children, ...newPost.children],
                     };
-                } else if (post.children.length == 0) {
+                } else if (newPost.children && newPost.children.length == 0) {
                     // The old post has children and the new post has children, which however aren't included in the new data
                     // -> keep old children
-                    newPost = {...post, children: oldPost.children};
+                    newPost = {...newPost, children: oldPost.children};
                 }
             }
             newState[post.post_id] = newPost;

@@ -30,8 +30,8 @@ export interface IPost {
 
 export interface IApiPost {
     post_id: string;
-    children: IApiPost[];
-    child_count: number;
+    children?: IApiPost[];
+    child_count?: number;
     next_reply: string;
     message: string;
     thumbnail_url: string;

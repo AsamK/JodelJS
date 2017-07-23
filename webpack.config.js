@@ -1,5 +1,6 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const isProduction = (process.argv.indexOf('-p') !== -1);
 
@@ -10,7 +11,14 @@ const extractText = new ExtractTextPlugin({
 });
 
 module.exports = {
-    entry: "./src/app/main.tsx",
+    entry: [
+        "es5-shim",
+        "es6-shim",
+        "html5-history-api",
+        "./src/app/main.tsx",
+        "./style/main.less"
+    ],
+
     output: {
         filename: "[name].[chunkhash].js",
         path: __dirname + "/dist"
@@ -90,6 +98,7 @@ module.exports = {
         ]
     },
     plugins: [
+        new CleanWebpackPlugin(['dist']),
         extractText,
         new HtmlWebpackPlugin({
             template: 'src/index.html'

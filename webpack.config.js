@@ -93,7 +93,10 @@ module.exports = {
             },
             {
                 test: /\.svg$/,
-                loader: 'svg-inline-loader?classPrefix'
+                use: {
+                    loader: 'svg-url-loader',
+                    options: {}
+                }
             }
         ]
     },

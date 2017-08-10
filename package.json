@@ -4,10 +4,10 @@
   "dependencies": {
     "@types/classnames": "^2.2.0",
     "@types/nprogress": "0.0.29",
-    "@types/react": "^16.0.1",
+    "@types/react": "^16.0.2",
     "@types/react-dom": "^15.5.2",
-    "@types/react-redux": "^4.4.47",
-    "@types/superagent": "^3.5.3",
+    "@types/react-redux": "^5.0.1",
+    "@types/superagent": "^3.5.4",
     "classnames": "^2.2.5",
     "create-hmac": "^1.1.6",
     "es5-shim": "^4.5.9",
@@ -43,7 +43,7 @@
     "typedarray": "0.0.6",
     "typescript": "^2.4.2",
     "uglifyjs-webpack-plugin": "^0.4.6",
-    "webpack": "^3.5.1",
+    "webpack": "^3.5.3",
     "webpack-dev-server": "^2.7.1"
   },
   "scripts": {

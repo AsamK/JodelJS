@@ -1,9 +1,9 @@
-(window as any).Uint8Array = require("typedarray").Uint8Array;
+(window as any).Uint8Array = require('typedarray').Uint8Array;
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import {applyMiddleware, createStore, Middleware} from 'redux';
+import {applyMiddleware, compose, createStore, Middleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import {
     fetchPostsIfNeeded,
@@ -45,13 +45,17 @@ if (process.env.NODE_ENV !== 'production') {
     reduxMiddlewares.push(freeze);
 }
 
-let store = createStore<IJodelAppStore>(
+const composeEnhancers = (process.env.NODE_ENV !== 'production' && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+const store = createStore<IJodelAppStore>(
     JodelApp,
     persistedState as IJodelAppStore,
-    applyMiddleware(
-        ...reduxMiddlewares
+    composeEnhancers(
+        applyMiddleware(
+            ...reduxMiddlewares
+        ),
     ),
 );
+
 let userClickedBack = false;
 store.subscribe((() => {
         let previousState = store.getState();

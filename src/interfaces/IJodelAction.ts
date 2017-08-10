@@ -1,13 +1,14 @@
 import {Action} from 'redux';
 
+import {PostListSortType} from '../enums/PostListSortType';
+import {Section} from '../enums/Section';
 import {IViewStateStore} from '../redux/reducers/viewState';
 import {IChannel} from './IChannel';
 import {IConfig} from './IConfig';
 import {ILocation} from './ILocation';
-import {IApiPost, IPost} from './IPost';
+import {INotification} from './INotification';
+import {IApiPost} from './IPost';
 import {IToken} from './IToken';
-import {PostListSortType} from '../enums/PostListSortType';
-import {Section} from '../enums/Section';
 
 export interface IPayload {
     entities?: IApiPost[];
@@ -33,8 +34,10 @@ export interface IPayload {
     sortType?: PostListSortType;
     visible?: boolean;
     newViewState?: IViewStateStore;
-    postsBySortType?: Array<{sortType: PostListSortType, posts: string[]}>;
+    postsBySortType?: Array<{ sortType: PostListSortType, posts: string[] }>;
+    notifications?: INotification[];
 }
+
 export interface IJodelAction extends Action {
     // FIXME: Disabled because of incomplete redux typings, will be fixed with redux 4.0
     payload?: IPayload;

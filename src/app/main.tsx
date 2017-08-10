@@ -9,14 +9,16 @@ import {
     fetchPostsIfNeeded,
     getConfig,
     replaceViewState,
+    selectPostFromNotification,
     setPermissionDenied,
     switchPostSection,
     updateLocation,
 } from '../redux/actions';
-import {refreshAccessToken} from '../redux/actions/api';
+import {getKarma, getNotifications, refreshAccessToken} from '../redux/actions/api';
 import {IJodelAppStore, JodelApp} from '../redux/reducers';
 import {ACCOUNT_VERSION, migrateAccount} from '../redux/reducers/account';
 import {migrateSettings, SETTINGS_VERSION} from '../redux/reducers/settings';
+import {getNotificationDescription} from '../utils/notification.utils';
 import {Jodel} from '../views/Jodel';
 import DocumentTitle = require('react-document-title/index');
 
@@ -59,6 +61,8 @@ const store = createStore<IJodelAppStore>(
 let userClickedBack = false;
 store.subscribe((() => {
         let previousState = store.getState();
+        let seenNotificationIds: string[] = [];
+
         return () => {
             let state = store.getState();
             localStorage.setItem('account', JSON.stringify(state.account));
@@ -73,6 +77,30 @@ store.subscribe((() => {
                 } else {
                     history.pushState(state.viewState, '');
                 }
+
+                if (seenNotificationIds.length !== state.entities.notifications.length && 'Notification' in window) {
+                    Notification.requestPermission(function (permission) {
+                        if (permission !== 'granted') {
+                            return;
+                        }
+                        state.entities.notifications
+                            .filter(n => !n.read)
+                            .filter(n => seenNotificationIds.indexOf(n.notification_id) === -1)
+                            .filter(n => 10 * 60 * 1000 > (Date.now() - new Date(n.last_interaction).getTime()))
+                            .forEach(n => {
+                                    seenNotificationIds.push(n.notification_id);
+                                    const notification = new Notification(getNotificationDescription(n), {
+                                        body: n.message,
+                                        tag: n.notification_id,
+                                    });
+                                    notification.onclick = () => {
+                                        store.dispatch(selectPostFromNotification(n.post_id));
+                                    };
+                                },
+                            );
+                    });
+                }
+
             }
             previousState = state;
         };
@@ -108,6 +136,8 @@ window.onpopstate = event => {
     userClickedBack = true;
     store.dispatch(replaceViewState(event.state));
 };
+store.dispatch(getNotifications());
+store.dispatch(getKarma());
 
 ReactDOM.render(<Provider store={store}><DocumentTitle
     title="Jodel Unofficial WebApp"><Jodel/></DocumentTitle></Provider>, document.getElementById('content'));

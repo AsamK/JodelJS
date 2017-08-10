@@ -389,6 +389,10 @@ export function apiGetNotifications(auth: string) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/notifications', {}, {});
 }
 
+export function apiSetNotificationPostRead(auth: string, postId: string) {
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/notifications/post/' + postId + '/read', {}, {});
+}
+
 /**
  * Set the user's language on the server
  * @param auth

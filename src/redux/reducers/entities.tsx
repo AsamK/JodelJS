@@ -1,19 +1,23 @@
 import {combineReducers} from 'redux';
 import {IChannel} from '../../interfaces/IChannel';
 import {IJodelAction} from '../../interfaces/IJodelAction';
+import {INotification} from '../../interfaces/INotification';
 import {IApiPost, IPost} from '../../interfaces/IPost';
 
 import {PINNED_POST, RECEIVE_POSTS} from '../actions';
+import {RECEIVE_NOTIFICATIONS} from '../actions/state';
 import {IJodelAppStore} from '../reducers';
 
 export interface IEntitiesStore {
     posts: { [key: string]: IPost }
     channels: { [key: string]: IChannel }
+    notifications: INotification[]
 }
 
 export const entities = combineReducers({
     posts,
     channels,
+    notifications,
 });
 
 function convertApiPostToPost(post: IApiPost): IPost {
@@ -94,6 +98,18 @@ function channels(state: { [key: string]: IChannel } = {}, action: IJodelAction)
             };
         }
         return state;
+    default:
+        return state;
+    }
+}
+
+function notifications(state: INotification[] = [], action: IJodelAction): typeof state {
+    if (!action.payload) {
+        return state;
+    }
+    switch (action.type) {
+    case RECEIVE_NOTIFICATIONS:
+        return action.payload.notifications ? action.payload.notifications : [];
     default:
         return state;
     }

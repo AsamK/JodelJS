@@ -13,6 +13,7 @@ import {
     SWITCH_POST_SECTION,
 } from '../actions';
 import {PostListSortType} from '../../enums/PostListSortType';
+import {SHOW_NOTIFICATIONS} from '../actions/state';
 
 export interface IVisible {
     visible: boolean
@@ -26,6 +27,7 @@ export interface IViewStateStore {
     addPost: IVisible
     settings: IVisible
     channelList: IVisible
+    notifications: IVisible
 }
 
 export function viewState(state: IViewStateStore, action: IJodelAction): IViewStateStore {
@@ -48,6 +50,7 @@ const viewStateCombined = combineReducers<IViewStateStore>({
     addPost,
     settings,
     channelList,
+    notifications,
 });
 
 function selectedPostId(state: string | null = null, action: IJodelAction): typeof state {
@@ -125,6 +128,18 @@ function settings(state: IVisible = {visible: false}, action: IJodelAction): typ
 function channelList(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
     switch (action.type) {
     case SHOW_CHANNEL_LIST:
+        if (!action.payload) {
+            return state;
+        }
+        return {visible: action.payload.visible || false};
+    default:
+        return state;
+    }
+}
+
+function notifications(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
+    switch (action.type) {
+    case SHOW_NOTIFICATIONS:
         if (!action.payload) {
             return state;
         }

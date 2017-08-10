@@ -13,7 +13,7 @@ export function TopBar({karma, showSettings, showChannelList}: ITopBarProps) {
     return (
         <div className="topBar">
             <div className="barEntry">
-                <Menu showSettings={showSettings}/>
+                <Menu/>
             </div>
             <div className="barEntry">
                 <SectionLink section="location"/>

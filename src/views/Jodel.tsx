@@ -29,6 +29,8 @@ import {PostListContainer} from './PostListContainer';
 import {PostTopBar} from './PostTopBar';
 import Progress from './Progress';
 import {TopBar} from './TopBar';
+import {getNotificationsIfAvailable} from '../redux/actions/api';
+import {NotificationList} from './NotificationList';
 
 export interface JodelProps {
     section: string
@@ -45,6 +47,7 @@ export interface JodelProps {
     recommendedChannels: IChannel[]
     localChannels: IChannel[]
     channelListShown: boolean
+    notificationsShown: boolean
     dispatch: Dispatch<IJodelAppStore>
 }
 
@@ -68,6 +71,7 @@ class JodelComponent extends Component<JodelProps> {
             return;
         }
         this.props.dispatch(fetchPostsIfNeeded());
+        this.props.dispatch(getNotificationsIfAvailable());
     }
 
     handleClick(post: IPost) {
@@ -142,6 +146,9 @@ class JodelComponent extends Component<JodelProps> {
                                  localChannels={this.props.localChannels}
                                  onChannelClick={(hashtag) => this.props.dispatch(switchPostSection('channel:' + hashtag))}/>
                 </div>
+                <div className={classnames('notifications', {notificationsShown: this.props.notificationsShown})}>
+                    <NotificationList/>
+                </div>
                 <Progress/>
             </div>;
         }
@@ -203,6 +210,7 @@ const mapStateToProps = (state: IJodelAppStore): Partial<JodelProps> => {
             .filter(channel => !followedChannels ? true : !followedChannels.find(c => c.toLowerCase() === channel.toLowerCase()))
             .map(channel => getChannel(state, channel)),
         channelListShown: state.viewState.channelList.visible,
+        notificationsShown: state.viewState.notifications.visible,
     };
 };
 

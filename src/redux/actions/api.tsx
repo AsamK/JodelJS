@@ -28,20 +28,22 @@ import {
     apiGetPostsMineVotes,
     apiGetRecommendedChannels,
     apiGiveThanks,
+    apiIsNotificationAvailable,
     apiPin,
     apiRefreshAccessToken,
     apiSendVerificationAnswer,
     apiSetAction,
     apiSetHome,
     apiSetLocation,
+    apiSetNotificationPostRead,
     apiSharePost,
     apiUnfollowChannel,
     apiUnpin,
     apiUpVote,
 } from '../../app/api';
-import {IApiPost} from '../../interfaces/IPost';
 import {PostListSortType} from '../../enums/PostListSortType';
 import {Section, SectionEnum} from '../../enums/Section';
+import {IApiPost} from '../../interfaces/IPost';
 import {setPermissionDenied, setToken, showSettings, updatePosts} from '../actions';
 import {getLocation, IJodelAppStore} from '../reducers';
 import {getPost} from '../reducers/entities';
@@ -52,6 +54,7 @@ import {
     _setLocation,
     invalidatePosts,
     pinnedPost,
+    receiveNotifications,
     receivePost,
     receivePosts,
     setChannelsMeta,
@@ -672,11 +675,33 @@ export function sendVerificationAnswer(answer: number[]): ThunkAction<void, IJod
     };
 }
 
+export function getNotificationsIfAvailable(): ThunkAction<void, IJodelAppStore, void> {
+    return (dispatch, getState) => {
+        apiIsNotificationAvailable(getAuth(getState()))
+            .then(res => {
+                    if (res.body.available) {
+                        dispatch(getNotifications());
+                    }
+                },
+                err => handleNetworkErrors(dispatch, getState, err));
+    };
+}
+
 export function getNotifications(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         apiGetNotifications(getAuth(getState()))
             .then(res => {
-                    console.log(res.body);
+                    dispatch(receiveNotifications(res.body.notifications));
+                },
+                err => handleNetworkErrors(dispatch, getState, err));
+    };
+}
+
+export function setNotificationPostRead(postId: string): ThunkAction<void, IJodelAppStore, void> {
+    return (dispatch, getState) => {
+        apiSetNotificationPostRead(getAuth(getState()), postId)
+            .then(res => {
+                    dispatch(getNotifications());
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     };

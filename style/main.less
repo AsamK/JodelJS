@@ -4,6 +4,8 @@
 html, body, #content, .jodel, .postListContainer {
   height: 100%;
   width: 100%;
+  font-family: sans-serif;
+  font-size: 15px;
 }
 
 .list {
@@ -91,6 +93,65 @@ html, body, #content, .jodel, .postListContainer {
       background-size: cover;
       float: left;
     }
+  }
+}
+
+.notifications {
+  position: absolute;
+  top: 3em;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-y: scroll;
+  background-color: #eee;
+  display: none;
+
+  &.notificationsShown {
+    display: block;
+  }
+}
+
+.notification {
+  cursor: pointer;
+  display: flex;
+  background-color: white;
+  margin-bottom: 1px;
+  padding: 10px 0;
+
+  &.unread .message {
+    font-weight: bolder;
+  }
+
+  .type {
+    flex: none;
+    font-size: .6em;
+    width: 40px;
+    overflow: hidden;
+  }
+
+  .details {
+    display: flex;
+    flex: 1 1;
+    flex-direction: column;
+    margin: 0 10px;
+    overflow: hidden;
+
+    .info-text {
+      font-size: .8em;
+    }
+
+    .message,
+    .info-text {
+      flex: auto;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .time {
+    flex: none;
+    font-size: .8em;
   }
 }
 

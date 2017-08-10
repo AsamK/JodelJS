@@ -10,6 +10,7 @@ import {
     getRecommendedChannels,
     setDeviceUid,
     setLocation,
+    setNotificationPostRead,
     updatePost,
 } from './actions/api';
 import {
@@ -19,6 +20,7 @@ import {
     _setToken,
     _showAddPost,
     _showChannelList,
+    _showNotifications,
     _showSettings,
     _switchPostListSortType,
     _switchPostSection,
@@ -37,6 +39,7 @@ export function switchPostSection(section: Section): ThunkAction<void, IJodelApp
         }
         dispatch(_selectPost(null));
         dispatch(_showChannelList(false));
+        dispatch(_showNotifications(false));
         dispatch(invalidatePosts(section));
         dispatch(fetchPostsIfNeeded(section));
     };
@@ -60,6 +63,20 @@ export function updatePosts(): ThunkAction<void, IJodelAppStore, void> {
 
 export function selectPost(postId: string | null): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
+        dispatch(_showChannelList(false));
+        dispatch(_showNotifications(false));
+        dispatch(_selectPost(postId));
+        if (postId != null) {
+            dispatch(updatePost(postId));
+        }
+    };
+}
+
+export function selectPostFromNotification(postId: string): ThunkAction<void, IJodelAppStore, void> {
+    return (dispatch, getState) => {
+        dispatch(_showChannelList(false));
+        dispatch(_showNotifications(false));
+        dispatch(setNotificationPostRead(postId));
         dispatch(_selectPost(postId));
         if (postId != null) {
             dispatch(updatePost(postId));
@@ -168,9 +185,19 @@ export function showSettings(visible: boolean): ThunkAction<void, IJodelAppStore
 export function showChannelList(visible: boolean): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         if (visible) {
+            dispatch(_showNotifications(false));
             dispatch(getRecommendedChannels());
             dispatch(getFollowedChannelsMeta());
         }
         dispatch(_showChannelList(visible));
+    };
+}
+
+export function showNotifications(visible: boolean): ThunkAction<void, IJodelAppStore, void> {
+    return (dispatch, getState) => {
+        if (visible) {
+            dispatch(_showChannelList(false));
+        }
+        dispatch(_showNotifications(visible));
     };
 }

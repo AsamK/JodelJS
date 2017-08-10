@@ -5,7 +5,7 @@ export interface TimeProps {
     time: string
 }
 
-export default class Time extends Component<TimeProps> {
+export class Time extends Component<TimeProps> {
     private timer?: number;
 
     componentDidMount() {
@@ -58,9 +58,9 @@ export default class Time extends Component<TimeProps> {
             this.timer = setInterval(this.tick.bind(this), timerInterval);
         }
         return (
-            <div className="time">
+            <div className="time" title={time}>
                 {age}
             </div>
         );
     }
-};
+}

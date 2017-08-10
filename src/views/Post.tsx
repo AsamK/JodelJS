@@ -9,7 +9,7 @@ import {IJodelAppStore} from '../redux/reducers';
 import ChildInfo from './ChildInfo';
 import Location from './Location';
 import Message from './Message';
-import Time from './Time';
+import {Time} from './Time';
 import Vote from './Vote';
 
 export interface PostProps {

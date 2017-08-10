@@ -1,10 +1,11 @@
+import {PostListSortType} from '../../enums/PostListSortType';
+import {Section} from '../../enums/Section';
 import {IChannel} from '../../interfaces/IChannel';
 import {IConfig} from '../../interfaces/IConfig';
 import {IJodelAction} from '../../interfaces/IJodelAction';
 import {IApiPost} from '../../interfaces/IPost';
-import {PostListSortType} from '../../enums/PostListSortType';
-import {Section} from '../../enums/Section';
 import {IViewStateStore} from '../reducers/viewState';
+import {INotification} from '../../interfaces/INotification';
 
 export const SWITCH_POST_LIST_SORT_TYPE = 'SWITCH_POST_LIST_CONTAINER_STATE';
 
@@ -47,6 +48,15 @@ export const SHOW_CHANNEL_LIST = 'SHOW_CHANNEL_LIST';
 export function _showChannelList(visible: boolean): IJodelAction {
     return {
         type: SHOW_CHANNEL_LIST,
+        payload: {visible},
+    };
+}
+
+export const SHOW_NOTIFICATIONS = 'SHOW_NOTIFICATIONS';
+
+export function _showNotifications(visible: boolean): IJodelAction {
+    return {
+        type: SHOW_NOTIFICATIONS,
         payload: {visible},
     };
 }
@@ -105,6 +115,18 @@ export function receivePost(post: IApiPost, append = false): IJodelAction {
         payload: {
             entities: [post],
             append,
+        },
+    };
+}
+
+export const RECEIVE_NOTIFICATIONS = 'RECEIVE_NOTIFICATIONS';
+
+export function receiveNotifications(notifications: INotification[]): IJodelAction {
+    return {
+        type: RECEIVE_NOTIFICATIONS,
+        receivedAt: Date.now(),
+        payload: {
+            notifications
         },
     };
 }

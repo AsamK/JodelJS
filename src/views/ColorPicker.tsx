@@ -2,7 +2,7 @@ import * as React from 'react';
 import {ChangeEvent, PureComponent} from 'react';
 
 import Settings from '../app/settings';
-import {Color} from '../interfaces/Color';
+import {Color} from '../enums/Color';
 
 export interface ColorPickerProps {
     color?: Color;

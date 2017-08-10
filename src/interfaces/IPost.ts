@@ -1,4 +1,4 @@
-import {Color} from './Color';
+import {Color} from '../enums/Color';
 export interface IApiLocation {
     name: string;
 }

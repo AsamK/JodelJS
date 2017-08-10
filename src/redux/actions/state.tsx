@@ -2,8 +2,8 @@ import {IChannel} from '../../interfaces/IChannel';
 import {IConfig} from '../../interfaces/IConfig';
 import {IJodelAction} from '../../interfaces/IJodelAction';
 import {IApiPost} from '../../interfaces/IPost';
-import {PostListSortType} from '../../interfaces/PostListSortType';
-import {Section} from '../../interfaces/Section';
+import {PostListSortType} from '../../enums/PostListSortType';
+import {Section} from '../../enums/Section';
 import {IViewStateStore} from '../reducers/viewState';
 
 export const SWITCH_POST_LIST_SORT_TYPE = 'SWITCH_POST_LIST_CONTAINER_STATE';

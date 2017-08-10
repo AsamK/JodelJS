@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
 
 import {IJodelAction} from '../../interfaces/IJodelAction';
-import {Section, SectionEnum} from '../../interfaces/Section';
+import {Section, SectionEnum} from '../../enums/Section';
 import {
     REPLACE_VIEW_STATE,
     SELECT_PICTURE,
@@ -12,7 +12,7 @@ import {
     SWITCH_POST_LIST_SORT_TYPE,
     SWITCH_POST_SECTION,
 } from '../actions';
-import {PostListSortType} from '../../interfaces/PostListSortType';
+import {PostListSortType} from '../../enums/PostListSortType';
 
 export interface IVisible {
     visible: boolean

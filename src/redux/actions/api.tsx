@@ -40,8 +40,8 @@ import {
     apiUpVote,
 } from '../../app/api';
 import {IApiPost} from '../../interfaces/IPost';
-import {PostListSortType} from '../../interfaces/PostListSortType';
-import {Section, SectionEnum} from '../../interfaces/Section';
+import {PostListSortType} from '../../enums/PostListSortType';
+import {Section, SectionEnum} from '../../enums/Section';
 import {setPermissionDenied, setToken, showSettings, updatePosts} from '../actions';
 import {getLocation, IJodelAppStore} from '../reducers';
 import {getPost} from '../reducers/entities';

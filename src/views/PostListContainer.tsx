@@ -3,7 +3,7 @@ import {Component, MouseEvent, PureComponent} from 'react';
 import {connect, Dispatch} from 'react-redux';
 
 import {IPost} from '../interfaces/IPost';
-import {PostListSortType} from '../interfaces/PostListSortType';
+import {PostListSortType} from '../enums/PostListSortType';
 import {IJodelAppStore, isLocationKnown} from '../redux/reducers';
 import {getPost} from '../redux/reducers/entities';
 import AddButton from './AddButton';

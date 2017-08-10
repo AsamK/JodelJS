@@ -2,7 +2,7 @@ import * as classnames from 'classnames';
 import * as React from 'react';
 import {ChangeEvent, FormEvent, PureComponent} from 'react';
 import {connect, Dispatch} from 'react-redux';
-import {Color} from '../interfaces/Color';
+import {Color} from '../enums/Color';
 import {addPost, switchPostSection} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 import ColorPicker from './ColorPicker';

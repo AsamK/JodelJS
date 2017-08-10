@@ -2,7 +2,7 @@ import * as classnames from 'classnames';
 import * as React from 'react';
 import {connect, Dispatch} from 'react-redux';
 
-import {PostListSortType} from '../interfaces/PostListSortType';
+import {PostListSortType} from '../enums/PostListSortType';
 import {switchPostListSortType} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 

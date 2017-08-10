@@ -2,8 +2,8 @@ import * as createHmac from 'create-hmac';
 import * as request from 'superagent';
 
 import Settings from '../app/settings';
-import {Color} from '../interfaces/Color';
-import {PostListSortType} from '../interfaces/PostListSortType';
+import {Color} from '../enums/Color';
+import {PostListSortType} from '../enums/PostListSortType';
 
 const API_PATH_V2 = '/v2';
 const API_PATH_V3 = '/v3';

@@ -1,8 +1,8 @@
 import * as randomBytes from 'randombytes';
 import {ThunkAction} from 'redux-thunk';
 
-import {PostListSortType} from '../interfaces/PostListSortType';
-import {Section} from '../interfaces/Section';
+import {PostListSortType} from '../enums/PostListSortType';
+import {Section} from '../enums/Section';
 import {
     fetchPostsIfNeeded,
     getConfig,

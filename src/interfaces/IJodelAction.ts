@@ -6,8 +6,8 @@ import {IConfig} from './IConfig';
 import {ILocation} from './ILocation';
 import {IApiPost, IPost} from './IPost';
 import {IToken} from './IToken';
-import {PostListSortType} from './PostListSortType';
-import {Section} from './Section';
+import {PostListSortType} from '../enums/PostListSortType';
+import {Section} from '../enums/Section';
 
 export interface IPayload {
     entities?: IApiPost[];

@@ -60,22 +60,20 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
     handleAddPost(event: FormEvent<HTMLFormElement>) {
         const {channel, ancestor} = this.props;
         event.preventDefault();
-        if (this.state.message.trim() === '' && this.state.image === null) {
+        if ((this.state.message.trim() === '' && this.state.image === null) || !(event.target instanceof HTMLFormElement)) {
             return;
         }
-        let encodedImage;
+        const form = event.target;
         if (this.state.image) {
             const fileReader = new FileReader();
             fileReader.onload = () => {
                 const url = fileReader.result;
-                encodedImage = url.substr(url.indexOf(',') + 1);
-
+                const encodedImage = url.substr(url.indexOf(',') + 1);
+                this.sendAddPost(this.state.message, encodedImage, channel, ancestor, this.state.color, form);
             };
             fileReader.readAsDataURL(this.state.image);
-        }
-        if (event.target instanceof HTMLFormElement) {
-            const form = event.target;
-            this.sendAddPost(this.state.message, encodedImage, channel, ancestor, this.state.color, form);
+        } else {
+            this.sendAddPost(this.state.message, undefined, channel, ancestor, this.state.color, form);
         }
         window.history.back();
     }

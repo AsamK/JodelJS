@@ -1,4 +1,7 @@
-(window as any).Uint8Array = require('typedarray').Uint8Array;
+if (!(window as any).Uint8Array) {
+    // Polyfill for IE9
+    (window as any).Uint8Array = require('typedarray').Uint8Array;
+}
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';

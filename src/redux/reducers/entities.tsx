@@ -21,7 +21,8 @@ export const entities = combineReducers({
 });
 
 function convertApiPostToPost(post: IApiPost): IPost {
-    const newChildren = post.children ? post.children.map(child => child.post_id) : undefined;
+    const seen: { [key: string]: boolean } = {};
+    const newChildren = post.children ? post.children.map(child => child.post_id).filter(c => seen[c] ? false : (seen[c] = true)) : undefined;
     return {...post, children: newChildren};
 }
 

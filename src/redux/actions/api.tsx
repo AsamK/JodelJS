@@ -1,5 +1,6 @@
 import {Dispatch} from 'redux';
 import {ThunkAction} from 'redux-thunk';
+import * as request from 'superagent';
 
 import {
     apiAddPost,
@@ -13,7 +14,6 @@ import {
     apiGetImageCaptcha,
     apiGetKarma,
     apiGetNotifications,
-    apiGetPost,
     apiGetPostDetails,
     apiGetPosts,
     apiGetPostsChannel,
@@ -431,12 +431,33 @@ export function updatePost(postId: string): ThunkAction<void, IJodelAppStore, vo
             if (count == undefined || children == undefined || children.length == 0) {
                 dispatch(fetchPost(postId));
             } else if (children.length == count) {
-                dispatch(fetchPost(postId));
-                //dispatch(fetchCompletePost(postId));
-                // TODO recursive fetch all children
+                dispatch(fetchCompletePost(postId));
             }
         }
     };
+}
+
+function getAllPostDetails(dispatch: Dispatch<IJodelAppStore>, getState: () => IJodelAppStore, postId: string, nextReply?: string): Promise<request.Response | void> {
+    return apiGetPostDetails(getAuth(getState()), postId, true, nextReply, false)
+        .then(res => {
+                if (!res.body.next) {
+                    return res;
+                }
+
+                return getAllPostDetails(dispatch, getState, postId, res.body.next)
+                    .then(nextRes => {
+                        if (!nextRes) {
+                            return res;
+                        }
+                        if (res.body.replies) {
+                            res.body.replies = res.body.replies.concat(nextRes.body.replies);
+                        } else {
+                            res.body.replies = nextRes.body.replies;
+                        }
+                        return res;
+                    });
+            },
+            err => handleNetworkErrors(dispatch, getState, err));
 }
 
 export function fetchPost(postId: string, nextReply?: string): ThunkAction<void, IJodelAppStore, void> {
@@ -454,15 +475,19 @@ export function fetchPost(postId: string, nextReply?: string): ThunkAction<void,
     };
 }
 
-/**
- * @deprecated returned post doesn't contain recent features
- * @param postId
- */
 export function fetchCompletePost(postId: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        apiGetPost(getAuth(getState()), postId)
+        getAllPostDetails(dispatch, getState, postId)
             .then(res => {
-                    dispatch(receivePost(res.body));
+                    if (!res) {
+                        return;
+                    }
+                    let post = res.body.details;
+                    post.children = res.body.replies;
+                    post.child_count = post.children.length;
+                    post.next_reply = res.body.next;
+                    post.shareable = res.body.shareable;
+                    dispatch(receivePost(post));
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     };

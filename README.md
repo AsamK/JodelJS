@@ -5,24 +5,24 @@ The account information is stored in the browser’s localStorage.
 
 <img src="https://github.com/AsamK/JodelJS/blob/master/screenshot.png" width="200" alt="DesktopJodel Screenshot">
 
-Before building the app, create your own `settings.js` file in `src/app/` by copying `settings.js.sample`.
+Before building the app, create your own `settings.ts` file in `src/app/` by copying `settings.ts.sample`.
 
 Build app:
 
     npm install
     npm run build
 
-Copy the files in `build/` to your webspace and open index.htm in your browser.
+Copy the files in `dist/` to your webspace and open index.html in your browser.
 
 ## Develop
 Once:
 npm install
 
-Start watcher to compile js:
-npm run start
+Start watcher to compile ts and run dev webserver:
+npm start
 
 ## License
 
-Copyright: AsamK 2016
+Copyright: AsamK 2016-2017
 
 Licensed under the GPLv3: http://www.gnu.org/licenses/gpl-3.0.html

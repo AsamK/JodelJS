@@ -17,7 +17,7 @@ import {
     switchPostSection,
     updateLocation,
 } from '../redux/actions';
-import {getKarma, getNotifications, refreshAccessToken} from '../redux/actions/api';
+import {getKarma, getNotifications, refreshAccessToken, verify} from '../redux/actions/api';
 import {IJodelAppStore, JodelApp} from '../redux/reducers';
 import {ACCOUNT_VERSION, migrateAccount} from '../redux/reducers/account';
 import {migrateSettings, SETTINGS_VERSION} from '../redux/reducers/settings';
@@ -126,6 +126,9 @@ if (!account.token || !account.token.access) {
     }
 }
 store.dispatch(updateLocation());
+store.dispatch(getConfig());
+store.dispatch(getNotifications());
+store.dispatch(getKarma());
 
 if (history.state === null) {
     history.replaceState(store.getState().viewState, '');
@@ -139,8 +142,6 @@ window.onpopstate = event => {
     userClickedBack = true;
     store.dispatch(replaceViewState(event.state));
 };
-store.dispatch(getNotifications());
-store.dispatch(getKarma());
 
 ReactDOM.render(<Provider store={store}><DocumentTitle
     title="Jodel Unofficial WebApp"><Jodel/></DocumentTitle></Provider>, document.getElementById('content'));

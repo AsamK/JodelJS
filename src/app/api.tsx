@@ -29,6 +29,49 @@ function computeSignature(auth: string | undefined, method: string, url: string,
     return hmac.read();
 }
 
+/**
+ * Create a new android gcm account
+ * @returns {Promise<request.Response>}
+ */
+export function getGcmAndroidAccount() {
+    return new Promise<request.Response>((resolve, reject) => {
+        const req = request('GET', Settings.GCM_ACCOUNT_HELPER_URL)
+            .set('Accept', 'application/json');
+
+        req.send()
+            .end((err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(res);
+                }
+            });
+    });
+}
+
+/**
+ * Receive the gcm push verification sent by the jodel server via GCM
+ * @param {{android_id: string; security_token: string}} androidAccount
+ * @returns {Promise<request.Response>}
+ */
+export function receiveGcmPushVerification(androidAccount: { android_id: string, security_token: string }) {
+    return new Promise<request.Response>((resolve, reject) => {
+        const req = request('POST', Settings.GCM_RECEIVE_HELPER_URL)
+            .type('json')
+            .set('Content-Type', 'application/json; charset=UTF-8');
+
+        req.send(JSON.stringify(androidAccount))
+            .end((err, res) => {
+                console.log(err, res);
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(res);
+                }
+            });
+    });
+}
+
 export function jodelRequest(auth: string | undefined, method: string, url: string, query: object | string, data: any) {
     return new Promise<request.Response>((resolve, reject) => {
         const dataString = JSON.stringify(data);
@@ -337,8 +380,14 @@ export function apiSetAction(auth: string, action: ApiAction) {
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/action', {}, data);
 }
 
+/**
+ * Send Gcm Push token to Jodel server, which will then send a verification code via GCM
+ * @param {string} auth
+ * @param {string} clientId Fixed Jodel android client id
+ * @param {string} pushToken Gcm push token
+ * @returns {Promise<request.Response>}
+ */
 export function apiSetPushToken(auth: string, clientId: string, pushToken: string) {
-    // Set GCM push token
     const data = {
         client_id: clientId,
         push_token: pushToken,

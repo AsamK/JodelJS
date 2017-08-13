@@ -36,13 +36,19 @@ import {
     apiSetHome,
     apiSetLocation,
     apiSetNotificationPostRead,
+    apiSetPushToken,
     apiSharePost,
     apiUnfollowChannel,
     apiUnpin,
     apiUpVote,
+    apiVerifyPush,
+    getGcmAndroidAccount,
+    receiveGcmPushVerification,
 } from '../../app/api';
+import Settings from '../../app/settings';
 import {PostListSortType} from '../../enums/PostListSortType';
 import {Section, SectionEnum} from '../../enums/Section';
+import {IConfig} from '../../interfaces/IConfig';
 import {IApiPost} from '../../interfaces/IPost';
 import {setPermissionDenied, setToken, showSettings, updatePosts} from '../actions';
 import {getLocation, IJodelAppStore} from '../reducers';
@@ -507,6 +513,10 @@ export function getConfig(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         apiGetConfig(getAuth(getState()))
             .then(res => {
+                    const config: IConfig = res.body;
+                    if (!config.verified) {
+                        dispatch(verify());
+                    }
                     dispatch(_setConfig(res.body));
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
@@ -697,6 +707,29 @@ export function sendVerificationAnswer(answer: number[]): ThunkAction<void, IJod
                     }
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
+    };
+}
+
+export function verify(): ThunkAction<void, IJodelAppStore, void> {
+    return (dispatch, getState) => {
+        getGcmAndroidAccount().then(res => {
+            const token = res.body.gcm_token;
+            const android_account = res.body.android_account;
+            return apiSetPushToken(getAuth(getState()), Settings.CLIENT_ID, token)
+                .then((res) => {
+                    return android_account;
+                });
+        }).then((android_account) => {
+            return receiveGcmPushVerification(android_account);
+        }).then((res) => {
+            const verification = res.body.verification;
+            return apiVerifyPush(getAuth(getState()), verification.server_time, verification.verification_code);
+        }).then(() => {
+                dispatch(getConfig());
+            }, err => {
+                handleNetworkErrors(dispatch, getState, err);
+            },
+        );
     };
 }
 

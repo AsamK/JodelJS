@@ -1,20 +1,27 @@
-import React from 'react';
-const Settings = {};
+const Settings = {
+    // API Server and Path
+    API_SERVER: 'https://api.go-tellm.com/api',
 
-// Android client id
-Settings.CLIENT_ID = '81e8a76e-1e02-4d17-9ba0-8a7020261b26';
+    // Android client id
+    CLIENT_ID: '81e8a76e-1e02-4d17-9ba0-8a7020261b26',
 
-// Client type and Key for signed requests
-Settings.CLIENT_TYPE = 'android_4.42.1';
-Settings.KEY = 'bJYlFZkrnLpLMVisrbstPDNsaYHPbzcKRSpqtjtt';
+    // Client type for signed requests
+    CLIENT_TYPE: 'android_4.55.0',
 
-// API Server and Path
-Settings.API_SERVER = 'https://api.go-tellm.com/api';
+    // Default location, if browser location is not available
+    DEFAULT_LOCATION: {latitude: undefined, longitude: undefined},
 
-// Default location, if browser location is not available
-Settings.DEFAULT_LOCATION = {latitude: undefined, longitude: undefined};
+    // Helper server url to create GCM account
+    GCM_ACCOUNT_HELPER_URL: '',
 
-// Colors for posts, the Server prevents other colors
-Settings.POST_COLORS = ['06A3CB', 'DD5F5F', 'FFBA00', 'FF9908', '8ABDB0', '9EC41C'];
+    // Helper server url to create GCM account
+    GCM_RECEIVE_HELPER_URL: '',
+
+    // Key for signed requests
+    KEY: 'SUJlYgihNxTmcfdrEcjROozfNemiqJSjYpoJJMUC',
+
+    // Colors for posts, the Server prevents other colors
+    POST_COLORS: ['06A3CB', 'DD5F5F', 'FFBA00', 'FF9908', '8ABDB0', '9EC41C'],
+};
 
 export default Settings;

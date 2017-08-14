@@ -503,19 +503,16 @@ html, body, #content, .jodel, .postListContainer {
     &:before {
       content: 'Menu';
     }
-    &:focus .menuContent {
-      display: block;
-    }
     .menuContent {
-      display: none;
+      padding: 0;
       position: absolute;
       background-color: #eee;
       list-style-type: none;
       .menuEntry {
-        padding-top: 1em;
-        padding-right: 1.3em;
-        padding-bottom: 1em;
-        height: 2em;
+        > * {
+          padding: 1em 1.3em 1em 1em;
+          height: 2em;
+        }
         &.active {
           background-color: #ccc;
         }
@@ -591,6 +588,7 @@ a.hashtag {
   margin-bottom: 1em;
   width: 100%;
 }
+
 .verificationImage {
   img {
     width: 100%;

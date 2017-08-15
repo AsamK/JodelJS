@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Component} from 'react';
 import {connect, Dispatch} from 'react-redux';
-import {showNotifications, showSettings} from '../redux/actions';
+import {showNotifications, showSearch, showSettings} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 
 import {SectionLink} from './SectionLink';
@@ -9,6 +9,7 @@ import {SectionLink} from './SectionLink';
 interface IMenuComponentProps {
     showSettings: () => void;
     showNotifications: () => void;
+    showSearch: () => void;
     unreadNotifications: number;
 }
 
@@ -25,7 +26,7 @@ class MenuComponent extends Component<IMenuComponentProps, IMenuComponentState> 
     }
 
     render() {
-        const {unreadNotifications, showNotifications, showSettings} = this.props;
+        const {unreadNotifications, showNotifications, showSettings, showSearch} = this.props;
         return (
             <div className="menu"
                  tabIndex={99999999}
@@ -51,6 +52,11 @@ class MenuComponent extends Component<IMenuComponentProps, IMenuComponentState> 
                             </div>
                         </li>
                         <li className="menuEntry">
+                            <div className="sectionLink" onClick={showSearch}>
+                                Suche
+                            </div>
+                        </li>
+                        <li className="menuEntry">
                             <div className="sectionLink" onClick={showSettings}>
                                 Einstellungen
                             </div>
@@ -72,6 +78,7 @@ const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: {}) =>
     return {
         showSettings: () => dispatch(showSettings(true)),
         showNotifications: () => dispatch(showNotifications(true)),
+        showSearch: () => dispatch(showSearch(true)),
     };
 };
 

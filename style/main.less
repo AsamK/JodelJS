@@ -1,6 +1,12 @@
 @import "~normalize.css";
 @import "~nprogress/nprogress.css";
 
+@top-bar-height: 3em;
+@post-top-bar-height: 3em;
+@channel-top-bar-height: 3em;
+
+@bottom-bar-height: 3em;
+
 html, body, #content, .jodel, .postListContainer {
   height: 100%;
   width: 100%;
@@ -10,8 +16,8 @@ html, body, #content, .jodel, .postListContainer {
 
 .list {
   position: absolute;
-  top: 3em;
-  bottom: 3em;
+  top: @top-bar-height;
+  bottom: @bottom-bar-height;
   left: 0;
   right: 0;
 
@@ -20,13 +26,13 @@ html, body, #content, .jodel, .postListContainer {
     display: none;
   }
   &.isChannel {
-    top: 6em;
+    top: @top-bar-height + @channel-top-bar-height;
   }
 }
 
 .detail {
   position: absolute;
-  top: 3em;
+  top: @top-bar-height;
   bottom: 0;
   left: 0;
   right: 0;
@@ -39,7 +45,7 @@ html, body, #content, .jodel, .postListContainer {
 
 .channels {
   position: absolute;
-  top: 3em;
+  top: @top-bar-height;
   bottom: 0;
   left: 0;
   right: 0;
@@ -98,7 +104,7 @@ html, body, #content, .jodel, .postListContainer {
 
 .notifications {
   position: absolute;
-  top: 3em;
+  top: @top-bar-height;
   bottom: 0;
   left: 0;
   right: 0;
@@ -155,12 +161,27 @@ html, body, #content, .jodel, .postListContainer {
   }
 }
 
+.search {
+  position: absolute;
+  top: @top-bar-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-y: scroll;
+  background-color: #eee;
+  display: none;
+
+  &.searchShown {
+    display: block;
+  }
+}
+
 .postTopBar {
-  height: 3em;
+  height: @post-top-bar-height;
   margin-top: 1px;
   background-color: #eee;
   position: fixed;
-  top: 3em;
+  top: @top-bar-height;
   left: 0;
   right: 0;
 }
@@ -201,11 +222,11 @@ html, body, #content, .jodel, .postListContainer {
 }
 
 .channelTopBar {
-  height: 3em;
+  height: @channel-top-bar-height;
   margin-top: 1px;
   background-color: #eee;
   position: fixed;
-  top: 3em;
+  top: @top-bar-height;
   left: 0;
   right: 0;
   .title {
@@ -279,7 +300,7 @@ html, body, #content, .jodel, .postListContainer {
   .sortType {
     float: left;
     width: 33%;
-    height: 3em;
+    height: @bottom-bar-height;
     cursor: pointer;
     &.active {
       background-color: #ccc;
@@ -306,7 +327,7 @@ html, body, #content, .jodel, .postListContainer {
 .postDetails {
   overflow-y: auto;
   position: fixed;
-  top: 6em;
+  top: @top-bar-height + @post-top-bar-height;
   left: 0;
   right: 0;
   bottom: 0;
@@ -471,7 +492,7 @@ html, body, #content, .jodel, .postListContainer {
 }
 
 .topBar {
-  height: 3em;
+  height: @top-bar-height;
   background-color: #eee;
   position: fixed;
   top: 0;

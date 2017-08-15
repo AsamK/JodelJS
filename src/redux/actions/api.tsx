@@ -27,10 +27,12 @@ import {
     apiGetPostsMineReplies,
     apiGetPostsMineVotes,
     apiGetRecommendedChannels,
+    apiGetSuggestedHashtags,
     apiGiveThanks,
     apiIsNotificationAvailable,
     apiPin,
     apiRefreshAccessToken,
+    apiSearchPosts,
     apiSendVerificationAnswer,
     apiSetAction,
     apiSetHome,
@@ -68,6 +70,7 @@ import {
     setIsFetching,
     setLocalChannels,
     setRecommendedChannels,
+    setSuggestedHashtags,
 } from './state';
 
 function handleNetworkErrors(dispatch: Dispatch<IJodelAppStore>, getState: () => IJodelAppStore, err: any) {
@@ -682,6 +685,16 @@ export function followChannel(channel: string, follow = true): ThunkAction<void,
     };
 }
 
+export function getSuggestedHashtags(): ThunkAction<void, IJodelAppStore, void> {
+    return (dispatch, getState) => {
+        apiGetSuggestedHashtags(getAuth(getState()), getState().settings.useHomeLocation)
+            .then(res => {
+                    dispatch(setSuggestedHashtags(res.body.hashtags));
+                },
+                err => handleNetworkErrors(dispatch, getState, err));
+    };
+}
+
 export function getImageCaptcha(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         apiGetImageCaptcha(getAuth(getState()))
@@ -770,6 +783,16 @@ export function sharePost(postId: string): ThunkAction<void, IJodelAppStore, voi
         apiSharePost(getAuth(getState()), postId)
             .then(res => {
                     alert(res.body.url);
+                },
+                err => handleNetworkErrors(dispatch, getState, err));
+    };
+}
+
+export function searchPosts(message: string, suggested = false): ThunkAction<void, IJodelAppStore, void> {
+    return (dispatch, getState) => {
+        apiSearchPosts(getAuth(getState()), message, suggested, getState().settings.useHomeLocation)
+            .then(res => {
+                    console.log(res.body);
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     };

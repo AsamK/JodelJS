@@ -1,7 +1,8 @@
 import {combineReducers} from 'redux';
 
-import {IJodelAction} from '../../interfaces/IJodelAction';
+import {PostListSortType} from '../../enums/PostListSortType';
 import {Section, SectionEnum} from '../../enums/Section';
+import {IJodelAction} from '../../interfaces/IJodelAction';
 import {
     REPLACE_VIEW_STATE,
     SELECT_PICTURE,
@@ -12,8 +13,7 @@ import {
     SWITCH_POST_LIST_SORT_TYPE,
     SWITCH_POST_SECTION,
 } from '../actions';
-import {PostListSortType} from '../../enums/PostListSortType';
-import {SHOW_NOTIFICATIONS} from '../actions/state';
+import {SHOW_NOTIFICATIONS, SHOW_SEARCH} from '../actions/state';
 
 export interface IVisible {
     visible: boolean
@@ -28,6 +28,7 @@ export interface IViewStateStore {
     settings: IVisible
     channelList: IVisible
     notifications: IVisible
+    search: IVisible
 }
 
 export function viewState(state: IViewStateStore, action: IJodelAction): IViewStateStore {
@@ -51,6 +52,7 @@ const viewStateCombined = combineReducers<IViewStateStore>({
     settings,
     channelList,
     notifications,
+    search,
 });
 
 function selectedPostId(state: string | null = null, action: IJodelAction): typeof state {
@@ -115,6 +117,14 @@ function addPost(state: IVisible = {visible: false}, action: IJodelAction): type
 
 function settings(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
     switch (action.type) {
+    case SHOW_NOTIFICATIONS:
+    case SHOW_CHANNEL_LIST:
+    case SHOW_SEARCH:
+        if (action.payload && action.payload.visible) {
+            return {visible: false};
+        } else {
+            return state;
+        }
     case SHOW_SETTINGS:
         if (!action.payload) {
             return state;
@@ -127,6 +137,14 @@ function settings(state: IVisible = {visible: false}, action: IJodelAction): typ
 
 function channelList(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
     switch (action.type) {
+    case SHOW_NOTIFICATIONS:
+    case SHOW_SEARCH:
+    case SHOW_SETTINGS:
+        if (action.payload && action.payload.visible) {
+            return {visible: false};
+        } else {
+            return state;
+        }
     case SHOW_CHANNEL_LIST:
         if (!action.payload) {
             return state;
@@ -138,8 +156,36 @@ function channelList(state: IVisible = {visible: false}, action: IJodelAction): 
 }
 
 function notifications(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
+    if (!action.payload) {
+        return state;
+    }
+    switch (action.type) {
+    case SHOW_SEARCH:
+    case SHOW_CHANNEL_LIST:
+    case SHOW_SETTINGS:
+        if (action.payload && action.payload.visible) {
+            return {visible: false};
+        } else {
+            return state;
+        }
+    case SHOW_NOTIFICATIONS:
+        return {visible: action.payload.visible || false};
+    default:
+        return state;
+    }
+}
+
+function search(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
     switch (action.type) {
     case SHOW_NOTIFICATIONS:
+    case SHOW_CHANNEL_LIST:
+    case SHOW_SETTINGS:
+        if (action.payload && action.payload.visible) {
+            return {visible: false};
+        } else {
+            return state;
+        }
+    case SHOW_SEARCH:
         if (!action.payload) {
             return state;
         }

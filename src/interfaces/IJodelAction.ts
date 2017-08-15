@@ -36,6 +36,7 @@ export interface IPayload {
     newViewState?: IViewStateStore;
     postsBySortType?: Array<{ sortType: PostListSortType, posts: string[] }>;
     notifications?: INotification[];
+    suggestedHashtags?: string[];
 }
 
 export interface IJodelAction extends Action {

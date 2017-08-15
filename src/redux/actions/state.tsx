@@ -3,9 +3,9 @@ import {Section} from '../../enums/Section';
 import {IChannel} from '../../interfaces/IChannel';
 import {IConfig} from '../../interfaces/IConfig';
 import {IJodelAction} from '../../interfaces/IJodelAction';
+import {INotification} from '../../interfaces/INotification';
 import {IApiPost} from '../../interfaces/IPost';
 import {IViewStateStore} from '../reducers/viewState';
-import {INotification} from '../../interfaces/INotification';
 
 export const SWITCH_POST_LIST_SORT_TYPE = 'SWITCH_POST_LIST_CONTAINER_STATE';
 
@@ -57,6 +57,15 @@ export const SHOW_NOTIFICATIONS = 'SHOW_NOTIFICATIONS';
 export function _showNotifications(visible: boolean): IJodelAction {
     return {
         type: SHOW_NOTIFICATIONS,
+        payload: {visible},
+    };
+}
+
+export const SHOW_SEARCH = 'SHOW_SEARCH';
+
+export function _showSearch(visible: boolean): IJodelAction {
+    return {
+        type: SHOW_SEARCH,
         payload: {visible},
     };
 }
@@ -126,7 +135,7 @@ export function receiveNotifications(notifications: INotification[]): IJodelActi
         type: RECEIVE_NOTIFICATIONS,
         receivedAt: Date.now(),
         payload: {
-            notifications
+            notifications,
         },
     };
 }
@@ -214,6 +223,17 @@ export function setChannelsMeta(channels: IChannel[]): IJodelAction {
         type: SET_CHANNELS_META,
         payload: {
             entitiesChannels: channels,
+        },
+    };
+}
+
+export const SET_SUGGESTED_HASHTAGS = 'SET_LOCAL_CHANNELS';
+
+export function setSuggestedHashtags(suggestedHashtags: string[]): IJodelAction {
+    return {
+        type: SET_LOCAL_CHANNELS,
+        payload: {
+            suggestedHashtags: suggestedHashtags,
         },
     };
 }

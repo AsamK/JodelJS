@@ -31,6 +31,7 @@ import Progress from './Progress';
 import {TopBar} from './TopBar';
 import {getNotificationsIfAvailable} from '../redux/actions/api';
 import {NotificationList} from './NotificationList';
+import {Search} from './Search';
 
 export interface JodelProps {
     section: string
@@ -48,6 +49,7 @@ export interface JodelProps {
     localChannels: IChannel[]
     channelListShown: boolean
     notificationsShown: boolean
+    searchShown: boolean
     dispatch: Dispatch<IJodelAppStore>
 }
 
@@ -149,6 +151,9 @@ class JodelComponent extends Component<JodelProps> {
                 <div className={classnames('notifications', {notificationsShown: this.props.notificationsShown})}>
                     <NotificationList/>
                 </div>
+                <div className={classnames('search', {searchShown: this.props.searchShown})}>
+                    <Search/>
+                </div>
                 <Progress/>
             </div>;
         }
@@ -211,6 +216,7 @@ const mapStateToProps = (state: IJodelAppStore): Partial<JodelProps> => {
             .map(channel => getChannel(state, channel)),
         channelListShown: state.viewState.channelList.visible,
         notificationsShown: state.viewState.notifications.visible,
+        searchShown: state.viewState.search.visible,
     };
 };
 

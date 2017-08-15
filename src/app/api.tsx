@@ -292,6 +292,10 @@ export function apiGetFollowedChannelsMeta(auth: string, channels: { [channelNam
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/user/followedChannelsMeta', {home}, channels);
 }
 
+export function apiGetSuggestedHashtags(auth: string, home = false) {
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/hashtags/suggested', {home}, {});
+}
+
 export function apiAddPost(auth: string, channel: string | undefined, ancestorPostId: string | undefined, color: Color | undefined, loc_accuracy: number, latitude: number, longitude: number, city: string, country: string, message: string, image: string | undefined, toHome = false) {
     // image must be base64 encoded string
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/', {}, {
@@ -475,4 +479,12 @@ export function apiSetUserProfile(auth: string, userType: UserType, age = 0) {
  */
 export function apiSharePost(auth: string, postId: string) {
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/' + postId + '/share', {}, {});
+}
+
+export function apiSearchPosts(auth: string, message: string, suggested = false, home = false): Promise<request.Response> {
+    const data = {
+        message,
+        suggested,
+    };
+    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/search', {home}, data);
 }

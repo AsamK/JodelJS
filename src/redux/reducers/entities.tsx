@@ -36,7 +36,7 @@ function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): type
             }
 
             const oldPost = state[post.post_id];
-            let newPost = convertApiPostToPost(post);
+            let newPost = {...oldPost, ...convertApiPostToPost(post)};
             if (oldPost && oldPost.children && newPost.children) {
                 if (payload.append === true) {
                     newPost = {
@@ -76,7 +76,7 @@ function channels(state: { [key: string]: IChannel } = {}, action: IJodelAction)
     if (action.payload && action.payload.entitiesChannels !== undefined) {
         let newState: typeof state = {};
         action.payload.entitiesChannels.forEach((channel) => {
-            newState[channel.channel] = channel;
+            newState[channel.channel] = {...state[channel.channel], ...channel};
         });
         state = {
             ...state,

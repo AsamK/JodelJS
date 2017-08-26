@@ -16,6 +16,7 @@ import {
     switchPostSection,
     updatePosts,
 } from '../redux/actions';
+import {getNotificationsIfAvailable} from '../redux/actions/api';
 import {IJodelAppStore, isLocationKnown} from '../redux/reducers';
 import {getChannel, getPost} from '../redux/reducers/entities';
 import {IVisible} from '../redux/reducers/viewState';
@@ -24,14 +25,13 @@ import AppSettings from './AppSettings';
 import ChannelList from './ChannelList';
 import ChannelTopBar from './ChannelTopBar';
 import FirstStart from './FirstStart';
+import {NotificationList} from './NotificationList';
 import PostDetails from './PostDetails';
 import {PostListContainer} from './PostListContainer';
 import {PostTopBar} from './PostTopBar';
 import Progress from './Progress';
-import {TopBar} from './TopBar';
-import {getNotificationsIfAvailable} from '../redux/actions/api';
-import {NotificationList} from './NotificationList';
 import {Search} from './Search';
+import {TopBar} from './TopBar';
 
 export interface JodelProps {
     section: string
@@ -101,8 +101,6 @@ class JodelComponent extends Component<JodelProps> {
             return <div className="jodel">
                 <FirstStart/>
             </div>;
-        } else if (this.props.settings.visible) {
-            return <AppSettings/>;
         } else {
             let selectedPost = this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost();
             return <div className="jodel">
@@ -154,6 +152,9 @@ class JodelComponent extends Component<JodelProps> {
                 <div className={classnames('search', {searchShown: this.props.searchShown})}>
                     <Search/>
                 </div>
+                <div className={classnames('settings', {settingsShown: this.props.settings.visible})}>
+                    <AppSettings/>
+                </div>
                 <Progress/>
             </div>;
         }
@@ -188,7 +189,7 @@ const mapStateToProps = (state: IJodelAppStore): Partial<JodelProps> => {
     if (selectedPost && selectedPost.children) {
         selectedPostChildren = selectedPost.children.map(child => getPost(state, child) as IPost);
     } else {
-        selectedPostChildren = null
+        selectedPostChildren = null;
     }
     let section = state.viewState.postSection;
     let selectedChannel;

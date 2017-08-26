@@ -76,7 +76,7 @@ class AppSettings extends Component<AppSettingsComponentProps> {
     }
 
     render() {
-        return <div className="settings">
+        return <div className="appSettings">
             <h2>Einstellungen</h2>
             <p>
                 Device UID:

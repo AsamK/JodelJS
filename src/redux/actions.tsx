@@ -40,6 +40,7 @@ export function switchPostSection(section: Section): ThunkAction<void, IJodelApp
             dispatch(_switchPostSection(section));
         }
         dispatch(_selectPost(null));
+        dispatch(_showSettings(false));
         dispatch(_showChannelList(false));
         dispatch(_showNotifications(false));
         dispatch(_showSearch(false));
@@ -66,6 +67,7 @@ export function updatePosts(): ThunkAction<void, IJodelAppStore, void> {
 
 export function selectPost(postId: string | null): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
+        dispatch(_showSettings(false));
         dispatch(_showChannelList(false));
         dispatch(_showNotifications(false));
         dispatch(_showSearch(false));
@@ -78,6 +80,7 @@ export function selectPost(postId: string | null): ThunkAction<void, IJodelAppSt
 
 export function selectPostFromNotification(postId: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
+        dispatch(_showSettings(false));
         dispatch(_showChannelList(false));
         dispatch(_showNotifications(false));
         dispatch(_showSearch(false));

@@ -71,7 +71,7 @@ function channelsLastRead(state: { [key: string]: number } = {}, action: IJodelA
         if (!action.payload) {
             return state;
         }
-        if (action.payload.section !== undefined && action.payload.section.startsWith('channel:')) {
+        if (!action.payload.append && action.payload.section !== undefined && action.payload.section.startsWith('channel:')) {
             let channel = action.payload.section.substring(8);
             return {
                 ...state,

@@ -17,7 +17,7 @@ import {
     switchPostSection,
     updateLocation,
 } from '../redux/actions';
-import {getKarma, getNotifications, refreshAccessToken, verify} from '../redux/actions/api';
+import {getKarma, getNotifications, refreshAccessToken} from '../redux/actions/api';
 import {IJodelAppStore, JodelApp} from '../redux/reducers';
 import {ACCOUNT_VERSION, migrateAccount} from '../redux/reducers/account';
 import {migrateSettings, SETTINGS_VERSION} from '../redux/reducers/settings';
@@ -143,5 +143,8 @@ window.onpopstate = event => {
     store.dispatch(replaceViewState(event.state));
 };
 
-ReactDOM.render(<Provider store={store}><DocumentTitle
-    title="Jodel Unofficial WebApp"><Jodel/></DocumentTitle></Provider>, document.getElementById('content'));
+ReactDOM.render(<Provider store={store}>
+    <DocumentTitle title="Jodel Unofficial WebApp">
+        <Jodel/>
+    </DocumentTitle>
+</Provider>, document.getElementById('content'));

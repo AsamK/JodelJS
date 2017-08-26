@@ -3,7 +3,7 @@ import {IJodelAction} from '../../interfaces/IJodelAction';
 import {INVALIDATE_POSTS, RECEIVE_POSTS, SET_IS_FETCHING} from '../actions';
 
 function uniq(a: string[]): string[] {
-    const seen: {[key: string]: boolean} = {};
+    const seen: { [key: string]: boolean } = {};
     return a.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
 }
 
@@ -70,10 +70,13 @@ function didInvalidate(state = false, action: IJodelAction): typeof state {
     }
 }
 
-function lastUpdated(state: number | null= null, action: IJodelAction): typeof state {
+function lastUpdated(state: number | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
     case RECEIVE_POSTS:
-        return action.receivedAt || null;
+        if (!action.payload) {
+            return state;
+        }
+        return !action.payload.append && action.receivedAt ? action.receivedAt : state;
     default:
         return state;
     }

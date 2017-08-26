@@ -17,7 +17,14 @@ interface SortTypeLinkComponentProps extends SortTypeLinkProps {
 }
 
 const SortTypeLinkComponent = ({sortType, active, onClick}: SortTypeLinkComponentProps) => (
-    <div className={classnames('sortType', sortType.toLowerCase(), {active})} onClick={onClick}/>
+    <div className={classnames('sortType', sortType.toLowerCase(), {active})}
+         onClick={onClick}
+         title={
+             sortType === PostListSortType.RECENT ? 'Neueste' :
+                 sortType === PostListSortType.DISCUSSED ? 'Meist kommentierte' :
+                     'Lauteste'
+         }
+    />
 );
 
 const mapStateToProps = (state: IJodelAppStore, ownProps: SortTypeLinkProps) => {

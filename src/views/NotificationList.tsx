@@ -6,8 +6,8 @@ import {connect, Dispatch} from 'react-redux';
 import {INotification} from '../interfaces/INotification';
 import {selectPostFromNotification} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
-import {Time} from './Time';
 import {getNotificationDescription} from '../utils/notification.utils';
+import {Time} from './Time';
 
 export interface NotificationListProps {
 }
@@ -26,21 +26,23 @@ class NotificationListComponent extends PureComponent<NotificationListComponentP
         const {notifications, selectPostFromNotification} = this.props;
         return (
             <div className="notificationList">
-                {notifications.map(n =>
-                    <div className={classnames('notification', {unread: !n.read})}
-                         key={n.notification_id}
-                         onClick={() => {
-                             selectPostFromNotification(n.post_id);
-                         }}
-                    >
-                        <div className="type">{n.type}</div>
-                        <div className="details">
-                            <div className="info-text">{getNotificationDescription(n)}</div>
-                            <div className="message">{n.message}</div>
-                        </div>
-                        <Time time={n.last_interaction}/>
-                    </div>,
-                )}
+                {notifications.length === 0 ?
+                    'Noch keine Benachrichtigungen vorhanden' :
+                    notifications.map(n =>
+                        <div className={classnames('notification', {unread: !n.read})}
+                             key={n.notification_id}
+                             onClick={() => {
+                                 selectPostFromNotification(n.post_id);
+                             }}
+                        >
+                            <div className="type">{n.type}</div>
+                            <div className="details">
+                                <div className="info-text">{getNotificationDescription(n)}</div>
+                                <div className="message">{n.message}</div>
+                            </div>
+                            <Time time={n.last_interaction}/>
+                        </div>,
+                    )}
             </div>
         );
     }

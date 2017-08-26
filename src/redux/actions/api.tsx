@@ -75,9 +75,9 @@ import {
 
 function handleNetworkErrors(dispatch: Dispatch<IJodelAppStore>, getState: () => IJodelAppStore, err: any) {
     if (err.status === undefined) {
-        console.error('No internet access or server down…');
+        console.error('No internet access or server down…,', err);
     } else if (err.status === 401) {
-        console.error('Permission denied, reregistering…');
+        console.error('Permission denied');
         dispatch(setPermissionDenied(true));
     } else if (err.status === 478) {
         console.error('Request error: Account probably not verified ' + err.status + ' ' + err.message + ': ' + err.response.text);
@@ -588,7 +588,15 @@ export function refreshAccessToken(): ThunkAction<void, IJodelAppStore, void> {
                         dispatch(setToken(account.token.distinctId, res.body.access_token, account.token.refresh, res.body.expiration_date, res.body.token_type));
                     }
                 },
-                err => handleNetworkErrors(dispatch, getState, err));
+                err => {
+                    // Reregister
+                    if (account.deviceUid && err.status === 401) {
+                        console.warn('Failed to refresh token, registering...')
+                        dispatch(setDeviceUid(account.deviceUid));
+                    }
+
+                    handleNetworkErrors(dispatch, getState, err);
+                });
     };
 }
 

@@ -10,7 +10,6 @@ export interface ChannelTopBarProps {
     onFollowClick: (channel: string, follow: boolean) => void
     channel: string
     followerCount: number
-    isFollowing: boolean
     followedName: string
 }
 

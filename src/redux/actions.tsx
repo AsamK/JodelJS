@@ -169,8 +169,6 @@ export function setPermissionDenied(permissionDenied: boolean): ThunkAction<void
         const account = getState().account;
         if (account.deviceUid && permissionDenied && !account.permissionDenied) {
             dispatch(_setPermissionDenied(permissionDenied));
-            // Reregister
-            dispatch(setDeviceUid(account.deviceUid));
         }
     };
 }

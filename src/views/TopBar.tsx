@@ -18,8 +18,10 @@ export function TopBar({karma, showSettings, showChannelList}: ITopBarProps) {
             <div className="barEntry">
                 <SectionLink section="location"/>
             </div>
-            <div className="barEntry sectionLink channelListLink" onClick={showChannelList}>
-                Kanäle
+            <div className="barEntry">
+                <div className="sectionLink channelListLink" onClick={showChannelList}>
+                    Kanäle
+                </div>
             </div>
             <div className="karma" onClick={showSettings}>
                 {(karma > 0 ? '+' : '') + karma}

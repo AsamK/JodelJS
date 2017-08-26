@@ -7,6 +7,8 @@
 
 @bottom-bar-height: 3em;
 
+@bar-shadow: 0 0 6px 3px rgba(0,0,0,0.16), 0 0 6px 3px rgba(0,0,0,0.23);
+
 html, body, #content, .jodel, .postListContainer {
   height: 100%;
   width: 100%;
@@ -184,6 +186,7 @@ html, body, #content, .jodel, .postListContainer {
   top: @top-bar-height;
   left: 0;
   right: 0;
+  box-shadow: @bar-shadow;
 }
 
 .backButton {
@@ -229,6 +232,8 @@ html, body, #content, .jodel, .postListContainer {
   top: @top-bar-height;
   left: 0;
   right: 0;
+  box-shadow: @bar-shadow;
+
   .title {
     float: left;
     padding-top: 1em;
@@ -296,6 +301,7 @@ html, body, #content, .jodel, .postListContainer {
   width: 100%;
   background-color: #eee;
   text-align: center;
+  box-shadow: @bar-shadow;
 
   .sortType {
     float: left;
@@ -338,7 +344,7 @@ html, body, #content, .jodel, .postListContainer {
 
 .post {
   margin-bottom: .5em;
-  padding-bottom: 2px;
+  padding: 5px;
   overflow: hidden;
   color: #fff;
 
@@ -499,6 +505,8 @@ html, body, #content, .jodel, .postListContainer {
   left: 0;
   right: 0;
   z-index: 1;
+  box-shadow: @bar-shadow;
+
   .karma {
     float: right;
     .subText {
@@ -507,16 +515,14 @@ html, body, #content, .jodel, .postListContainer {
   }
 
   .barEntry {
-    padding-top: 1em;
-    padding-right: 1.3em;
-    padding-bottom: 1em;
-    height: 2em;
     float: left;
-  }
-  .sectionLink {
-    cursor: pointer;
-    &.active {
-      background-color: #ccc;
+    > * {
+      cursor: pointer;
+      height: @top-bar-height / 3;
+      padding: (@top-bar-height/3) .6em;
+      &.active {
+        background-color: #ccc;
+      }
     }
   }
   .menu {

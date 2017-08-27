@@ -1,3 +1,4 @@
+import * as classnames from 'classnames';
 import * as React from 'react';
 import {Component} from 'react';
 import {connect, Dispatch} from 'react-redux';
@@ -28,7 +29,7 @@ class MenuComponent extends Component<IMenuComponentProps, IMenuComponentState> 
     render() {
         const {unreadNotifications, showNotifications, showSettings, showSearch} = this.props;
         return (
-            <div className="menu"
+            <div className={classnames('menu', {newNotifications: unreadNotifications > 0})}
                  tabIndex={99999999}
                  onClick={() => this.setState({menuOpen: !this.state.menuOpen})}
             >

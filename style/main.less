@@ -566,12 +566,23 @@ html, body, #content, .jodel {
     height: @top-bar-height / 3;
     padding: (@top-bar-height/3) .6em;
 
-    &:before {
+    &::before {
       background: url('../img/menu.svg') no-repeat center;
       content: '  ';
       display: block;
       height: @top-bar-height / 3;
       width: @top-bar-height / 2;
+    }
+
+    &.newNotifications::after {
+      content: ' ';
+      background-color: blue;
+      border-radius: 10px;
+      position: absolute;
+      left: @top-bar-height / 2;
+      top: @top-bar-height / 4;
+      width: 10px;
+      height: 10px;
     }
 
     .menuContent {

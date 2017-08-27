@@ -117,6 +117,14 @@ function addPost(state: IVisible = {visible: false}, action: IJodelAction): type
 
 function settings(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
     switch (action.type) {
+    case SWITCH_POST_SECTION:
+        return {visible: false};
+    case SELECT_POST:
+        if (action.payload && action.payload.postId) {
+            return {visible: false};
+        } else {
+            return state;
+        }
     case SHOW_NOTIFICATIONS:
     case SHOW_CHANNEL_LIST:
     case SHOW_SEARCH:
@@ -137,6 +145,14 @@ function settings(state: IVisible = {visible: false}, action: IJodelAction): typ
 
 function channelList(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
     switch (action.type) {
+    case SWITCH_POST_SECTION:
+        return {visible: false};
+    case SELECT_POST:
+        if (action.payload && action.payload.postId) {
+            return {visible: false};
+        } else {
+            return state;
+        }
     case SHOW_NOTIFICATIONS:
     case SHOW_SEARCH:
     case SHOW_SETTINGS:
@@ -160,6 +176,14 @@ function notifications(state: IVisible = {visible: false}, action: IJodelAction)
         return state;
     }
     switch (action.type) {
+    case SWITCH_POST_SECTION:
+        return {visible: false};
+    case SELECT_POST:
+        if (action.payload && action.payload.postId) {
+            return {visible: false};
+        } else {
+            return state;
+        }
     case SHOW_SEARCH:
     case SHOW_CHANNEL_LIST:
     case SHOW_SETTINGS:
@@ -177,6 +201,14 @@ function notifications(state: IVisible = {visible: false}, action: IJodelAction)
 
 function search(state: IVisible = {visible: false}, action: IJodelAction): typeof state {
     switch (action.type) {
+    case SWITCH_POST_SECTION:
+        return {visible: false};
+    case SELECT_POST:
+        if (action.payload && action.payload.postId) {
+            return {visible: false};
+        } else {
+            return state;
+        }
     case SHOW_NOTIFICATIONS:
     case SHOW_CHANNEL_LIST:
     case SHOW_SETTINGS:

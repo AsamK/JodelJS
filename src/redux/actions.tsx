@@ -37,13 +37,9 @@ export function switchPostSection(section: Section): ThunkAction<void, IJodelApp
     return (dispatch, getState) => {
         if (getState().viewState.postSection !== section) {
             dispatch(switchPostListSortType(PostListSortType.RECENT));
-            dispatch(_switchPostSection(section));
         }
+        dispatch(_switchPostSection(section));
         dispatch(_selectPost(null));
-        dispatch(_showSettings(false));
-        dispatch(_showChannelList(false));
-        dispatch(_showNotifications(false));
-        dispatch(_showSearch(false));
         dispatch(invalidatePosts(section));
         dispatch(fetchPostsIfNeeded(section));
     };
@@ -67,10 +63,6 @@ export function updatePosts(): ThunkAction<void, IJodelAppStore, void> {
 
 export function selectPost(postId: string | null): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        dispatch(_showSettings(false));
-        dispatch(_showChannelList(false));
-        dispatch(_showNotifications(false));
-        dispatch(_showSearch(false));
         dispatch(_selectPost(postId));
         if (postId != null) {
             dispatch(updatePost(postId));
@@ -80,10 +72,6 @@ export function selectPost(postId: string | null): ThunkAction<void, IJodelAppSt
 
 export function selectPostFromNotification(postId: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        dispatch(_showSettings(false));
-        dispatch(_showChannelList(false));
-        dispatch(_showNotifications(false));
-        dispatch(_showSearch(false));
         dispatch(setNotificationPostRead(postId));
         dispatch(_selectPost(postId));
         if (postId != null) {

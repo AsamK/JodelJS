@@ -192,22 +192,30 @@ html, body, #content, .jodel {
 .postTopBar {
   background-color: #eee;
   box-shadow: @bar-shadow;
+  display: flex;
   flex: none;
+  justify-content: space-between;
   height: @post-top-bar-height;
   width: 100%;
   z-index: @z-index-sub-layer;
+
+  .rightButtons {
+    display: flex;
+    flex: none;
+  }
 }
 
 .backButton {
   cursor: pointer;
+  flex: none;
   padding-top: 1em;
   padding-bottom: 1em;
   padding-left: 1em;
-  float: left;
 }
 
 .pin {
-  float: right;
+  flex: none;
+
   .pinButton {
     cursor: pointer;
     display: inline-block;
@@ -222,7 +230,8 @@ html, body, #content, .jodel {
 }
 
 .share {
-  float: right;
+  flex: none;
+
   .shareButton {
     cursor: pointer;
     display: inline-block;
@@ -236,22 +245,25 @@ html, body, #content, .jodel {
 .channelTopBar {
   background-color: #eee;
   box-shadow: @bar-shadow;
+  display: flex;
   flex: none;
   height: @channel-top-bar-height;
   width: 100%;
   z-index: @z-index-sub-layer;
 
   .title {
-    float: left;
+    flex: auto;
+    font-weight: bold;
+    overflow: hidden;
     padding-top: 1em;
     padding-bottom: 1em;
     padding-left: 1em;
-    font-weight: bold;
+    text-overflow: ellipsis;
   }
 }
 
 .follow {
-  float: right;
+  flex: none;
   .followButton {
     cursor: pointer;
     display: inline-block;
@@ -512,6 +524,7 @@ html, body, #content, .jodel {
 
 .topBar {
   background-color: #eee;
+  display: flex;
   flex: none;
   box-shadow: @bar-shadow;
   height: @top-bar-height;
@@ -519,7 +532,7 @@ html, body, #content, .jodel {
   z-index: @z-index-top-layer;
 
   .karma {
-    float: right;
+    flex: none;
     margin-right: 5px;
     margin-top: 5px;
 
@@ -528,19 +541,31 @@ html, body, #content, .jodel {
     }
   }
 
-  .barEntry {
-    float: left;
+  .barEntries {
+    display: flex;
+    flex: auto;
+    overflow: hidden;
+
     > * {
       cursor: pointer;
+      flex: none;
       height: @top-bar-height / 3;
       padding: (@top-bar-height/3) .6em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
       &.active {
         background-color: #ccc;
       }
     }
   }
   .menu {
+    flex: none;
     cursor: pointer;
+    height: @top-bar-height / 3;
+    padding: (@top-bar-height/3) .6em;
+
     &:before {
       background: url('../img/menu.svg') no-repeat center;
       content: '  ';

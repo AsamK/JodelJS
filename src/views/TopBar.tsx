@@ -12,13 +12,9 @@ interface ITopBarProps {
 export function TopBar({karma, showSettings, showChannelList}: ITopBarProps) {
     return (
         <div className="topBar">
-            <div className="barEntry">
-                <Menu/>
-            </div>
-            <div className="barEntry">
+            <Menu/>
+            <div className="barEntries">
                 <SectionLink section="location"/>
-            </div>
-            <div className="barEntry">
                 <div className="sectionLink channelListLink" onClick={showChannelList}>
                     Kanäle
                 </div>

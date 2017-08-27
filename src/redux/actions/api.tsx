@@ -60,6 +60,7 @@ import {
     _setDeviceUID,
     _setKarma,
     _setLocation,
+    _setNotificationPostRead,
     invalidatePosts,
     pinnedPost,
     receiveNotifications,
@@ -790,6 +791,7 @@ export function setNotificationPostRead(postId: string): ThunkAction<void, IJode
     return (dispatch, getState) => {
         apiSetNotificationPostRead(getAuth(getState()), postId)
             .then(res => {
+                    dispatch(_setNotificationPostRead(postId));
                     dispatch(getNotifications());
                 },
                 err => handleNetworkErrors(dispatch, getState, err));

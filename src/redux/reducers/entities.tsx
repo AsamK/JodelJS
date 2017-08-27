@@ -5,7 +5,7 @@ import {INotification} from '../../interfaces/INotification';
 import {IApiPost, IPost} from '../../interfaces/IPost';
 
 import {PINNED_POST, RECEIVE_POSTS} from '../actions';
-import {RECEIVE_NOTIFICATIONS} from '../actions/state';
+import {RECEIVE_NOTIFICATIONS, SET_NOTIFICATION_POST_READ} from '../actions/state';
 import {IJodelAppStore} from '../reducers';
 
 export interface IEntitiesStore {
@@ -111,6 +111,9 @@ function notifications(state: INotification[] = [], action: IJodelAction): typeo
     switch (action.type) {
     case RECEIVE_NOTIFICATIONS:
         return action.payload.notifications ? action.payload.notifications : [];
+    case SET_NOTIFICATION_POST_READ:
+        const postId = action.payload.postId;
+        return state.map(n => postId === n.post_id ? {...n, read: true} : n);
     default:
         return state;
     }

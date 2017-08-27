@@ -140,6 +140,18 @@ export function receiveNotifications(notifications: INotification[]): IJodelActi
     };
 }
 
+export const SET_NOTIFICATION_POST_READ = 'SET_NOTIFICATION_POST_READ';
+
+export function _setNotificationPostRead(postId: string): IJodelAction {
+    return {
+        type: SET_NOTIFICATION_POST_READ,
+        receivedAt: Date.now(),
+        payload: {
+            postId,
+        },
+    };
+}
+
 export const PINNED_POST = 'PINNED_POST';
 
 export function pinnedPost(postId: string, pinned: boolean, pinCount: number): IJodelAction {

@@ -591,7 +591,7 @@ export function refreshAccessToken(): ThunkAction<void, IJodelAppStore, void> {
                 err => {
                     // Reregister
                     if (account.deviceUid && err.status === 401) {
-                        console.warn('Failed to refresh token, registering...')
+                        console.warn('Failed to refresh token, registering...');
                         dispatch(setDeviceUid(account.deviceUid));
                     }
 

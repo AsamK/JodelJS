@@ -55,23 +55,25 @@ export class SelectLocation extends PureComponent<SelectLocationProps> {
         const {location, useBrowserLocation, onLocationRequested} = this.props;
         return (
             <div className="selectLocation">
-                <label>
-                    <input type="radio" value={USE_BROWSER_LOCATION} checked={useBrowserLocation}
-                           onChange={this.handleChangeRadio}/>
-                    Standort vom Browser abfragen
-                </label>
-                {useBrowserLocation ? <div>
+                <div className="locationType">
+                    <label>
+                        <input type="radio" value={USE_BROWSER_LOCATION} checked={useBrowserLocation}
+                               onChange={this.handleChangeRadio}/>
+                        Standort vom Browser abfragen
+                    </label>
+                    <label>
+                        <input type="radio" value={MANUAL} checked={!useBrowserLocation}
+                               onChange={this.handleChangeRadio}/>
+                        Standort manuell setzen
+                    </label>
+                </div>
+                {useBrowserLocation ? <div className="browserLocation">
                     <p>Aktueller
                         Standort: {!location ? '(Unbekannt)' : location.latitude + ', ' + location.longitude}</p>
                     <a onClick={onLocationRequested}>Standort aktualisieren</a>
                 </div> : ''}
-                <label>
-                    <input type="radio" value={MANUAL} checked={!useBrowserLocation}
-                           onChange={this.handleChangeRadio}/>
-                    Standort manuell setzen
-                </label>
                 {!useBrowserLocation ?
-                    <div>
+                    <div className="manualLocation">
                         <label>
                             Breitengrad:
                             <input type="number" min="-90" max="90" step="0.01"

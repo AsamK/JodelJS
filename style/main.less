@@ -613,17 +613,33 @@ html, body, #content, .jodel {
 }
 
 .selectLocation {
-  box-shadow: 0 0 1em gold;
-}
+  .locationType {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: .5rem;
+    label {
+      flex: none;
+      margin-right: 1rem;
+      white-space: nowrap;
+    }
+  }
 
-.selectLocation label {
-  display: block;
-  margin-bottom: .5em;
-}
+  .manualLocation {
+    label {
+    display: block;
+      }
+  }
 
-.selectLocation a {
-  cursor: pointer;
-  text-decoration: underline;
+  .manualLocation {
+    input {
+      height: 2rem;
+    }
+  }
+
+  a {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 }
 
 a.hashtag {
@@ -673,7 +689,27 @@ a.hashtag {
   }
 }
 
-.accountVerification {
+.appSettings {
+  .block {
+    margin-bottom: 2em;
+    margin-left: 2em;
+  }
+
+  .deviceUid {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .closeButton {
+    margin: 1em;
+  }
+}
+
+.accountVerification,
+.features,
+.userType,
+.pendingDeletion,
+.internationalFeed {
   margin-top: 1em;
   margin-bottom: 1em;
   width: 100%;

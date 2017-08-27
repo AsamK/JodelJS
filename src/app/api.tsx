@@ -4,6 +4,7 @@ import * as request from 'superagent';
 import Settings from '../app/settings';
 import {Color} from '../enums/Color';
 import {PostListSortType} from '../enums/PostListSortType';
+import {UserType} from '../enums/UserType';
 
 const API_PATH_V2 = '/v2';
 const API_PATH_V3 = '/v3';
@@ -455,7 +456,6 @@ export function apiSetUserLanguage(auth: string, language: string) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/language', {}, {language});
 }
 
-export type UserType = 'student' // | ...
 /**
  * Set the user's language on the server
  * @param {string} auth

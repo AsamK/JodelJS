@@ -14,15 +14,15 @@ export default class ChannelList extends Component<ChannelListProps> {
     render() {
         const {channels, recommendedChannels, localChannels, onChannelClick} = this.props;
         const channelNodes = channels.map((channel) => {
-                return ChannelList.createChannelNode(channel, onChannelClick);
+                return ChannelList.createChannelNode(channel, onChannelClick, true);
             },
         );
         const recommendedChannelNodes = recommendedChannels.map((channel) => {
-                return ChannelList.createChannelNode(channel, onChannelClick);
+                return ChannelList.createChannelNode(channel, onChannelClick, true);
             },
         );
         const localChannelNodes = localChannels.map((channel) => {
-                return ChannelList.createChannelNode(channel, onChannelClick);
+                return ChannelList.createChannelNode(channel, onChannelClick, false);
             },
         );
         return (
@@ -43,17 +43,17 @@ export default class ChannelList extends Component<ChannelListProps> {
         );
     }
 
-    static createChannelNode(channel: IChannel, onChannelClick: (channel: string) => void) {
+    static createChannelNode(channel: IChannel, onChannelClick: (channel: string) => void, showImage: boolean) {
         return <div key={channel.channel}
                     className={classnames('channelLink', {unread: channel.unread})}
                     onClick={() => onChannelClick(channel.channel)}>
-            {channel.image_url && channel.image_url != null ?
+            {showImage && channel.image_url ?
                 <div className="channelPicture"
                      style={{backgroundImage: 'url(https:' + channel.image_url + ')'}}/>
                 : undefined}
             <div className="title">@{channel.channel}</div>
-            {channel.sponsored && channel.sponsored ?
-                <div> (Sponsored)</div>
+            {channel.sponsored ?
+                <div className="sponsored"> (Sponsored)</div>
                 : undefined}
             {channel.followers ?
                 <div className="followers">{channel.followers} Followers</div>

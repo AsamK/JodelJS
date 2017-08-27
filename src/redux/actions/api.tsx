@@ -52,7 +52,7 @@ import {PostListSortType} from '../../enums/PostListSortType';
 import {Section, SectionEnum} from '../../enums/Section';
 import {IConfig} from '../../interfaces/IConfig';
 import {IApiPost} from '../../interfaces/IPost';
-import {setPermissionDenied, setToken, showSettings, updatePosts} from '../actions';
+import {setPermissionDenied, setToken, showSettings, switchPostSection, updatePosts} from '../actions';
 import {getLocation, IJodelAppStore} from '../reducers';
 import {getPost} from '../reducers/entities';
 import {
@@ -168,8 +168,8 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
         const section = sectionToFetch ? sectionToFetch : getState().viewState.postSection;
 
         if (shouldFetchPosts(section, getState())) {
-            dispatch(setIsFetching(section));
             if (section.startsWith('channel:')) {
+                dispatch(setIsFetching(section));
                 let channel = section.substring(8);
                 apiGetPostsChannelCombo(getAuth(getState()), channel, getState().settings.useHomeLocation)
                     .then(res => {
@@ -190,6 +190,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
                     });
             }
             if (section.startsWith('hashtag:')) {
+                dispatch(setIsFetching(section));
                 let hashtag = section.substring(8);
                 apiGetPostsHashtagCombo(getAuth(getState()), hashtag, getState().settings.useHomeLocation)
                     .then(res => {
@@ -209,6 +210,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
                     if (!loc) {
                         break;
                     }
+                    dispatch(setIsFetching(section));
                     apiGetPostsCombo(getAuth(getState()), loc.latitude, loc.longitude, true, getState().settings.useHomeLocation)
                         .then(res => {
                             dispatch(receivePosts(section, {
@@ -222,6 +224,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
                         });
                     break;
                 case SectionEnum.MINE:
+                    dispatch(setIsFetching(section));
                     apiGetPostsMineCombo(getAuth(getState()))
                         .then(res => {
                             dispatch(receivePosts(section, {
@@ -235,6 +238,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
                         });
                     break;
                 case SectionEnum.MINE_REPLIES:
+                    dispatch(setIsFetching(section));
                     apiGetPostsMineReplies(getAuth(getState()))
                         .then(res => {
                             dispatch(receivePosts(section, {
@@ -246,6 +250,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
                         });
                     break;
                 case SectionEnum.MINE_VOTES:
+                    dispatch(setIsFetching(section));
                     apiGetPostsMineVotes(getAuth(getState()))
                         .then(res => {
                             dispatch(receivePosts(section, {
@@ -257,6 +262,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
                         });
                     break;
                 case SectionEnum.MINE_PINNED:
+                    dispatch(setIsFetching(section));
                     apiGetPostsMinePinned(getAuth(getState()))
                         .then(res => {
                             dispatch(receivePosts(section, {
@@ -320,11 +326,11 @@ export function fetchMorePosts(sectionToFetch?: Section, sortTypeToFetch?: PostL
                 if (posts !== undefined) {
                     afterId = posts[posts.length - 1];
                 }
-                dispatch(setIsFetching(section));
                 let loc = getLocation(getState());
                 if (!loc) {
                     break;
                 }
+                dispatch(setIsFetching(section));
                 apiGetPosts(getAuth(getState()), sortType, afterId, loc.latitude, loc.longitude, getState().settings.useHomeLocation)
                     .then(res => {
                         let p: { [sortType: string]: IApiPost[] } = {};
@@ -566,6 +572,9 @@ export function setDeviceUid(deviceUid: string): ThunkAction<void, IJodelAppStor
             .then(res => {
                 dispatch(_setDeviceUID(deviceUid));
                 dispatch(setToken(res.body.distinct_id, res.body.access_token, res.body.refresh_token, res.body.expiration_date, res.body.token_type));
+                dispatch(switchPostSection('location'));
+                dispatch(getKarma());
+                dispatch(getConfig());
             })
             .catch(err => {
                 console.error('Failed to register user.' + err);
@@ -586,6 +595,7 @@ export function refreshAccessToken(): ThunkAction<void, IJodelAppStore, void> {
                     }
                     if (res.body.upgraded === true) {
                         dispatch(setToken(account.token.distinctId, res.body.access_token, account.token.refresh, res.body.expiration_date, res.body.token_type));
+                        dispatch(fetchPostsIfNeeded());
                     }
                 },
                 err => {

@@ -54,33 +54,39 @@ class FirstStart extends Component<FirstStartProps, FirstStartState> {
                     this.props.dispatch(setDeviceUid(this.state.deviceUid));
                 }
             }}>
-                <SelectDeviceUid deviceUid={this.state.deviceUid} setDeviceUid={this.setDeviceUid}/>
-                <p>Standort</p>
-                <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
-                                location={this.props.location}
-                                onChange={(useBrowserLocation, location) => {
-                                    this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
-                                    if (!location) {
-                                        if (useBrowserLocation) {
-                                            return;
+                <h3>Konto</h3>
+                <div className="block">
+                    <SelectDeviceUid deviceUid={this.state.deviceUid} setDeviceUid={this.setDeviceUid}/>
+                </div>
+                <h3>Standort</h3>
+                <div className="block">
+                    <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
+                                    location={this.props.location}
+                                    onChange={(useBrowserLocation, location) => {
+                                        this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
+                                        if (!location) {
+                                            if (useBrowserLocation) {
+                                                return;
+                                            }
+                                            location = {
+                                                latitude: Settings.DEFAULT_LOCATION.latitude,
+                                                longitude: Settings.DEFAULT_LOCATION.longitude,
+                                            };
                                         }
-                                        location = {
-                                            latitude: Settings.DEFAULT_LOCATION.latitude,
-                                            longitude: Settings.DEFAULT_LOCATION.longitude,
-                                        };
-                                    }
-                                    this.props.dispatch(_setLocation(location.latitude, location.longitude));
-                                }}
-                                onLocationRequested={this.updateLocation}
-                />
-                {!this.props.location ?
-                    <div className="locationError">
-                        <p>Zum erstmaligen Anmelden muss der aktuelle Standort bekannt sein.
-                            Die Standort Abfrage war jedoch noch nicht erfolgreich.
-                        </p>
-                        <a onClick={this.updateLocation}>Erneut versuchen</a> oder oben den Standort manuell festlegen
-                    </div>
-                    : ''}
+                                        this.props.dispatch(_setLocation(location.latitude, location.longitude));
+                                    }}
+                                    onLocationRequested={this.updateLocation}
+                    />
+                    {!this.props.location ?
+                        <div className="locationError">
+                            <p>Zum erstmaligen Anmelden muss der aktuelle Standort bekannt sein.
+                                Die Standort Abfrage war jedoch noch nicht erfolgreich.
+                            </p>
+                            <a onClick={this.updateLocation}>Erneut versuchen</a> oder oben den Standort manuell
+                            festlegen
+                        </div>
+                        : ''}
+                </div>
                 <button type="submit" disabled={!this.props.location}>
                     Jodeln beginnen
                 </button>

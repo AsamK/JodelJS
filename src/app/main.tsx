@@ -121,14 +121,13 @@ if (!account.token || !account.token.access) {
     if (now > account.token.expirationDate - timeToExpire) {
         store.dispatch(refreshAccessToken());
     } else {
-        store.dispatch(getConfig());
         store.dispatch(fetchPostsIfNeeded());
     }
+    store.dispatch(getConfig());
+    store.dispatch(getNotifications());
+    store.dispatch(getKarma());
 }
 store.dispatch(updateLocation());
-store.dispatch(getConfig());
-store.dispatch(getNotifications());
-store.dispatch(getKarma());
 
 if (history.state === null) {
     history.replaceState(store.getState().viewState, '');

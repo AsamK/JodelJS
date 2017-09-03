@@ -9,12 +9,12 @@ interface ISearchProps {
 }
 
 interface ISearchComponentProps extends ISearchProps {
-    suggestedHashtags: string[]
-    searchPosts: (message: string, suggested: boolean) => void
+    suggestedHashtags: string[];
+    searchPosts: (message: string, suggested: boolean) => void;
 }
 
 interface ISearchComponentState {
-    searchText: string
+    searchText: string;
 }
 
 class SearchComponent extends Component<ISearchComponentProps, ISearchComponentState> {
@@ -25,7 +25,7 @@ class SearchComponent extends Component<ISearchComponentProps, ISearchComponentS
         };
     }
 
-    render() {
+    public render() {
         return <div className="searchContainer">
             <form className="searchBox" onSubmit={e => {
                 e.preventDefault();

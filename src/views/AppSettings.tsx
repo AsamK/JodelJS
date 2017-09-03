@@ -21,26 +21,26 @@ import {SelectLocation} from './SelectLocation';
 import {VerificationImageCaptcha} from './VerificationImageCaptcha';
 
 export interface AppSettingsProps {
-    deviceUid: string | null
-    location: ILocation | null
-    homeSet: boolean
-    homeName: string | null
-    homeClearAllowed: boolean
-    verified: boolean
-    useBrowserLocation: boolean
-    useHomeLocation: boolean
-    imageUrl: string | null
-    imageWidth: number | null
-    experiments: IExperiment[]
-    user_type: string | null
-    moderator: boolean
-    feedInternationalized: boolean
-    feedInternationalizable: boolean
-    pending_deletion: boolean
+    deviceUid: string | null;
+    location: ILocation | null;
+    homeSet: boolean;
+    homeName: string | null;
+    homeClearAllowed: boolean;
+    verified: boolean;
+    useBrowserLocation: boolean;
+    useHomeLocation: boolean;
+    imageUrl: string | null;
+    imageWidth: number | null;
+    experiments: IExperiment[];
+    user_type: string | null;
+    moderator: boolean;
+    feedInternationalized: boolean;
+    feedInternationalizable: boolean;
+    pending_deletion: boolean;
 }
 
 interface AppSettingsComponentProps extends AppSettingsProps {
-    dispatch: Dispatch<IJodelAppStore>
+    dispatch: Dispatch<IJodelAppStore>;
 }
 
 class AppSettings extends Component<AppSettingsComponentProps> {
@@ -51,11 +51,11 @@ class AppSettings extends Component<AppSettingsComponentProps> {
         this.showHome = this.showHome.bind(this);
     }
 
-    updateLocation() {
+    public updateLocation() {
         this.props.dispatch(updateLocation());
     }
 
-    locationChange(useBrowserLocation: boolean, location: IGeoCoordinates | null) {
+    public locationChange(useBrowserLocation: boolean, location: IGeoCoordinates | null) {
         this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
         if (useBrowserLocation && !this.props.useBrowserLocation) {
             this.updateLocation();
@@ -72,17 +72,17 @@ class AppSettings extends Component<AppSettingsComponentProps> {
         this.props.dispatch(_setLocation(location.latitude, location.longitude));
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         if (!this.props.verified) {
             this.props.dispatch(getImageCaptcha());
         }
     }
 
-    showHome() {
+    public showHome() {
         this.props.dispatch(setUseHomeLocation(!this.props.useHomeLocation));
     }
 
-    render() {
+    public render() {
         return <div className="appSettings">
             <h2>Einstellungen</h2>
             <h3>Device UID:</h3>
@@ -170,7 +170,7 @@ class AppSettings extends Component<AppSettingsComponentProps> {
 }
 
 const mapStateToProps = (state: IJodelAppStore): AppSettingsProps => {
-    let loc = getLocation(state);
+    const loc = getLocation(state);
     return {
         deviceUid: state.account.deviceUid,
         location: loc,

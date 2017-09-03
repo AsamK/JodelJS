@@ -16,19 +16,19 @@ import {
 import {SHOW_NOTIFICATIONS, SHOW_SEARCH} from '../actions/state';
 
 export interface IVisible {
-    visible: boolean
+    visible: boolean;
 }
 
 export interface IViewStateStore {
-    selectedPostId: string | null
-    selectedPicturePostId: string | null
-    postSection: Section
-    postListSortType: PostListSortType
-    addPost: IVisible
-    settings: IVisible
-    channelList: IVisible
-    notifications: IVisible
-    search: IVisible
+    selectedPostId: string | null;
+    selectedPicturePostId: string | null;
+    postSection: Section;
+    postListSortType: PostListSortType;
+    addPost: IVisible;
+    settings: IVisible;
+    channelList: IVisible;
+    notifications: IVisible;
+    search: IVisible;
 }
 
 export function viewState(state: IViewStateStore, action: IJodelAction): IViewStateStore {

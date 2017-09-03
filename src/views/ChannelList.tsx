@@ -4,24 +4,24 @@ import {Component} from 'react';
 import {IChannel} from '../interfaces/IChannel';
 
 export interface ChannelListProps {
-    channels: IChannel[]
-    recommendedChannels: IChannel[]
-    localChannels: IChannel[]
-    onChannelClick: (channelName: string) => void
+    channels: IChannel[];
+    recommendedChannels: IChannel[];
+    localChannels: IChannel[];
+    onChannelClick: (channelName: string) => void;
 }
 
 export default class ChannelList extends Component<ChannelListProps> {
-    render() {
+    public render() {
         const {channels, recommendedChannels, localChannels, onChannelClick} = this.props;
-        const channelNodes = channels.map((channel) => {
+        const channelNodes = channels.map(channel => {
                 return ChannelList.createChannelNode(channel, onChannelClick, true);
             },
         );
-        const recommendedChannelNodes = recommendedChannels.map((channel) => {
+        const recommendedChannelNodes = recommendedChannels.map(channel => {
                 return ChannelList.createChannelNode(channel, onChannelClick, true);
             },
         );
-        const localChannelNodes = localChannels.map((channel) => {
+        const localChannelNodes = localChannels.map(channel => {
                 return ChannelList.createChannelNode(channel, onChannelClick, false);
             },
         );
@@ -43,7 +43,7 @@ export default class ChannelList extends Component<ChannelListProps> {
         );
     }
 
-    static createChannelNode(channel: IChannel, onChannelClick: (channel: string) => void, showImage: boolean) {
+    public static createChannelNode(channel: IChannel, onChannelClick: (channel: string) => void, showImage: boolean) {
         return <div key={channel.channel}
                     className={classnames('channelLink', {unread: channel.unread})}
                     onClick={() => onChannelClick(channel.channel)}>
@@ -60,4 +60,4 @@ export default class ChannelList extends Component<ChannelListProps> {
                 : undefined}
         </div>;
     }
-};
+}

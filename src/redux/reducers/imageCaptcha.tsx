@@ -2,13 +2,13 @@ import {IJodelAction} from '../../interfaces/IJodelAction';
 import {SET_IMAGE_CAPTCHA} from '../actions/state';
 
 export interface ICaptchaImage {
-    url: string | null
-    width: number | null
+    url: string | null;
+    width: number | null;
 }
 
 export interface IImageCaptchaStore {
-    key: string | null
-    image: ICaptchaImage | null
+    key: string | null;
+    image: ICaptchaImage | null;
 }
 
 export function imageCaptcha(state: IImageCaptchaStore = {

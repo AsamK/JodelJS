@@ -171,7 +171,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
         if (shouldFetchPosts(section, getState())) {
             if (section.startsWith('channel:')) {
                 dispatch(setIsFetching(section));
-                let channel = section.substring(8);
+                const channel = section.substring(8);
                 apiGetPostsChannelCombo(getAuth(getState()), channel, getState().settings.useHomeLocation)
                     .then(res => {
                         dispatch(receivePosts(section, {
@@ -192,7 +192,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
             }
             if (section.startsWith('hashtag:')) {
                 dispatch(setIsFetching(section));
-                let hashtag = section.substring(8);
+                const hashtag = section.substring(8);
                 apiGetPostsHashtagCombo(getAuth(getState()), hashtag, getState().settings.useHomeLocation)
                     .then(res => {
                         dispatch(receivePosts(section, {
@@ -207,7 +207,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
             } else {
                 switch (section) {
                 case SectionEnum.LOCATION:
-                    let loc = getLocation(getState());
+                    const loc = getLocation(getState());
                     if (!loc) {
                         break;
                     }
@@ -291,12 +291,12 @@ export function fetchMorePosts(sectionToFetch?: Section, sortTypeToFetch?: PostL
         }
         const posts = postSection.postsBySortType[sortType];
         if (section.startsWith('channel:')) {
-            let channel = section.substring(8);
+            const channel = section.substring(8);
             const afterId = posts ? posts[posts.length - 1] : undefined;
             dispatch(setIsFetching(section));
             apiGetPostsChannel(getAuth(getState()), sortType, afterId, channel, getState().settings.useHomeLocation)
                 .then(res => {
-                    let p: { [sortType: string]: IApiPost[] } = {};
+                    const p: { [sortType: string]: IApiPost[] } = {};
                     p[sortType] = res.body.posts;
                     dispatch(receivePosts(section, p, true));
                 }, err => {
@@ -304,7 +304,7 @@ export function fetchMorePosts(sectionToFetch?: Section, sortTypeToFetch?: PostL
                     handleNetworkErrors(dispatch, getState, err);
                 });
         } else if (section.startsWith('hashtag:')) {
-            let hashtag = section.substring(8);
+            const hashtag = section.substring(8);
             let afterId;
             if (posts !== undefined) {
                 afterId = posts[posts.length - 1];
@@ -312,7 +312,7 @@ export function fetchMorePosts(sectionToFetch?: Section, sortTypeToFetch?: PostL
             dispatch(setIsFetching(section));
             apiGetPostsHashtag(getAuth(getState()), sortType, afterId, hashtag, getState().settings.useHomeLocation)
                 .then(res => {
-                    let p: { [sortType: string]: IApiPost[] } = {};
+                    const p: { [sortType: string]: IApiPost[] } = {};
                     p[sortType] = res.body.posts;
                     dispatch(receivePosts(section, p, true));
                 }, err => {
@@ -327,14 +327,14 @@ export function fetchMorePosts(sectionToFetch?: Section, sortTypeToFetch?: PostL
                 if (posts !== undefined) {
                     afterId = posts[posts.length - 1];
                 }
-                let loc = getLocation(getState());
+                const loc = getLocation(getState());
                 if (!loc) {
                     break;
                 }
                 dispatch(setIsFetching(section));
                 apiGetPosts(getAuth(getState()), sortType, afterId, loc.latitude, loc.longitude, getState().settings.useHomeLocation)
                     .then(res => {
-                        let p: { [sortType: string]: IApiPost[] } = {};
+                        const p: { [sortType: string]: IApiPost[] } = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
                     }, err => {
@@ -350,7 +350,7 @@ export function fetchMorePosts(sectionToFetch?: Section, sortTypeToFetch?: PostL
                 dispatch(setIsFetching(section));
                 apiGetPostsMine(getAuth(getState()), sortType, skip, limit)
                     .then(res => {
-                        let p: { [sortType: string]: IApiPost[] } = {};
+                        const p: { [sortType: string]: IApiPost[] } = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
                     }, err => {
@@ -369,7 +369,7 @@ export function fetchMorePosts(sectionToFetch?: Section, sortTypeToFetch?: PostL
                 dispatch(setIsFetching(section));
                 apiGetPostsMineReplies(getAuth(getState()), skip, limit)
                     .then(res => {
-                        let p: { [sortType: string]: IApiPost[] } = {};
+                        const p: { [sortType: string]: IApiPost[] } = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
                     }, err => {
@@ -388,7 +388,7 @@ export function fetchMorePosts(sectionToFetch?: Section, sortTypeToFetch?: PostL
                 dispatch(setIsFetching(section));
                 apiGetPostsMineVotes(getAuth(getState()), skip, limit)
                     .then(res => {
-                        let p: { [sortType: string]: IApiPost[] } = {};
+                        const p: { [sortType: string]: IApiPost[] } = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
                     }, err => {
@@ -407,7 +407,7 @@ export function fetchMorePosts(sectionToFetch?: Section, sortTypeToFetch?: PostL
                 dispatch(setIsFetching(section));
                 apiGetPostsMinePinned(getAuth(getState()), skip, limit)
                     .then(res => {
-                        let p: { [sortType: string]: IApiPost[] } = {};
+                        const p: { [sortType: string]: IApiPost[] } = {};
                         p[sortType] = res.body.posts;
                         dispatch(receivePosts(section, p, true));
                     }, err => {
@@ -428,7 +428,7 @@ export function fetchMoreComments(): ThunkAction<void, IJodelAppStore, void> {
         }
         const post = getPost(getState(), postId);
         if (post && post.next_reply) {
-            let nextReply = post.next_reply;
+            const nextReply = post.next_reply;
             if (nextReply != null) {
                 dispatch(fetchPost(postId, nextReply));
             }
@@ -438,12 +438,12 @@ export function fetchMoreComments(): ThunkAction<void, IJodelAppStore, void> {
 
 export function updatePost(postId: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        let post = getPost(getState(), postId);
+        const post = getPost(getState(), postId);
         if (post == undefined) {
             dispatch(fetchPost(postId));
         } else {
-            let count = post.child_count;
-            let children = post.children;
+            const count = post.child_count;
+            const children = post.children;
             if (count == undefined || children == undefined || children.length == 0) {
                 dispatch(fetchPost(postId));
             } else if (children.length == count) {
@@ -480,7 +480,7 @@ export function fetchPost(postId: string, nextReply?: string): ThunkAction<void,
     return (dispatch, getState) => {
         apiGetPostDetails(getAuth(getState()), postId, true, nextReply, false)
             .then(res => {
-                    let post = res.body.details;
+                    const post = res.body.details;
                     post.children = res.body.replies;
                     post.child_count = post.children.length + res.body.remaining;
                     post.next_reply = res.body.next;
@@ -498,7 +498,7 @@ export function fetchCompletePost(postId: string): ThunkAction<void, IJodelAppSt
                     if (!res) {
                         return;
                     }
-                    let post = res.body.details;
+                    const post = res.body.details;
                     post.children = res.body.replies;
                     post.child_count = post.children.length;
                     post.next_reply = res.body.next;
@@ -535,7 +535,7 @@ export function getConfig(): ThunkAction<void, IJodelAppStore, void> {
 
 export function addPost(text: string, image?: string, channel?: string, ancestor?: string, color = 'FF9908'): ThunkAction<Promise<Section | null>, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        let loc = getLocation(getState());
+        const loc = getLocation(getState());
         if (!loc) {
             return Promise.reject('No location available to post');
         }
@@ -565,7 +565,7 @@ export function addPost(text: string, image?: string, channel?: string, ancestor
 
 export function setDeviceUid(deviceUid: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        let loc = getLocation(getState());
+        const loc = getLocation(getState());
         if (!loc) {
             return;
         }
@@ -657,7 +657,6 @@ export function deleteHome(): ThunkAction<void, IJodelAppStore, void> {
     };
 }
 
-
 export function getRecommendedChannels(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         apiGetRecommendedChannels(getAuth(getState()), getState().settings.useHomeLocation)
@@ -671,13 +670,13 @@ export function getRecommendedChannels(): ThunkAction<void, IJodelAppStore, void
 
 export function getFollowedChannelsMeta(): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        let channels: { [channelName: string]: number } = {};
+        const channels: { [channelName: string]: number } = {};
         const config = getState().account.config;
         if (!config) {
             return;
         }
         config.followed_channels.forEach(c => {
-            let timestamp = getState().settings.channelsLastRead[c];
+            const timestamp = getState().settings.channelsLastRead[c];
             channels[c] = timestamp === undefined ? 0 : timestamp;
         });
         apiGetFollowedChannelsMeta(getAuth(getState()), channels, getState().settings.useHomeLocation)
@@ -748,12 +747,12 @@ export function verify(): ThunkAction<void, IJodelAppStore, void> {
             const token = res.body.gcm_token;
             const android_account = res.body.android_account;
             return apiSetPushToken(getAuth(getState()), Settings.CLIENT_ID, token)
-                .then((res) => {
+                .then(res => {
                     return android_account;
                 });
-        }).then((android_account) => {
+        }).then(android_account => {
             return receiveGcmPushVerification(android_account);
-        }).then((res) => {
+        }).then(res => {
             const verification = res.body.verification;
             return apiVerifyPush(getAuth(getState()), verification.server_time, verification.verification_code);
         }).then(() => {

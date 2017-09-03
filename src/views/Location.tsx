@@ -3,13 +3,13 @@ import * as React from 'react';
 import {Component} from 'react';
 
 export interface LocationProps {
-    distance: number
-    location: string
-    fromHome: boolean
+    distance: number;
+    location: string;
+    fromHome: boolean;
 }
 
 export default class Location extends Component<LocationProps> {
-    render() {
+    public render() {
         const {distance, location, fromHome} = this.props;
         return (
             <div className="location">
@@ -18,4 +18,4 @@ export default class Location extends Component<LocationProps> {
             </div>
         );
     }
-};
+}

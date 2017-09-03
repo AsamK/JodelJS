@@ -19,7 +19,7 @@ export class VerificationImageCaptcha extends Component<VerificationImageCaptcha
         };
     }
 
-    onImageClick = (e: MouseEvent<HTMLImageElement>) => {
+    public onImageClick = (e: MouseEvent<HTMLImageElement>) => {
         const {imageWidth} = this.props;
 
         const actualHeight = (e.target as HTMLElement).offsetHeight;
@@ -28,8 +28,8 @@ export class VerificationImageCaptcha extends Component<VerificationImageCaptcha
         const imgIndex = Math.floor(scaleFactor * e.nativeEvent.offsetX / imageWidth);
 
         // Remove or add the clicked image
-        let clickedImages = this.state.clickedImages;
-        let i = clickedImages.indexOf(imgIndex);
+        const clickedImages = this.state.clickedImages;
+        const i = clickedImages.indexOf(imgIndex);
         if (i > -1) {
             clickedImages.splice(i, 1);
         } else {
@@ -38,9 +38,9 @@ export class VerificationImageCaptcha extends Component<VerificationImageCaptcha
 
         // Update state
         this.setState({clickedImages});
-    };
+    }
 
-    render() {
+    public render() {
         const {imageUrl, onFinishedClick} = this.props;
 
         return (
@@ -57,4 +57,4 @@ export class VerificationImageCaptcha extends Component<VerificationImageCaptcha
             </div>
         );
     }
-};
+}

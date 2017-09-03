@@ -8,15 +8,19 @@ function uniq(a: string[]): string[] {
 }
 
 export interface IPostSection {
-    isFetching: boolean
-    didInvalidate: boolean
-    lastUpdated: number | null
-    postsBySortType: IPostsBySortType
+    isFetching: boolean;
+    didInvalidate: boolean;
+    lastUpdated: number | null;
+    postsBySortType: IPostsBySortType;
 }
 
-export type IPostsBySortType = { [key: string]: Array<string> }
+export interface IPostsBySortType {
+    [key: string]: string[];
+}
 
-export type IPostsBySectionStore = { [key: string]: IPostSection };
+export interface IPostsBySectionStore {
+    [key: string]: IPostSection;
+}
 
 export function postsBySection(state: IPostsBySectionStore = {}, action: IJodelAction): typeof state {
     switch (action.type) {
@@ -85,7 +89,7 @@ function lastUpdated(state: number | null = null, action: IJodelAction): typeof 
 function postsBySortType(state: IPostsBySortType = {}, action: IJodelAction): typeof state {
     switch (action.type) {
     case RECEIVE_POSTS:
-        let newState: typeof state = {};
+        const newState: typeof state = {};
         if (!action.payload || !action.payload.postsBySortType) {
             return state;
         }

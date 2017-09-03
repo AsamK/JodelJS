@@ -14,6 +14,7 @@ import {
 import {SET_LOCAL_CHANNELS, SET_SUGGESTED_HASHTAGS} from '../actions/state';
 
 export const ACCOUNT_VERSION = 3;
+
 export function migrateAccount(storedState: IAccountStore, oldVersion: number): IAccountStore {
     storedState.permissionDenied = false;
     if (oldVersion < 2) {
@@ -26,14 +27,14 @@ export function migrateAccount(storedState: IAccountStore, oldVersion: number): 
 }
 
 export interface IAccountStore {
-    karma: number
-    deviceUid: string | null
-    token: IToken | null
-    config: IConfig | null
-    permissionDenied: boolean
-    recommendedChannels: string[]
-    localChannels: string[]
-    suggestedHashtags: string[]
+    karma: number;
+    deviceUid: string | null;
+    token: IToken | null;
+    config: IConfig | null;
+    permissionDenied: boolean;
+    recommendedChannels: string[];
+    localChannels: string[];
+    suggestedHashtags: string[];
 }
 
 export const account = combineReducers<IAccountStore>({
@@ -51,7 +52,7 @@ function karma(state = 0, action: IJodelAction): typeof state {
     switch (action.type) {
     case SET_KARMA:
         if (!action.payload) {
-            return state
+            return state;
         }
         return action.payload.karma || 0;
     default:
@@ -63,7 +64,7 @@ function deviceUid(state: string | null = null, action: IJodelAction): typeof st
     switch (action.type) {
     case SET_DEVICE_UID:
         if (!action.payload) {
-            return state
+            return state;
         }
         return action.payload.deviceUid || null;
     default:
@@ -75,7 +76,7 @@ function token(state: IToken | null = null, action: IJodelAction): typeof state 
     switch (action.type) {
     case SET_TOKEN:
         if (!action.payload) {
-            return state
+            return state;
         }
         return action.payload.token || null;
     default:
@@ -83,11 +84,11 @@ function token(state: IToken | null = null, action: IJodelAction): typeof state 
     }
 }
 
-function config(state: IConfig | null= null, action: IJodelAction): typeof state {
+function config(state: IConfig | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
     case SET_CONFIG:
         if (!action.payload) {
-            return state
+            return state;
         }
         return action.payload.config || null;
     default:
@@ -101,7 +102,7 @@ function permissionDenied(state: boolean = false, action: IJodelAction): typeof 
         return false;
     case SET_PERMISSION_DENIED:
         if (!action.payload) {
-            return state
+            return state;
         }
         return action.payload.permissionDenied || false;
     default:
@@ -113,7 +114,7 @@ function recommendedChannels(state: string[] = [], action: IJodelAction): typeof
     switch (action.type) {
     case SET_RECOMMENDED_CHANNELS:
         if (!action.payload) {
-            return state
+            return state;
         }
         return action.payload.channelNames || [];
     default:
@@ -125,7 +126,7 @@ function localChannels(state: string[] = [], action: IJodelAction): typeof state
     switch (action.type) {
     case SET_LOCAL_CHANNELS:
         if (!action.payload) {
-            return state
+            return state;
         }
         return action.payload.channelNames || [];
     default:
@@ -137,7 +138,7 @@ function suggestedHashtags(state: string[] = [], action: IJodelAction): typeof s
     switch (action.type) {
     case SET_SUGGESTED_HASHTAGS:
         if (!action.payload) {
-            return state
+            return state;
         }
         return action.payload.suggestedHashtags || [];
     default:

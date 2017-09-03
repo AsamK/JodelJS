@@ -16,10 +16,10 @@ export function migrateSettings(storedState: ISettingsStore, oldVersion: number)
 }
 
 export interface ISettingsStore {
-    location: ILocation | null
-    useBrowserLocation: boolean
-    useHomeLocation: boolean
-    channelsLastRead: { [key: string]: number }
+    location: ILocation | null;
+    useBrowserLocation: boolean;
+    useHomeLocation: boolean;
+    channelsLastRead: { [key: string]: number };
 }
 
 export const settings = combineReducers<ISettingsStore>({
@@ -72,7 +72,7 @@ function channelsLastRead(state: { [key: string]: number } = {}, action: IJodelA
             return state;
         }
         if (!action.payload.append && action.payload.section !== undefined && action.payload.section.startsWith('channel:')) {
-            let channel = action.payload.section.substring(8);
+            const channel = action.payload.section.substring(8);
             return {
                 ...state,
                 [channel]: action.receivedAt || 0,

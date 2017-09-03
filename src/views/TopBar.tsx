@@ -4,9 +4,9 @@ import {Menu} from './Menu';
 import {SectionLink} from './SectionLink';
 
 interface ITopBarProps {
-    karma: number
-    showSettings: () => void
-    showChannelList: () => void
+    karma: number;
+    showSettings: () => void;
+    showChannelList: () => void;
 }
 
 export function TopBar({karma, showSettings, showChannelList}: ITopBarProps) {

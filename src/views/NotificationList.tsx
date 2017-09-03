@@ -13,8 +13,8 @@ export interface NotificationListProps {
 }
 
 export interface NotificationListComponentProps extends NotificationListProps {
-    notifications: INotification[]
-    selectPostFromNotification: (postId: string) => void
+    notifications: INotification[];
+    selectPostFromNotification: (postId: string) => void;
 }
 
 class NotificationListComponent extends PureComponent<NotificationListComponentProps> {
@@ -22,7 +22,7 @@ class NotificationListComponent extends PureComponent<NotificationListComponentP
         super(props);
     }
 
-    render() {
+    public render() {
         const {notifications, selectPostFromNotification} = this.props;
         return (
             <div className="notificationList">

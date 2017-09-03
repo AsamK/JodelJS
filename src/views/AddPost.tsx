@@ -8,17 +8,17 @@ import {IJodelAppStore} from '../redux/reducers';
 import ColorPicker from './ColorPicker';
 
 export interface AddPostComponentProps {
-    ancestor: string
-    channel: string
-    visible: boolean
-    dispatch: Dispatch<IJodelAppStore>
+    ancestor: string;
+    channel: string;
+    visible: boolean;
+    dispatch: Dispatch<IJodelAppStore>;
 }
 
 export interface AddPostComponentState {
-    imageUrl: string | undefined
-    message: string
-    image: File | undefined
-    color: Color | undefined
+    imageUrl: string | undefined;
+    message: string;
+    image: File | undefined;
+    color: Color | undefined;
 }
 
 export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPostComponentState> {
@@ -35,7 +35,7 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
         this.resetForm = this.resetForm.bind(this);
     }
 
-    handleChangeImage(event: ChangeEvent<HTMLInputElement>) {
+    public handleChangeImage(event: ChangeEvent<HTMLInputElement>) {
         if (this.state.imageUrl) {
             window.URL.revokeObjectURL(this.state.imageUrl);
         }
@@ -46,18 +46,18 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
         }
         this.setState({image: input.files[0]});
         if ('URL' in window && 'createObjectURL' in window.URL) {
-            let url = window.URL.createObjectURL(input.files[0]);
+            const url = window.URL.createObjectURL(input.files[0]);
             this.setState({imageUrl: url});
         }
     }
 
-    resetForm(form: HTMLFormElement) {
+    public resetForm(form: HTMLFormElement) {
         this.setState({message: '', image: undefined, imageUrl: undefined});
         form.reset();
         sessionStorage.removeItem('messageDraft');
     }
 
-    handleAddPost(event: FormEvent<HTMLFormElement>) {
+    public handleAddPost(event: FormEvent<HTMLFormElement>) {
         const {channel, ancestor} = this.props;
         event.preventDefault();
         if ((this.state.message.trim() === '' && this.state.image === null) || !(event.target instanceof HTMLFormElement)) {
@@ -78,7 +78,7 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
         window.history.back();
     }
 
-    sendAddPost(message: string, encodedImage: string | undefined, channel: string, ancestor: string, color: Color | undefined, form: HTMLFormElement) {
+    public sendAddPost(message: string, encodedImage: string | undefined, channel: string, ancestor: string, color: Color | undefined, form: HTMLFormElement) {
         this.props.dispatch(addPost(message, encodedImage, channel, ancestor, color)).then(
             section => {
                 this.resetForm(form);
@@ -89,7 +89,7 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
         );
     }
 
-    render() {
+    public render() {
         const {channel, ancestor, visible} = this.props;
 
         const MAX_POST_CHARS = 230;
@@ -134,7 +134,7 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
 const mapStateToProps = (state: IJodelAppStore) => {
     let channel;
     if (state.viewState.selectedPostId == null) {
-        let section = state.viewState.postSection;
+        const section = state.viewState.postSection;
         if (section != null && section.startsWith('channel:')) {
             channel = section.substring(8);
         }

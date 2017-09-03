@@ -183,7 +183,6 @@ export function _selectPicture(postId: string) {
     };
 }
 
-
 export const SET_KARMA = 'SET_KARMA';
 
 export function _setKarma(karma: number): IJodelAction {
@@ -245,7 +244,7 @@ export function setSuggestedHashtags(suggestedHashtags: string[]): IJodelAction 
     return {
         type: SET_LOCAL_CHANNELS,
         payload: {
-            suggestedHashtags: suggestedHashtags,
+            suggestedHashtags,
         },
     };
 }

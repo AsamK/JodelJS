@@ -3,14 +3,14 @@ import * as React from 'react';
 import {Component, MouseEvent} from 'react';
 
 export interface VoteProps {
-    vote_count: number
-    voted: string
-    upvote: (e: MouseEvent<HTMLElement>) => void
-    downvote: (e: MouseEvent<HTMLElement>) => void
+    vote_count: number;
+    voted: string;
+    upvote: (e: MouseEvent<HTMLElement>) => void;
+    downvote: (e: MouseEvent<HTMLElement>) => void;
 }
 
 export default class Vote extends Component<VoteProps> {
-    render() {
+    public render() {
         const {vote_count, voted, upvote, downvote} = this.props;
         return (
             <div className="vote">
@@ -20,4 +20,4 @@ export default class Vote extends Component<VoteProps> {
             </div>
         );
     }
-};
+}

@@ -6,12 +6,12 @@ import {switchPostSection} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 
 interface ISectionLinkProps {
-    section: string
+    section: string;
 }
 
 interface ISectionLinkComponentProps extends ISectionLinkProps {
-    active?: boolean
-    onClick?: () => void
+    active?: boolean;
+    onClick?: () => void;
 }
 
 const SectionLinkComponent = ({section, active, onClick}: ISectionLinkComponentProps) => {

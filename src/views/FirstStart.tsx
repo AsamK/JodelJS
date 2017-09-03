@@ -11,14 +11,14 @@ import {SelectDeviceUid} from './SelectDeviceUid';
 import {SelectLocation} from './SelectLocation';
 
 export interface FirstStartProps {
-    deviceUid: string | null
-    location: ILocation | null
-    useBrowserLocation: boolean
-    dispatch: Dispatch<IJodelAppStore>
+    deviceUid: string | null;
+    location: ILocation | null;
+    useBrowserLocation: boolean;
+    dispatch: Dispatch<IJodelAppStore>;
 }
 
 export interface FirstStartState {
-    deviceUid: string | null
+    deviceUid: string | null;
 }
 
 class FirstStart extends Component<FirstStartProps, FirstStartState> {
@@ -29,19 +29,19 @@ class FirstStart extends Component<FirstStartProps, FirstStartState> {
         this.updateLocation = this.updateLocation.bind(this);
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.setState({deviceUid: this.props.deviceUid});
     }
 
-    setDeviceUid(deviceUid: string) {
-        this.setState({deviceUid: deviceUid});
+    public setDeviceUid(deviceUid: string) {
+        this.setState({deviceUid});
     }
 
-    updateLocation() {
+    public updateLocation() {
         this.props.dispatch(updateLocation());
     }
 
-    render() {
+    public render() {
         return <div className="firstStart">
             <h1>Willkommen bei der inoffiziellen Jodel Web App</h1>
             <form onSubmit={e => {
@@ -96,7 +96,7 @@ class FirstStart extends Component<FirstStartProps, FirstStartState> {
 }
 
 const mapStateToProps = (state: IJodelAppStore) => {
-    let loc = getLocation(state);
+    const loc = getLocation(state);
     return {
         deviceUid: state.account.deviceUid,
         location: loc,

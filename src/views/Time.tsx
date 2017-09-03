@@ -2,28 +2,28 @@ import * as React from 'react';
 import {Component} from 'react';
 
 export interface TimeProps {
-    time: string
+    time: string;
 }
 
 export class Time extends Component<TimeProps> {
     private timer?: number;
 
-    componentDidMount() {
+    public componentDidMount() {
         this.timer = setInterval(this.tick.bind(this), 1000);
     }
 
-    tick() {
+    public tick() {
         this.forceUpdate();
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         if (this.timer) {
             clearInterval(this.timer);
         }
         this.timer = undefined;
     }
 
-    render() {
+    public render() {
         const {time} = this.props;
         let diff = new Date().valueOf() - new Date(time).valueOf();
         if (diff < 0) {

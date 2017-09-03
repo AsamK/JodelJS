@@ -9,9 +9,9 @@ import {RECEIVE_NOTIFICATIONS, SET_NOTIFICATION_POST_READ} from '../actions/stat
 import {IJodelAppStore} from '../reducers';
 
 export interface IEntitiesStore {
-    posts: { [key: string]: IPost }
-    channels: { [key: string]: IChannel }
-    notifications: INotification[]
+    posts: { [key: string]: IPost };
+    channels: { [key: string]: IChannel };
+    notifications: INotification[];
 }
 
 export const entities = combineReducers({
@@ -29,7 +29,7 @@ function convertApiPostToPost(post: IApiPost): IPost {
 function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): typeof state {
     const payload = action.payload;
     if (payload && payload.entities !== undefined) {
-        let newState: typeof state = {};
+        const newState: typeof state = {};
         payload.entities.forEach((post: IApiPost) => {
             if (post.children) {
                 post.children.forEach((child: IApiPost) => newState[child.post_id] = convertApiPostToPost(child));
@@ -74,8 +74,8 @@ function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): type
 
 function channels(state: { [key: string]: IChannel } = {}, action: IJodelAction): typeof state {
     if (action.payload && action.payload.entitiesChannels !== undefined) {
-        let newState: typeof state = {};
-        action.payload.entitiesChannels.forEach((channel) => {
+        const newState: typeof state = {};
+        action.payload.entitiesChannels.forEach(channel => {
             newState[channel.channel] = {...state[channel.channel], ...channel};
         });
         state = {
@@ -89,7 +89,7 @@ function channels(state: { [key: string]: IChannel } = {}, action: IJodelAction)
             return state;
         }
         if (action.payload.section !== undefined && action.payload.section.startsWith('channel:')) {
-            let channelName = action.payload.section.substring(8);
+            const channelName = action.payload.section.substring(8);
             return {
                 ...state,
                 [channelName]: {
@@ -124,7 +124,7 @@ export function getPost(state: IJodelAppStore, postId: string): IPost | null {
 }
 
 export function getChannel(state: IJodelAppStore, channel: string): IChannel {
-    let c = state.entities.channels[channel];
+    const c = state.entities.channels[channel];
     if (c === undefined) {
         return {channel};
     }

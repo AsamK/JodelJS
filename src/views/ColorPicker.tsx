@@ -14,9 +14,9 @@ export default class ColorPicker extends PureComponent<ColorPickerProps> {
         super(props);
     }
 
-    render() {
+    public render() {
         const {color, onChange} = this.props;
-        const colorNodes = Settings.POST_COLORS.map((c) => {
+        const colorNodes = Settings.POST_COLORS.map(c => {
             return <label key={c} style={{backgroundColor: '#' + c}}>
                 <input type="radio" value={c} checked={c === color} onChange={onChange}/>
                 #{c}
@@ -28,4 +28,4 @@ export default class ColorPicker extends PureComponent<ColorPickerProps> {
             </div>
         );
     }
-};
+}

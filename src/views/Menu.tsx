@@ -26,7 +26,7 @@ class MenuComponent extends Component<IMenuComponentProps, IMenuComponentState> 
         };
     }
 
-    render() {
+    public render() {
         const {unreadNotifications, showNotifications, showSettings, showSearch} = this.props;
         return (
             <div className={classnames('menu', {newNotifications: unreadNotifications > 0})}

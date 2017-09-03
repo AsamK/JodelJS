@@ -1,7 +1,9 @@
 import {Color} from '../enums/Color';
+
 export interface IApiLocation {
     name: string;
 }
+
 export interface IPost {
     post_id: string;
     children?: string[];

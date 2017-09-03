@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export interface ChildInfoProps {
-    child_count: number
+    child_count: number;
 }
 
 const ChildInfo = ({child_count}: ChildInfoProps) => (

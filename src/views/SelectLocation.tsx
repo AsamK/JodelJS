@@ -20,7 +20,7 @@ export class SelectLocation extends PureComponent<SelectLocationProps> {
         this.handleChangeRadio = this.handleChangeRadio.bind(this);
     }
 
-    handleChangeLatitude(event: ChangeEvent<HTMLInputElement>) {
+    public handleChangeLatitude(event: ChangeEvent<HTMLInputElement>) {
         let number = Number.parseFloat(event.target.value);
         if (isNaN(number) || number < -90 || number > 90) {
             return;
@@ -30,7 +30,7 @@ export class SelectLocation extends PureComponent<SelectLocationProps> {
         this.props.onChange(this.props.useBrowserLocation, {latitude: number, longitude});
     }
 
-    handleChangeLongitude(event: ChangeEvent<HTMLInputElement>) {
+    public handleChangeLongitude(event: ChangeEvent<HTMLInputElement>) {
         let number = Number.parseFloat(event.target.value.replace(',', '.'));
         if (isNaN(number) || number < -180 || number > 180) {
             return;
@@ -40,7 +40,7 @@ export class SelectLocation extends PureComponent<SelectLocationProps> {
         this.props.onChange(this.props.useBrowserLocation, {latitude, longitude: number});
     }
 
-    handleChangeRadio(event: ChangeEvent<HTMLInputElement>) {
+    public handleChangeRadio(event: ChangeEvent<HTMLInputElement>) {
         switch (event.target.value) {
         case USE_BROWSER_LOCATION:
             this.props.onChange(true, this.props.location);
@@ -51,7 +51,7 @@ export class SelectLocation extends PureComponent<SelectLocationProps> {
         }
     }
 
-    render() {
+    public render() {
         const {location, useBrowserLocation, onLocationRequested} = this.props;
         return (
             <div className="selectLocation">

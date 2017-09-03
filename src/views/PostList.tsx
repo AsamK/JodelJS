@@ -5,13 +5,13 @@ import {IPost} from '../interfaces/IPost';
 import {Post} from './Post';
 
 export interface PostListProps {
-    posts: IPost[]
-    sortType?: string
-    section?: string
-    lastUpdated?: number
-    parentPost?: IPost
-    onPostClick: (post: IPost) => void
-    onLoadMore?: () => void
+    posts: IPost[];
+    sortType?: string;
+    section?: string;
+    lastUpdated?: number;
+    parentPost?: IPost;
+    onPostClick: (post: IPost) => void;
+    onLoadMore?: () => void;
 }
 
 export default class PostList extends Component<PostListProps> {
@@ -25,18 +25,18 @@ export default class PostList extends Component<PostListProps> {
         this._onScroll = this._onScroll.bind(this);
     }
 
-    _onPostClick(post: IPost) {
+    public _onPostClick(post: IPost) {
         this.props.onPostClick(post);
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         if (this._scrollable) {
             this._scrollable.addEventListener('scroll', this._onScroll);
         }
         this._scrollAtBottom = false;
     }
 
-    componentDidUpdate(prevProps: PostListProps) {
+    public componentDidUpdate(prevProps: PostListProps) {
         if (prevProps.sortType != this.props.sortType || prevProps.section != this.props.section || prevProps.lastUpdated != this.props.lastUpdated) {
             if (this._scrollable) {
                 this._scrollable.scrollTop = 0;
@@ -44,17 +44,17 @@ export default class PostList extends Component<PostListProps> {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         if (this._scrollable) {
             this._scrollable.removeEventListener('scroll', this._onScroll);
         }
     }
 
-    _onScroll() {
+    public _onScroll() {
         if (!this._scrollable || !this.props.onLoadMore) {
             return;
         }
-        let newFlag = this._scrollable.scrollTop > 0 && (this._scrollable.scrollTop + this._scrollable.clientHeight) >= (this._scrollable.scrollHeight - 500);
+        const newFlag = this._scrollable.scrollTop > 0 && (this._scrollable.scrollTop + this._scrollable.clientHeight) >= (this._scrollable.scrollHeight - 500);
         if (this._scrollAtBottom != newFlag && newFlag) {
             this._scrollAtBottom = newFlag;
             this.props.onLoadMore();
@@ -63,9 +63,9 @@ export default class PostList extends Component<PostListProps> {
         }
     }
 
-    render() {
+    public render() {
         const {posts, parentPost, onPostClick} = this.props;
-        const postNodes = posts.map((post) => {
+        const postNodes = posts.map(post => {
                 let author, parentPostId;
                 if (parentPost) {
                     parentPostId = parentPost.post_id;
@@ -80,9 +80,9 @@ export default class PostList extends Component<PostListProps> {
             },
         );
         return (
-            <div className="postList" ref={(c) => this._scrollable = c}>
+            <div className="postList" ref={c => this._scrollable = c}>
                 {postNodes}
             </div>
         );
     }
-};
+}

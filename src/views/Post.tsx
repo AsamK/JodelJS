@@ -13,20 +13,20 @@ import {Time} from './Time';
 import Vote from './Vote';
 
 export interface PostProps {
-    post: IPost
-    parentPostId?: string
-    author?: string
-    onPostClick: () => void
+    post: IPost;
+    parentPostId?: string;
+    author?: string;
+    onPostClick: () => void;
 }
 
 interface PostComponentProps extends PostProps {
-    selectPicture: () => void
-    deletePost: () => void
-    downVote: () => void
-    upVote: () => void
-    giveThanks: () => void
-    switchToHashtag: (hashtag: string) => void
-    switchToChannel: (channel: string) => void
+    selectPicture: () => void;
+    deletePost: () => void;
+    downVote: () => void;
+    upVote: () => void;
+    giveThanks: () => void;
+    switchToHashtag: (hashtag: string) => void;
+    switchToChannel: (channel: string) => void;
 }
 
 export class PostComponent extends PureComponent<PostComponentProps> {
@@ -45,14 +45,14 @@ export class PostComponent extends PureComponent<PostComponentProps> {
         } else {
             this.props.upVote();
         }
-    };
+    }
 
     private downvote = (e: MouseEvent<HTMLElement>) => {
         e.stopPropagation();
         this.props.downVote();
-    };
+    }
 
-    render() {
+    public render() {
         const {post, author, onPostClick} = this.props;
         return (
             <div className="post" style={{backgroundColor: '#' + post.color}} onClick={onPostClick}>

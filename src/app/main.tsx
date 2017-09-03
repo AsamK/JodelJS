@@ -4,6 +4,7 @@ if (!(window as any).Uint8Array) {
 }
 
 import * as React from 'react';
+import DocumentTitle = require('react-document-title/index');
 import * as ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {applyMiddleware, compose, createStore, Middleware} from 'redux';
@@ -23,19 +24,18 @@ import {ACCOUNT_VERSION, migrateAccount} from '../redux/reducers/account';
 import {migrateSettings, SETTINGS_VERSION} from '../redux/reducers/settings';
 import {getNotificationDescription} from '../utils/notification.utils';
 import {Jodel} from '../views/Jodel';
-import DocumentTitle = require('react-document-title/index');
 
-let persistedState: Partial<IJodelAppStore> = {};
+const persistedState: Partial<IJodelAppStore> = {};
 
-let storedAccount = localStorage.getItem('account');
+const storedAccount = localStorage.getItem('account');
 if (storedAccount) {
-    let oldVersion = parseInt(localStorage.getItem('accountVersion') || '0', 10);
+    const oldVersion = parseInt(localStorage.getItem('accountVersion') || '0', 10);
     persistedState.account = migrateAccount(JSON.parse(storedAccount), oldVersion);
 }
 
-let storedSettings = localStorage.getItem('settings');
+const storedSettings = localStorage.getItem('settings');
 if (storedSettings) {
-    let oldVersion = parseInt(localStorage.getItem('settingsVersion') || '0', 10);
+    const oldVersion = parseInt(localStorage.getItem('settingsVersion') || '0', 10);
     persistedState.settings = migrateSettings(JSON.parse(storedSettings), oldVersion);
 }
 
@@ -56,7 +56,7 @@ const store = createStore<IJodelAppStore>(
     persistedState as IJodelAppStore,
     composeEnhancers(
         applyMiddleware(
-            ...reduxMiddlewares
+            ...reduxMiddlewares,
         ),
     ),
 );
@@ -67,7 +67,7 @@ store.subscribe((() => {
         const shownNotifications: { [notificationId: string]: Notification | null } = {};
 
         return () => {
-            let state = store.getState();
+            const state = store.getState();
             localStorage.setItem('account', JSON.stringify(state.account));
             localStorage.setItem('accountVersion', ACCOUNT_VERSION.toString());
 
@@ -96,7 +96,7 @@ store.subscribe((() => {
                 const newNotifications = state.entities.notifications
                     .filter(n => !n.read)
                     .filter(n => 10 * 60 * 1000 > (Date.now() - new Date(n.last_interaction).getTime()));
-                Notification.requestPermission(function (permission) {
+                Notification.requestPermission(function(permission) {
                     if (permission !== 'granted') {
                         return;
                     }
@@ -133,7 +133,7 @@ if (!account.token || !account.token.access) {
     }
 } else {
     const now = new Date().getTime() / 1000;
-    let timeToExpire = 60 * 60 * 24 * 4;
+    const timeToExpire = 60 * 60 * 24 * 4;
     if (now > account.token.expirationDate - timeToExpire) {
         store.dispatch(refreshAccessToken());
     } else {

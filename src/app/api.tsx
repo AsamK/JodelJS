@@ -21,7 +21,7 @@ function computeSignature(auth: string | undefined, method: string, url: string,
     if (!path.startsWith('/')) {
         path = '/' + path;
     }
-    let raw = method + '%' + u.hostname + '%' + 443 + '%' + path + '%' + (auth || '') + '%' + timestamp + '%' + '' + '%' + data;
+    const raw = method + '%' + u.hostname + '%' + 443 + '%' + path + '%' + (auth || '') + '%' + timestamp + '%' + '' + '%' + data;
 
     const hmac = createHmac('sha1', Settings.KEY);
     hmac.setEncoding('hex');
@@ -130,7 +130,7 @@ export function apiGetPosts(auth: string, sortType: PostListSortType, afterPostI
         type = 'popular';
         break;
     default:
-        throw 'Unknown sort type';
+        throw new Error('Unknown sort type');
     }
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/location/' + type, {
         after: afterPostId,
@@ -157,7 +157,7 @@ export function apiGetPostsMine(auth: string, sortType: PostListSortType, skip?:
         type = 'popular';
         break;
     default:
-        throw 'Unknown sort type';
+        throw new Error('Unknown sort type');
     }
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/' + type, {
         skip,
@@ -203,10 +203,10 @@ export function apiGetPostsChannel(auth: string, sortType: PostListSortType, aft
         type = 'popular';
         break;
     default:
-        throw 'Unknown sort type';
+        throw new Error('Unknown sort type');
     }
-    let query = {
-        channel: channel,
+    const query = {
+        channel,
         after: afterPostId,
         home,
     };
@@ -230,9 +230,9 @@ export function apiGetPostsHashtag(auth: string, sortType: PostListSortType, aft
         type = 'popular';
         break;
     default:
-        throw 'Unknown sort type';
+        throw new Error('Unknown sort type');
     }
-    let query = {
+    const query = {
         hashtag,
         after: afterPostId,
         home,
@@ -246,9 +246,9 @@ export function apiGetPost(auth: string, post_id: string) {
 
 export function apiGetPostDetails(auth: string, post_id: string, details = true, nextReply: string | undefined, reversed = false) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/' + post_id + '/details', {
-        details: details,
+        details,
         reply: nextReply,
-        reversed: reversed,
+        reversed,
     }, {});
 }
 
@@ -376,7 +376,7 @@ export function apiDeleteHome(auth: string) {
     return jodelRequest(auth, 'DELETE', Settings.API_SERVER + API_PATH_V3 + '/user/home', {}, {});
 }
 
-export type ApiAction = 'SetHomeStarted' | 'SetHomeCompleted' | 'NewestFeedSelected' | 'MostCommentedFeedSelected'
+export type ApiAction = 'SetHomeStarted' | 'SetHomeCompleted' | 'NewestFeedSelected' | 'MostCommentedFeedSelected';
 
 export function apiSetAction(auth: string, action: ApiAction) {
     const data = {
@@ -411,16 +411,16 @@ export function apiVerifyPush(auth: string, serverTime: number, verificationCode
 
 export function apiGetAccessToken(deviceUid: string, latitude = 0.0, longitude = 0.0, city: string, country: string) {
     const data = {
-        'client_id': Settings.CLIENT_ID,
-        'device_uid': deviceUid,
-        'location': {
-            'loc_accuracy': 0.0,
-            'city': city,
-            'loc_coordinates': {
-                'lat': latitude,
-                'lng': longitude,
+        client_id: Settings.CLIENT_ID,
+        device_uid: deviceUid,
+        location: {
+            loc_accuracy: 0.0,
+            city,
+            loc_coordinates: {
+                lat: latitude,
+                lng: longitude,
             },
-            'country': country,
+            country,
         },
     };
     return jodelRequest(undefined, 'POST', Settings.API_SERVER + API_PATH_V2 + '/users/', {}, data);
@@ -428,9 +428,9 @@ export function apiGetAccessToken(deviceUid: string, latitude = 0.0, longitude =
 
 export function apiRefreshAccessToken(auth: string, distinctId: string, refreshToken: string) {
     const data = {
-        'current_client_id': Settings.CLIENT_ID,
-        'distinct_id': distinctId,
-        'refresh_token': refreshToken,
+        current_client_id: Settings.CLIENT_ID,
+        distinct_id: distinctId,
+        refresh_token: refreshToken,
     };
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V2 + '/users/refreshToken', {}, data);
 }

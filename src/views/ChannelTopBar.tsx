@@ -7,14 +7,14 @@ import {getChannel} from '../redux/reducers/entities';
 import BackButton from './BackButton';
 
 export interface ChannelTopBarProps {
-    onFollowClick: (channel: string, follow: boolean) => void
-    channel: string
-    followerCount: number
-    followedName: string
+    onFollowClick: (channel: string, follow: boolean) => void;
+    channel: string;
+    followerCount: number;
+    followedName: string;
 }
 
-let ChannelTopBar = ({onFollowClick, channel, followerCount, followedName}: ChannelTopBarProps) => {
-    let isFollowing = followedName !== null;
+const ChannelTopBar = ({onFollowClick, channel, followerCount, followedName}: ChannelTopBarProps) => {
+    const isFollowing = followedName !== null;
     return (
         <div className="channelTopBar">
             <BackButton onClick={() => window.history.back()}/>

@@ -34,41 +34,41 @@ import {Search} from './Search';
 import {TopBar} from './TopBar';
 
 export interface JodelProps {
-    section: string
-    selectedPost: IPost | null
-    selectedPostChildren: IPost[] | null
-    selectedPicturePost: IPost | null
-    selectedChannel: string
-    locationKnown: boolean
-    settings: IVisible
-    karma: number
-    deviceUid: string | null
-    isRegistered: boolean
-    followedChannels: IChannel[]
-    recommendedChannels: IChannel[]
-    localChannels: IChannel[]
-    channelListShown: boolean
-    notificationsShown: boolean
-    searchShown: boolean
-    dispatch: Dispatch<IJodelAppStore>
+    section: string;
+    selectedPost: IPost | null;
+    selectedPostChildren: IPost[] | null;
+    selectedPicturePost: IPost | null;
+    selectedChannel: string;
+    locationKnown: boolean;
+    settings: IVisible;
+    karma: number;
+    deviceUid: string | null;
+    isRegistered: boolean;
+    followedChannels: IChannel[];
+    recommendedChannels: IChannel[];
+    localChannels: IChannel[];
+    channelListShown: boolean;
+    notificationsShown: boolean;
+    searchShown: boolean;
+    dispatch: Dispatch<IJodelAppStore>;
 }
 
 class JodelComponent extends Component<JodelProps> {
     private timer: number;
 
-    componentDidMount() {
+    public componentDidMount() {
         this.timer = setInterval(this.refresh.bind(this), 20000);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         clearInterval(this.timer);
     }
 
-    onRefresh() {
+    public onRefresh() {
         this.props.dispatch(updatePosts());
     }
 
-    refresh() {
+    public refresh() {
         if (!this.props.isRegistered) {
             return;
         }
@@ -76,33 +76,33 @@ class JodelComponent extends Component<JodelProps> {
         this.props.dispatch(getNotificationsIfAvailable());
     }
 
-    handleClick(post: IPost) {
+    public handleClick(post: IPost) {
         this.props.dispatch(selectPost(post != null ? post.post_id : null));
     }
 
-    handleAddClick() {
+    public handleAddClick() {
         this.props.dispatch(showAddPost(true));
     }
 
-    handleAddCommentClick() {
+    public handleAddCommentClick() {
         this.props.dispatch(showAddPost(true));
     }
 
-    onLoadMore() {
+    public onLoadMore() {
         this.props.dispatch(fetchMorePosts());
     }
 
-    onLoadMoreComments() {
+    public onLoadMoreComments() {
         this.props.dispatch(fetchMoreComments());
     }
 
-    render() {
+    public render() {
         if (!this.props.deviceUid) {
             return <div className="jodel">
                 <FirstStart/>
             </div>;
         } else {
-            let selectedPost = this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost();
+            const selectedPost = this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost();
             return <div className="jodel">
                 <TopBar karma={this.props.karma}
                         showSettings={() => this.props.dispatch(showSettings(true))}
@@ -144,7 +144,7 @@ class JodelComponent extends Component<JodelProps> {
                     <ChannelList channels={this.props.followedChannels}
                                  recommendedChannels={this.props.recommendedChannels}
                                  localChannels={this.props.localChannels}
-                                 onChannelClick={(hashtag) => this.props.dispatch(switchPostSection('channel:' + hashtag))}/>
+                                 onChannelClick={hashtag => this.props.dispatch(switchPostSection('channel:' + hashtag))}/>
                 </div>
                 <div className={classnames('notifications', {notificationsShown: this.props.notificationsShown})}>
                     <NotificationList/>
@@ -171,7 +171,7 @@ function getEmptyPost(): IPost {
         post_own: 'team',
         vote_count: 0,
         post_id: '',
-        location: {'name': ''},
+        location: {name: ''},
         color: '000000',
     };
 }
@@ -191,12 +191,12 @@ const mapStateToProps = (state: IJodelAppStore): Partial<JodelProps> => {
     } else {
         selectedPostChildren = null;
     }
-    let section = state.viewState.postSection;
+    const section = state.viewState.postSection;
     let selectedChannel;
     if (section != null && section.startsWith('channel:')) {
         selectedChannel = section.substring(8);
     }
-    let followedChannels = state.account.config ? state.account.config.followed_channels : undefined;
+    const followedChannels = state.account.config ? state.account.config.followed_channels : undefined;
     return {
         section,
         selectedPost,

@@ -8,17 +8,17 @@ import {IJodelAppStore} from '../redux/reducers';
 import BackButton from './BackButton';
 
 export interface PostTopBarProps {
-    post: IPost
+    post: IPost;
 }
 
 export interface PostTopBarComponentProps extends PostTopBarProps {
-    onBackClick: () => void
-    onPinClick: () => void
-    onShareClick: () => void
+    onBackClick: () => void;
+    onPinClick: () => void;
+    onShareClick: () => void;
 }
 
-let PostTopBarComponent = ({onBackClick, onPinClick, onShareClick, post}: PostTopBarComponentProps) => {
-    let pinned = post.pinned && post.pinned;
+const PostTopBarComponent = ({onBackClick, onPinClick, onShareClick, post}: PostTopBarComponentProps) => {
+    const pinned = post.pinned && post.pinned;
     return (
         <div className="postTopBar">
             <BackButton onClick={onBackClick}/>
@@ -50,7 +50,7 @@ const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: PostTo
             window.history.back();
         },
         onPinClick: () => {
-            let isPinned = ownProps.post.pinned && ownProps.post.pinned;
+            const isPinned = ownProps.post.pinned && ownProps.post.pinned;
             dispatch(pin(ownProps.post.post_id, !isPinned));
         },
         onShareClick: () => {

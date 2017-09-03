@@ -7,13 +7,13 @@ import {switchPostListSortType} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 
 interface SortTypeLinkProps {
-    sortType: PostListSortType
+    sortType: PostListSortType;
 }
 
 interface SortTypeLinkComponentProps extends SortTypeLinkProps {
-    active: boolean
-    sortType: PostListSortType
-    onClick: () => void
+    active: boolean;
+    sortType: PostListSortType;
+    onClick: () => void;
 }
 
 const SortTypeLinkComponent = ({sortType, active, onClick}: SortTypeLinkComponentProps) => (

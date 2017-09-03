@@ -5,13 +5,13 @@ const CREATE_NEW = 'CREATE_NEW';
 const USE_EXISTING = 'USE_EXISTING';
 
 export interface SelectDeviceUidProps {
-    deviceUid: string | null
-    setDeviceUid: (deviceUid: string | null) => void
+    deviceUid: string | null;
+    setDeviceUid: (deviceUid: string | null) => void;
 }
 
 export interface SelectDeviceUidState {
-    deviceUid: string
-    radioState: string
+    deviceUid: string;
+    radioState: string;
 }
 
 export class SelectDeviceUid extends PureComponent<SelectDeviceUidProps, SelectDeviceUidState> {
@@ -25,18 +25,18 @@ export class SelectDeviceUid extends PureComponent<SelectDeviceUidProps, SelectD
         this.handleChangeRadio = this.handleChangeRadio.bind(this);
     }
 
-    componentDidMount() {
+    public componentDidMount() {
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
     }
 
-    handleChangeText(event: ChangeEvent<HTMLInputElement>) {
+    public handleChangeText(event: ChangeEvent<HTMLInputElement>) {
         this.setState({deviceUid: event.target.value});
         this.props.setDeviceUid(event.target.value);
     }
 
-    handleChangeRadio(event: ChangeEvent<HTMLInputElement>) {
+    public handleChangeRadio(event: ChangeEvent<HTMLInputElement>) {
         switch (event.target.value) {
         case CREATE_NEW:
             this.props.setDeviceUid(null);
@@ -48,7 +48,7 @@ export class SelectDeviceUid extends PureComponent<SelectDeviceUidProps, SelectD
         this.setState({radioState: event.target.value});
     }
 
-    render() {
+    public render() {
         return (
             <div className="selectDeviceUid">
                 <label>

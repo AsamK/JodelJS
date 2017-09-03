@@ -93,7 +93,7 @@ export function updateLocation(): ThunkAction<void, IJodelAppStore, void> {
             navigator.geolocation.getCurrentPosition(position => {
 
                 const state = getState();
-                let loc = getLocation(state);
+                const loc = getLocation(state);
                 if (!loc || loc.latitude !== position.coords.latitude ||
                     loc.longitude !== position.coords.longitude) {
                     dispatch(setLocation(position.coords.latitude, position.coords.longitude));

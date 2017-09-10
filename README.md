@@ -15,11 +15,13 @@ Build app:
 Copy the files in `dist/` to your webspace and open index.html in your browser.
 
 ## Develop
-Once:
-npm install
+After first clone and after updating:
+
+    npm install
 
 Start watcher to compile ts and run dev webserver:
-npm start
+
+    npm start
 
 ## License
 

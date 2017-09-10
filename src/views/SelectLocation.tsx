@@ -1,19 +1,20 @@
 import * as React from 'react';
 import {ChangeEvent, PureComponent} from 'react';
+
 import {IGeoCoordinates} from '../interfaces/ILocation';
 
 const USE_BROWSER_LOCATION = 'USE_BROWSER_LOCATION';
 const MANUAL = 'MANUAL';
 
-export interface SelectLocationProps {
+export interface ISelectLocationProps {
     location: IGeoCoordinates | null;
     useBrowserLocation: boolean;
     onChange: (useBrowserLocation: boolean, location: IGeoCoordinates | null) => void;
     onLocationRequested: () => void;
 }
 
-export class SelectLocation extends PureComponent<SelectLocationProps> {
-    constructor(props: SelectLocationProps) {
+export class SelectLocation extends PureComponent<ISelectLocationProps> {
+    constructor(props: ISelectLocationProps) {
         super(props);
         this.handleChangeLatitude = this.handleChangeLatitude.bind(this);
         this.handleChangeLongitude = this.handleChangeLongitude.bind(this);
@@ -21,33 +22,33 @@ export class SelectLocation extends PureComponent<SelectLocationProps> {
     }
 
     public handleChangeLatitude(event: ChangeEvent<HTMLInputElement>) {
-        let number = Number.parseFloat(event.target.value);
-        if (isNaN(number) || number < -90 || number > 90) {
+        let latitudeNumber = Number.parseFloat(event.target.value);
+        if (isNaN(latitudeNumber) || latitudeNumber < -90 || latitudeNumber > 90) {
             return;
         }
-        number = Math.round(number * 100) / 100;
+        latitudeNumber = Math.round(latitudeNumber * 100) / 100;
         const longitude = this.props.location ? this.props.location.longitude : 0;
-        this.props.onChange(this.props.useBrowserLocation, {latitude: number, longitude});
+        this.props.onChange(this.props.useBrowserLocation, {latitude: latitudeNumber, longitude});
     }
 
     public handleChangeLongitude(event: ChangeEvent<HTMLInputElement>) {
-        let number = Number.parseFloat(event.target.value.replace(',', '.'));
-        if (isNaN(number) || number < -180 || number > 180) {
+        let longitudeNumber = Number.parseFloat(event.target.value.replace(',', '.'));
+        if (isNaN(longitudeNumber) || longitudeNumber < -180 || longitudeNumber > 180) {
             return;
         }
-        number = Math.round(number * 100) / 100;
+        longitudeNumber = Math.round(longitudeNumber * 100) / 100;
         const latitude = this.props.location ? this.props.location.latitude : 0;
-        this.props.onChange(this.props.useBrowserLocation, {latitude, longitude: number});
+        this.props.onChange(this.props.useBrowserLocation, {latitude, longitude: longitudeNumber});
     }
 
     public handleChangeRadio(event: ChangeEvent<HTMLInputElement>) {
         switch (event.target.value) {
-        case USE_BROWSER_LOCATION:
-            this.props.onChange(true, this.props.location);
-            break;
-        case MANUAL:
-            this.props.onChange(false, this.props.location);
-            break;
+            case USE_BROWSER_LOCATION:
+                this.props.onChange(true, this.props.location);
+                break;
+            case MANUAL:
+                this.props.onChange(false, this.props.location);
+                break;
         }
     }
 

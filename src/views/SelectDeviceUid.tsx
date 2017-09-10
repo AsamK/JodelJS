@@ -4,31 +4,25 @@ import {ChangeEvent, PureComponent} from 'react';
 const CREATE_NEW = 'CREATE_NEW';
 const USE_EXISTING = 'USE_EXISTING';
 
-export interface SelectDeviceUidProps {
+export interface ISelectDeviceUidProps {
     deviceUid: string | null;
     setDeviceUid: (deviceUid: string | null) => void;
 }
 
-export interface SelectDeviceUidState {
+export interface ISelectDeviceUidState {
     deviceUid: string;
     radioState: string;
 }
 
-export class SelectDeviceUid extends PureComponent<SelectDeviceUidProps, SelectDeviceUidState> {
-    constructor(props: SelectDeviceUidProps) {
+export class SelectDeviceUid extends PureComponent<ISelectDeviceUidProps, ISelectDeviceUidState> {
+    constructor(props: ISelectDeviceUidProps) {
         super(props);
         this.state = {
-            radioState: CREATE_NEW,
             deviceUid: !props.deviceUid ? '' : props.deviceUid,
+            radioState: CREATE_NEW,
         };
         this.handleChangeText = this.handleChangeText.bind(this);
         this.handleChangeRadio = this.handleChangeRadio.bind(this);
-    }
-
-    public componentDidMount() {
-    }
-
-    public componentWillUnmount() {
     }
 
     public handleChangeText(event: ChangeEvent<HTMLInputElement>) {
@@ -38,12 +32,12 @@ export class SelectDeviceUid extends PureComponent<SelectDeviceUidProps, SelectD
 
     public handleChangeRadio(event: ChangeEvent<HTMLInputElement>) {
         switch (event.target.value) {
-        case CREATE_NEW:
-            this.props.setDeviceUid(null);
-            break;
-        case USE_EXISTING:
-            this.props.setDeviceUid(this.state.deviceUid);
-            break;
+            case CREATE_NEW:
+                this.props.setDeviceUid(null);
+                break;
+            case USE_EXISTING:
+                this.props.setDeviceUid(this.state.deviceUid);
+                break;
         }
         this.setState({radioState: event.target.value});
     }

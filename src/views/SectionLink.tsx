@@ -17,21 +17,21 @@ interface ISectionLinkComponentProps extends ISectionLinkProps {
 const SectionLinkComponent = ({section, active, onClick}: ISectionLinkComponentProps) => {
     let name;
     switch (section) {
-    case 'location':
-        name = 'In der Nähe';
-        break;
-    case 'mine':
-        name = 'Meine Jodel';
-        break;
-    case 'mineReplies':
-        name = 'Meine Antworten';
-        break;
-    case 'mineVotes':
-        name = 'Meine Votes';
-        break;
-    case 'minePinned':
-        name = 'Meine Pins';
-        break;
+        case 'location':
+            name = 'In der Nähe';
+            break;
+        case 'mine':
+            name = 'Meine Jodel';
+            break;
+        case 'mineReplies':
+            name = 'Meine Antworten';
+            break;
+        case 'mineVotes':
+            name = 'Meine Votes';
+            break;
+        case 'minePinned':
+            name = 'Meine Pins';
+            break;
     }
     return <div className={classnames('sectionLink', section.toLowerCase(), {active})} onClick={onClick}>{name}</div>;
 };
@@ -42,7 +42,8 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: ISectionLinkProps): Pa
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: ISectionLinkProps): Partial<ISectionLinkComponentProps> => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>,
+                            ownProps: ISectionLinkProps): Partial<ISectionLinkComponentProps> => {
     return {
         onClick: () => {
             dispatch(switchPostSection(ownProps.section));

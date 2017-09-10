@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {MouseEvent} from 'react';
 
-export interface BackButtonProps {
+export interface IBackButtonProps {
     onClick: (e: MouseEvent<HTMLElement>) => void;
 }
 
-const BackButton = ({onClick}: BackButtonProps) => {
+const BackButton = ({onClick}: IBackButtonProps) => {
     return <div className="backButton" onClick={onClick}>Zurück</div>;
 };
 

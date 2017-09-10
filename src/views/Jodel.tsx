@@ -33,7 +33,7 @@ import Progress from './Progress';
 import {Search} from './Search';
 import {TopBar} from './TopBar';
 
-export interface JodelProps {
+export interface IJodelProps {
     section: string;
     selectedPost: IPost | null;
     selectedPostChildren: IPost[] | null;
@@ -53,7 +53,7 @@ export interface JodelProps {
     dispatch: Dispatch<IJodelAppStore>;
 }
 
-class JodelComponent extends Component<JodelProps> {
+class JodelComponent extends Component<IJodelProps> {
     private timer: number;
 
     public componentDidMount() {
@@ -111,8 +111,8 @@ class JodelComponent extends Component<JodelProps> {
                         }}
                 />
                 <div className={classnames('list', {
-                    postShown: this.props.selectedPost != null,
                     isChannel: this.props.selectedChannel !== undefined,
+                    postShown: this.props.selectedPost != null,
                 })}>
                     {this.props.selectedChannel ?
                         <ChannelTopBar channel={this.props.selectedChannel}/>
@@ -144,7 +144,8 @@ class JodelComponent extends Component<JodelProps> {
                     <ChannelList channels={this.props.followedChannels}
                                  recommendedChannels={this.props.recommendedChannels}
                                  localChannels={this.props.localChannels}
-                                 onChannelClick={hashtag => this.props.dispatch(switchPostSection('channel:' + hashtag))}/>
+                                 onChannelClick={hashtag => this.props.dispatch(
+                                     switchPostSection('channel:' + hashtag))}/>
                 </div>
                 <div className={classnames('notifications', {notificationsShown: this.props.notificationsShown})}>
                     <NotificationList/>
@@ -163,20 +164,20 @@ class JodelComponent extends Component<JodelProps> {
 
 function getEmptyPost(): IPost {
     return {
+        color: '000000',
+        created_at: '0000-00-00T00:00:00.000Z',
+        distance: 0,
+        location: {name: ''},
+        message: '',
+        post_id: '',
+        post_own: 'team',
         updated_at: '0000-00-00T00:00:00.000Z',
         user_handle: '',
-        message: '',
-        distance: 0,
-        created_at: '0000-00-00T00:00:00.000Z',
-        post_own: 'team',
         vote_count: 0,
-        post_id: '',
-        location: {name: ''},
-        color: '000000',
     };
 }
 
-const mapStateToProps = (state: IJodelAppStore): Partial<JodelProps> => {
+const mapStateToProps = (state: IJodelAppStore): Partial<IJodelProps> => {
     let selectedPicturePost = null;
     if (state.viewState.selectedPicturePostId) {
         selectedPicturePost = getPost(state, state.viewState.selectedPicturePostId);
@@ -198,26 +199,30 @@ const mapStateToProps = (state: IJodelAppStore): Partial<JodelProps> => {
     }
     const followedChannels = state.account.config ? state.account.config.followed_channels : undefined;
     return {
+        channelListShown: state.viewState.channelList.visible,
+        deviceUid: state.account.deviceUid,
+        followedChannels: followedChannels === undefined ? [] : followedChannels.map(c => getChannel(state, c)),
+        isRegistered: state.account.token !== null,
+        karma: state.account.karma,
+        localChannels: state.account.localChannels
+            .filter(channel => !followedChannels ?
+                true :
+                !followedChannels.find(c => c.toLowerCase() === channel.toLowerCase()))
+            .map(channel => getChannel(state, channel)),
+        locationKnown: isLocationKnown(state),
+        notificationsShown: state.viewState.notifications.visible,
+        recommendedChannels: state.account.recommendedChannels
+            .filter(channel => !followedChannels ?
+                true :
+                !followedChannels.find(c => c.toLowerCase() === channel.toLowerCase()))
+            .map(channel => getChannel(state, channel)),
+        searchShown: state.viewState.search.visible,
         section,
+        selectedChannel,
+        selectedPicturePost,
         selectedPost,
         selectedPostChildren,
-        selectedPicturePost,
-        selectedChannel,
-        locationKnown: isLocationKnown(state),
         settings: state.viewState.settings,
-        karma: state.account.karma,
-        deviceUid: state.account.deviceUid,
-        isRegistered: state.account.token !== null,
-        followedChannels: followedChannels === undefined ? [] : followedChannels.map(c => getChannel(state, c)),
-        recommendedChannels: state.account.recommendedChannels
-            .filter(channel => !followedChannels ? true : !followedChannels.find(c => c.toLowerCase() === channel.toLowerCase()))
-            .map(channel => getChannel(state, channel)),
-        localChannels: state.account.localChannels
-            .filter(channel => !followedChannels ? true : !followedChannels.find(c => c.toLowerCase() === channel.toLowerCase()))
-            .map(channel => getChannel(state, channel)),
-        channelListShown: state.viewState.channelList.visible,
-        notificationsShown: state.viewState.notifications.visible,
-        searchShown: state.viewState.search.visible,
     };
 };
 

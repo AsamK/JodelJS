@@ -5,10 +5,7 @@ import {searchPosts} from '../redux/actions/api';
 
 import {IJodelAppStore} from '../redux/reducers';
 
-interface ISearchProps {
-}
-
-interface ISearchComponentProps extends ISearchProps {
+interface ISearchComponentProps {
     suggestedHashtags: string[];
     searchPosts: (message: string, suggested: boolean) => void;
 }
@@ -47,13 +44,13 @@ class SearchComponent extends Component<ISearchComponentProps, ISearchComponentS
     }
 }
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: ISearchProps) => {
+const mapStateToProps = (state: IJodelAppStore) => {
     return {
         suggestedHashtags: state.account.suggestedHashtags,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: ISearchProps) => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>) => {
     return {
         searchPosts: (message: string, suggested: boolean) => dispatch(searchPosts(message, suggested)),
     };

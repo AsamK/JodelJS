@@ -4,13 +4,13 @@ import {ChangeEvent, PureComponent} from 'react';
 import Settings from '../app/settings';
 import {Color} from '../enums/Color';
 
-export interface ColorPickerProps {
+export interface IColorPickerProps {
     color?: Color;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default class ColorPicker extends PureComponent<ColorPickerProps> {
-    constructor(props: ColorPickerProps) {
+export default class ColorPicker extends PureComponent<IColorPickerProps> {
+    constructor(props: IColorPickerProps) {
         super(props);
     }
 

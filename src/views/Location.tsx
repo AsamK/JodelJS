@@ -2,13 +2,13 @@ import * as classnames from 'classnames';
 import * as React from 'react';
 import {Component} from 'react';
 
-export interface LocationProps {
+export interface ILocationProps {
     distance: number;
     location: string;
     fromHome: boolean;
 }
 
-export default class Location extends Component<LocationProps> {
+export default class Location extends Component<ILocationProps> {
     public render() {
         const {distance, location, fromHome} = this.props;
         return (

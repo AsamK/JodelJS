@@ -1,18 +1,20 @@
 import * as React from 'react';
 import {Component, MouseEvent} from 'react';
 
-export interface VerificationImageCaptchaProps {
+export interface IVerificationImageCaptchaProps {
     imageUrl: string;
     imageWidth: number;
     onFinishedClick: (clickedImages: number[]) => void;
 }
 
-interface VerificationImageCaptchaState {
+interface IVerificationImageCaptchaState {
     clickedImages: number[];
 }
 
-export class VerificationImageCaptcha extends Component<VerificationImageCaptchaProps, VerificationImageCaptchaState> {
-    constructor(props: VerificationImageCaptchaProps) {
+export class VerificationImageCaptcha
+    extends Component<IVerificationImageCaptchaProps, IVerificationImageCaptchaState> {
+
+    constructor(props: IVerificationImageCaptchaProps) {
         super(props);
         this.state = {
             clickedImages: [],

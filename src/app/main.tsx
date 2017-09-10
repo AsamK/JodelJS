@@ -50,7 +50,8 @@ if (process.env.NODE_ENV !== 'production') {
     reduxMiddlewares.push(freeze);
 }
 
-const composeEnhancers = (process.env.NODE_ENV !== 'production' && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+const composeEnhancers = (process.env.NODE_ENV !== 'production' &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 const store = createStore<IJodelAppStore>(
     JodelApp,
     persistedState as IJodelAppStore,
@@ -96,7 +97,7 @@ store.subscribe((() => {
                 const newNotifications = state.entities.notifications
                     .filter(n => !n.read)
                     .filter(n => 10 * 60 * 1000 > (Date.now() - new Date(n.last_interaction).getTime()));
-                Notification.requestPermission(function(permission) {
+                Notification.requestPermission(permission => {
                     if (permission !== 'granted') {
                         return;
                     }

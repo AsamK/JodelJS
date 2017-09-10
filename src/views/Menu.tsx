@@ -8,9 +8,9 @@ import {IJodelAppStore} from '../redux/reducers';
 import {SectionLink} from './SectionLink';
 
 interface IMenuComponentProps {
-    showSettings: () => void;
-    showNotifications: () => void;
-    showSearch: () => void;
+    showSettingsCallback: () => void;
+    showNotificationsCallback: () => void;
+    showSearchCallback: () => void;
     unreadNotifications: number;
 }
 
@@ -27,7 +27,7 @@ class MenuComponent extends Component<IMenuComponentProps, IMenuComponentState> 
     }
 
     public render() {
-        const {unreadNotifications, showNotifications, showSettings, showSearch} = this.props;
+        const {unreadNotifications, showNotificationsCallback, showSettingsCallback, showSearchCallback} = this.props;
         return (
             <div className={classnames('menu', {newNotifications: unreadNotifications > 0})}
                  tabIndex={99999999}
@@ -48,17 +48,17 @@ class MenuComponent extends Component<IMenuComponentProps, IMenuComponentState> 
                             <SectionLink section="minePinned"/>
                         </li>
                         <li className="menuEntry">
-                            <div className="sectionLink" onClick={showNotifications}>
+                            <div className="sectionLink" onClick={showNotificationsCallback}>
                                 Benachrichtigungen {unreadNotifications === 0 ? '' : `(${unreadNotifications})`}
                             </div>
                         </li>
                         <li className="menuEntry">
-                            <div className="sectionLink" onClick={showSearch}>
+                            <div className="sectionLink" onClick={showSearchCallback}>
                                 Suche
                             </div>
                         </li>
                         <li className="menuEntry">
-                            <div className="sectionLink" onClick={showSettings}>
+                            <div className="sectionLink" onClick={showSettingsCallback}>
                                 Einstellungen
                             </div>
                         </li>
@@ -77,9 +77,9 @@ const mapStateToProps = (state: IJodelAppStore) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: {}) => {
     return {
-        showSettings: () => dispatch(showSettings(true)),
-        showNotifications: () => dispatch(showNotifications(true)),
-        showSearch: () => dispatch(showSearch(true)),
+        showNotificationsCallback: () => dispatch(showNotifications(true)),
+        showSearchCallback: () => dispatch(showSearch(true)),
+        showSettingsCallback: () => dispatch(showSettings(true)),
     };
 };
 

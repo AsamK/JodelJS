@@ -6,7 +6,7 @@ import AddButton from './AddButton';
 import {Post} from './Post';
 import PostList from './PostList';
 
-export interface PostDetailsProps {
+export interface IPostDetailsProps {
     post: IPost;
     postChildren: IPost[] | null;
     locationKnown: boolean;
@@ -15,51 +15,52 @@ export interface PostDetailsProps {
     onLoadMore: () => void;
 }
 
-export default class PostDetails extends Component<PostDetailsProps> {
-    private _scrollAtBottom: boolean;
+export default class PostDetails extends Component<IPostDetailsProps> {
+    private scrollAtBottom: boolean;
 
-    private _scrollable: HTMLElement | null;
+    private scrollable: HTMLElement | null;
 
-    constructor(props: PostDetailsProps) {
+    constructor(props: IPostDetailsProps) {
         super(props);
         this._onScroll = this._onScroll.bind(this);
     }
 
-    public componentDidUpdate(prevProps: PostDetailsProps) {
+    public componentDidUpdate(prevProps: IPostDetailsProps) {
         if (this.props.post === null) {
             return;
         } else if (prevProps.post !== null && prevProps.post.post_id === this.props.post.post_id) {
-            this._scrollAtBottom = false;
+            this.scrollAtBottom = false;
             return;
         }
-        if (this._scrollable) {
-            this._scrollable.scrollTop = 0;
+        if (this.scrollable) {
+            this.scrollable.scrollTop = 0;
         }
     }
 
     public componentDidMount() {
-        if (this._scrollable) {
-            this._scrollable.addEventListener('scroll', this._onScroll);
+        if (this.scrollable) {
+            this.scrollable.addEventListener('scroll', this._onScroll);
         }
-        this._scrollAtBottom = false;
+        this.scrollAtBottom = false;
     }
 
     public componentWillUnmount() {
-        if (this._scrollable) {
-            this._scrollable.removeEventListener('scroll', this._onScroll);
+        if (this.scrollable) {
+            this.scrollable.removeEventListener('scroll', this._onScroll);
         }
     }
 
     public _onScroll() {
-        if (!this._scrollable || !this.props.onLoadMore) {
+        if (!this.scrollable || !this.props.onLoadMore) {
             return;
         }
-        const newFlag = this._scrollable.scrollTop > 0 && (this._scrollable.scrollTop + this._scrollable.clientHeight) >= (this._scrollable.scrollHeight - 500);
-        if (this._scrollAtBottom != newFlag && newFlag) {
-            this._scrollAtBottom = newFlag;
+        const isNearBottom = this.scrollable.scrollTop > 0 &&
+            (this.scrollable.scrollTop + this.scrollable.clientHeight) >= (this.scrollable.scrollHeight - 500);
+        if (isNearBottom && this.scrollAtBottom !== isNearBottom) {
+            this.scrollAtBottom = isNearBottom;
             this.props.onLoadMore();
         } else {
-            this._scrollAtBottom = newFlag;
+            this.scrollAtBottom = isNearBottom;
         }
     }
 
@@ -68,7 +69,7 @@ export default class PostDetails extends Component<PostDetailsProps> {
         const childPosts = postChildren ? postChildren : [];
 
         return (
-            <div className="postDetails" ref={c => this._scrollable = c}>
+            <div className="postDetails" ref={c => this.scrollable = c}>
                 <Post post={post} onPostClick={onPostClick}/>
                 <PostList parentPost={post} posts={childPosts} onPostClick={onPostClick}/>
                 {locationKnown ? <AddButton onClick={onAddClick}/> : ''}

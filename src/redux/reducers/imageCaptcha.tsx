@@ -7,27 +7,27 @@ export interface ICaptchaImage {
 }
 
 export interface IImageCaptchaStore {
-    key: string | null;
     image: ICaptchaImage | null;
+    key: string | null;
 }
 
 export function imageCaptcha(state: IImageCaptchaStore = {
-    key: null,
     image: null,
+    key: null,
 }, action: IJodelAction): typeof state {
     switch (action.type) {
-    case SET_IMAGE_CAPTCHA:
-        if (!action.payload) {
+        case SET_IMAGE_CAPTCHA:
+            if (!action.payload) {
+                return state;
+            }
+            return {
+                image: {
+                    url: action.payload.imageUrl || null,
+                    width: action.payload.imageWidth || null,
+                },
+                key: action.payload.key || null,
+            };
+        default:
             return state;
-        }
-        return {
-            image: {
-                url: action.payload.imageUrl || null,
-                width: action.payload.imageWidth || null,
-            },
-            key: action.payload.key || null,
-        };
-    default:
-        return state;
     }
 }

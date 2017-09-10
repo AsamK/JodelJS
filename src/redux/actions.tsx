@@ -104,19 +104,20 @@ export function updateLocation(): ThunkAction<void, IJodelAppStore, void> {
             }, err => {
                 // TODO do something useful
                 switch (err.code) {
-                case err.PERMISSION_DENIED:
-                    break;
-                case err.POSITION_UNAVAILABLE:
-                    break;
-                case err.TIMEOUT:
-                    break;
+                    case err.PERMISSION_DENIED:
+                        break;
+                    case err.POSITION_UNAVAILABLE:
+                        break;
+                    case err.TIMEOUT:
+                        break;
                 }
             });
         }
     };
 }
 
-export function setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number, tokenType: string): ThunkAction<void, IJodelAppStore, void> {
+export function setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number,
+                         tokenType: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         // TODO clear cached posts
         dispatch(_setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType));

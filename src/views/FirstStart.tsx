@@ -10,19 +10,19 @@ import {getLocation, IJodelAppStore} from '../redux/reducers';
 import {SelectDeviceUid} from './SelectDeviceUid';
 import {SelectLocation} from './SelectLocation';
 
-export interface FirstStartProps {
+export interface IFirstStartProps {
     deviceUid: string | null;
     location: ILocation | null;
     useBrowserLocation: boolean;
     dispatch: Dispatch<IJodelAppStore>;
 }
 
-export interface FirstStartState {
+export interface IFirstStartState {
     deviceUid: string | null;
 }
 
-class FirstStart extends Component<FirstStartProps, FirstStartState> {
-    constructor(props: FirstStartProps) {
+class FirstStart extends Component<IFirstStartProps, IFirstStartState> {
+    constructor(props: IFirstStartProps) {
         super(props);
         this.state = {deviceUid: null};
         this.setDeviceUid = this.setDeviceUid.bind(this);

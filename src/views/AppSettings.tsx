@@ -20,7 +20,7 @@ import {getLocation, IJodelAppStore} from '../redux/reducers';
 import {SelectLocation} from './SelectLocation';
 import {VerificationImageCaptcha} from './VerificationImageCaptcha';
 
-export interface AppSettingsProps {
+export interface IAppSettingsProps {
     deviceUid: string | null;
     location: ILocation | null;
     homeSet: boolean;
@@ -39,12 +39,12 @@ export interface AppSettingsProps {
     pending_deletion: boolean;
 }
 
-interface AppSettingsComponentProps extends AppSettingsProps {
+interface IAppSettingsComponentProps extends IAppSettingsProps {
     dispatch: Dispatch<IJodelAppStore>;
 }
 
-class AppSettings extends Component<AppSettingsComponentProps> {
-    constructor(props: AppSettingsComponentProps) {
+class AppSettings extends Component<IAppSettingsComponentProps> {
+    constructor(props: IAppSettingsComponentProps) {
         super(props);
         this.updateLocation = this.updateLocation.bind(this);
         this.locationChange = this.locationChange.bind(this);
@@ -122,7 +122,8 @@ class AppSettings extends Component<AppSettingsComponentProps> {
                                 if (!this.props.location) {
                                     return;
                                 }
-                                this.props.dispatch(setHome(this.props.location.latitude, this.props.location.longitude));
+                                this.props.dispatch(
+                                    setHome(this.props.location.latitude, this.props.location.longitude));
                             }}>
                                 Aktuellen Standort als Heimat setzen
                             </button>
@@ -159,7 +160,8 @@ class AppSettings extends Component<AppSettingsComponentProps> {
             <button className="closeButton"
                     onClick={() => {
                         if (this.props.location) {
-                            this.props.dispatch(setLocation(this.props.location.latitude, this.props.location.longitude));
+                            this.props.dispatch(
+                                setLocation(this.props.location.latitude, this.props.location.longitude));
                         }
                         window.history.back();
                     }}>
@@ -169,25 +171,25 @@ class AppSettings extends Component<AppSettingsComponentProps> {
     }
 }
 
-const mapStateToProps = (state: IJodelAppStore): AppSettingsProps => {
+const mapStateToProps = (state: IJodelAppStore): IAppSettingsProps => {
     const loc = getLocation(state);
     return {
         deviceUid: state.account.deviceUid,
-        location: loc,
-        homeSet: state.account.config ? state.account.config.home_set : false,
-        homeName: state.account.config ? state.account.config.home_name : null,
+        experiments: state.account.config ? state.account.config.experiments : [],
+        feedInternationalizable: state.account.config ? state.account.config.feedInternationalizable : false,
+        feedInternationalized: state.account.config ? state.account.config.feedInternationalized : false,
         homeClearAllowed: state.account.config ? state.account.config.home_clear_allowed : false,
-        verified: state.account.config ? state.account.config.verified : false,
-        useBrowserLocation: state.settings.useBrowserLocation,
-        useHomeLocation: state.settings.useHomeLocation,
+        homeName: state.account.config ? state.account.config.home_name : null,
+        homeSet: state.account.config ? state.account.config.home_set : false,
         imageUrl: state.imageCaptcha.image ? state.imageCaptcha.image.url : null,
         imageWidth: state.imageCaptcha.image ? state.imageCaptcha.image.width : null,
-        experiments: state.account.config ? state.account.config.experiments : [],
-        user_type: state.account.config ? state.account.config.user_type : null,
+        location: loc,
         moderator: state.account.config ? state.account.config.moderator : false,
-        feedInternationalized: state.account.config ? state.account.config.feedInternationalized : false,
-        feedInternationalizable: state.account.config ? state.account.config.feedInternationalizable : false,
         pending_deletion: state.account.config ? state.account.config.pending_deletion : false,
+        useBrowserLocation: state.settings.useBrowserLocation,
+        useHomeLocation: state.settings.useHomeLocation,
+        user_type: state.account.config ? state.account.config.user_type : null,
+        verified: state.account.config ? state.account.config.verified : false,
     };
 };
 

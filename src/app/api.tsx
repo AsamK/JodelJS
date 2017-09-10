@@ -21,7 +21,8 @@ function computeSignature(auth: string | undefined, method: string, url: string,
     if (!path.startsWith('/')) {
         path = '/' + path;
     }
-    const raw = method + '%' + u.hostname + '%' + 443 + '%' + path + '%' + (auth || '') + '%' + timestamp + '%' + '' + '%' + data;
+    const raw = method + '%' + u.hostname + '%' + 443 + '%' + path + '%' + (auth || '') + '%' + timestamp + '%' + '' +
+        '%' + data;
 
     const hmac = createHmac('sha1', Settings.KEY);
     hmac.setEncoding('hex');
@@ -63,7 +64,6 @@ export function receiveGcmPushVerification(androidAccount: { android_id: string,
 
         req.send(JSON.stringify(androidAccount))
             .end((err, res) => {
-                console.log(err, res);
                 if (err) {
                     reject(err);
                 } else {
@@ -110,33 +110,34 @@ export function jodelRequest(auth: string | undefined, method: string, url: stri
 
 export function apiGetPostsCombo(auth: string, latitude: number, longitude: number, stickies = true, home = false) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/location/combo', {
+        home,
         lat: latitude,
         lng: longitude,
         stickies,
-        home,
     }, {});
 }
 
-export function apiGetPosts(auth: string, sortType: PostListSortType, afterPostId: string | undefined, latitude: number, longitude: number, home = false) {
+export function apiGetPosts(auth: string, sortType: PostListSortType, afterPostId: string | undefined, latitude: number,
+                            longitude: number, home = false) {
     let type;
     switch (sortType) {
-    case PostListSortType.RECENT:
-        type = '';
-        break;
-    case PostListSortType.DISCUSSED:
-        type = 'discussed';
-        break;
-    case PostListSortType.POPULAR:
-        type = 'popular';
-        break;
-    default:
-        throw new Error('Unknown sort type');
+        case PostListSortType.RECENT:
+            type = '';
+            break;
+        case PostListSortType.DISCUSSED:
+            type = 'discussed';
+            break;
+        case PostListSortType.POPULAR:
+            type = 'popular';
+            break;
+        default:
+            throw new Error('Unknown sort type');
     }
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/location/' + type, {
         after: afterPostId,
+        home,
         lat: latitude,
         lng: longitude,
-        home,
     }, {});
 }
 
@@ -147,42 +148,42 @@ export function apiGetPostsMineCombo(auth: string) {
 export function apiGetPostsMine(auth: string, sortType: PostListSortType, skip?: number, limit?: number) {
     let type;
     switch (sortType) {
-    case PostListSortType.RECENT:
-        type = '';
-        break;
-    case PostListSortType.DISCUSSED:
-        type = 'discussed';
-        break;
-    case PostListSortType.POPULAR:
-        type = 'popular';
-        break;
-    default:
-        throw new Error('Unknown sort type');
+        case PostListSortType.RECENT:
+            type = '';
+            break;
+        case PostListSortType.DISCUSSED:
+            type = 'discussed';
+            break;
+        case PostListSortType.POPULAR:
+            type = 'popular';
+            break;
+        default:
+            throw new Error('Unknown sort type');
     }
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/' + type, {
-        skip,
         limit,
+        skip,
     }, {});
 }
 
 export function apiGetPostsMineReplies(auth: string, skip?: number, limit?: number) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/replies', {
-        skip,
         limit,
+        skip,
     }, {});
 }
 
 export function apiGetPostsMinePinned(auth: string, skip?: number, limit?: number) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/pinned', {
-        skip,
         limit,
+        skip,
     }, {});
 }
 
 export function apiGetPostsMineVotes(auth: string, skip?: number, limit?: number) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/votes', {
-        skip,
         limit,
+        skip,
     }, {});
 }
 
@@ -190,24 +191,25 @@ export function apiGetPostsChannelCombo(auth: string, channel: string, home = fa
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/channel/combo', {channel, home}, {});
 }
 
-export function apiGetPostsChannel(auth: string, sortType: PostListSortType, afterPostId: string | undefined, channel: string, home = false) {
+export function apiGetPostsChannel(auth: string, sortType: PostListSortType, afterPostId: string | undefined,
+                                   channel: string, home = false) {
     let type;
     switch (sortType) {
-    case PostListSortType.RECENT:
-        type = '';
-        break;
-    case PostListSortType.DISCUSSED:
-        type = 'discussed';
-        break;
-    case PostListSortType.POPULAR:
-        type = 'popular';
-        break;
-    default:
-        throw new Error('Unknown sort type');
+        case PostListSortType.RECENT:
+            type = '';
+            break;
+        case PostListSortType.DISCUSSED:
+            type = 'discussed';
+            break;
+        case PostListSortType.POPULAR:
+            type = 'popular';
+            break;
+        default:
+            throw new Error('Unknown sort type');
     }
     const query = {
-        channel,
         after: afterPostId,
+        channel,
         home,
     };
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/channel/' + type, query, {});
@@ -217,35 +219,37 @@ export function apiGetPostsHashtagCombo(auth: string, hashtag: string, home = fa
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/hashtag/combo', {hashtag, home}, {});
 }
 
-export function apiGetPostsHashtag(auth: string, sortType: PostListSortType, afterPostId: string | undefined, hashtag: string, home = false) {
+export function apiGetPostsHashtag(auth: string, sortType: PostListSortType, afterPostId: string | undefined,
+                                   hashtag: string, home = false) {
     let type;
     switch (sortType) {
-    case PostListSortType.RECENT:
-        type = '';
-        break;
-    case PostListSortType.DISCUSSED:
-        type = 'discussed';
-        break;
-    case PostListSortType.POPULAR:
-        type = 'popular';
-        break;
-    default:
-        throw new Error('Unknown sort type');
+        case PostListSortType.RECENT:
+            type = '';
+            break;
+        case PostListSortType.DISCUSSED:
+            type = 'discussed';
+            break;
+        case PostListSortType.POPULAR:
+            type = 'popular';
+            break;
+        default:
+            throw new Error('Unknown sort type');
     }
     const query = {
-        hashtag,
         after: afterPostId,
+        hashtag,
         home,
     };
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/hashtag/' + type, query, {});
 }
 
-export function apiGetPost(auth: string, post_id: string) {
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/' + post_id, {}, {});
+export function apiGetPost(auth: string, postId: string) {
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId, {}, {});
 }
 
-export function apiGetPostDetails(auth: string, post_id: string, details = true, nextReply: string | undefined, reversed = false) {
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/' + post_id + '/details', {
+export function apiGetPostDetails(auth: string, postId: string, details = true, nextReply: string | undefined,
+                                  reversed = false) {
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/' + postId + '/details', {
         details,
         reply: nextReply,
         reversed,
@@ -257,11 +261,13 @@ export function apiDeletePost(auth: string, postId: string) {
 }
 
 export function apiUpVote(auth: string, postId: string) {
-    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/upvote', {}, {reason_code: -1});
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/upvote', {},
+        {reason_code: -1});
 }
 
 export function apiDownVote(auth: string, postId: string) {
-    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/downvote', {}, {reason_code: -1});
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/downvote', {},
+        {reason_code: -1});
 }
 
 export function apiGiveThanks(auth: string, postId: string) {
@@ -290,22 +296,31 @@ export function apiGetRecommendedChannels(auth: string, home = false) {
 
 export function apiGetFollowedChannelsMeta(auth: string, channels: { [channelName: string]: number }, home = false) {
     // Format: {"channelName": timestamp, "channel2": timestamp2}
-    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/user/followedChannelsMeta', {home}, channels);
+    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/user/followedChannelsMeta', {home},
+        channels);
 }
 
 export function apiGetSuggestedHashtags(auth: string, home = false) {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/hashtags/suggested', {home}, {});
 }
 
-export function apiAddPost(auth: string, channel: string | undefined, ancestorPostId: string | undefined, color: Color | undefined, loc_accuracy: number, latitude: number, longitude: number, city: string, country: string, message: string, image: string | undefined, toHome = false) {
+export function apiAddPost(auth: string, channel: string | undefined, ancestorPostId: string | undefined,
+                           color: Color | undefined, locAccuracy: number, latitude: number, longitude: number,
+                           city: string, country: string, message: string, image: string | undefined, toHome = false) {
     // image must be base64 encoded string
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/', {}, {
-        channel,
         ancestor: ancestorPostId,
+        channel,
         color,
-        message,
         image,
-        location: {loc_accuracy, city, name: city, country, loc_coordinates: {lat: latitude, lng: longitude}},
+        location: {
+            city,
+            country,
+            loc_accuracy: locAccuracy,
+            loc_coordinates: {lat: latitude, lng: longitude},
+            name: city,
+        },
+        message,
         to_home: toHome,
     });
 }
@@ -343,13 +358,13 @@ export function apiSendVerificationAnswer(auth: string, key: string, answer: num
 export function apiSetLocation(auth: string, latitude: number, longitude: number, city: string, country: string) {
     const data = {
         location: {
-            loc_accuracy: 0.0,
             city,
+            country,
+            loc_accuracy: 0.0,
             loc_coordinates: {
                 lat: latitude,
                 lng: longitude,
             },
-            country,
             name: city,
         },
     };
@@ -359,13 +374,13 @@ export function apiSetLocation(auth: string, latitude: number, longitude: number
 export function apiSetHome(auth: string, latitude: number, longitude: number, city: string, country: string) {
     const data = {
         location: {
-            loc_accuracy: 0.0,
             city,
+            country,
+            loc_accuracy: 0.0,
             loc_coordinates: {
                 lat: latitude,
                 lng: longitude,
             },
-            country,
             name: city,
         },
     };
@@ -414,13 +429,13 @@ export function apiGetAccessToken(deviceUid: string, latitude = 0.0, longitude =
         client_id: Settings.CLIENT_ID,
         device_uid: deviceUid,
         location: {
-            loc_accuracy: 0.0,
             city,
+            country,
+            loc_accuracy: 0.0,
             loc_coordinates: {
                 lat: latitude,
                 lng: longitude,
             },
-            country,
         },
     };
     return jodelRequest(undefined, 'POST', Settings.API_SERVER + API_PATH_V2 + '/users/', {}, data);
@@ -444,7 +459,8 @@ export function apiGetNotifications(auth: string) {
 }
 
 export function apiSetNotificationPostRead(auth: string, postId: string) {
-    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/notifications/post/' + postId + '/read', {}, {});
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/notifications/post/' + postId + '/read',
+        {}, {});
 }
 
 /**
@@ -481,7 +497,8 @@ export function apiSharePost(auth: string, postId: string) {
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/' + postId + '/share', {}, {});
 }
 
-export function apiSearchPosts(auth: string, message: string, suggested = false, home = false): Promise<request.Response> {
+export function apiSearchPosts(auth: string, message: string, suggested = false,
+                               home = false): Promise<request.Response> {
     const data = {
         message,
         suggested,

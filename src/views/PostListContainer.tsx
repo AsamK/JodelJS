@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Component, MouseEvent, PureComponent} from 'react';
+import {MouseEvent, PureComponent} from 'react';
 import {connect, Dispatch} from 'react-redux';
 
 import {PostListSortType} from '../enums/PostListSortType';
@@ -10,14 +10,14 @@ import AddButton from './AddButton';
 import PostList from './PostList';
 import {SortTypeLink} from './SortTypeLink';
 
-export interface PostListContainerProps {
+export interface IPostListContainerProps {
     onPostClick: (post: IPost) => void;
     onLoadMore?: () => void;
     onAddClick: (e: MouseEvent<HTMLElement>) => void;
     onRefresh: () => void; // TODO implement
 }
 
-export interface PostListContainerComponentProps extends PostListContainerProps {
+export interface IPostListContainerComponentProps extends IPostListContainerProps {
     section: string;
     sortType: PostListSortType;
     lastUpdated: number;
@@ -25,8 +25,8 @@ export interface PostListContainerComponentProps extends PostListContainerProps 
     locationKnown: boolean;
 }
 
-class PostListContainerComponent extends PureComponent<PostListContainerComponentProps> {
-    public constructor(props: PostListContainerComponentProps) {
+class PostListContainerComponent extends PureComponent<IPostListContainerComponentProps> {
+    public constructor(props: IPostListContainerComponentProps) {
         super(props);
     }
 
@@ -47,21 +47,23 @@ class PostListContainerComponent extends PureComponent<PostListContainerComponen
     }
 }
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: PostListContainerProps) => {
+const mapStateToProps = (state: IJodelAppStore, ownProps: IPostListContainerProps) => {
     const section = state.viewState.postSection;
     const sortType = state.viewState.postListSortType;
     const postsSection = state.postsBySection[section];
-    const posts = postsSection !== undefined && postsSection.postsBySortType[sortType] ? postsSection.postsBySortType[sortType] : [];
+    const posts = postsSection !== undefined && postsSection.postsBySortType[sortType] ?
+        postsSection.postsBySortType[sortType] :
+        [];
     return {
+        lastUpdated: postsSection ? postsSection.lastUpdated : undefined,
+        locationKnown: isLocationKnown(state),
+        posts: posts.map(postId => getPost(state, postId)),
         section,
         sortType,
-        lastUpdated: postsSection ? postsSection.lastUpdated : undefined,
-        posts: posts.map(post_id => getPost(state, post_id)),
-        locationKnown: isLocationKnown(state),
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: PostListContainerProps) => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: IPostListContainerProps) => {
     return {};
 };
 

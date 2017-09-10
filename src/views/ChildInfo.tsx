@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-export interface ChildInfoProps {
+export interface IChildInfoProps {
     child_count: number;
 }
 
-const ChildInfo = ({child_count}: ChildInfoProps) => (
+const ChildInfo = ({child_count}: IChildInfoProps) => (
     <div className="childInfo" style={{visibility: child_count > 0 ? null : 'hidden'}}>
         {child_count} Kommentare
     </div>

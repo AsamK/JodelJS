@@ -6,14 +6,14 @@ import {IJodelAppStore} from '../redux/reducers';
 import {getChannel} from '../redux/reducers/entities';
 import BackButton from './BackButton';
 
-export interface ChannelTopBarProps {
+export interface IChannelTopBarProps {
     onFollowClick: (channel: string, follow: boolean) => void;
     channel: string;
     followerCount: number;
     followedName: string;
 }
 
-const ChannelTopBar = ({onFollowClick, channel, followerCount, followedName}: ChannelTopBarProps) => {
+const ChannelTopBar = ({onFollowClick, channel, followerCount, followedName}: IChannelTopBarProps) => {
     const isFollowing = followedName !== null;
     return (
         <div className="channelTopBar">
@@ -29,17 +29,19 @@ const ChannelTopBar = ({onFollowClick, channel, followerCount, followedName}: Ch
     );
 };
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: ChannelTopBarProps) => {
+const mapStateToProps = (state: IJodelAppStore, ownProps: IChannelTopBarProps) => {
     const followers = getChannel(state, ownProps.channel).followers;
     return {
         followedName: state.account.config
-            ? state.account.config.followed_channels.find(c => c.toLowerCase() === ownProps.channel.toLowerCase()) || null
-            : null,
+            ?
+            state.account.config.followed_channels.find(c => c.toLowerCase() === ownProps.channel.toLowerCase()) || null
+            :
+            null,
         followerCount: !followers ? 0 : followers,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: Partial<ChannelTopBarProps>) => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: Partial<IChannelTopBarProps>) => {
     return {
         onFollowClick: (channel: string, follow: boolean) => {
             dispatch(followChannel(channel, follow));

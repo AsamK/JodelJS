@@ -7,29 +7,29 @@ import {addPost, switchPostSection} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 import ColorPicker from './ColorPicker';
 
-export interface AddPostComponentProps {
+export interface IAddPostComponentProps {
     ancestor: string;
     channel: string;
     visible: boolean;
     dispatch: Dispatch<IJodelAppStore>;
 }
 
-export interface AddPostComponentState {
+export interface IAddPostComponentState {
     imageUrl: string | undefined;
     message: string;
     image: File | undefined;
     color: Color | undefined;
 }
 
-export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPostComponentState> {
-    constructor(props: AddPostComponentProps) {
+export class AddPostComponent extends PureComponent<IAddPostComponentProps, IAddPostComponentState> {
+    constructor(props: IAddPostComponentProps) {
         super(props);
         const messageDraft = sessionStorage.getItem('messageDraft');
         this.state = {
-            message: messageDraft !== null ? messageDraft : '',
+            color: undefined,
             image: undefined,
             imageUrl: undefined,
-            color: undefined,
+            message: messageDraft !== null ? messageDraft : '',
         };
         this.handleChangeImage = this.handleChangeImage.bind(this);
         this.resetForm = this.resetForm.bind(this);
@@ -60,7 +60,8 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
     public handleAddPost(event: FormEvent<HTMLFormElement>) {
         const {channel, ancestor} = this.props;
         event.preventDefault();
-        if ((this.state.message.trim() === '' && this.state.image === null) || !(event.target instanceof HTMLFormElement)) {
+        if ((this.state.message.trim() === '' && this.state.image === null) ||
+            !(event.target instanceof HTMLFormElement)) {
             return;
         }
         const form = event.target;
@@ -78,7 +79,8 @@ export class AddPostComponent extends PureComponent<AddPostComponentProps, AddPo
         window.history.back();
     }
 
-    public sendAddPost(message: string, encodedImage: string | undefined, channel: string, ancestor: string, color: Color | undefined, form: HTMLFormElement) {
+    public sendAddPost(message: string, encodedImage: string | undefined, channel: string, ancestor: string,
+                       color: Color | undefined, form: HTMLFormElement) {
         this.props.dispatch(addPost(message, encodedImage, channel, ancestor, color)).then(
             section => {
                 this.resetForm(form);

@@ -15,14 +15,16 @@ export interface IEntitiesStore {
 }
 
 export const entities = combineReducers({
-    posts,
     channels,
     notifications,
+    posts,
 });
 
 function convertApiPostToPost(post: IApiPost): IPost {
     const seen: { [key: string]: boolean } = {};
-    const newChildren = post.children ? post.children.map(child => child.post_id).filter(c => seen[c] ? false : (seen[c] = true)) : undefined;
+    const newChildren = post.children ?
+        post.children.map(child => child.post_id).filter(c => seen[c] ? false : (seen[c] = true)) :
+        undefined;
     return {...post, children: newChildren};
 }
 
@@ -41,11 +43,13 @@ function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): type
                 if (payload.append === true) {
                     newPost = {
                         ...newPost,
-                        child_count: (newPost.child_count ? newPost.child_count : 0) + (oldPost.children ? oldPost.children.length : 0),
+                        child_count: (newPost.child_count ? newPost.child_count : 0) +
+                        (oldPost.children ? oldPost.children.length : 0),
                         children: [...oldPost.children, ...newPost.children],
                     };
-                } else if (newPost.children && newPost.children.length == 0) {
-                    // The old post has children and the new post has children, which however aren't included in the new data
+                } else if (newPost.children && newPost.children.length === 0) {
+                    // The old post has children and the new post has children,
+                    // which however aren't included in the new data
                     // -> keep old children
                     newPost = {...newPost, children: oldPost.children};
                 }
@@ -55,20 +59,20 @@ function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): type
         state = {...state, ...newState};
     }
     switch (action.type) {
-    case PINNED_POST:
-        if (!payload || !payload.postId) {
+        case PINNED_POST:
+            if (!payload || !payload.postId) {
+                return state;
+            }
+            return {
+                ...state,
+                [payload.postId]: {
+                    ...state[payload.postId],
+                    pin_count: payload.pinCount,
+                    pinned: payload.pinned,
+                },
+            };
+        default:
             return state;
-        }
-        return {
-            ...state,
-            [payload.postId]: {
-                ...state[payload.postId],
-                pinned: payload.pinned,
-                pin_count: payload.pinCount,
-            },
-        };
-    default:
-        return state;
     }
 }
 
@@ -84,23 +88,23 @@ function channels(state: { [key: string]: IChannel } = {}, action: IJodelAction)
         };
     }
     switch (action.type) {
-    case RECEIVE_POSTS:
-        if (!action.payload) {
+        case RECEIVE_POSTS:
+            if (!action.payload) {
+                return state;
+            }
+            if (action.payload.section !== undefined && action.payload.section.startsWith('channel:')) {
+                const channelName = action.payload.section.substring(8);
+                return {
+                    ...state,
+                    [channelName]: {
+                        ...state[channelName],
+                        unread: false,
+                    },
+                };
+            }
             return state;
-        }
-        if (action.payload.section !== undefined && action.payload.section.startsWith('channel:')) {
-            const channelName = action.payload.section.substring(8);
-            return {
-                ...state,
-                [channelName]: {
-                    ...state[channelName],
-                    unread: false,
-                },
-            };
-        }
-        return state;
-    default:
-        return state;
+        default:
+            return state;
     }
 }
 
@@ -109,13 +113,13 @@ function notifications(state: INotification[] = [], action: IJodelAction): typeo
         return state;
     }
     switch (action.type) {
-    case RECEIVE_NOTIFICATIONS:
-        return action.payload.notifications ? action.payload.notifications : [];
-    case SET_NOTIFICATION_POST_READ:
-        const postId = action.payload.postId;
-        return state.map(n => postId === n.post_id ? {...n, read: true} : n);
-    default:
-        return state;
+        case RECEIVE_NOTIFICATIONS:
+            return action.payload.notifications ? action.payload.notifications : [];
+        case SET_NOTIFICATION_POST_READ:
+            const postId = action.payload.postId;
+            return state.map(n => postId === n.post_id ? {...n, read: true} : n);
+        default:
+            return state;
     }
 }
 

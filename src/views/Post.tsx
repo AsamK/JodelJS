@@ -12,14 +12,14 @@ import Message from './Message';
 import {Time} from './Time';
 import Vote from './Vote';
 
-export interface PostProps {
+export interface IPostProps {
     post: IPost;
     parentPostId?: string;
     author?: string;
     onPostClick: () => void;
 }
 
-interface PostComponentProps extends PostProps {
+interface IPostComponentProps extends IPostProps {
     selectPicture: () => void;
     deletePost: () => void;
     downVote: () => void;
@@ -29,27 +29,11 @@ interface PostComponentProps extends PostProps {
     switchToChannel: (channel: string) => void;
 }
 
-export class PostComponent extends PureComponent<PostComponentProps> {
+export class PostComponent extends PureComponent<IPostComponentProps> {
     private pressTimer: number;
 
-    constructor(props: PostComponentProps) {
+    constructor(props: IPostComponentProps) {
         super(props);
-    }
-
-    private upvote = (e: MouseEvent<HTMLElement>) => {
-        e.stopPropagation();
-        const {post, parentPostId} = this.props;
-        if (post.voted === 'up') {
-            // Already upvoted -> Give thanks
-            this.props.giveThanks();
-        } else {
-            this.props.upVote();
-        }
-    }
-
-    private downvote = (e: MouseEvent<HTMLElement>) => {
-        e.stopPropagation();
-        this.props.downVote();
     }
 
     public render() {
@@ -98,21 +82,37 @@ export class PostComponent extends PureComponent<PostComponentProps> {
             </div>
         );
     }
+
+    private upvote = (e: MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+        const {post, parentPostId} = this.props;
+        if (post.voted === 'up') {
+            // Already upvoted -> Give thanks
+            this.props.giveThanks();
+        } else {
+            this.props.upVote();
+        }
+    }
+
+    private downvote = (e: MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+        this.props.downVote();
+    }
 }
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: PostProps) => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: IPostProps) => {
     return {
-        selectPicture: () => dispatch(selectPicture(ownProps.post.post_id)),
         deletePost: () => dispatch(deletePost(ownProps.post.post_id)),
         downVote: () => dispatch(downVote(ownProps.post.post_id)),
-        upVote: () => dispatch(upVote(ownProps.post.post_id)),
         giveThanks: () => dispatch(giveThanks(ownProps.post.post_id, ownProps.parentPostId)),
-        switchToHashtag: (hashtag: string) => dispatch(switchPostSection('hashtag:' + hashtag)),
+        selectPicture: () => dispatch(selectPicture(ownProps.post.post_id)),
         switchToChannel: (channel: string) => dispatch(switchPostSection('channel:' + channel)),
+        switchToHashtag: (hashtag: string) => dispatch(switchPostSection('hashtag:' + hashtag)),
+        upVote: () => dispatch(upVote(ownProps.post.post_id)),
     };
 };
 

@@ -3,14 +3,32 @@ import * as React from 'react';
 import {Component} from 'react';
 import {IChannel} from '../interfaces/IChannel';
 
-export interface ChannelListProps {
+export interface IChannelListProps {
     channels: IChannel[];
     recommendedChannels: IChannel[];
     localChannels: IChannel[];
     onChannelClick: (channelName: string) => void;
 }
 
-export default class ChannelList extends Component<ChannelListProps> {
+export default class ChannelList extends Component<IChannelListProps> {
+    public static createChannelNode(channel: IChannel, onChannelClick: (channel: string) => void, showImage: boolean) {
+        return <div key={channel.channel}
+                    className={classnames('channelLink', {unread: channel.unread})}
+                    onClick={() => onChannelClick(channel.channel)}>
+            {showImage && channel.image_url ?
+                <div className="channelPicture"
+                     style={{backgroundImage: 'url(https:' + channel.image_url + ')'}}/>
+                : undefined}
+            <div className="title">@{channel.channel}</div>
+            {channel.sponsored ?
+                <div className="sponsored"> (Sponsored)</div>
+                : undefined}
+            {channel.followers ?
+                <div className="followers">{channel.followers} Followers</div>
+                : undefined}
+        </div>;
+    }
+
     public render() {
         const {channels, recommendedChannels, localChannels, onChannelClick} = this.props;
         const channelNodes = channels.map(channel => {
@@ -41,23 +59,5 @@ export default class ChannelList extends Component<ChannelListProps> {
                 {localChannelNodes}
             </div>
         );
-    }
-
-    public static createChannelNode(channel: IChannel, onChannelClick: (channel: string) => void, showImage: boolean) {
-        return <div key={channel.channel}
-                    className={classnames('channelLink', {unread: channel.unread})}
-                    onClick={() => onChannelClick(channel.channel)}>
-            {showImage && channel.image_url ?
-                <div className="channelPicture"
-                     style={{backgroundImage: 'url(https:' + channel.image_url + ')'}}/>
-                : undefined}
-            <div className="title">@{channel.channel}</div>
-            {channel.sponsored ?
-                <div className="sponsored"> (Sponsored)</div>
-                : undefined}
-            {channel.followers ?
-                <div className="followers">{channel.followers} Followers</div>
-                : undefined}
-        </div>;
     }
 }

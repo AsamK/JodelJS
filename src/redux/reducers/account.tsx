@@ -38,110 +38,110 @@ export interface IAccountStore {
 }
 
 export const account = combineReducers<IAccountStore>({
-    karma,
-    deviceUid,
-    token,
     config,
+    deviceUid,
+    karma,
+    localChannels,
     permissionDenied,
     recommendedChannels,
-    localChannels,
     suggestedHashtags,
+    token,
 });
 
 function karma(state = 0, action: IJodelAction): typeof state {
     switch (action.type) {
-    case SET_KARMA:
-        if (!action.payload) {
+        case SET_KARMA:
+            if (!action.payload) {
+                return state;
+            }
+            return action.payload.karma || 0;
+        default:
             return state;
-        }
-        return action.payload.karma || 0;
-    default:
-        return state;
     }
 }
 
 function deviceUid(state: string | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
-    case SET_DEVICE_UID:
-        if (!action.payload) {
+        case SET_DEVICE_UID:
+            if (!action.payload) {
+                return state;
+            }
+            return action.payload.deviceUid || null;
+        default:
             return state;
-        }
-        return action.payload.deviceUid || null;
-    default:
-        return state;
     }
 }
 
 function token(state: IToken | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
-    case SET_TOKEN:
-        if (!action.payload) {
+        case SET_TOKEN:
+            if (!action.payload) {
+                return state;
+            }
+            return action.payload.token || null;
+        default:
             return state;
-        }
-        return action.payload.token || null;
-    default:
-        return state;
     }
 }
 
 function config(state: IConfig | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
-    case SET_CONFIG:
-        if (!action.payload) {
+        case SET_CONFIG:
+            if (!action.payload) {
+                return state;
+            }
+            return action.payload.config || null;
+        default:
             return state;
-        }
-        return action.payload.config || null;
-    default:
-        return state;
     }
 }
 
 function permissionDenied(state: boolean = false, action: IJodelAction): typeof state {
     switch (action.type) {
-    case SET_TOKEN:
-        return false;
-    case SET_PERMISSION_DENIED:
-        if (!action.payload) {
+        case SET_TOKEN:
+            return false;
+        case SET_PERMISSION_DENIED:
+            if (!action.payload) {
+                return state;
+            }
+            return action.payload.permissionDenied || false;
+        default:
             return state;
-        }
-        return action.payload.permissionDenied || false;
-    default:
-        return state;
     }
 }
 
 function recommendedChannels(state: string[] = [], action: IJodelAction): typeof state {
     switch (action.type) {
-    case SET_RECOMMENDED_CHANNELS:
-        if (!action.payload) {
+        case SET_RECOMMENDED_CHANNELS:
+            if (!action.payload) {
+                return state;
+            }
+            return action.payload.channelNames || [];
+        default:
             return state;
-        }
-        return action.payload.channelNames || [];
-    default:
-        return state;
     }
 }
 
 function localChannels(state: string[] = [], action: IJodelAction): typeof state {
     switch (action.type) {
-    case SET_LOCAL_CHANNELS:
-        if (!action.payload) {
+        case SET_LOCAL_CHANNELS:
+            if (!action.payload) {
+                return state;
+            }
+            return action.payload.channelNames || [];
+        default:
             return state;
-        }
-        return action.payload.channelNames || [];
-    default:
-        return state;
     }
 }
 
 function suggestedHashtags(state: string[] = [], action: IJodelAction): typeof state {
     switch (action.type) {
-    case SET_SUGGESTED_HASHTAGS:
-        if (!action.payload) {
+        case SET_SUGGESTED_HASHTAGS:
+            if (!action.payload) {
+                return state;
+            }
+            return action.payload.suggestedHashtags || [];
+        default:
             return state;
-        }
-        return action.payload.suggestedHashtags || [];
-    default:
-        return state;
     }
 }

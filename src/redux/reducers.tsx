@@ -18,12 +18,12 @@ export interface IJodelAppStore {
 }
 
 export const JodelApp = combineReducers<IJodelAppStore>({
-    entities,
-    postsBySection,
-    viewState,
     account,
-    settings,
+    entities,
     imageCaptcha,
+    postsBySection,
+    settings,
+    viewState,
 });
 
 export function getLocation(store: IJodelAppStore): ILocation | null {

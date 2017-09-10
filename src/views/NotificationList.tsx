@@ -9,21 +9,18 @@ import {IJodelAppStore} from '../redux/reducers';
 import {getNotificationDescription} from '../utils/notification.utils';
 import {Time} from './Time';
 
-export interface NotificationListProps {
-}
-
-export interface NotificationListComponentProps extends NotificationListProps {
+export interface INotificationListComponentProps {
     notifications: INotification[];
-    selectPostFromNotification: (postId: string) => void;
+    selectPost: (postId: string) => void;
 }
 
-class NotificationListComponent extends PureComponent<NotificationListComponentProps> {
-    public constructor(props: NotificationListComponentProps) {
+class NotificationListComponent extends PureComponent<INotificationListComponentProps> {
+    public constructor(props: INotificationListComponentProps) {
         super(props);
     }
 
     public render() {
-        const {notifications, selectPostFromNotification} = this.props;
+        const {notifications, selectPost} = this.props;
         return (
             <div className="notificationList">
                 {notifications.length === 0 ?
@@ -32,7 +29,7 @@ class NotificationListComponent extends PureComponent<NotificationListComponentP
                         <div className={classnames('notification', {unread: !n.read})}
                              key={n.notification_id}
                              onClick={() => {
-                                 selectPostFromNotification(n.post_id);
+                                 selectPost(n.post_id);
                              }}
                         >
                             <div className="type">{n.type}</div>
@@ -48,15 +45,15 @@ class NotificationListComponent extends PureComponent<NotificationListComponentP
     }
 }
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: NotificationListProps) => {
+const mapStateToProps = (state: IJodelAppStore) => {
     return {
         notifications: state.entities.notifications,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: NotificationListProps) => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>) => {
     return {
-        selectPostFromNotification: (postId: string) => dispatch(selectPostFromNotification(postId)),
+        selectPost: (postId: string) => dispatch(selectPostFromNotification(postId)),
     };
 };
 

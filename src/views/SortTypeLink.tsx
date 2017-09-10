@@ -6,17 +6,17 @@ import {PostListSortType} from '../enums/PostListSortType';
 import {switchPostListSortType} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 
-interface SortTypeLinkProps {
+interface ISortTypeLinkProps {
     sortType: PostListSortType;
 }
 
-interface SortTypeLinkComponentProps extends SortTypeLinkProps {
+interface ISortTypeLinkComponentProps extends ISortTypeLinkProps {
     active: boolean;
     sortType: PostListSortType;
     onClick: () => void;
 }
 
-const SortTypeLinkComponent = ({sortType, active, onClick}: SortTypeLinkComponentProps) => (
+const SortTypeLinkComponent = ({sortType, active, onClick}: ISortTypeLinkComponentProps) => (
     <div className={classnames('sortType', sortType.toLowerCase(), {active})}
          onClick={onClick}
          title={
@@ -27,13 +27,13 @@ const SortTypeLinkComponent = ({sortType, active, onClick}: SortTypeLinkComponen
     />
 );
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: SortTypeLinkProps) => {
+const mapStateToProps = (state: IJodelAppStore, ownProps: ISortTypeLinkProps) => {
     return {
         active: ownProps.sortType === state.viewState.postListSortType,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: SortTypeLinkProps) => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: ISortTypeLinkProps) => {
     return {
         onClick: () => {
             dispatch(switchPostListSortType(ownProps.sortType));

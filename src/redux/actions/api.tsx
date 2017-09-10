@@ -81,7 +81,8 @@ function handleNetworkErrors(dispatch: Dispatch<IJodelAppStore>, getState: () =>
         console.error('Permission denied');
         dispatch(setPermissionDenied(true));
     } else if (err.status === 478) {
-        console.error('Request error: Account probably not verified ' + err.status + ' ' + err.message + ': ' + err.response.text);
+        console.error('Request error: Account probably not verified ' + err.status + ' ' + err.message + ': ' +
+            err.response.text);
         dispatch(showSettings(true));
     } else {
         console.error('Request error: ' + err.status + ' ' + err.message + ': ' + err.response.text);
@@ -175,9 +176,9 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
                 apiGetPostsChannelCombo(getAuth(getState()), channel, getState().settings.useHomeLocation)
                     .then(res => {
                         dispatch(receivePosts(section, {
-                            recent: res.body.recent,
                             discussed: res.body.replied,
                             popular: res.body.voted,
+                            recent: res.body.recent,
                         }));
                         dispatch(setChannelsMeta([
                             {
@@ -196,9 +197,9 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
                 apiGetPostsHashtagCombo(getAuth(getState()), hashtag, getState().settings.useHomeLocation)
                     .then(res => {
                         dispatch(receivePosts(section, {
-                            recent: res.body.recent,
                             discussed: res.body.replied,
                             popular: res.body.voted,
+                            recent: res.body.recent,
                         }));
                     }, err => {
                         dispatch(setIsFetching(section, false));
@@ -206,81 +207,83 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
                     });
             } else {
                 switch (section) {
-                case SectionEnum.LOCATION:
-                    const loc = getLocation(getState());
-                    if (!loc) {
+                    case SectionEnum.LOCATION:
+                        const loc = getLocation(getState());
+                        if (!loc) {
+                            break;
+                        }
+                        dispatch(setIsFetching(section));
+                        apiGetPostsCombo(getAuth(getState()), loc.latitude, loc.longitude, true,
+                            getState().settings.useHomeLocation)
+                            .then(res => {
+                                dispatch(receivePosts(section, {
+                                    discussed: res.body.replied,
+                                    popular: res.body.voted,
+                                    recent: res.body.recent,
+                                }));
+                            }, err => {
+                                dispatch(setIsFetching(section, false));
+                                handleNetworkErrors(dispatch, getState, err);
+                            });
                         break;
-                    }
-                    dispatch(setIsFetching(section));
-                    apiGetPostsCombo(getAuth(getState()), loc.latitude, loc.longitude, true, getState().settings.useHomeLocation)
-                        .then(res => {
-                            dispatch(receivePosts(section, {
-                                recent: res.body.recent,
-                                discussed: res.body.replied,
-                                popular: res.body.voted,
-                            }));
-                        }, err => {
-                            dispatch(setIsFetching(section, false));
-                            handleNetworkErrors(dispatch, getState, err);
-                        });
-                    break;
-                case SectionEnum.MINE:
-                    dispatch(setIsFetching(section));
-                    apiGetPostsMineCombo(getAuth(getState()))
-                        .then(res => {
-                            dispatch(receivePosts(section, {
-                                recent: res.body.recent,
-                                discussed: res.body.replied,
-                                popular: res.body.voted,
-                            }));
-                        }, err => {
-                            dispatch(setIsFetching(section, false));
-                            handleNetworkErrors(dispatch, getState, err);
-                        });
-                    break;
-                case SectionEnum.MINE_REPLIES:
-                    dispatch(setIsFetching(section));
-                    apiGetPostsMineReplies(getAuth(getState()))
-                        .then(res => {
-                            dispatch(receivePosts(section, {
-                                recent: res.body.posts,
-                            }));
-                        }, err => {
-                            dispatch(setIsFetching(section, false));
-                            handleNetworkErrors(dispatch, getState, err);
-                        });
-                    break;
-                case SectionEnum.MINE_VOTES:
-                    dispatch(setIsFetching(section));
-                    apiGetPostsMineVotes(getAuth(getState()))
-                        .then(res => {
-                            dispatch(receivePosts(section, {
-                                recent: res.body.posts,
-                            }));
-                        }, err => {
-                            dispatch(setIsFetching(section, false));
-                            handleNetworkErrors(dispatch, getState, err);
-                        });
-                    break;
-                case SectionEnum.MINE_PINNED:
-                    dispatch(setIsFetching(section));
-                    apiGetPostsMinePinned(getAuth(getState()))
-                        .then(res => {
-                            dispatch(receivePosts(section, {
-                                recent: res.body.posts,
-                            }));
-                        }, err => {
-                            dispatch(setIsFetching(section, false));
-                            handleNetworkErrors(dispatch, getState, err);
-                        });
-                    break;
+                    case SectionEnum.MINE:
+                        dispatch(setIsFetching(section));
+                        apiGetPostsMineCombo(getAuth(getState()))
+                            .then(res => {
+                                dispatch(receivePosts(section, {
+                                    discussed: res.body.replied,
+                                    popular: res.body.voted,
+                                    recent: res.body.recent,
+                                }));
+                            }, err => {
+                                dispatch(setIsFetching(section, false));
+                                handleNetworkErrors(dispatch, getState, err);
+                            });
+                        break;
+                    case SectionEnum.MINE_REPLIES:
+                        dispatch(setIsFetching(section));
+                        apiGetPostsMineReplies(getAuth(getState()))
+                            .then(res => {
+                                dispatch(receivePosts(section, {
+                                    recent: res.body.posts,
+                                }));
+                            }, err => {
+                                dispatch(setIsFetching(section, false));
+                                handleNetworkErrors(dispatch, getState, err);
+                            });
+                        break;
+                    case SectionEnum.MINE_VOTES:
+                        dispatch(setIsFetching(section));
+                        apiGetPostsMineVotes(getAuth(getState()))
+                            .then(res => {
+                                dispatch(receivePosts(section, {
+                                    recent: res.body.posts,
+                                }));
+                            }, err => {
+                                dispatch(setIsFetching(section, false));
+                                handleNetworkErrors(dispatch, getState, err);
+                            });
+                        break;
+                    case SectionEnum.MINE_PINNED:
+                        dispatch(setIsFetching(section));
+                        apiGetPostsMinePinned(getAuth(getState()))
+                            .then(res => {
+                                dispatch(receivePosts(section, {
+                                    recent: res.body.posts,
+                                }));
+                            }, err => {
+                                dispatch(setIsFetching(section, false));
+                                handleNetworkErrors(dispatch, getState, err);
+                            });
+                        break;
                 }
             }
         }
     };
 }
 
-export function fetchMorePosts(sectionToFetch?: Section, sortTypeToFetch?: PostListSortType): ThunkAction<void, IJodelAppStore, void> {
+export function fetchMorePosts(sectionToFetch?: Section,
+                               sortTypeToFetch?: PostListSortType): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         const section = sectionToFetch ? sectionToFetch : getState().viewState.postSection;
         const sortType = sortTypeToFetch ? sortTypeToFetch : getState().viewState.postListSortType;
@@ -320,101 +323,103 @@ export function fetchMorePosts(sectionToFetch?: Section, sortTypeToFetch?: PostL
                     handleNetworkErrors(dispatch, getState, err);
                 });
         } else {
-            let skip, limit;
+            let skip;
+            let limit;
             switch (section) {
-            case SectionEnum.LOCATION:
-                let afterId;
-                if (posts !== undefined) {
-                    afterId = posts[posts.length - 1];
-                }
-                const loc = getLocation(getState());
-                if (!loc) {
+                case SectionEnum.LOCATION:
+                    let afterId;
+                    if (posts !== undefined) {
+                        afterId = posts[posts.length - 1];
+                    }
+                    const loc = getLocation(getState());
+                    if (!loc) {
+                        break;
+                    }
+                    dispatch(setIsFetching(section));
+                    apiGetPosts(getAuth(getState()), sortType, afterId, loc.latitude, loc.longitude,
+                        getState().settings.useHomeLocation)
+                        .then(res => {
+                            const p: { [sortType: string]: IApiPost[] } = {};
+                            p[sortType] = res.body.posts;
+                            dispatch(receivePosts(section, p, true));
+                        }, err => {
+                            dispatch(setIsFetching(section, false));
+                            handleNetworkErrors(dispatch, getState, err);
+                        });
                     break;
-                }
-                dispatch(setIsFetching(section));
-                apiGetPosts(getAuth(getState()), sortType, afterId, loc.latitude, loc.longitude, getState().settings.useHomeLocation)
-                    .then(res => {
-                        const p: { [sortType: string]: IApiPost[] } = {};
-                        p[sortType] = res.body.posts;
-                        dispatch(receivePosts(section, p, true));
-                    }, err => {
-                        dispatch(setIsFetching(section, false));
-                        handleNetworkErrors(dispatch, getState, err);
-                    });
-                break;
-            case SectionEnum.MINE:
-                if (posts !== undefined) {
-                    skip = posts.length;
-                    limit = 10;
-                }
-                dispatch(setIsFetching(section));
-                apiGetPostsMine(getAuth(getState()), sortType, skip, limit)
-                    .then(res => {
-                        const p: { [sortType: string]: IApiPost[] } = {};
-                        p[sortType] = res.body.posts;
-                        dispatch(receivePosts(section, p, true));
-                    }, err => {
-                        dispatch(setIsFetching(section, false));
-                        handleNetworkErrors(dispatch, getState, err);
-                    });
-                break;
-            case SectionEnum.MINE_REPLIES:
-                if (sortType != PostListSortType.RECENT) {
-                    return;
-                }
-                if (posts !== undefined) {
-                    skip = posts.length;
-                    limit = 10;
-                }
-                dispatch(setIsFetching(section));
-                apiGetPostsMineReplies(getAuth(getState()), skip, limit)
-                    .then(res => {
-                        const p: { [sortType: string]: IApiPost[] } = {};
-                        p[sortType] = res.body.posts;
-                        dispatch(receivePosts(section, p, true));
-                    }, err => {
-                        dispatch(setIsFetching(section, false));
-                        handleNetworkErrors(dispatch, getState, err);
-                    });
-                break;
-            case SectionEnum.MINE_VOTES:
-                if (sortType != PostListSortType.RECENT) {
-                    return;
-                }
-                if (posts !== undefined) {
-                    skip = posts.length;
-                    limit = 10;
-                }
-                dispatch(setIsFetching(section));
-                apiGetPostsMineVotes(getAuth(getState()), skip, limit)
-                    .then(res => {
-                        const p: { [sortType: string]: IApiPost[] } = {};
-                        p[sortType] = res.body.posts;
-                        dispatch(receivePosts(section, p, true));
-                    }, err => {
-                        dispatch(setIsFetching(section, false));
-                        handleNetworkErrors(dispatch, getState, err);
-                    });
-                break;
-            case SectionEnum.MINE_PINNED:
-                if (sortType != PostListSortType.RECENT) {
-                    return;
-                }
-                if (posts !== undefined) {
-                    skip = posts.length;
-                    limit = 10;
-                }
-                dispatch(setIsFetching(section));
-                apiGetPostsMinePinned(getAuth(getState()), skip, limit)
-                    .then(res => {
-                        const p: { [sortType: string]: IApiPost[] } = {};
-                        p[sortType] = res.body.posts;
-                        dispatch(receivePosts(section, p, true));
-                    }, err => {
-                        dispatch(setIsFetching(section, false));
-                        handleNetworkErrors(dispatch, getState, err);
-                    });
-                break;
+                case SectionEnum.MINE:
+                    if (posts !== undefined) {
+                        skip = posts.length;
+                        limit = 10;
+                    }
+                    dispatch(setIsFetching(section));
+                    apiGetPostsMine(getAuth(getState()), sortType, skip, limit)
+                        .then(res => {
+                            const p: { [sortType: string]: IApiPost[] } = {};
+                            p[sortType] = res.body.posts;
+                            dispatch(receivePosts(section, p, true));
+                        }, err => {
+                            dispatch(setIsFetching(section, false));
+                            handleNetworkErrors(dispatch, getState, err);
+                        });
+                    break;
+                case SectionEnum.MINE_REPLIES:
+                    if (sortType !== PostListSortType.RECENT) {
+                        return;
+                    }
+                    if (posts !== undefined) {
+                        skip = posts.length;
+                        limit = 10;
+                    }
+                    dispatch(setIsFetching(section));
+                    apiGetPostsMineReplies(getAuth(getState()), skip, limit)
+                        .then(res => {
+                            const p: { [sortType: string]: IApiPost[] } = {};
+                            p[sortType] = res.body.posts;
+                            dispatch(receivePosts(section, p, true));
+                        }, err => {
+                            dispatch(setIsFetching(section, false));
+                            handleNetworkErrors(dispatch, getState, err);
+                        });
+                    break;
+                case SectionEnum.MINE_VOTES:
+                    if (sortType !== PostListSortType.RECENT) {
+                        return;
+                    }
+                    if (posts !== undefined) {
+                        skip = posts.length;
+                        limit = 10;
+                    }
+                    dispatch(setIsFetching(section));
+                    apiGetPostsMineVotes(getAuth(getState()), skip, limit)
+                        .then(res => {
+                            const p: { [sortType: string]: IApiPost[] } = {};
+                            p[sortType] = res.body.posts;
+                            dispatch(receivePosts(section, p, true));
+                        }, err => {
+                            dispatch(setIsFetching(section, false));
+                            handleNetworkErrors(dispatch, getState, err);
+                        });
+                    break;
+                case SectionEnum.MINE_PINNED:
+                    if (sortType !== PostListSortType.RECENT) {
+                        return;
+                    }
+                    if (posts !== undefined) {
+                        skip = posts.length;
+                        limit = 10;
+                    }
+                    dispatch(setIsFetching(section));
+                    apiGetPostsMinePinned(getAuth(getState()), skip, limit)
+                        .then(res => {
+                            const p: { [sortType: string]: IApiPost[] } = {};
+                            p[sortType] = res.body.posts;
+                            dispatch(receivePosts(section, p, true));
+                        }, err => {
+                            dispatch(setIsFetching(section, false));
+                            handleNetworkErrors(dispatch, getState, err);
+                        });
+                    break;
             }
         }
     };
@@ -439,21 +444,22 @@ export function fetchMoreComments(): ThunkAction<void, IJodelAppStore, void> {
 export function updatePost(postId: string): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         const post = getPost(getState(), postId);
-        if (post == undefined) {
+        if (!post) {
             dispatch(fetchPost(postId));
         } else {
             const count = post.child_count;
             const children = post.children;
-            if (count == undefined || children == undefined || children.length == 0) {
+            if (!count || !children || children.length === 0) {
                 dispatch(fetchPost(postId));
-            } else if (children.length == count) {
+            } else if (children.length === count) {
                 dispatch(fetchCompletePost(postId));
             }
         }
     };
 }
 
-function getAllPostDetails(dispatch: Dispatch<IJodelAppStore>, getState: () => IJodelAppStore, postId: string, nextReply?: string): Promise<request.Response | void> {
+function getAllPostDetails(dispatch: Dispatch<IJodelAppStore>, getState: () => IJodelAppStore, postId: string,
+                           nextReply?: string): Promise<request.Response | void> {
     return apiGetPostDetails(getAuth(getState()), postId, true, nextReply, false)
         .then(res => {
                 if (!res.body.next) {
@@ -533,18 +539,20 @@ export function getConfig(): ThunkAction<void, IJodelAppStore, void> {
     };
 }
 
-export function addPost(text: string, image?: string, channel?: string, ancestor?: string, color = 'FF9908'): ThunkAction<Promise<Section | null>, IJodelAppStore, void> {
+export function addPost(text: string, image?: string, channel?: string, ancestor?: string,
+                        color = 'FF9908'): ThunkAction<Promise<Section | null>, IJodelAppStore, void> {
     return (dispatch, getState) => {
         const loc = getLocation(getState());
         if (!loc) {
             return Promise.reject('No location available to post');
         }
-        return apiAddPost(getAuth(getState()), channel, ancestor, color, 0.0, loc.latitude, loc.longitude, loc.city, loc.country, text, image, getState().settings.useHomeLocation)
+        return apiAddPost(getAuth(getState()), channel, ancestor, color, 0.0, loc.latitude, loc.longitude, loc.city,
+            loc.country, text, image, getState().settings.useHomeLocation)
             .then(res => {
-                    if (ancestor != undefined) {
+                    if (ancestor) {
                         dispatch(updatePost(ancestor));
                         return null;
-                    } else if (channel != undefined) {
+                    } else if (channel) {
                         const section = 'channel:' + channel;
                         dispatch(invalidatePosts(section));
                         dispatch(fetchPostsIfNeeded(section));
@@ -572,7 +580,8 @@ export function setDeviceUid(deviceUid: string): ThunkAction<void, IJodelAppStor
         apiGetAccessToken(deviceUid, loc.latitude, loc.longitude, loc.city, loc.country)
             .then(res => {
                 dispatch(_setDeviceUID(deviceUid));
-                dispatch(setToken(res.body.distinct_id, res.body.access_token, res.body.refresh_token, res.body.expiration_date, res.body.token_type));
+                dispatch(setToken(res.body.distinct_id, res.body.access_token, res.body.refresh_token,
+                    res.body.expiration_date, res.body.token_type));
                 dispatch(switchPostSection('location'));
                 dispatch(getKarma());
                 dispatch(getConfig());
@@ -595,7 +604,8 @@ export function refreshAccessToken(): ThunkAction<void, IJodelAppStore, void> {
                         return;
                     }
                     if (res.body.upgraded === true) {
-                        dispatch(setToken(account.token.distinctId, res.body.access_token, account.token.refresh, res.body.expiration_date, res.body.token_type));
+                        dispatch(setToken(account.token.distinctId, res.body.access_token, account.token.refresh,
+                            res.body.expiration_date, res.body.token_type));
                         dispatch(fetchPostsIfNeeded());
                     }
                 },
@@ -618,7 +628,8 @@ function getAuth(state: IJodelAppStore) {
     return state.account.token.access;
 }
 
-export function setLocation(latitude: number, longitude: number, city: string = '', country = 'DE'): ThunkAction<void, IJodelAppStore, void> {
+export function setLocation(latitude: number, longitude: number, city: string = '',
+                            country = 'DE'): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         latitude = Math.round(latitude * 100) / 100;
         longitude = Math.round(longitude * 100) / 100;
@@ -632,7 +643,8 @@ export function setLocation(latitude: number, longitude: number, city: string = 
     };
 }
 
-export function setHome(latitude: number, longitude: number, city: string = '', country = 'DE'): ThunkAction<void, IJodelAppStore, void> {
+export function setHome(latitude: number, longitude: number, city: string = '',
+                        country = 'DE'): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         latitude = Math.round(latitude * 100) / 100;
         longitude = Math.round(longitude * 100) / 100;
@@ -747,11 +759,11 @@ export function verify(): ThunkAction<void, IJodelAppStore, void> {
             const token = res.body.gcm_token;
             const android_account = res.body.android_account;
             return apiSetPushToken(getAuth(getState()), Settings.CLIENT_ID, token)
-                .then(res => {
+                .then(() => {
                     return android_account;
                 });
-        }).then(android_account => {
-            return receiveGcmPushVerification(android_account);
+        }).then(androidAccount => {
+            return receiveGcmPushVerification(androidAccount);
         }).then(res => {
             const verification = res.body.verification;
             return apiVerifyPush(getAuth(getState()), verification.server_time, verification.verification_code);
@@ -811,7 +823,7 @@ export function searchPosts(message: string, suggested = false): ThunkAction<voi
     return (dispatch, getState) => {
         apiSearchPosts(getAuth(getState()), message, suggested, getState().settings.useHomeLocation)
             .then(res => {
-                    console.log(res.body);
+                    console.info(res.body);
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     };

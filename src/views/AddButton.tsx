@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {MouseEvent} from 'react';
 
-export interface AddButtonProps {
+export interface IAddButtonProps {
     onClick: (e: MouseEvent<HTMLElement>) => void;
 }
 
-const AddButton = ({onClick}: AddButtonProps) => {
+const AddButton = ({onClick}: IAddButtonProps) => {
     return (
         <div className="addButton" onClick={onClick}>
         </div>

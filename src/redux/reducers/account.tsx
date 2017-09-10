@@ -16,7 +16,6 @@ import {SET_LOCAL_CHANNELS, SET_SUGGESTED_HASHTAGS} from '../actions/state';
 export const ACCOUNT_VERSION = 3;
 
 export function migrateAccount(storedState: IAccountStore, oldVersion: number): IAccountStore {
-    storedState.permissionDenied = false;
     if (oldVersion < 2) {
         storedState.recommendedChannels = [];
     }

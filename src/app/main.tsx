@@ -135,7 +135,7 @@ if (!account.token || !account.token.access) {
 } else {
     const now = new Date().getTime() / 1000;
     const timeToExpire = 60 * 60 * 24 * 4;
-    if (now > account.token.expirationDate - timeToExpire) {
+    if (account.permissionDenied || now > account.token.expirationDate - timeToExpire) {
         store.dispatch(refreshAccessToken());
     } else {
         store.dispatch(fetchPostsIfNeeded());

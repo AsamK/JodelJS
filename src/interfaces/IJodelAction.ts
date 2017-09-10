@@ -8,6 +8,7 @@ import {IConfig} from './IConfig';
 import {ILocation} from './ILocation';
 import {INotification} from './INotification';
 import {IApiPost} from './IPost';
+import {IToast} from './IToast';
 import {IToken} from './IToken';
 
 export interface IPayload {
@@ -37,6 +38,8 @@ export interface IPayload {
     postsBySortType?: Array<{ sortType: PostListSortType, posts: string[] }>;
     notifications?: INotification[];
     suggestedHashtags?: string[];
+    toast?: IToast;
+    toastId?: number;
 }
 
 export interface IJodelAction extends Action {

@@ -31,6 +31,7 @@ import {PostListContainer} from './PostListContainer';
 import {PostTopBar} from './PostTopBar';
 import Progress from './Progress';
 import {Search} from './Search';
+import {ToastContainer} from './ToastContainer';
 import {TopBar} from './TopBar';
 
 export interface IJodelProps {
@@ -110,6 +111,7 @@ class JodelComponent extends Component<IJodelProps> {
                             this.props.dispatch(showChannelList(!this.props.channelListShown));
                         }}
                 />
+                <ToastContainer/>
                 <div className={classnames('list', {
                     isChannel: this.props.selectedChannel !== undefined,
                     postShown: this.props.selectedPost != null,

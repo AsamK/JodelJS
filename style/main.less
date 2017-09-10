@@ -9,8 +9,10 @@
 
 @bar-shadow: 0 0 6px 3px rgba(0, 0, 0, 0.16), 0 0 6px 3px rgba(0, 0, 0, 0.23);
 @menu-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
+@toast-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
 
 @z-index-overlay: 200;
+@z-index-toast-layer: 150;
 @z-index-top-layer: 100;
 @z-index-sub-layer: 80;
 
@@ -643,8 +645,8 @@ html, body, #content, .jodel {
 
   .manualLocation {
     label {
-    display: block;
-      }
+      display: block;
+    }
   }
 
   .manualLocation {
@@ -735,5 +737,36 @@ a.hashtag {
 .verificationImage {
   img {
     width: 100%;
+  }
+}
+
+.toast-container {
+  position: relative;
+  z-index: @z-index-toast-layer;
+
+  .toast {
+    box-shadow: @toast-shadow;
+    cursor: pointer;
+    left: 0;
+    margin: 10px 20px;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    &-message {
+      padding: 10px;
+    }
+
+    &-error {
+      background-color: red;
+    }
+
+    &-warning {
+      background-color: orange;
+    }
+
+    &-info {
+      background-color: white;
+    }
   }
 }

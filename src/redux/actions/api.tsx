@@ -50,6 +50,7 @@ import {
 import Settings from '../../app/settings';
 import {PostListSortType} from '../../enums/PostListSortType';
 import {Section, SectionEnum} from '../../enums/Section';
+import {ToastType} from '../../enums/ToastType';
 import {IConfig} from '../../interfaces/IConfig';
 import {IApiPost} from '../../interfaces/IPost';
 import {setPermissionDenied, setToken, showSettings, switchPostSection, updatePosts} from '../actions';
@@ -73,18 +74,24 @@ import {
     setRecommendedChannels,
     setSuggestedHashtags,
 } from './state';
+import {showToast} from './toasts.actions';
 
 function handleNetworkErrors(dispatch: Dispatch<IJodelAppStore>, getState: () => IJodelAppStore, err: any) {
     if (err.status === undefined) {
+        dispatch(showToast('Kein Internet Zugriff oder Server down.', ToastType.WARNING));
         console.error('No internet access or server down…,', err);
     } else if (err.status === 401) {
+        dispatch(showToast('Zugriff verweigert, token ist abgelaufen.', ToastType.ERROR));
         console.error('Permission denied');
         dispatch(setPermissionDenied(true));
     } else if (err.status === 478) {
+        dispatch(showToast('Zugriff verweigert, Konto nicht verifiziert.', ToastType.ERROR));
         console.error('Request error: Account probably not verified ' + err.status + ' ' + err.message + ': ' +
             err.response.text);
         dispatch(showSettings(true));
     } else {
+        const error = err.response.body ? err.response.body.error : err.response.text;
+        dispatch(showToast(`Fehler: ${err.status} ${err.message} ${error}.`, ToastType.ERROR));
         console.error('Request error: ' + err.status + ' ' + err.message + ': ' + err.response.text);
     }
 }

@@ -105,7 +105,6 @@ class JodelComponent extends Component<IJodelProps> {
                 <FirstStart/>
             </div>;
         } else if (this.props.isConfigAvailable) {
-            const selectedPost = this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost();
             return <div className="jodel">
                 <TopBar karma={this.props.karma}
                         showSettings={() => this.props.dispatch(showSettings(true))}
@@ -126,15 +125,17 @@ class JodelComponent extends Component<IJodelProps> {
                                        onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}
                                        onLoadMore={this.onLoadMore.bind(this)}/>
                 </div>
-                <div className={classnames('detail', {postShown: this.props.selectedPost != null})}>
-                    <PostTopBar post={selectedPost}/>
-                    <PostDetails post={selectedPost}
-                                 postChildren={this.props.selectedPostChildren}
-                                 onPostClick={this.refresh.bind(this)}
-                                 onAddClick={this.handleAddCommentClick.bind(this)}
-                                 locationKnown={this.props.locationKnown}
-                                 onLoadMore={this.onLoadMoreComments.bind(this)}/>
-                </div>
+                {this.props.selectedPost ?
+                    <div className={classnames('detail', {postShown: this.props.selectedPost != null})}>
+                        <PostTopBar post={this.props.selectedPost}/>
+                        <PostDetails post={this.props.selectedPost}
+                                     postChildren={this.props.selectedPostChildren}
+                                     onPostClick={this.refresh.bind(this)}
+                                     onAddClick={this.handleAddCommentClick.bind(this)}
+                                     locationKnown={this.props.locationKnown}
+                                     onLoadMore={this.onLoadMoreComments.bind(this)}/>
+                    </div>
+                    : null}
                 {this.props.selectedPicturePost ?
                     <div className="bigPicture" onMouseUp={e => window.history.back()}>
                         <img alt={this.props.selectedPicturePost.message}
@@ -142,7 +143,7 @@ class JodelComponent extends Component<IJodelProps> {
                         <img alt={this.props.selectedPicturePost.message}
                              src={'https:' + this.props.selectedPicturePost.image_url}/>
                     </div>
-                    : ''}
+                    : null}
                 <AddPost/>
                 <div className={classnames('channels', {channelListShown: this.props.channelListShown})}>
                     <ChannelList channels={this.props.followedChannels}
@@ -166,21 +167,6 @@ class JodelComponent extends Component<IJodelProps> {
             return null;
         }
     }
-}
-
-function getEmptyPost(): IPost {
-    return {
-        color: '000000',
-        created_at: '0000-00-00T00:00:00.000Z',
-        distance: 0,
-        location: {name: ''},
-        message: '',
-        post_id: '',
-        post_own: 'team',
-        updated_at: '0000-00-00T00:00:00.000Z',
-        user_handle: '',
-        vote_count: 0,
-    };
 }
 
 const mapStateToProps = (state: IJodelAppStore): Partial<IJodelProps> => {

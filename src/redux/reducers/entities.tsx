@@ -1,11 +1,13 @@
 import {combineReducers} from 'redux';
+import {IApiPostReplyPost} from '../../interfaces/IApiPostDetailsPost';
+import {IApiPostListPost} from '../../interfaces/IApiPostListPost';
 import {IChannel} from '../../interfaces/IChannel';
 import {IJodelAction} from '../../interfaces/IJodelAction';
 import {INotification} from '../../interfaces/INotification';
-import {IApiPost, IPost} from '../../interfaces/IPost';
+import {IPost} from '../../interfaces/IPost';
 
 import {PINNED_POST, RECEIVE_POSTS} from '../actions';
-import {RECEIVE_NOTIFICATIONS, SET_NOTIFICATION_POST_READ} from '../actions/state';
+import {RECEIVE_NOTIFICATIONS, RECEIVE_POST, SET_NOTIFICATION_POST_READ, VOTED_POST} from '../actions/state';
 import {IJodelAppStore} from '../reducers';
 
 export interface IEntitiesStore {
@@ -20,41 +22,31 @@ export const entities = combineReducers({
     posts,
 });
 
-function convertApiPostToPost(post: IApiPost): IPost {
+function convertApiReplyPostToReplyPost(replies: IApiPostReplyPost[]): string[] | undefined {
+    if (!replies) {
+        return undefined;
+    }
     const seen: { [key: string]: boolean } = {};
-    const newChildren = post.children ?
-        post.children.map(child => child.post_id).filter(c => seen[c] ? false : (seen[c] = true)) :
-        undefined;
-    return {...post, children: newChildren};
+    return replies.map(child => child.post_id)
+        .filter(c => seen[c] ? false : (seen[c] = true));
 }
 
 function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): typeof state {
     const payload = action.payload;
     if (payload && payload.entities !== undefined) {
         const newState: typeof state = {};
-        payload.entities.forEach((post: IApiPost) => {
-            if (post.children) {
-                post.children.forEach((child: IApiPost) => newState[child.post_id] = convertApiPostToPost(child));
+        payload.entities.forEach((post): void => {
+            const postChildren = (post as IApiPostListPost).children || undefined;
+            if (postChildren && postChildren.length > 0) {
+                console.warn('Received a post with unexpected children: ', post.post_id);
             }
 
             const oldPost = state[post.post_id];
-            let newPost = {...oldPost, ...convertApiPostToPost(post)};
-            if (oldPost && oldPost.children && newPost.children) {
-                if (payload.append === true) {
-                    newPost = {
-                        ...newPost,
-                        child_count: (newPost.child_count ? newPost.child_count : 0) +
-                        (oldPost.children ? oldPost.children.length : 0),
-                        children: [...oldPost.children, ...newPost.children],
-                    };
-                } else if (newPost.children && newPost.children.length === 0) {
-                    // The old post has children and the new post has children,
-                    // which however aren't included in the new data
-                    // -> keep old children
-                    newPost = {...newPost, children: oldPost.children};
-                }
-            }
-            newState[post.post_id] = newPost;
+            newState[post.post_id] = {
+                ...oldPost,
+                ...post,
+                children: oldPost ? oldPost.children : [],
+            };
         });
         state = {...state, ...newState};
     }
@@ -70,6 +62,55 @@ function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): type
                     pin_count: payload.pinCount,
                     pinned: payload.pinned,
                 },
+            };
+        case VOTED_POST:
+            if (!payload || !payload.postId || payload.voteCount === undefined) {
+                return state;
+            }
+            return {
+                ...state,
+                [payload.postId]: {
+                    ...state[payload.postId],
+                    vote_count: payload.voteCount,
+                    voted: payload.voted,
+                },
+            };
+        case RECEIVE_POST:
+            if (!payload || !payload.post) {
+                return state;
+            }
+            const childrenEntities: typeof state = {};
+            const post = payload.post;
+            const postChildren = post.children;
+
+            if (postChildren) {
+                postChildren.forEach(child => childrenEntities[child.post_id] = child);
+            }
+
+            const oldPost = state[post.post_id];
+            const newPost = {
+                ...oldPost,
+                ...post,
+                children: convertApiReplyPostToReplyPost(postChildren),
+                next_reply: payload.nextReply,
+                shareable: payload.shareable,
+            };
+            if (oldPost && oldPost.children && newPost.children) {
+                if (payload.append === true) {
+                    newPost.child_count = (newPost.child_count ? newPost.child_count : 0) +
+                        (oldPost.children ? oldPost.children.length : 0);
+                    newPost.children = [...oldPost.children, ...newPost.children];
+                } else if (newPost.children && newPost.children.length === 0) {
+                    // The old post has children and the new post has children,
+                    // which however aren't included in the new data
+                    // -> keep old children
+                    newPost.children = oldPost.children;
+                }
+            }
+            return {
+                ...state,
+                ...childrenEntities,
+                [post.post_id]: newPost,
             };
         default:
             return state;

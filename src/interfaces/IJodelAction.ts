@@ -2,27 +2,32 @@ import {Action} from 'redux';
 
 import {PostListSortType} from '../enums/PostListSortType';
 import {Section} from '../enums/Section';
+import {VoteType} from '../enums/VoteType';
 import {IViewStateStore} from '../redux/reducers/viewState';
+import {IApiConfig} from './IApiConfig';
+import {IApiPostDetailsPost, IApiPostReplyPost} from './IApiPostDetailsPost';
+import {IApiPostListPost} from './IApiPostListPost';
 import {IChannel} from './IChannel';
-import {IConfig} from './IConfig';
 import {ILocation} from './ILocation';
 import {INotification} from './INotification';
-import {IApiPost} from './IPost';
 import {IToast} from './IToast';
 import {IToken} from './IToken';
 
 export interface IPayload {
-    entities?: IApiPost[];
+    entities?: Array<IApiPostListPost | IApiPostReplyPost>;
+    post?: IApiPostDetailsPost;
     entitiesChannels?: IChannel[];
     section?: Section;
     append?: boolean;
     postId?: string | null;
     pinned?: boolean;
     pinCount?: number;
+    voted?: VoteType;
+    voteCount?: number;
     karma?: number;
     deviceUid?: string;
     token?: IToken;
-    config?: IConfig;
+    config?: IApiConfig;
     permissionDenied?: boolean;
     channelNames?: string[];
     location?: ILocation;
@@ -40,6 +45,8 @@ export interface IPayload {
     suggestedHashtags?: string[];
     toast?: IToast;
     toastId?: number;
+    nextReply?: string | null;
+    shareable?: boolean;
 }
 
 export interface IJodelAction extends Action {

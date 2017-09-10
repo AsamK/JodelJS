@@ -3,6 +3,7 @@ import {ThunkAction} from 'redux-thunk';
 
 import {PostListSortType} from '../enums/PostListSortType';
 import {Section} from '../enums/Section';
+import {TokenType} from '../enums/TokenType';
 import {
     fetchPostsIfNeeded,
     getConfig,
@@ -119,7 +120,7 @@ export function updateLocation(): ThunkAction<void, IJodelAppStore, void> {
 }
 
 export function setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number,
-                         tokenType: string): ThunkAction<void, IJodelAppStore, void> {
+                         tokenType: TokenType): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         // TODO clear cached posts
         dispatch(_setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType));

@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 
-import {IConfig} from '../../interfaces/IConfig';
+import {IApiConfig} from '../../interfaces/IApiConfig';
 import {IJodelAction} from '../../interfaces/IJodelAction';
 import {IToken} from '../../interfaces/IToken';
 import {
@@ -29,7 +29,7 @@ export interface IAccountStore {
     karma: number;
     deviceUid: string | null;
     token: IToken | null;
-    config: IConfig | null;
+    config: IApiConfig | null;
     permissionDenied: boolean;
     recommendedChannels: string[];
     localChannels: string[];
@@ -83,7 +83,7 @@ function token(state: IToken | null = null, action: IJodelAction): typeof state 
     }
 }
 
-function config(state: IConfig | null = null, action: IJodelAction): typeof state {
+function config(state: IApiConfig | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_CONFIG:
             if (!action.payload) {

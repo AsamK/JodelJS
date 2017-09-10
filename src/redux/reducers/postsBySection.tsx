@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 import {IJodelAction} from '../../interfaces/IJodelAction';
 import {INVALIDATE_POSTS, RECEIVE_POSTS, SET_IS_FETCHING} from '../actions';
+import {RECEIVE_POST} from '../actions/state';
 
 function uniq(a: string[]): string[] {
     const seen: { [key: string]: boolean } = {};
@@ -48,6 +49,7 @@ const posts = combineReducers<IPostSection>({
 
 function isFetching(state = false, action: IJodelAction): typeof state {
     switch (action.type) {
+        case RECEIVE_POST:
         case RECEIVE_POSTS:
             return false;
         case SET_IS_FETCHING:

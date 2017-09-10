@@ -1,10 +1,13 @@
 import {PostListSortType} from '../../enums/PostListSortType';
 import {Section} from '../../enums/Section';
+import {TokenType} from '../../enums/TokenType';
+import {VoteType} from '../../enums/VoteType';
+import {IApiConfig} from '../../interfaces/IApiConfig';
+import {IApiPostDetailsPost, IApiPostReplyPost} from '../../interfaces/IApiPostDetailsPost';
+import {IApiPostListPost} from '../../interfaces/IApiPostListPost';
 import {IChannel} from '../../interfaces/IChannel';
-import {IConfig} from '../../interfaces/IConfig';
 import {IJodelAction} from '../../interfaces/IJodelAction';
 import {INotification} from '../../interfaces/INotification';
-import {IApiPost} from '../../interfaces/IPost';
 import {IViewStateStore} from '../reducers/viewState';
 
 export const SWITCH_POST_LIST_SORT_TYPE = 'SWITCH_POST_LIST_CONTAINER_STATE';
@@ -81,11 +84,12 @@ export function replaceViewState(newViewState: IViewStateStore): IJodelAction {
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 
-export function receivePosts(section: Section, postsBySortType: { [sortType: string]: IApiPost[] },
+export function receivePosts(section: Section,
+                             postsBySortType: { [sortType: string]: Array<IApiPostListPost | IApiPostReplyPost> },
                              append = false): IJodelAction {
     const payload: {
         append: boolean,
-        entities: IApiPost[],
+        entities: Array<IApiPostListPost | IApiPostReplyPost>,
         postsBySortType: Array<{ sortType: PostListSortType, posts: string[] }>,
         section: Section,
     } = {
@@ -123,14 +127,19 @@ export function receivePosts(section: Section, postsBySortType: { [sortType: str
     };
 }
 
-export function receivePost(post: IApiPost, append = false): IJodelAction {
+export const RECEIVE_POST = 'RECEIVE_POST';
+
+export function receivePost(post: IApiPostDetailsPost, append = false, nextReply?: string | null,
+                            shareable?: boolean): IJodelAction {
     return {
         payload: {
             append,
-            entities: [post],
+            nextReply,
+            post,
+            shareable,
         },
         receivedAt: Date.now(),
-        type: RECEIVE_POSTS,
+        type: RECEIVE_POST,
     };
 }
 
@@ -171,6 +180,19 @@ export function pinnedPost(postId: string, pinned: boolean, pinCount: number): I
     };
 }
 
+export const VOTED_POST = 'VOTED_POST';
+
+export function votedPost(postId: string, voted: VoteType, voteCount: number): IJodelAction {
+    return {
+        payload: {
+            postId,
+            voteCount,
+            voted,
+        },
+        type: VOTED_POST,
+    };
+}
+
 export const SELECT_POST = 'SELECT_POST';
 
 export function _selectPost(postId: string | null): IJodelAction {
@@ -201,7 +223,7 @@ export function _setKarma(karma: number): IJodelAction {
 
 export const SET_CONFIG = 'SET_CONFIG';
 
-export function _setConfig(config: IConfig): IJodelAction {
+export function _setConfig(config: IApiConfig): IJodelAction {
     return {
         payload: {config},
         receivedAt: Date.now(),
@@ -276,7 +298,7 @@ export function _setPermissionDenied(permissionDenied: boolean): IJodelAction {
 export const SET_TOKEN = 'SET_TOKEN';
 
 export function _setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number,
-                          tokenType: string): IJodelAction {
+                          tokenType: TokenType): IJodelAction {
     return {
         payload: {
             token: {

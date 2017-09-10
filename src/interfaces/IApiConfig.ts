@@ -1,12 +1,12 @@
-export interface IExperiment {
+export interface IApiExperiment {
     features: string[];
     group: string;
     name: string;
 }
 
-export interface IConfig {
+export interface IApiConfig {
     channels_follow_limit: number;
-    experiments: IExperiment[];
+    experiments: IApiExperiment[];
     feedInternationalized: boolean;
     feedInternationalizable: boolean;
     followed_channels: string[];

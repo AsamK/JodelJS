@@ -6,7 +6,6 @@ export function getNotificationDescription(notification: INotification) {
 
         case NotificationType.OJ_REPLY_REPLY:
             return 'OJ hat geantwortet';
-
         case NotificationType.OJ_REPLY_MENTION:
             return 'OJ hat dich erwähnt';
         case NotificationType.OJ_THANKS:
@@ -15,6 +14,8 @@ export function getNotificationDescription(notification: INotification) {
             return 'OJ Antwort auf deinen Pin';
         case NotificationType.REPLY:
             return 'Antwort auf deinen Jodel';
+        case NotificationType.REPLY_MENTION:
+            return 'Jemand hat dich erwähnt';
         case NotificationType.REPLY_REPLY:
             return 'Antwort auf deine Antwort';
         case NotificationType.VOTE_REPLY:

@@ -3,7 +3,7 @@ import {Component} from 'react';
 import {connect, Dispatch} from 'react-redux';
 
 import Settings from '../app/settings';
-import {IExperiment} from '../interfaces/IConfig';
+import {IApiExperiment} from '../interfaces/IApiConfig';
 import {IGeoCoordinates, ILocation} from '../interfaces/ILocation';
 import {
     _setLocation,
@@ -31,7 +31,7 @@ export interface IAppSettingsProps {
     useHomeLocation: boolean;
     imageUrl: string | null;
     imageWidth: number | null;
-    experiments: IExperiment[];
+    experiments: IApiExperiment[];
     user_type: string | null;
     moderator: boolean;
     feedInternationalized: boolean;

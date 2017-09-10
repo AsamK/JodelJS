@@ -5,6 +5,28 @@ import Settings from '../app/settings';
 import {Color} from '../enums/Color';
 import {PostListSortType} from '../enums/PostListSortType';
 import {UserType} from '../enums/UserType';
+import {IApiChannelPostListCombo} from '../interfaces/IApiChannelPostListCombo';
+import {IApiChannelsMeta} from '../interfaces/IApiChannelsMeta';
+import {IApiConfig} from '../interfaces/IApiConfig';
+import {IApiAndroidAccount, IApiGcmAccount} from '../interfaces/IApiGcmAccount';
+import {IApiGcmVerification} from '../interfaces/IApiGcmVerification';
+import {IApiHashtagPostListCombo} from '../interfaces/IApiHashtagPostListCombo';
+import {IApiImageCaptcha} from '../interfaces/IApiImageCaptcha';
+import {IApiKarma} from '../interfaces/IApiKarma';
+import {IApiLocationPostListCombo} from '../interfaces/IApiLocationPostListCombo';
+import {IApiNotificationAvailable} from '../interfaces/IApiNotificationAvailable';
+import {IApiNotifications} from '../interfaces/IApiNotifications';
+import {IApiPin} from '../interfaces/IApiPin';
+import {IApiPostAdded} from '../interfaces/IApiPostAdded';
+import {IApiPostDetails} from '../interfaces/IApiPostDetails';
+import {IApiPostListCombo} from '../interfaces/IApiPostListCombo';
+import {IApiPostListSingle} from '../interfaces/IApiPostListSingle';
+import {IApiRecommendedChannels} from '../interfaces/IApiRecommendedChannels';
+import {IApiRefreshToken} from '../interfaces/IApiRefreshToken';
+import {IApiRegister} from '../interfaces/IApiRegister';
+import {IApiShare} from '../interfaces/IApiShare';
+import {IApiVerify} from '../interfaces/IApiVerify';
+import {IApiVote} from '../interfaces/IApiVote';
 
 const API_PATH_V2 = '/v2';
 const API_PATH_V3 = '/v3';
@@ -35,8 +57,8 @@ function computeSignature(auth: string | undefined, method: string, url: string,
  * Create a new android gcm account
  * @returns {Promise<request.Response>}
  */
-export function getGcmAndroidAccount() {
-    return new Promise<request.Response>((resolve, reject) => {
+export function getGcmAndroidAccount(): Promise<IApiGcmAccount> {
+    return new Promise((resolve, reject) => {
         const req = request('GET', Settings.GCM_ACCOUNT_HELPER_URL)
             .set('Accept', 'application/json');
 
@@ -47,7 +69,7 @@ export function getGcmAndroidAccount() {
                 } else if (res.body.error) {
                     reject(res.body.error);
                 } else {
-                    resolve(res);
+                    resolve(res.body);
                 }
             });
     });
@@ -55,11 +77,9 @@ export function getGcmAndroidAccount() {
 
 /**
  * Receive the gcm push verification sent by the jodel server via GCM
- * @param {{android_id: string; security_token: string}} androidAccount
- * @returns {Promise<request.Response>}
  */
-export function receiveGcmPushVerification(androidAccount: { android_id: string, security_token: string }) {
-    return new Promise<request.Response>((resolve, reject) => {
+export function receiveGcmPushVerification(androidAccount: IApiAndroidAccount): Promise<IApiGcmVerification> {
+    return new Promise((resolve, reject) => {
         const req = request('POST', Settings.GCM_RECEIVE_HELPER_URL)
             .type('json')
             .set('Content-Type', 'application/json; charset=UTF-8');
@@ -69,14 +89,15 @@ export function receiveGcmPushVerification(androidAccount: { android_id: string,
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(res);
+                    resolve(res.body);
                 }
             });
     });
 }
 
-export function jodelRequest(auth: string | undefined, method: string, url: string, query: object | string, data: any) {
-    return new Promise<request.Response>((resolve, reject) => {
+export function jodelRequest(auth: string | undefined, method: string, url: string, query: object | string,
+                             data: any): Promise<request.Response> {
+    return new Promise((resolve, reject) => {
         const dataString = JSON.stringify(data);
         const timestamp = new Date().toISOString();
         const sig = computeSignature(auth, method, url, timestamp, dataString);
@@ -106,21 +127,23 @@ export function jodelRequest(auth: string | undefined, method: string, url: stri
     });
 }
 
-/*export function apiGetPosts(callback) {
- return jodelRequest("GET", Settings.API_SERVER + API_PATH_V2 + "/posts/", {}, {});
- }*/
+// export function apiGetPosts(callback) {
+//     return jodelRequest('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/', {}, {});
+// }
 
-export function apiGetPostsCombo(auth: string, latitude: number, longitude: number, stickies = true, home = false) {
+export function apiGetPostsCombo(auth: string, latitude: number, longitude: number, stickies = true,
+                                 home = false): Promise<IApiLocationPostListCombo> {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/location/combo', {
         home,
         lat: latitude,
         lng: longitude,
         stickies,
-    }, {});
+    }, {})
+        .then(res => res.body);
 }
 
 export function apiGetPosts(auth: string, sortType: PostListSortType, afterPostId: string | undefined, latitude: number,
-                            longitude: number, home = false) {
+                            longitude: number, home = false): Promise<IApiPostListSingle> {
     let type;
     switch (sortType) {
         case PostListSortType.RECENT:
@@ -140,14 +163,17 @@ export function apiGetPosts(auth: string, sortType: PostListSortType, afterPostI
         home,
         lat: latitude,
         lng: longitude,
-    }, {});
+    }, {})
+        .then(res => res.body);
 }
 
-export function apiGetPostsMineCombo(auth: string) {
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/combo', {}, {});
+export function apiGetPostsMineCombo(auth: string): Promise<IApiPostListCombo> {
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/combo', {}, {})
+        .then(res => res.body);
 }
 
-export function apiGetPostsMine(auth: string, sortType: PostListSortType, skip?: number, limit?: number) {
+export function apiGetPostsMine(auth: string, sortType: PostListSortType, skip?: number,
+                                limit?: number): Promise<IApiPostListSingle> {
     let type;
     switch (sortType) {
         case PostListSortType.RECENT:
@@ -165,36 +191,42 @@ export function apiGetPostsMine(auth: string, sortType: PostListSortType, skip?:
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/' + type, {
         limit,
         skip,
-    }, {});
+    }, {})
+        .then(res => res.body);
 }
 
-export function apiGetPostsMineReplies(auth: string, skip?: number, limit?: number) {
+export function apiGetPostsMineReplies(auth: string, skip?: number, limit?: number): Promise<IApiPostListSingle> {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/replies', {
         limit,
         skip,
-    }, {});
+    }, {})
+        .then(res => res.body);
 }
 
-export function apiGetPostsMinePinned(auth: string, skip?: number, limit?: number) {
+export function apiGetPostsMinePinned(auth: string, skip?: number, limit?: number): Promise<IApiPostListSingle> {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/pinned', {
         limit,
         skip,
-    }, {});
+    }, {})
+        .then(res => res.body);
 }
 
-export function apiGetPostsMineVotes(auth: string, skip?: number, limit?: number) {
+export function apiGetPostsMineVotes(auth: string, skip?: number, limit?: number): Promise<IApiPostListSingle> {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/votes', {
         limit,
         skip,
-    }, {});
+    }, {})
+        .then(res => res.body);
 }
 
-export function apiGetPostsChannelCombo(auth: string, channel: string, home = false) {
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/channel/combo', {channel, home}, {});
+export function apiGetPostsChannelCombo(auth: string, channel: string,
+                                        home = false): Promise<IApiChannelPostListCombo> {
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/channel/combo', {channel, home}, {})
+        .then(res => res.body);
 }
 
 export function apiGetPostsChannel(auth: string, sortType: PostListSortType, afterPostId: string | undefined,
-                                   channel: string, home = false) {
+                                   channel: string, home = false): Promise<IApiPostListSingle> {
     let type;
     switch (sortType) {
         case PostListSortType.RECENT:
@@ -214,15 +246,18 @@ export function apiGetPostsChannel(auth: string, sortType: PostListSortType, aft
         channel,
         home,
     };
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/channel/' + type, query, {});
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/channel/' + type, query, {})
+        .then(res => res.body);
 }
 
-export function apiGetPostsHashtagCombo(auth: string, hashtag: string, home = false) {
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/hashtag/combo', {hashtag, home}, {});
+export function apiGetPostsHashtagCombo(auth: string, hashtag: string,
+                                        home = false): Promise<IApiHashtagPostListCombo> {
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/hashtag/combo', {hashtag, home}, {})
+        .then(res => res.body);
 }
 
 export function apiGetPostsHashtag(auth: string, sortType: PostListSortType, afterPostId: string | undefined,
-                                   hashtag: string, home = false) {
+                                   hashtag: string, home = false): Promise<IApiPostListSingle> {
     let type;
     switch (sortType) {
         case PostListSortType.RECENT:
@@ -242,64 +277,77 @@ export function apiGetPostsHashtag(auth: string, sortType: PostListSortType, aft
         hashtag,
         home,
     };
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/hashtag/' + type, query, {});
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/hashtag/' + type, query, {})
+        .then(res => res.body);
 }
 
-export function apiGetPost(auth: string, postId: string) {
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId, {}, {});
-}
+// export function apiGetPost(auth: string, postId: string) {
+//     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId, {}, {});
+// }
 
 export function apiGetPostDetails(auth: string, postId: string, details = true, nextReply: string | undefined,
-                                  reversed = false) {
+                                  reversed = false): Promise<IApiPostDetails> {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/' + postId + '/details', {
         details,
         reply: nextReply,
         reversed,
-    }, {});
+    }, {})
+        .then(res => res.body);
 }
 
-export function apiDeletePost(auth: string, postId: string) {
-    return jodelRequest(auth, 'DELETE', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId, {}, {});
+export function apiDeletePost(auth: string, postId: string): Promise<void> {
+    return jodelRequest(auth, 'DELETE', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId, {}, {})
+        .then(res => res.body);
 }
 
-export function apiUpVote(auth: string, postId: string) {
+export function apiUpVote(auth: string, postId: string): Promise<IApiVote> {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/upvote', {},
-        {reason_code: -1});
+        {reason_code: -1})
+        .then(res => res.body);
 }
 
-export function apiDownVote(auth: string, postId: string) {
+export function apiDownVote(auth: string, postId: string): Promise<IApiVote> {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/downvote', {},
-        {reason_code: -1});
+        {reason_code: -1})
+        .then(res => res.body);
 }
 
-export function apiGiveThanks(auth: string, postId: string) {
-    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/' + postId + '/giveThanks', {}, {});
+export function apiGiveThanks(auth: string, postId: string): Promise<void> {
+    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/' + postId + '/giveThanks', {}, {})
+        .then(res => res.body);
 }
 
-export function apiPin(auth: string, postId: string) {
-    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/pin', {}, {});
+export function apiPin(auth: string, postId: string): Promise<IApiPin> {
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/pin', {}, {})
+        .then(res => res.body);
 }
 
-export function apiUnpin(auth: string, postId: string) {
-    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/unpin', {}, {});
+export function apiUnpin(auth: string, postId: string): Promise<IApiPin> {
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/unpin', {}, {})
+        .then(res => res.body);
 }
 
-export function apiFollowChannel(auth: string, channel: string) {
-    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/followChannel', {channel}, {});
+export function apiFollowChannel(auth: string, channel: string): Promise<void> {
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/followChannel', {channel}, {})
+        .then(res => res.body);
 }
 
-export function apiUnfollowChannel(auth: string, channel: string) {
-    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/unfollowChannel', {channel}, {});
+export function apiUnfollowChannel(auth: string, channel: string): Promise<void> {
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/unfollowChannel', {channel}, {})
+        .then(res => res.body);
 }
 
-export function apiGetRecommendedChannels(auth: string, home = false) {
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/recommendedChannels', {home}, {});
+export function apiGetRecommendedChannels(auth: string, home = false): Promise<IApiRecommendedChannels> {
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/recommendedChannels', {home}, {})
+        .then(res => res.body);
 }
 
-export function apiGetFollowedChannelsMeta(auth: string, channels: { [channelName: string]: number }, home = false) {
+export function apiGetFollowedChannelsMeta(auth: string, channels: { [channelName: string]: number },
+                                           home = false): Promise<IApiChannelsMeta> {
     // Format: {"channelName": timestamp, "channel2": timestamp2}
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/user/followedChannelsMeta', {home},
-        channels);
+        channels)
+        .then(res => res.body);
 }
 
 export function apiGetSuggestedHashtags(auth: string, home = false) {
@@ -308,7 +356,8 @@ export function apiGetSuggestedHashtags(auth: string, home = false) {
 
 export function apiAddPost(auth: string, channel: string | undefined, ancestorPostId: string | undefined,
                            color: Color | undefined, locAccuracy: number, latitude: number, longitude: number,
-                           city: string, country: string, message: string, image: string | undefined, toHome = false) {
+                           city: string, country: string, message: string, image: string | undefined,
+                           toHome = false): Promise<IApiPostAdded> {
     // image must be base64 encoded string
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/', {}, {
         ancestor: ancestorPostId,
@@ -324,15 +373,18 @@ export function apiAddPost(auth: string, channel: string | undefined, ancestorPo
         },
         message,
         to_home: toHome,
-    });
+    })
+        .then(res => res.body);
 }
 
-export function apiGetConfig(auth: string) {
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/config', {}, {});
+export function apiGetConfig(auth: string): Promise<IApiConfig> {
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/config', {}, {})
+        .then(res => res.body);
 }
 
-export function apiGetKarma(auth: string) {
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/users/karma', {}, {});
+export function apiGetKarma(auth: string): Promise<IApiKarma> {
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V2 + '/users/karma', {}, {})
+        .then(res => res.body);
 }
 
 /**
@@ -341,8 +393,9 @@ export function apiGetKarma(auth: string) {
  * @param auth
  * @returns {Promise}
  */
-export function apiGetImageCaptcha(auth: string) {
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/verification/imageCaptcha', {}, {});
+export function apiGetImageCaptcha(auth: string): Promise<IApiImageCaptcha> {
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/verification/imageCaptcha', {}, {})
+        .then(res => res.body);
 }
 
 /**
@@ -350,14 +403,16 @@ export function apiGetImageCaptcha(auth: string) {
  * expected data from server: {verified: Boolean}
  * @returns {Promise}
  */
-export function apiSendVerificationAnswer(auth: string, key: string, answer: number[]) {
+export function apiSendVerificationAnswer(auth: string, key: string, answer: number[]): Promise<IApiVerify> {
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/user/verification/imageCaptcha', {}, {
         answer,
         key,
-    });
+    })
+        .then(res => res.body);
 }
 
-export function apiSetLocation(auth: string, latitude: number, longitude: number, city: string, country: string) {
+export function apiSetLocation(auth: string, latitude: number, longitude: number, city: string,
+                               country: string): Promise<void> {
     const data = {
         location: {
             city,
@@ -370,10 +425,12 @@ export function apiSetLocation(auth: string, latitude: number, longitude: number
             name: city,
         },
     };
-    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/users/location', {}, data);
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/users/location', {}, data)
+        .then(res => res.body);
 }
 
-export function apiSetHome(auth: string, latitude: number, longitude: number, city: string, country: string) {
+export function apiSetHome(auth: string, latitude: number, longitude: number, city: string,
+                           country: string): Promise<void> {
     const data = {
         location: {
             city,
@@ -386,20 +443,23 @@ export function apiSetHome(auth: string, latitude: number, longitude: number, ci
             name: city,
         },
     };
-    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/home', {}, data);
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/home', {}, data)
+        .then(res => res.body);
 }
 
-export function apiDeleteHome(auth: string) {
-    return jodelRequest(auth, 'DELETE', Settings.API_SERVER + API_PATH_V3 + '/user/home', {}, {});
+export function apiDeleteHome(auth: string): Promise<void> {
+    return jodelRequest(auth, 'DELETE', Settings.API_SERVER + API_PATH_V3 + '/user/home', {}, {})
+        .then(res => res.body);
 }
 
 export type ApiAction = 'SetHomeStarted' | 'SetHomeCompleted' | 'NewestFeedSelected' | 'MostCommentedFeedSelected';
 
-export function apiSetAction(auth: string, action: ApiAction) {
+export function apiSetAction(auth: string, action: ApiAction): Promise<void> {
     const data = {
         action,
     };
-    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/action', {}, data);
+    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/action', {}, data)
+        .then(res => res.body);
 }
 
 /**
@@ -407,75 +467,83 @@ export function apiSetAction(auth: string, action: ApiAction) {
  * @param {string} auth
  * @param {string} clientId Fixed Jodel android client id
  * @param {string} pushToken Gcm push token
- * @returns {Promise<request.Response>}
  */
-export function apiSetPushToken(auth: string, clientId: string, pushToken: string) {
+export function apiSetPushToken(auth: string, clientId: string, pushToken: string): Promise<void> {
     const data = {
         client_id: clientId,
         push_token: pushToken,
     };
-    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/users/pushToken', {}, data);
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V2 + '/users/pushToken', {}, data)
+        .then(res => res.body);
 }
 
-export function apiVerifyPush(auth: string, serverTime: number, verificationCode: string) {
+export function apiVerifyPush(auth: string, serverTime: number, verificationCode: string): Promise<void> {
     // Verify GCM push
     const data = {
         server_time: serverTime,
         verification_code: verificationCode,
     };
-    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/user/verification/push', {}, data);
+    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/user/verification/push', {}, data)
+        .then(res => res.body);
 }
 
-export function apiGetAccessToken(deviceUid: string, latitude = 0.0, longitude = 0.0, city: string, country: string) {
+export function apiGetAccessToken(deviceUid: string, latitude = 0.0, longitude = 0.0, city: string,
+                                  country: string): Promise<IApiRegister> {
     const data = {
         client_id: Settings.CLIENT_ID,
         device_uid: deviceUid,
         location: {
             city,
             country,
-            loc_accuracy: 0.0,
+            loc_accuracy: 10.56,
             loc_coordinates: {
                 lat: latitude,
                 lng: longitude,
             },
         },
     };
-    return jodelRequest(undefined, 'POST', Settings.API_SERVER + API_PATH_V2 + '/users/', {}, data);
+    return jodelRequest(undefined, 'POST', Settings.API_SERVER + API_PATH_V2 + '/users/', {}, data)
+        .then(res => res.body);
 }
 
-export function apiRefreshAccessToken(auth: string, distinctId: string, refreshToken: string) {
+export function apiRefreshAccessToken(auth: string, distinctId: string,
+                                      refreshToken: string): Promise<IApiRefreshToken> {
     const data = {
         current_client_id: Settings.CLIENT_ID,
         distinct_id: distinctId,
         refresh_token: refreshToken,
     };
-    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V2 + '/users/refreshToken', {}, data);
+    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V2 + '/users/refreshToken', {}, data)
+        .then(res => res.body);
 }
 
-export function apiIsNotificationAvailable(auth: string) {
-    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/notifications/new', {}, {});
+export function apiIsNotificationAvailable(auth: string): Promise<IApiNotificationAvailable> {
+    return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/user/notifications/new', {}, {})
+        .then(res => res.body);
 }
 
-export function apiGetNotifications(auth: string) {
-    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/notifications', {}, {});
+export function apiGetNotifications(auth: string): Promise<IApiNotifications> {
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/notifications', {}, {})
+        .then(res => res.body);
 }
 
-export function apiSetNotificationPostRead(auth: string, postId: string) {
+export function apiSetNotificationPostRead(auth: string, postId: string): Promise<void> {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/notifications/post/' + postId + '/read',
-        {}, {});
+        {}, {})
+        .then(res => res.body);
 }
 
 /**
  * Set the user's language on the server
  * @param auth
- * @param language Language name in ISO 639-1 format, e.g. 'de'
+ * @param language Language name in ISO 639-1 format, e.g. 'de-de'
  */
 export function apiSetUserLanguage(auth: string, language: string) {
     return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/user/language', {}, {language});
 }
 
 /**
- * Set the user's language on the server
+ * Set the user's profile on the server
  * @param {string} auth
  * @param {string} userType User profile type, e.g. student
  * @param {Number} [age] User's age
@@ -495,8 +563,9 @@ export function apiSetUserProfile(auth: string, userType: UserType, age = 0) {
  * @param {number} postId The postId you want to share
  * @returns {*} a server generated url
  */
-export function apiSharePost(auth: string, postId: string) {
-    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/' + postId + '/share', {}, {});
+export function apiSharePost(auth: string, postId: string): Promise<IApiShare> {
+    return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/' + postId + '/share', {}, {})
+        .then(res => res.body);
 }
 
 export function apiSearchPosts(auth: string, message: string, suggested = false,

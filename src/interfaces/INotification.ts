@@ -15,4 +15,5 @@ export interface INotification {
     vote_count?: number;
     color: Color;
     notification_id: string;
+    thumbnail_url: string;
 }

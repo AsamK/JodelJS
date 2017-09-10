@@ -139,10 +139,10 @@ if (!account.token || !account.token.access) {
         store.dispatch(refreshAccessToken());
     } else {
         store.dispatch(fetchPostsIfNeeded());
+        store.dispatch(getConfig());
+        store.dispatch(getNotifications());
+        store.dispatch(getKarma());
     }
-    store.dispatch(getConfig());
-    store.dispatch(getNotifications());
-    store.dispatch(getKarma());
 }
 store.dispatch(updateLocation());
 

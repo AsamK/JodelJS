@@ -84,8 +84,14 @@ function handleNetworkErrors(dispatch: Dispatch<IJodelAppStore>, getState: () =>
         dispatch(showToast('Zugriff verweigert, token ist abgelaufen.', ToastType.ERROR));
         console.error('Permission denied');
         dispatch(setPermissionDenied(true));
+    } else if (err.status === 477) {
+        const error = err.response.body ? err.response.body.error : err.response.text;
+        dispatch(showToast('Zugriff verweigert, Jodel Geheimnis ist veraltet: ' + error, ToastType.ERROR));
+        console.error('Request error: Secret is probably outdated ' + err.status + ' ' + err.message + ': ' +
+            err.response.text);
     } else if (err.status === 478) {
-        dispatch(showToast('Zugriff verweigert, Konto nicht verifiziert.', ToastType.ERROR));
+        const error = err.response.body ? err.response.body.error : err.response.text;
+        dispatch(showToast('Zugriff verweigert, Konto nicht verifiziert: ' + error, ToastType.ERROR));
         console.error('Request error: Account probably not verified ' + err.status + ' ' + err.message + ': ' +
             err.response.text);
         dispatch(showSettings(true));
@@ -590,11 +596,9 @@ export function setDeviceUid(deviceUid: string): ThunkAction<void, IJodelAppStor
                 dispatch(setToken(res.body.distinct_id, res.body.access_token, res.body.refresh_token,
                     res.body.expiration_date, res.body.token_type));
                 dispatch(switchPostSection('location'));
-                dispatch(getKarma());
-                dispatch(getConfig());
             })
             .catch(err => {
-                console.error('Failed to register user.' + err);
+                handleNetworkErrors(dispatch, getState, err);
             });
     };
 }
@@ -613,7 +617,6 @@ export function refreshAccessToken(): ThunkAction<void, IJodelAppStore, void> {
                     if (res.body.upgraded === true) {
                         dispatch(setToken(account.token.distinctId, res.body.access_token, account.token.refresh,
                             res.body.expiration_date, res.body.token_type));
-                        dispatch(fetchPostsIfNeeded());
                     }
                 },
                 err => {

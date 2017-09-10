@@ -44,6 +44,8 @@ export function getGcmAndroidAccount() {
             .end((err, res) => {
                 if (err) {
                     reject(err);
+                } else if (res.body.error) {
+                    reject(res.body.error);
                 } else {
                     resolve(res);
                 }

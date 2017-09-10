@@ -7,6 +7,8 @@ import {
     fetchPostsIfNeeded,
     getConfig,
     getFollowedChannelsMeta,
+    getKarma,
+    getNotifications,
     getRecommendedChannels,
     getSuggestedHashtags,
     setDeviceUid,
@@ -123,6 +125,8 @@ export function setToken(distinctId: string, accessToken: string, refreshToken: 
         dispatch(_setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType));
         dispatch(getConfig());
         dispatch(updatePosts());
+        dispatch(getNotifications());
+        dispatch(getKarma());
     };
 }
 

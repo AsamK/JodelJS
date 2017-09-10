@@ -51,6 +51,7 @@ export interface IJodelProps {
     channelListShown: boolean;
     notificationsShown: boolean;
     searchShown: boolean;
+    isConfigAvailable: boolean;
     dispatch: Dispatch<IJodelAppStore>;
 }
 
@@ -100,9 +101,10 @@ class JodelComponent extends Component<IJodelProps> {
     public render() {
         if (!this.props.deviceUid) {
             return <div className="jodel">
+                <ToastContainer/>
                 <FirstStart/>
             </div>;
-        } else {
+        } else if (this.props.isConfigAvailable) {
             const selectedPost = this.props.selectedPost != null ? this.props.selectedPost : getEmptyPost();
             return <div className="jodel">
                 <TopBar karma={this.props.karma}
@@ -160,6 +162,8 @@ class JodelComponent extends Component<IJodelProps> {
                 </div>
                 <Progress/>
             </div>;
+        } else {
+            return null;
         }
     }
 }
@@ -204,6 +208,7 @@ const mapStateToProps = (state: IJodelAppStore): Partial<IJodelProps> => {
         channelListShown: state.viewState.channelList.visible,
         deviceUid: state.account.deviceUid,
         followedChannels: followedChannels === undefined ? [] : followedChannels.map(c => getChannel(state, c)),
+        isConfigAvailable: !!state.account.config,
         isRegistered: state.account.token !== null,
         karma: state.account.karma,
         localChannels: state.account.localChannels

@@ -5,6 +5,7 @@ import {connect, Dispatch} from 'react-redux';
 import {Color} from '../enums/Color';
 import {addPost, switchPostSection} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
+import {resizePicture} from '../utils/picture.utils';
 import ColorPicker from './ColorPicker';
 
 export interface IAddPostComponentProps {
@@ -20,6 +21,9 @@ export interface IAddPostComponentState {
     image: File | undefined;
     color: Color | undefined;
 }
+
+const MAX_PICTURE_WIDTH = 640;
+const MAX_POST_CHARS = 230;
 
 export class AddPostComponent extends PureComponent<IAddPostComponentProps, IAddPostComponentState> {
     constructor(props: IAddPostComponentProps) {
@@ -66,13 +70,11 @@ export class AddPostComponent extends PureComponent<IAddPostComponentProps, IAdd
         }
         const form = event.target;
         if (this.state.image) {
-            const fileReader = new FileReader();
-            fileReader.onload = () => {
-                const url = fileReader.result;
-                const encodedImage = url.substr(url.indexOf(',') + 1);
-                this.sendAddPost(this.state.message, encodedImage, channel, ancestor, this.state.color, form);
-            };
-            fileReader.readAsDataURL(this.state.image);
+            resizePicture(this.state.image, MAX_PICTURE_WIDTH)
+                .then(dataUrl => {
+                    const encodedImage = dataUrl.substr(dataUrl.indexOf(',') + 1);
+                    this.sendAddPost(this.state.message, encodedImage, channel, ancestor, this.state.color, form);
+                });
         } else {
             this.sendAddPost(this.state.message, undefined, channel, ancestor, this.state.color, form);
         }
@@ -94,7 +96,6 @@ export class AddPostComponent extends PureComponent<IAddPostComponentProps, IAdd
     public render() {
         const {channel, ancestor, visible} = this.props;
 
-        const MAX_POST_CHARS = 230;
         return (
             <div className={classnames('addPost', {visible})}>
                 {ancestor === null ?

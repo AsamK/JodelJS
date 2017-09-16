@@ -519,7 +519,7 @@ export function fetchCompletePost(postId: string): ThunkAction<void, IJodelAppSt
                     const post = res.details;
                     post.children = res.replies;
                     post.child_count = post.children.length;
-                    dispatch(receivePost(post, false, res.next, res.shareable));
+                    dispatch(receivePost(post, false, null, res.shareable));
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     };

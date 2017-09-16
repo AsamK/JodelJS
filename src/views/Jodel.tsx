@@ -33,6 +33,7 @@ import Progress from './Progress';
 import {Search} from './Search';
 import {ToastContainer} from './ToastContainer';
 import {TopBar} from './TopBar';
+import {HashtagTopBar} from './HashtagTopBar';
 
 export interface IJodelProps {
     section: string;
@@ -40,6 +41,7 @@ export interface IJodelProps {
     selectedPostChildren: IPost[] | null;
     selectedPicturePost: IPost | null;
     selectedChannel: string;
+    selectedHashtag: string;
     locationKnown: boolean;
     settings: IVisible;
     karma: number;
@@ -121,6 +123,10 @@ class JodelComponent extends Component<IJodelProps> {
                         <ChannelTopBar channel={this.props.selectedChannel}/>
                         : undefined
                     }
+                    {this.props.selectedHashtag ?
+                        <HashtagTopBar hashtag={this.props.selectedHashtag}/>
+                        : undefined
+                    }
                     <PostListContainer onPostClick={this.handleClick.bind(this)}
                                        onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}
                                        onLoadMore={this.onLoadMore.bind(this)}/>
@@ -185,10 +191,15 @@ const mapStateToProps = (state: IJodelAppStore): Partial<IJodelProps> => {
         selectedPostChildren = null;
     }
     const section = state.viewState.postSection;
-    let selectedChannel;
-    if (section != null && section.startsWith('channel:')) {
-        selectedChannel = section.substring(8);
-    }
+
+    const selectedChannel = section != null && section.startsWith('channel:')
+        ? section.substring(8)
+        : undefined;
+
+    const selectedHashtag = section != null && section.startsWith('hashtag:')
+        ? section.substring(8)
+        : undefined;
+
     const followedChannels = state.account.config ? state.account.config.followed_channels : undefined;
     return {
         channelListShown: state.viewState.channelList.visible,
@@ -212,6 +223,7 @@ const mapStateToProps = (state: IJodelAppStore): Partial<IJodelProps> => {
         searchShown: state.viewState.search.visible,
         section,
         selectedChannel,
+        selectedHashtag,
         selectedPicturePost,
         selectedPost,
         selectedPostChildren,

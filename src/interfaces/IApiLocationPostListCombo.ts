@@ -1,6 +1,6 @@
 import {IApiPostListCombo} from './IApiPostListCombo';
-import {ISticky} from './ISticky';
+import {IApiSticky} from './IApiSticky';
 
 export interface IApiLocationPostListCombo extends IApiPostListCombo {
-    stickies: ISticky[];
+    stickies: IApiSticky[];
 }

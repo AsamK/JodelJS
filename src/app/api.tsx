@@ -43,8 +43,7 @@ function computeSignature(auth: string | undefined, method: string, url: string,
     if (!path.startsWith('/')) {
         path = '/' + path;
     }
-    const raw = method + '%' + u.hostname + '%' + 443 + '%' + path + '%' + (auth || '') + '%' + timestamp + '%' + '' +
-        '%' + data;
+    const raw = `${method}%${u.hostname}%${443}%${path}%${auth || ''}%${timestamp}%%${data}`;
 
     const hmac = createHmac('sha1', Settings.KEY);
     hmac.setEncoding('hex');
@@ -575,4 +574,9 @@ export function apiSearchPosts(auth: string, message: string, suggested = false,
         suggested,
     };
     return jodelRequest(auth, 'POST', Settings.API_SERVER + API_PATH_V3 + '/posts/search', {home}, data);
+}
+
+export function apiStickyPostClose(auth: string, stickyPostId: string): Promise<void> {
+    return jodelRequest(auth, 'PUT', Settings.API_SERVER + API_PATH_V3 + '/stickyposts/' + stickyPostId + '/up', {}, {})
+        .then(res => res.body);
 }

@@ -1,5 +1,6 @@
 import {Dispatch} from 'redux';
 import {ThunkAction} from 'redux-thunk';
+import {_closeSticky} from './state';
 
 import {
     apiAddPost,
@@ -39,6 +40,7 @@ import {
     apiSetNotificationPostRead,
     apiSetPushToken,
     apiSharePost,
+    apiStickyPostClose,
     apiUnfollowChannel,
     apiUnpin,
     apiUpVote,
@@ -234,7 +236,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): ThunkAction<void, 
                                     discussed: res.replied,
                                     popular: res.voted,
                                     recent: res.recent,
-                                }));
+                                }, false, res.stickies));
                             }, err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
@@ -828,6 +830,16 @@ export function searchPosts(message: string, suggested = false): ThunkAction<voi
         apiSearchPosts(getAuth(getState()), message, suggested, getState().settings.useHomeLocation)
             .then(res => {
                     console.info(res.body);
+                },
+                err => handleNetworkErrors(dispatch, getState, err));
+    };
+}
+
+export function closeSticky(stickyId: string): ThunkAction<void, IJodelAppStore, void> {
+    return (dispatch, getState) => {
+        apiStickyPostClose(getAuth(getState()), stickyId)
+            .then(res => {
+                    dispatch(_closeSticky(stickyId));
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     };

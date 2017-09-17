@@ -3,7 +3,6 @@ import {INotification} from '../interfaces/INotification';
 
 export function getNotificationDescription(notification: INotification) {
     switch (notification.type) {
-
         case NotificationType.OJ_REPLY_REPLY:
             return 'OJ hat geantwortet';
         case NotificationType.OJ_REPLY_MENTION:

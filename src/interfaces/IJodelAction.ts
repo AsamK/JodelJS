@@ -7,6 +7,7 @@ import {IViewStateStore} from '../redux/reducers/viewState';
 import {IApiConfig} from './IApiConfig';
 import {IApiPostDetailsPost, IApiPostReplyPost} from './IApiPostDetailsPost';
 import {IApiPostListPost} from './IApiPostListPost';
+import {IApiSticky} from './IApiSticky';
 import {IChannel} from './IChannel';
 import {ILocation} from './ILocation';
 import {INotification} from './INotification';
@@ -47,6 +48,8 @@ export interface IPayload {
     toastId?: number;
     nextReply?: string | null;
     shareable?: boolean;
+    stickies?: IApiSticky[];
+    stickyId?: string;
 }
 
 export interface IJodelAction extends Action {

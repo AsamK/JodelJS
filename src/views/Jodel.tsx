@@ -25,15 +25,16 @@ import AppSettings from './AppSettings';
 import ChannelList from './ChannelList';
 import ChannelTopBar from './ChannelTopBar';
 import FirstStart from './FirstStart';
+import {HashtagTopBar} from './HashtagTopBar';
 import {NotificationList} from './NotificationList';
 import PostDetails from './PostDetails';
 import {PostListContainer} from './PostListContainer';
 import {PostTopBar} from './PostTopBar';
 import Progress from './Progress';
 import {Search} from './Search';
+import {StickyList} from './StickyList';
 import {ToastContainer} from './ToastContainer';
 import {TopBar} from './TopBar';
-import {HashtagTopBar} from './HashtagTopBar';
 
 export interface IJodelProps {
     section: string;
@@ -127,6 +128,7 @@ class JodelComponent extends Component<IJodelProps> {
                         <HashtagTopBar hashtag={this.props.selectedHashtag}/>
                         : undefined
                     }
+                    <StickyList/>
                     <PostListContainer onPostClick={this.handleClick.bind(this)}
                                        onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}
                                        onLoadMore={this.onLoadMore.bind(this)}/>

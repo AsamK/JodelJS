@@ -5,6 +5,7 @@ import {VoteType} from '../../enums/VoteType';
 import {IApiConfig} from '../../interfaces/IApiConfig';
 import {IApiPostDetailsPost, IApiPostReplyPost} from '../../interfaces/IApiPostDetailsPost';
 import {IApiPostListPost} from '../../interfaces/IApiPostListPost';
+import {IApiSticky} from '../../interfaces/IApiSticky';
 import {IChannel} from '../../interfaces/IChannel';
 import {IJodelAction} from '../../interfaces/IJodelAction';
 import {INotification} from '../../interfaces/INotification';
@@ -85,18 +86,21 @@ export function replaceViewState(newViewState: IViewStateStore): IJodelAction {
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 
 export function receivePosts(section: Section,
-                             postsBySortType: { [sortType: string]: Array<IApiPostListPost | IApiPostReplyPost> },
-                             append = false): IJodelAction {
+                             postsBySortType: { [sortType: string]: IApiPostListPost[] },
+                             append = false,
+                             stickies?: IApiSticky[]): IJodelAction {
     const payload: {
         append: boolean,
         entities: Array<IApiPostListPost | IApiPostReplyPost>,
         postsBySortType: Array<{ sortType: PostListSortType, posts: string[] }>,
         section: Section,
+        stickies?: IApiSticky[],
     } = {
         append,
         entities: [],
         postsBySortType: [],
         section,
+        stickies,
     };
 
     if (postsBySortType.recent !== undefined) {
@@ -380,5 +384,16 @@ export function setImageCaptcha(key: string | null, imageUrl: string | null, ima
             key,
         },
         type: SET_IMAGE_CAPTCHA,
+    };
+}
+
+export const CLOSE_STICKY = 'CLOSE_STICKY';
+
+export function _closeSticky(stickyId: string): IJodelAction {
+    return {
+        payload: {
+            stickyId,
+        },
+        type: CLOSE_STICKY,
     };
 }

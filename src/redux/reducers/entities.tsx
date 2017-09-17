@@ -1,25 +1,34 @@
 import {combineReducers} from 'redux';
 import {IApiPostReplyPost} from '../../interfaces/IApiPostDetailsPost';
 import {IApiPostListPost} from '../../interfaces/IApiPostListPost';
+import {IApiSticky} from '../../interfaces/IApiSticky';
 import {IChannel} from '../../interfaces/IChannel';
 import {IJodelAction} from '../../interfaces/IJodelAction';
 import {INotification} from '../../interfaces/INotification';
 import {IPost} from '../../interfaces/IPost';
 
 import {PINNED_POST, RECEIVE_POSTS} from '../actions';
-import {RECEIVE_NOTIFICATIONS, RECEIVE_POST, SET_NOTIFICATION_POST_READ, VOTED_POST} from '../actions/state';
+import {
+    CLOSE_STICKY,
+    RECEIVE_NOTIFICATIONS,
+    RECEIVE_POST,
+    SET_NOTIFICATION_POST_READ,
+    VOTED_POST,
+} from '../actions/state';
 import {IJodelAppStore} from '../reducers';
 
 export interface IEntitiesStore {
     posts: { [key: string]: IPost };
     channels: { [key: string]: IChannel };
     notifications: INotification[];
+    stickies: IApiSticky[];
 }
 
 export const entities = combineReducers({
     channels,
     notifications,
     posts,
+    stickies,
 });
 
 function convertApiReplyPostToReplyPost(replies: IApiPostReplyPost[]): string[] | undefined {
@@ -159,6 +168,24 @@ function notifications(state: INotification[] = [], action: IJodelAction): typeo
         case SET_NOTIFICATION_POST_READ:
             const postId = action.payload.postId;
             return state.map(n => postId === n.post_id ? {...n, read: true} : n);
+        default:
+            return state;
+    }
+}
+
+function stickies(state: IApiSticky[] = [], action: IJodelAction): typeof state {
+    switch (action.type) {
+        case RECEIVE_POSTS:
+            if (!action.payload || !action.payload.stickies) {
+                return state;
+            }
+            return action.payload.stickies;
+        case CLOSE_STICKY:
+            if (!action.payload || !action.payload.stickyId) {
+                return state;
+            }
+            const stickyId = action.payload.stickyId;
+            return state.filter(sticky => sticky.stickypost_id !== stickyId);
         default:
             return state;
     }

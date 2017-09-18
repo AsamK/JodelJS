@@ -93,28 +93,41 @@ html, body, #content, .jodel {
   .channelLink {
     background: #fff;
     color: #333;
-    padding-top: 1em;
-    padding-left: 1em;
-    padding-bottom: 1em;
+    display: flex;
+    justify-items: center;
     margin-bottom: 1px;
+    padding: 1em;
     cursor: pointer;
 
     &.unread {
       font-weight: bold;
     }
 
+    .channelPicture {
+      background-size: cover;
+      flex: none;
+      height: 2em;
+      margin-right: 1em;
+      width: 2em;
+    }
+
+    .title {
+      flex: auto;
+      margin-top: .5em;
+      margin-bottom: .5em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .channel-info {
+      flex: 0 1 auto;
+      margin-left: .5em;
+    }
+
     .followers,
     .countryFollowers {
-      float: right;
-      font-size: .7em;
-      margin-left: 2em;
-      margin-top: -1em;
-    }
-    .channelPicture {
-      width: 2em;
-      height: 2em;
-      background-size: cover;
-      float: left;
+      font-size: .7rem;
+      text-align: right;
     }
   }
 }

@@ -21,15 +21,17 @@ export default class ChannelList extends Component<IChannelListProps> {
                      style={{backgroundImage: 'url(https:' + channel.image_url + ')'}}/>
                 : undefined}
             <div className="title">@{channel.channel}</div>
-            {channel.sponsored ?
-                <div className="sponsored"> (Sponsored)</div>
-                : undefined}
-            {channel.followers ?
-                <div className="followers">{channel.followers} Followers</div>
-                : undefined}
-            {channel.country_followers ?
-                <div className="countryFollowers">{channel.country_followers} Country wide</div>
-                : undefined}
+            <div className="channel-info">
+                {channel.sponsored ?
+                    <div className="sponsored"> (Sponsored)</div>
+                    : undefined}
+                {channel.followers ?
+                    <div className="followers">{channel.followers} Followers</div>
+                    : undefined}
+                {channel.country_followers ?
+                    <div className="countryFollowers">{channel.country_followers} Country wide</div>
+                    : undefined}
+            </div>
         </div>;
     }
 

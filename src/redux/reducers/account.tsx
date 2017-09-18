@@ -11,7 +11,7 @@ import {
     SET_RECOMMENDED_CHANNELS,
     SET_TOKEN,
 } from '../actions';
-import {SET_LOCAL_CHANNELS, SET_SUGGESTED_HASHTAGS} from '../actions/state';
+import {SET_COUNTRY_CHANNELS, SET_LOCAL_CHANNELS, SET_SUGGESTED_HASHTAGS} from '../actions/state';
 
 export const ACCOUNT_VERSION = 3;
 
@@ -33,11 +33,13 @@ export interface IAccountStore {
     permissionDenied: boolean;
     recommendedChannels: string[];
     localChannels: string[];
+    countryChannels: string[];
     suggestedHashtags: string[];
 }
 
 export const account = combineReducers<IAccountStore>({
     config,
+    countryChannels,
     deviceUid,
     karma,
     localChannels,
@@ -124,6 +126,18 @@ function recommendedChannels(state: string[] = [], action: IJodelAction): typeof
 function localChannels(state: string[] = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_LOCAL_CHANNELS:
+            if (!action.payload) {
+                return state;
+            }
+            return action.payload.channelNames || [];
+        default:
+            return state;
+    }
+}
+
+function countryChannels(state: string[] = [], action: IJodelAction): typeof state {
+    switch (action.type) {
+        case SET_COUNTRY_CHANNELS:
             if (!action.payload) {
                 return state;
             }

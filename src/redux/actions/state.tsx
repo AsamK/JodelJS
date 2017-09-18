@@ -259,6 +259,18 @@ export function setLocalChannels(localChannels: IChannel[]): IJodelAction {
     };
 }
 
+export const SET_COUNTRY_CHANNELS = 'SET_COUNTRY_CHANNELS';
+
+export function setCountryChannels(countryChannels: IChannel[]): IJodelAction {
+    return {
+        payload: {
+            channelNames: countryChannels.map(c => c.channel),
+            entitiesChannels: countryChannels,
+        },
+        type: SET_COUNTRY_CHANNELS,
+    };
+}
+
 export const SET_CHANNELS_META = 'SET_CHANNELS_META';
 
 export function setChannelsMeta(channels: IChannel[]): IJodelAction {

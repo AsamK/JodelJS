@@ -7,6 +7,7 @@ export interface IChannelListProps {
     channels: IChannel[];
     recommendedChannels: IChannel[];
     localChannels: IChannel[];
+    countryChannels: IChannel[];
     onChannelClick: (channelName: string) => void;
 }
 
@@ -26,11 +27,14 @@ export default class ChannelList extends Component<IChannelListProps> {
             {channel.followers ?
                 <div className="followers">{channel.followers} Followers</div>
                 : undefined}
+            {channel.country_followers ?
+                <div className="countryFollowers">{channel.country_followers} Country wide</div>
+                : undefined}
         </div>;
     }
 
     public render() {
-        const {channels, recommendedChannels, localChannels, onChannelClick} = this.props;
+        const {channels, recommendedChannels, localChannels, countryChannels, onChannelClick} = this.props;
         const channelNodes = channels.map(channel => {
                 return ChannelList.createChannelNode(channel, onChannelClick, true);
             },
@@ -40,6 +44,10 @@ export default class ChannelList extends Component<IChannelListProps> {
             },
         );
         const localChannelNodes = localChannels.map(channel => {
+                return ChannelList.createChannelNode(channel, onChannelClick, false);
+            },
+        );
+        const countryChannelNodes = countryChannels.map(channel => {
                 return ChannelList.createChannelNode(channel, onChannelClick, false);
             },
         );
@@ -57,6 +65,11 @@ export default class ChannelList extends Component<IChannelListProps> {
                     : undefined
                 }
                 {localChannelNodes}
+                {countryChannelNodes.length > 0 ?
+                    <div className="channelListCountry">Landesweit</div>
+                    : undefined
+                }
+                {countryChannelNodes}
             </div>
         );
     }

@@ -51,6 +51,7 @@ export interface IJodelProps {
     followedChannels: IChannel[];
     recommendedChannels: IChannel[];
     localChannels: IChannel[];
+    countryChannels: IChannel[];
     channelListShown: boolean;
     notificationsShown: boolean;
     searchShown: boolean;
@@ -157,6 +158,7 @@ class JodelComponent extends Component<IJodelProps> {
                     <ChannelList channels={this.props.followedChannels}
                                  recommendedChannels={this.props.recommendedChannels}
                                  localChannels={this.props.localChannels}
+                                 countryChannels={this.props.countryChannels}
                                  onChannelClick={hashtag => this.props.dispatch(
                                      switchPostSection('channel:' + hashtag))}/>
                 </div>
@@ -205,6 +207,10 @@ const mapStateToProps = (state: IJodelAppStore): Partial<IJodelProps> => {
     const followedChannels = state.account.config ? state.account.config.followed_channels : undefined;
     return {
         channelListShown: state.viewState.channelList.visible,
+        countryChannels: state.account.countryChannels
+            .filter(channel => !followedChannels ||
+                !followedChannels.find(c => c.toLowerCase() === channel.toLowerCase()))
+            .map(channel => getChannel(state, channel)),
         deviceUid: state.account.deviceUid,
         followedChannels: followedChannels === undefined ? [] : followedChannels.map(c => getChannel(state, c)),
         isConfigAvailable: !!state.account.config,

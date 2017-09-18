@@ -70,6 +70,7 @@ import {
     receivePost,
     receivePosts,
     setChannelsMeta,
+    setCountryChannels,
     setImageCaptcha,
     setIsFetching,
     setLocalChannels,
@@ -681,6 +682,7 @@ export function getRecommendedChannels(): ThunkAction<void, IJodelAppStore, void
             .then(res => {
                     dispatch(setRecommendedChannels(res.recommended));
                     dispatch(setLocalChannels(res.local));
+                    dispatch(setCountryChannels(res.country));
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     };

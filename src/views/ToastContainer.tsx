@@ -4,6 +4,7 @@ import {connect, Dispatch} from 'react-redux';
 import {IToast} from '../interfaces/IToast';
 import {hideToast} from '../redux/actions/toasts.actions';
 import {IJodelAppStore} from '../redux/reducers';
+import {getToasts} from '../redux/selectors/app';
 import {Toast} from './Toast';
 
 interface IToastContainerComponentProps {
@@ -25,7 +26,7 @@ const ToastContainerComponent = ({toasts, onToastClick}: IToastContainerComponen
 
 const mapStateToProps = (state: IJodelAppStore): Partial<IToastContainerComponentProps> => {
     return {
-        toasts: state.toasts,
+        toasts: getToasts(state),
     };
 };
 

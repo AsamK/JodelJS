@@ -1,6 +1,4 @@
 import {combineReducers} from 'redux';
-
-import {ILocation} from '../interfaces/ILocation';
 import {IToast} from '../interfaces/IToast';
 import {account, IAccountStore} from './reducers/account';
 import {entities, IEntitiesStore} from './reducers/entities';
@@ -29,11 +27,3 @@ export const JodelApp = combineReducers<IJodelAppStore>({
     toasts,
     viewState,
 });
-
-export function getLocation(store: IJodelAppStore): ILocation | null {
-    return store.settings.location;
-}
-
-export function isLocationKnown(store: IJodelAppStore): boolean {
-    return !!getLocation(store);
-}

@@ -56,8 +56,9 @@ import {VoteType} from '../../enums/VoteType';
 import {IApiPostDetails} from '../../interfaces/IApiPostDetails';
 import {IApiPostListPost} from '../../interfaces/IApiPostListPost';
 import {setPermissionDenied, setToken, showSettings, switchPostSection, updatePosts} from '../actions';
-import {getLocation, IJodelAppStore} from '../reducers';
+import {IJodelAppStore} from '../reducers';
 import {getPost} from '../reducers/entities';
+import {getLocation} from '../selectors/app';
 import {
     _setConfig,
     _setDeviceUID,

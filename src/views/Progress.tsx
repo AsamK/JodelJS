@@ -2,7 +2,9 @@ import * as NProgress from 'nprogress';
 import * as React from 'react';
 import {Component} from 'react';
 import {connect, Dispatch} from 'react-redux';
+
 import {IJodelAppStore} from '../redux/reducers';
+import {getIsSelectedSectionFetching} from '../redux/selectors/posts';
 
 interface IProgressProps {
     isFetching: boolean;
@@ -38,9 +40,8 @@ class Progress extends Component<IProgressProps> {
 }
 
 function mapStateToProps(state: IJodelAppStore): Partial<IProgressProps> {
-    const postSection = state.postsBySection[state.viewState.postSection];
     return {
-        isFetching: postSection === undefined ? false : postSection.isFetching,
+        isFetching: getIsSelectedSectionFetching(state),
     };
 }
 

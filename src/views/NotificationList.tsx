@@ -6,6 +6,7 @@ import {connect, Dispatch} from 'react-redux';
 import {INotification} from '../interfaces/INotification';
 import {selectPostFromNotification} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
+import {getNotifications} from '../redux/selectors/notifications';
 import {getNotificationDescription} from '../utils/notification.utils';
 import {Time} from './Time';
 
@@ -47,7 +48,7 @@ class NotificationListComponent extends PureComponent<INotificationListComponent
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        notifications: state.entities.notifications,
+        notifications: getNotifications(state),
     };
 };
 

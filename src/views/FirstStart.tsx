@@ -6,7 +6,8 @@ import Settings from '../app/settings';
 import {ILocation} from '../interfaces/ILocation';
 import {_setLocation, createNewAccount, setUseBrowserLocation, updateLocation} from '../redux/actions';
 import {setDeviceUid} from '../redux/actions/api';
-import {getLocation, IJodelAppStore} from '../redux/reducers';
+import {IJodelAppStore} from '../redux/reducers';
+import {getDeviceUid, getLocation} from '../redux/selectors/app';
 import {SelectDeviceUid} from './SelectDeviceUid';
 import {SelectLocation} from './SelectLocation';
 
@@ -96,10 +97,9 @@ class FirstStart extends Component<IFirstStartProps, IFirstStartState> {
 }
 
 const mapStateToProps = (state: IJodelAppStore) => {
-    const loc = getLocation(state);
     return {
-        deviceUid: state.account.deviceUid,
-        location: loc,
+        deviceUid: getDeviceUid(state),
+        location: getLocation(state),
         useBrowserLocation: state.settings.useBrowserLocation,
     };
 };

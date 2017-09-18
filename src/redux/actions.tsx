@@ -31,7 +31,8 @@ import {
     _switchPostSection,
     invalidatePosts,
 } from './actions/state';
-import {getLocation, IJodelAppStore} from './reducers';
+import {IJodelAppStore} from './reducers';
+import {getLocation} from './selectors/app';
 
 export * from './actions/state';
 export * from './actions/api';

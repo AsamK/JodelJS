@@ -16,7 +16,8 @@ import {
     setUseHomeLocation,
     updateLocation,
 } from '../redux/actions';
-import {getLocation, IJodelAppStore} from '../redux/reducers';
+import {IJodelAppStore} from '../redux/reducers';
+import {getDeviceUid, getLocation} from '../redux/selectors/app';
 import {SelectLocation} from './SelectLocation';
 import {VerificationImageCaptcha} from './VerificationImageCaptcha';
 
@@ -172,9 +173,8 @@ class AppSettings extends Component<IAppSettingsComponentProps> {
 }
 
 const mapStateToProps = (state: IJodelAppStore): IAppSettingsProps => {
-    const loc = getLocation(state);
     return {
-        deviceUid: state.account.deviceUid,
+        deviceUid: getDeviceUid(state),
         experiments: state.account.config ? state.account.config.experiments : [],
         feedInternationalizable: state.account.config ? state.account.config.feedInternationalizable : false,
         feedInternationalized: state.account.config ? state.account.config.feedInternationalized : false,
@@ -183,7 +183,7 @@ const mapStateToProps = (state: IJodelAppStore): IAppSettingsProps => {
         homeSet: state.account.config ? state.account.config.home_set : false,
         imageUrl: state.imageCaptcha.image ? state.imageCaptcha.image.url : null,
         imageWidth: state.imageCaptcha.image ? state.imageCaptcha.image.width : null,
-        location: loc,
+        location: getLocation(state),
         moderator: state.account.config ? state.account.config.moderator : false,
         pending_deletion: state.account.config ? state.account.config.pending_deletion : false,
         useBrowserLocation: state.settings.useBrowserLocation,

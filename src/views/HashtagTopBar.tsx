@@ -2,6 +2,7 @@ import * as React from 'react';
 import {connect, Dispatch} from 'react-redux';
 
 import {IJodelAppStore} from '../redux/reducers';
+import {getSelectedHashtagName} from '../redux/selectors/view';
 import BackButton from './BackButton';
 
 export interface IHashtagTopBarProps {
@@ -9,19 +10,20 @@ export interface IHashtagTopBarProps {
 }
 
 const HashtagTopBarComponent = ({hashtag}: IHashtagTopBarProps) => {
-    return (
+    return !hashtag ? null :
         <div className="hashtagTopBar">
             <BackButton onClick={() => window.history.back()}/>
             <div className="title">#{hashtag}</div>
-        </div>
-    );
+        </div>;
 };
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: IHashtagTopBarProps) => {
-    return {};
+const mapStateToProps = (state: IJodelAppStore) => {
+    return {
+        hashtag: getSelectedHashtagName(state),
+    };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: IHashtagTopBarProps) => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>) => {
     return {};
 };
 

@@ -5,6 +5,9 @@ import {connect, Dispatch} from 'react-redux';
 import {Color} from '../enums/Color';
 import {addPost, switchPostSection} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
+import {getAddPostChannel} from '../redux/selectors/app';
+import {getSelectedPostId} from '../redux/selectors/posts';
+import {getAddPostVisible} from '../redux/selectors/view';
 import {resizePicture} from '../utils/picture.utils';
 import ColorPicker from './ColorPicker';
 
@@ -81,8 +84,8 @@ export class AddPostComponent extends PureComponent<IAddPostComponentProps, IAdd
         window.history.back();
     }
 
-    public sendAddPost(message: string, encodedImage: string | undefined, channel: string, ancestor: string,
-                       color: Color | undefined, form: HTMLFormElement) {
+    public sendAddPost(message: string, encodedImage: string | undefined, channel: string | undefined,
+                       ancestor: string | undefined, color: Color | undefined, form: HTMLFormElement) {
         this.props.dispatch(addPost(message, encodedImage, channel, ancestor, color)).then(
             section => {
                 this.resetForm(form);
@@ -135,17 +138,10 @@ export class AddPostComponent extends PureComponent<IAddPostComponentProps, IAdd
 }
 
 const mapStateToProps = (state: IJodelAppStore) => {
-    let channel;
-    if (state.viewState.selectedPostId == null) {
-        const section = state.viewState.postSection;
-        if (section != null && section.startsWith('channel:')) {
-            channel = section.substring(8);
-        }
-    }
     return {
-        ancestor: state.viewState.selectedPostId,
-        channel,
-        visible: state.viewState.addPost.visible,
+        ancestor: getSelectedPostId(state),
+        channel: getAddPostChannel(state),
+        visible: getAddPostVisible(state),
     };
 };
 

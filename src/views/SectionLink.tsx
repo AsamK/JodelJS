@@ -4,6 +4,7 @@ import {connect, Dispatch} from 'react-redux';
 
 import {switchPostSection} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
+import {getSelectedSection} from '../redux/selectors/view';
 
 interface ISectionLinkProps {
     section: string;
@@ -38,7 +39,7 @@ const SectionLinkComponent = ({section, active, onClick}: ISectionLinkComponentP
 
 const mapStateToProps = (state: IJodelAppStore, ownProps: ISectionLinkProps): Partial<ISectionLinkComponentProps> => {
     return {
-        active: ownProps.section === state.viewState.postSection,
+        active: ownProps.section === getSelectedSection(state),
     };
 };
 

@@ -6,6 +6,7 @@ import {IApiSticky} from '../interfaces/IApiSticky';
 import {selectPost, switchPostSection} from '../redux/actions';
 import {closeSticky} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
+import {getStickies} from '../redux/selectors/posts';
 import {Sticky} from './Sticky';
 
 export interface IStickyListProps {
@@ -48,7 +49,7 @@ class StickyListComponent extends Component<IStickyListProps> {
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        stickies: state.entities.stickies,
+        stickies: getStickies(state),
     };
 };
 

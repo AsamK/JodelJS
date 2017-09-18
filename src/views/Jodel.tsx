@@ -17,9 +17,22 @@ import {
     updatePosts,
 } from '../redux/actions';
 import {getNotificationsIfAvailable} from '../redux/actions/api';
-import {IJodelAppStore, isLocationKnown} from '../redux/reducers';
-import {getChannel, getPost} from '../redux/reducers/entities';
-import {IVisible} from '../redux/reducers/viewState';
+import {IJodelAppStore} from '../redux/reducers';
+import {getDeviceUid, getIsConfigAvailable, getIsRegistered, getKarma, isLocationKnown} from '../redux/selectors/app';
+import {
+    getCountryChannels,
+    getFollowedChannels,
+    getLocalChannels,
+    getRecommendedChannels,
+} from '../redux/selectors/channels';
+import {getSelectedPicturePost, getSelectedPost, getSelectedPostChildren} from '../redux/selectors/posts';
+import {
+    getChannelListVisible,
+    getNotificationsVisible,
+    getSearchVisible,
+    getSelectedSection,
+    getSettingsVisible,
+} from '../redux/selectors/view';
 import {AddPost} from './AddPost';
 import AppSettings from './AppSettings';
 import ChannelList from './ChannelList';
@@ -41,10 +54,8 @@ export interface IJodelProps {
     selectedPost: IPost | null;
     selectedPostChildren: IPost[] | null;
     selectedPicturePost: IPost | null;
-    selectedChannel: string;
-    selectedHashtag: string;
     locationKnown: boolean;
-    settings: IVisible;
+    settingsVisible: boolean;
     karma: number;
     deviceUid: string | null;
     isRegistered: boolean;
@@ -52,9 +63,9 @@ export interface IJodelProps {
     recommendedChannels: IChannel[];
     localChannels: IChannel[];
     countryChannels: IChannel[];
-    channelListShown: boolean;
-    notificationsShown: boolean;
-    searchShown: boolean;
+    channelListVisible: boolean;
+    notificationsVisible: boolean;
+    searchVisible: boolean;
     isConfigAvailable: boolean;
     dispatch: Dispatch<IJodelAppStore>;
 }
@@ -113,22 +124,15 @@ class JodelComponent extends Component<IJodelProps> {
                 <TopBar karma={this.props.karma}
                         showSettings={() => this.props.dispatch(showSettings(true))}
                         showChannelList={() => {
-                            this.props.dispatch(showChannelList(!this.props.channelListShown));
+                            this.props.dispatch(showChannelList(!this.props.channelListVisible));
                         }}
                 />
                 <ToastContainer/>
                 <div className={classnames('list', {
-                    isChannel: this.props.selectedChannel !== undefined,
                     postShown: this.props.selectedPost != null,
                 })}>
-                    {this.props.selectedChannel ?
-                        <ChannelTopBar channel={this.props.selectedChannel}/>
-                        : undefined
-                    }
-                    {this.props.selectedHashtag ?
-                        <HashtagTopBar hashtag={this.props.selectedHashtag}/>
-                        : undefined
-                    }
+                    <ChannelTopBar/>
+                    <HashtagTopBar/>
                     <StickyList/>
                     <PostListContainer onPostClick={this.handleClick.bind(this)}
                                        onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}
@@ -154,7 +158,7 @@ class JodelComponent extends Component<IJodelProps> {
                     </div>
                     : null}
                 <AddPost/>
-                <div className={classnames('channels', {channelListShown: this.props.channelListShown})}>
+                <div className={classnames('channels', {channelListShown: this.props.channelListVisible})}>
                     <ChannelList channels={this.props.followedChannels}
                                  recommendedChannels={this.props.recommendedChannels}
                                  localChannels={this.props.localChannels}
@@ -162,13 +166,13 @@ class JodelComponent extends Component<IJodelProps> {
                                  onChannelClick={hashtag => this.props.dispatch(
                                      switchPostSection('channel:' + hashtag))}/>
                 </div>
-                <div className={classnames('notifications', {notificationsShown: this.props.notificationsShown})}>
+                <div className={classnames('notifications', {notificationsShown: this.props.notificationsVisible})}>
                     <NotificationList/>
                 </div>
-                <div className={classnames('search', {searchShown: this.props.searchShown})}>
+                <div className={classnames('search', {searchShown: this.props.searchVisible})}>
                     <Search/>
                 </div>
-                <div className={classnames('settings', {settingsShown: this.props.settings.visible})}>
+                <div className={classnames('settings', {settingsShown: this.props.settingsVisible})}>
                     <AppSettings/>
                 </div>
                 <Progress/>
@@ -180,62 +184,24 @@ class JodelComponent extends Component<IJodelProps> {
 }
 
 const mapStateToProps = (state: IJodelAppStore): Partial<IJodelProps> => {
-    let selectedPicturePost = null;
-    if (state.viewState.selectedPicturePostId) {
-        selectedPicturePost = getPost(state, state.viewState.selectedPicturePostId);
-    }
-    let selectedPost = null;
-    if (state.viewState.selectedPostId) {
-        selectedPost = getPost(state, state.viewState.selectedPostId);
-    }
-    let selectedPostChildren: IPost[] | null;
-    if (selectedPost && selectedPost.children) {
-        selectedPostChildren = selectedPost.children.map(child => getPost(state, child) as IPost);
-    } else {
-        selectedPostChildren = null;
-    }
-    const section = state.viewState.postSection;
-
-    const selectedChannel = section != null && section.startsWith('channel:')
-        ? section.substring(8)
-        : undefined;
-
-    const selectedHashtag = section != null && section.startsWith('hashtag:')
-        ? section.substring(8)
-        : undefined;
-
-    const followedChannels = state.account.config ? state.account.config.followed_channels : undefined;
     return {
-        channelListShown: state.viewState.channelList.visible,
-        countryChannels: state.account.countryChannels
-            .filter(channel => !followedChannels ||
-                !followedChannels.find(c => c.toLowerCase() === channel.toLowerCase()))
-            .map(channel => getChannel(state, channel)),
-        deviceUid: state.account.deviceUid,
-        followedChannels: followedChannels === undefined ? [] : followedChannels.map(c => getChannel(state, c)),
-        isConfigAvailable: !!state.account.config,
-        isRegistered: state.account.token !== null,
-        karma: state.account.karma,
-        localChannels: state.account.localChannels
-            .filter(channel => !followedChannels ?
-                true :
-                !followedChannels.find(c => c.toLowerCase() === channel.toLowerCase()))
-            .map(channel => getChannel(state, channel)),
+        channelListVisible: getChannelListVisible(state),
+        countryChannels: getCountryChannels(state),
+        deviceUid: getDeviceUid(state),
+        followedChannels: getFollowedChannels(state),
+        isConfigAvailable: getIsConfigAvailable(state),
+        isRegistered: getIsRegistered(state),
+        karma: getKarma(state),
+        localChannels: getLocalChannels(state),
         locationKnown: isLocationKnown(state),
-        notificationsShown: state.viewState.notifications.visible,
-        recommendedChannels: state.account.recommendedChannels
-            .filter(channel => !followedChannels ?
-                true :
-                !followedChannels.find(c => c.toLowerCase() === channel.toLowerCase()))
-            .map(channel => getChannel(state, channel)),
-        searchShown: state.viewState.search.visible,
-        section,
-        selectedChannel,
-        selectedHashtag,
-        selectedPicturePost,
-        selectedPost,
-        selectedPostChildren,
-        settings: state.viewState.settings,
+        notificationsVisible: getNotificationsVisible(state),
+        recommendedChannels: getRecommendedChannels(state),
+        searchVisible: getSearchVisible(state),
+        section: getSelectedSection(state),
+        selectedPicturePost: getSelectedPicturePost(state),
+        selectedPost: getSelectedPost(state),
+        selectedPostChildren: getSelectedPostChildren(state),
+        settingsVisible: getSettingsVisible(state),
     };
 };
 

@@ -4,8 +4,10 @@ import {connect, Dispatch} from 'react-redux';
 
 import {PostListSortType} from '../enums/PostListSortType';
 import {IPost} from '../interfaces/IPost';
-import {IJodelAppStore, isLocationKnown} from '../redux/reducers';
-import {getPost} from '../redux/reducers/entities';
+import {IJodelAppStore} from '../redux/reducers';
+import {isLocationKnown} from '../redux/selectors/app';
+import {getSelectedSectionLastUpdated, getSelectedSectionSortPosts} from '../redux/selectors/posts';
+import {getSelectedSection, getSelectedSortType} from '../redux/selectors/view';
 import AddButton from './AddButton';
 import PostList from './PostList';
 import {SortTypeLink} from './SortTypeLink';
@@ -48,18 +50,12 @@ class PostListContainerComponent extends PureComponent<IPostListContainerCompone
 }
 
 const mapStateToProps = (state: IJodelAppStore, ownProps: IPostListContainerProps) => {
-    const section = state.viewState.postSection;
-    const sortType = state.viewState.postListSortType;
-    const postsSection = state.postsBySection[section];
-    const posts = postsSection !== undefined && postsSection.postsBySortType[sortType] ?
-        postsSection.postsBySortType[sortType] :
-        [];
     return {
-        lastUpdated: postsSection ? postsSection.lastUpdated : undefined,
+        lastUpdated: getSelectedSectionLastUpdated(state),
         locationKnown: isLocationKnown(state),
-        posts: posts.map(postId => getPost(state, postId)),
-        section,
-        sortType,
+        posts: getSelectedSectionSortPosts(state),
+        section: getSelectedSection(state),
+        sortType: getSelectedSortType(state),
     };
 };
 

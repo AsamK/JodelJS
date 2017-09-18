@@ -4,6 +4,7 @@ import {Component} from 'react';
 import {connect, Dispatch} from 'react-redux';
 import {showNotifications, showSearch, showSettings} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
+import {getUnreadNotificationsCount} from '../redux/selectors/notifications';
 
 import {SectionLink} from './SectionLink';
 
@@ -71,7 +72,7 @@ class MenuComponent extends Component<IMenuComponentProps, IMenuComponentState> 
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        unreadNotifications: state.entities.notifications.filter(n => !n.read).length,
+        unreadNotifications: getUnreadNotificationsCount(state),
     };
 };
 

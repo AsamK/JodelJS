@@ -3,45 +3,43 @@ import * as React from 'react';
 import {connect, Dispatch} from 'react-redux';
 import {followChannel} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
-import {getChannel} from '../redux/reducers/entities';
+import {
+    getIsSelectedChannelFollowed,
+    getSelectedChannelFollowersCount,
+    getSelectedChannelNameLikeFollowed,
+} from '../redux/selectors/channels';
 import BackButton from './BackButton';
 
 export interface IChannelTopBarProps {
     onFollowClick: (channel: string, follow: boolean) => void;
-    channel: string;
+    channel?: string;
     followerCount: number;
-    followedName: string;
+    isFollowing: boolean;
 }
 
-const ChannelTopBar = ({onFollowClick, channel, followerCount, followedName}: IChannelTopBarProps) => {
-    const isFollowing = followedName !== null;
-    return (
+const ChannelTopBar = ({onFollowClick, channel, followerCount, isFollowing}: IChannelTopBarProps) => {
+    return !channel ? null :
         <div className="channelTopBar">
             <BackButton onClick={() => window.history.back()}/>
             <div className="title">@{channel}</div>
             <div className="follow">
-                {followerCount > 0 ? followerCount : ''}
+                {followerCount > 0 ? followerCount : null}
                 <div className={classnames('followButton', {isFollowing})}
-                     onClick={() => onFollowClick(isFollowing ? followedName : channel, !isFollowing)}>
+                     onClick={() => onFollowClick(channel, !isFollowing)}>
                 </div>
             </div>
-        </div>
-    );
+        </div>;
 };
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: IChannelTopBarProps) => {
-    const followers = getChannel(state, ownProps.channel).followers;
+const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        followedName: state.account.config
-            ?
-            state.account.config.followed_channels.find(c => c.toLowerCase() === ownProps.channel.toLowerCase()) || null
-            :
-            null,
-        followerCount: !followers ? 0 : followers,
+        channel: getSelectedChannelNameLikeFollowed(state),
+        followerCount: getSelectedChannelFollowersCount(state),
+        isFollowing: getIsSelectedChannelFollowed(state),
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: Partial<IChannelTopBarProps>) => {
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>) => {
     return {
         onFollowClick: (channel: string, follow: boolean) => {
             dispatch(followChannel(channel, follow));

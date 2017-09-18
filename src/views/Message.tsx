@@ -10,7 +10,7 @@ export interface IMessageProps {
 export default class Message extends Component<IMessageProps> {
     public render() {
         const {message, onAtClick, onHashtagClick} = this.props;
-        const linkReg = /([^#@]*)([@#])([^\s#@]*)/mg;
+        const linkReg = /([^#@]*)([@#])([^\s#@:;.,]*)/mg;
         let previousIndex = 0;
         const messageParts = [];
         while (true) {
@@ -22,7 +22,7 @@ export default class Message extends Component<IMessageProps> {
             messageParts.push(regResult[1]);
             if (regResult[2] === '@') {
                 const channel = regResult[3];
-                messageParts.push(<a key={linkReg.lastIndex} className="hashtag"
+                messageParts.push(<a key={linkReg.lastIndex} className="channel-link"
                                      onClick={e => onAtClick(e, channel)}>@{channel}</a>);
             } else if (regResult[2] === '#') {
                 const hashtag = regResult[3];

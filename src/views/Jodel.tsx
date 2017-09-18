@@ -147,9 +147,9 @@ class JodelComponent extends Component<IJodelProps> {
                 {this.props.selectedPicturePost ?
                     <div className="bigPicture" onMouseUp={e => window.history.back()}>
                         <img alt={this.props.selectedPicturePost.message}
-                             src={'https:' + this.props.selectedPicturePost.thumbnail_url}/>
-                        <img alt={this.props.selectedPicturePost.message}
                              src={'https:' + this.props.selectedPicturePost.image_url}/>
+                        <img alt={this.props.selectedPicturePost.message}
+                             src={'https:' + this.props.selectedPicturePost.thumbnail_url}/>
                     </div>
                     : null}
                 <AddPost/>

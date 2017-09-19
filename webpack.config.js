@@ -14,7 +14,6 @@ module.exports = {
     entry: [
         "es5-shim",
         "es6-shim",
-        "html5-history-api",
         "./src/app/main.tsx",
         "./style/main.less"
     ],

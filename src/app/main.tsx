@@ -1,10 +1,10 @@
 import * as React from 'react';
-import DocumentTitle = require('react-document-title/index');
 import * as ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {applyMiddleware, compose, createStore, Middleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
+import DocumentTitle = require('react-document-title/index');
 import {
     fetchPostsIfNeeded,
     getConfig,
@@ -16,24 +16,29 @@ import {
 } from '../redux/actions';
 import {getKarma, getNotifications, refreshAccessToken} from '../redux/actions/api';
 import {IJodelAppStore, JodelApp} from '../redux/reducers';
-import {ACCOUNT_VERSION, migrateAccount} from '../redux/reducers/account';
-import {migrateSettings, SETTINGS_VERSION} from '../redux/reducers/settings';
+import {ACCOUNT_VERSION, IAccountStore, migrateAccount} from '../redux/reducers/account';
+import {ISettingsStore, migrateSettings, SETTINGS_VERSION} from '../redux/reducers/settings';
 import {getNotificationDescription} from '../utils/notification.utils';
 import {Jodel} from '../views/Jodel';
 
-const persistedState: Partial<IJodelAppStore> = {};
-
+let persistedStateAccount: IAccountStore | undefined;
 const storedAccount = localStorage.getItem('account');
 if (storedAccount) {
     const oldVersion = parseInt(localStorage.getItem('accountVersion') || '0', 10);
-    persistedState.account = migrateAccount(JSON.parse(storedAccount), oldVersion);
+    persistedStateAccount = migrateAccount(JSON.parse(storedAccount), oldVersion);
 }
 
+let persistedStateSettings: ISettingsStore | undefined;
 const storedSettings = localStorage.getItem('settings');
 if (storedSettings) {
     const oldVersion = parseInt(localStorage.getItem('settingsVersion') || '0', 10);
-    persistedState.settings = migrateSettings(JSON.parse(storedSettings), oldVersion);
+    persistedStateSettings = migrateSettings(JSON.parse(storedSettings), oldVersion);
 }
+
+const persistedState: Partial<IJodelAppStore> = {
+    account: persistedStateAccount,
+    settings: persistedStateSettings,
+};
 
 const reduxMiddlewares: Middleware[] = [
     thunkMiddleware, // lets us use dispatch() functions

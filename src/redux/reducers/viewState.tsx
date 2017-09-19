@@ -16,22 +16,22 @@ import {
 import {SHOW_NOTIFICATIONS, SHOW_SEARCH} from '../actions/state';
 
 export interface IVisible {
-    visible: boolean;
+    readonly visible: boolean;
 }
 
 export interface IViewStateStore {
-    selectedPostId: string | null;
-    selectedPicturePostId: string | null;
-    postSection: Section;
-    postListSortType: PostListSortType;
-    addPost: IVisible;
-    settings: IVisible;
-    channelList: IVisible;
-    notifications: IVisible;
-    search: IVisible;
+    readonly selectedPostId: string | null;
+    readonly selectedPicturePostId: string | null;
+    readonly postSection: Section;
+    readonly postListSortType: PostListSortType;
+    readonly addPost: IVisible;
+    readonly settings: IVisible;
+    readonly channelList: IVisible;
+    readonly notifications: IVisible;
+    readonly search: IVisible;
 }
 
-export function viewState(state: IViewStateStore, action: IJodelAction): IViewStateStore {
+export function viewState(state: IViewStateStore, action: IJodelAction): typeof state {
     switch (action.type) {
         case REPLACE_VIEW_STATE:
             if (!action.payload) {

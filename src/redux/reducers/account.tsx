@@ -16,25 +16,28 @@ import {SET_COUNTRY_CHANNELS, SET_LOCAL_CHANNELS, SET_SUGGESTED_HASHTAGS} from '
 export const ACCOUNT_VERSION = 3;
 
 export function migrateAccount(storedState: IAccountStore, oldVersion: number): IAccountStore {
+    const newState: Partial<IAccountStoreMutable> = {};
     if (oldVersion < 2) {
-        storedState.recommendedChannels = [];
+        newState.recommendedChannels = [];
     }
     if (oldVersion < 3) {
-        storedState.localChannels = [];
+        newState.localChannels = [];
     }
-    return storedState;
+    return {...storedState, ...newState};
 }
 
-export interface IAccountStore {
+export type IAccountStore = Readonly<IAccountStoreMutable>;
+
+interface IAccountStoreMutable {
     karma: number;
     deviceUid: string | null;
     token: IToken | null;
     config: IApiConfig | null;
     permissionDenied: boolean;
-    recommendedChannels: string[];
-    localChannels: string[];
-    countryChannels: string[];
-    suggestedHashtags: string[];
+    recommendedChannels: ReadonlyArray<string>;
+    localChannels: ReadonlyArray<string>;
+    countryChannels: ReadonlyArray<string>;
+    suggestedHashtags: ReadonlyArray<string>;
 }
 
 export const account = combineReducers<IAccountStore>({
@@ -111,7 +114,7 @@ function permissionDenied(state: boolean = false, action: IJodelAction): typeof 
     }
 }
 
-function recommendedChannels(state: string[] = [], action: IJodelAction): typeof state {
+function recommendedChannels(state: ReadonlyArray<string> = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_RECOMMENDED_CHANNELS:
             if (!action.payload) {
@@ -123,7 +126,7 @@ function recommendedChannels(state: string[] = [], action: IJodelAction): typeof
     }
 }
 
-function localChannels(state: string[] = [], action: IJodelAction): typeof state {
+function localChannels(state: ReadonlyArray<string> = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_LOCAL_CHANNELS:
             if (!action.payload) {
@@ -135,7 +138,7 @@ function localChannels(state: string[] = [], action: IJodelAction): typeof state
     }
 }
 
-function countryChannels(state: string[] = [], action: IJodelAction): typeof state {
+function countryChannels(state: ReadonlyArray<string> = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_COUNTRY_CHANNELS:
             if (!action.payload) {
@@ -147,7 +150,7 @@ function countryChannels(state: string[] = [], action: IJodelAction): typeof sta
     }
 }
 
-function suggestedHashtags(state: string[] = [], action: IJodelAction): typeof state {
+function suggestedHashtags(state: ReadonlyArray<string> = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_SUGGESTED_HASHTAGS:
             if (!action.payload) {

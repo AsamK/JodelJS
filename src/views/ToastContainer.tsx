@@ -8,7 +8,7 @@ import {getToasts} from '../redux/selectors/app';
 import {Toast} from './Toast';
 
 interface IToastContainerComponentProps {
-    toasts: IToast[];
+    toasts: ReadonlyArray<IToast>;
     onToastClick: (toastId: number) => void;
 }
 

@@ -18,10 +18,10 @@ import {
 import {IJodelAppStore} from '../reducers';
 
 export interface IEntitiesStore {
-    posts: { [key: string]: IPost };
-    channels: { [key: string]: IChannel };
-    notifications: INotification[];
-    stickies: IApiSticky[];
+    readonly posts: { readonly [key: string]: IPost };
+    readonly channels: { readonly [key: string]: IChannel };
+    readonly notifications: ReadonlyArray<INotification>;
+    readonly stickies: ReadonlyArray<IApiSticky>;
 }
 
 export const entities = combineReducers({
@@ -40,10 +40,10 @@ function convertApiReplyPostToReplyPost(replies: IApiPostReplyPost[]): string[] 
         .filter(c => seen[c] ? false : (seen[c] = true));
 }
 
-function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): typeof state {
+function posts(state: { readonly [key: string]: IPost } = {}, action: IJodelAction): typeof state {
     const payload = action.payload;
     if (payload && payload.entities !== undefined) {
-        const newState: typeof state = {};
+        const newState: { [key: string]: IPost } = {};
         payload.entities.forEach((post): void => {
             const postChildren = (post as IApiPostListPost).children || undefined;
             if (postChildren && postChildren.length > 0) {
@@ -88,7 +88,7 @@ function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): type
             if (!payload || !payload.post) {
                 return state;
             }
-            const childrenEntities: typeof state = {};
+            const childrenEntities: { [key: string]: IPost } = {};
             const post = payload.post;
             const postChildren = post.children;
 
@@ -126,9 +126,9 @@ function posts(state: { [key: string]: IPost } = {}, action: IJodelAction): type
     }
 }
 
-function channels(state: { [key: string]: IChannel } = {}, action: IJodelAction): typeof state {
+function channels(state: { readonly [key: string]: IChannel } = {}, action: IJodelAction): typeof state {
     if (action.payload && action.payload.entitiesChannels !== undefined) {
-        const newState: typeof state = {};
+        const newState: { [key: string]: IChannel } = {};
         action.payload.entitiesChannels.forEach(channel => {
             newState[channel.channel] = {...state[channel.channel], ...channel};
         });
@@ -158,7 +158,7 @@ function channels(state: { [key: string]: IChannel } = {}, action: IJodelAction)
     }
 }
 
-function notifications(state: INotification[] = [], action: IJodelAction): typeof state {
+function notifications(state: ReadonlyArray<INotification> = [], action: IJodelAction): typeof state {
     if (!action.payload) {
         return state;
     }
@@ -173,7 +173,7 @@ function notifications(state: INotification[] = [], action: IJodelAction): typeo
     }
 }
 
-function stickies(state: IApiSticky[] = [], action: IJodelAction): typeof state {
+function stickies(state: ReadonlyArray<IApiSticky> = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case RECEIVE_POSTS:
             if (!action.payload || !action.payload.stickies) {
@@ -193,12 +193,4 @@ function stickies(state: IApiSticky[] = [], action: IJodelAction): typeof state 
 
 export function getPost(state: IJodelAppStore, postId: string): IPost | null {
     return state.entities.posts[postId] || null;
-}
-
-export function getChannel(state: IJodelAppStore, channel: string): IChannel {
-    const c = state.entities.channels[channel];
-    if (c === undefined) {
-        return {channel};
-    }
-    return c;
 }

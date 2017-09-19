@@ -7,8 +7,8 @@ export interface ICaptchaImage {
 }
 
 export interface IImageCaptchaStore {
-    image: ICaptchaImage | null;
-    key: string | null;
+    readonly image: Readonly<ICaptchaImage> | null;
+    readonly key: string | null;
 }
 
 export function imageCaptcha(state: IImageCaptchaStore = {

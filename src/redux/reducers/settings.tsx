@@ -9,17 +9,20 @@ export const SETTINGS_VERSION = 1;
 export function migrateSettings(storedState: ISettingsStore, oldVersion: number): ISettingsStore {
     if (storedState.location) {
         if (!storedState.location.latitude || !storedState.location.longitude) {
-            storedState.location = null;
+            return {
+                ...storedState,
+                location: null,
+            };
         }
     }
     return storedState;
 }
 
 export interface ISettingsStore {
-    location: ILocation | null;
-    useBrowserLocation: boolean;
-    useHomeLocation: boolean;
-    channelsLastRead: { [key: string]: number };
+    readonly location: ILocation | null;
+    readonly useBrowserLocation: boolean;
+    readonly useHomeLocation: boolean;
+    readonly channelsLastRead: { readonly [key: string]: number };
 }
 
 export const settings = combineReducers<ISettingsStore>({
@@ -29,7 +32,7 @@ export const settings = combineReducers<ISettingsStore>({
     useHomeLocation,
 });
 
-function location(state: ILocation | null = null, action: IJodelAction): typeof state {
+function location(state: Readonly<ILocation> | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_LOCATION:
             if (!action.payload || !action.payload.location) {
@@ -65,7 +68,7 @@ function useHomeLocation(state = false, action: IJodelAction): typeof state {
     }
 }
 
-function channelsLastRead(state: { [key: string]: number } = {}, action: IJodelAction): typeof state {
+function channelsLastRead(state: { readonly [key: string]: number } = {}, action: IJodelAction): typeof state {
     switch (action.type) {
         case RECEIVE_POSTS:
             if (!action.payload) {

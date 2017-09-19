@@ -1,5 +1,5 @@
 import {IJodelAction} from '../../interfaces/IJodelAction';
-import {SET_IMAGE_CAPTCHA} from '../actions/state';
+import {SET_IMAGE_CAPTCHA} from '../actions/action.consts';
 
 export interface ICaptchaImage {
     url: string | null;
@@ -17,15 +17,12 @@ export function imageCaptcha(state: IImageCaptchaStore = {
 }, action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_IMAGE_CAPTCHA:
-            if (!action.payload) {
-                return state;
-            }
             return {
                 image: {
-                    url: action.payload.imageUrl || null,
-                    width: action.payload.imageWidth || null,
+                    url: action.payload.imageUrl,
+                    width: action.payload.imageWidth,
                 },
-                key: action.payload.key || null,
+                key: action.payload.key,
             };
         default:
             return state;

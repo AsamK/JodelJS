@@ -5,13 +5,15 @@ import {IJodelAction} from '../../interfaces/IJodelAction';
 import {IToken} from '../../interfaces/IToken';
 import {
     SET_CONFIG,
+    SET_COUNTRY_CHANNELS,
     SET_DEVICE_UID,
     SET_KARMA,
+    SET_LOCAL_CHANNELS,
     SET_PERMISSION_DENIED,
     SET_RECOMMENDED_CHANNELS,
+    SET_SUGGESTED_HASHTAGS,
     SET_TOKEN,
-} from '../actions';
-import {SET_COUNTRY_CHANNELS, SET_LOCAL_CHANNELS, SET_SUGGESTED_HASHTAGS} from '../actions/state';
+} from '../actions/action.consts';
 
 export const ACCOUNT_VERSION = 3;
 
@@ -55,10 +57,7 @@ export const account = combineReducers<IAccountStore>({
 function karma(state = 0, action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_KARMA:
-            if (!action.payload) {
-                return state;
-            }
-            return action.payload.karma || 0;
+            return action.payload.karma;
         default:
             return state;
     }
@@ -67,10 +66,7 @@ function karma(state = 0, action: IJodelAction): typeof state {
 function deviceUid(state: string | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_DEVICE_UID:
-            if (!action.payload) {
-                return state;
-            }
-            return action.payload.deviceUid || null;
+            return action.payload.deviceUid;
         default:
             return state;
     }
@@ -79,10 +75,7 @@ function deviceUid(state: string | null = null, action: IJodelAction): typeof st
 function token(state: IToken | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_TOKEN:
-            if (!action.payload) {
-                return state;
-            }
-            return action.payload.token || null;
+            return action.payload.token;
         default:
             return state;
     }
@@ -91,10 +84,7 @@ function token(state: IToken | null = null, action: IJodelAction): typeof state 
 function config(state: IApiConfig | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_CONFIG:
-            if (!action.payload) {
-                return state;
-            }
-            return action.payload.config || null;
+            return action.payload.config;
         default:
             return state;
     }
@@ -105,10 +95,7 @@ function permissionDenied(state: boolean = false, action: IJodelAction): typeof 
         case SET_TOKEN:
             return false;
         case SET_PERMISSION_DENIED:
-            if (!action.payload) {
-                return state;
-            }
-            return action.payload.permissionDenied || false;
+            return action.payload.permissionDenied;
         default:
             return state;
     }
@@ -117,10 +104,7 @@ function permissionDenied(state: boolean = false, action: IJodelAction): typeof 
 function recommendedChannels(state: ReadonlyArray<string> = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_RECOMMENDED_CHANNELS:
-            if (!action.payload) {
-                return state;
-            }
-            return action.payload.channelNames || [];
+            return action.payload.entitiesChannels.map(c => c.channel);
         default:
             return state;
     }
@@ -129,10 +113,7 @@ function recommendedChannels(state: ReadonlyArray<string> = [], action: IJodelAc
 function localChannels(state: ReadonlyArray<string> = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_LOCAL_CHANNELS:
-            if (!action.payload) {
-                return state;
-            }
-            return action.payload.channelNames || [];
+            return action.payload.entitiesChannels.map(c => c.channel);
         default:
             return state;
     }
@@ -141,10 +122,7 @@ function localChannels(state: ReadonlyArray<string> = [], action: IJodelAction):
 function countryChannels(state: ReadonlyArray<string> = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_COUNTRY_CHANNELS:
-            if (!action.payload) {
-                return state;
-            }
-            return action.payload.channelNames || [];
+            return action.payload.entitiesChannels.map(c => c.channel);
         default:
             return state;
     }
@@ -153,10 +131,7 @@ function countryChannels(state: ReadonlyArray<string> = [], action: IJodelAction
 function suggestedHashtags(state: ReadonlyArray<string> = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_SUGGESTED_HASHTAGS:
-            if (!action.payload) {
-                return state;
-            }
-            return action.payload.suggestedHashtags || [];
+            return action.payload.suggestedHashtags;
         default:
             return state;
     }

@@ -1,7 +1,6 @@
 import {combineReducers} from 'redux';
 import {IJodelAction} from '../../interfaces/IJodelAction';
-import {INVALIDATE_POSTS, RECEIVE_POSTS, SET_IS_FETCHING} from '../actions';
-import {RECEIVE_POST} from '../actions/state';
+import {INVALIDATE_POSTS, RECEIVE_POST, RECEIVE_POSTS, SET_IS_FETCHING} from '../actions/action.consts';
 
 function uniq(a: string[]): string[] {
     const seen: { [key: string]: boolean } = {};
@@ -28,9 +27,6 @@ export function postsBySection(state: IPostsBySectionStore = {}, action: IJodelA
         case RECEIVE_POSTS:
         case INVALIDATE_POSTS:
         case SET_IS_FETCHING:
-            if (!action.payload || !action.payload.section) {
-                return state;
-            }
             return {
                 ...state,
                 [action.payload.section]: posts(state[action.payload.section], action),
@@ -53,10 +49,7 @@ function isFetching(state = false, action: IJodelAction): typeof state {
         case RECEIVE_POSTS:
             return false;
         case SET_IS_FETCHING:
-            if (!action.payload) {
-                return state;
-            }
-            return action.payload.isFetching || false;
+            return action.payload.isFetching;
         default:
             return state;
     }
@@ -65,7 +58,7 @@ function isFetching(state = false, action: IJodelAction): typeof state {
 function didInvalidate(state = false, action: IJodelAction): typeof state {
     switch (action.type) {
         case RECEIVE_POSTS:
-            if (!action.payload || action.payload.append) {
+            if (action.payload.append) {
                 return state;
             }
             return false;
@@ -79,9 +72,6 @@ function didInvalidate(state = false, action: IJodelAction): typeof state {
 function lastUpdated(state: number | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
         case RECEIVE_POSTS:
-            if (!action.payload) {
-                return state;
-            }
             return !action.payload.append && action.receivedAt ? action.receivedAt : state;
         default:
             return state;
@@ -92,9 +82,6 @@ function postsBySortType(state: IPostsBySortType = {}, action: IJodelAction): ty
     switch (action.type) {
         case RECEIVE_POSTS:
             const newState: { [key: string]: string[] } = {};
-            if (!action.payload || !action.payload.postsBySortType) {
-                return state;
-            }
             if (action.payload.append) {
                 action.payload.postsBySortType.forEach(
                     p => newState[p.sortType] = uniq([...state[p.sortType], ...p.posts]));

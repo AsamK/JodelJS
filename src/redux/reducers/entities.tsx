@@ -1,4 +1,5 @@
 import {combineReducers} from 'redux';
+
 import {IApiPostReplyPost} from '../../interfaces/IApiPostDetailsPost';
 import {IApiPostListPost} from '../../interfaces/IApiPostListPost';
 import {IApiSticky} from '../../interfaces/IApiSticky';
@@ -6,15 +7,19 @@ import {IChannel} from '../../interfaces/IChannel';
 import {IJodelAction} from '../../interfaces/IJodelAction';
 import {INotification} from '../../interfaces/INotification';
 import {IPost} from '../../interfaces/IPost';
-
-import {PINNED_POST, RECEIVE_POSTS} from '../actions';
 import {
     CLOSE_STICKY,
+    PINNED_POST,
     RECEIVE_NOTIFICATIONS,
     RECEIVE_POST,
+    RECEIVE_POSTS,
+    SET_CHANNELS_META,
+    SET_COUNTRY_CHANNELS,
+    SET_LOCAL_CHANNELS,
     SET_NOTIFICATION_POST_READ,
+    SET_RECOMMENDED_CHANNELS,
     VOTED_POST,
-} from '../actions/state';
+} from '../actions/action.consts';
 import {IJodelAppStore} from '../reducers';
 
 export interface IEntitiesStore {
@@ -41,55 +46,45 @@ function convertApiReplyPostToReplyPost(replies: IApiPostReplyPost[]): string[] 
 }
 
 function posts(state: { readonly [key: string]: IPost } = {}, action: IJodelAction): typeof state {
-    const payload = action.payload;
-    if (payload && payload.entities !== undefined) {
-        const newState: { [key: string]: IPost } = {};
-        payload.entities.forEach((post): void => {
-            const postChildren = (post as IApiPostListPost).children || undefined;
-            if (postChildren && postChildren.length > 0) {
-                console.warn('Received a post with unexpected children: ', post.post_id);
-            }
-
-            const oldPost = state[post.post_id];
-            newState[post.post_id] = {
-                ...oldPost,
-                ...post,
-                children: oldPost ? oldPost.children : [],
-            };
-        });
-        state = {...state, ...newState};
-    }
     switch (action.type) {
+        case RECEIVE_POSTS: {
+            const newState: { [key: string]: IPost } = {};
+            action.payload.entities.forEach((post): void => {
+                const postChildren = (post as IApiPostListPost).children || undefined;
+                if (postChildren && postChildren.length > 0) {
+                    console.warn('Received a post with unexpected children: ', post.post_id);
+                }
+
+                const oldPost = state[post.post_id];
+                newState[post.post_id] = {
+                    ...oldPost,
+                    ...post,
+                    children: oldPost ? oldPost.children : [],
+                };
+            });
+            return {...state, ...newState};
+        }
         case PINNED_POST:
-            if (!payload || !payload.postId) {
-                return state;
-            }
             return {
                 ...state,
-                [payload.postId]: {
-                    ...state[payload.postId],
-                    pin_count: payload.pinCount,
-                    pinned: payload.pinned,
+                [action.payload.postId]: {
+                    ...state[action.payload.postId],
+                    pin_count: action.payload.pinCount,
+                    pinned: action.payload.pinned,
                 },
             };
         case VOTED_POST:
-            if (!payload || !payload.postId || payload.voteCount === undefined) {
-                return state;
-            }
             return {
                 ...state,
-                [payload.postId]: {
-                    ...state[payload.postId],
-                    vote_count: payload.voteCount,
-                    voted: payload.voted,
+                [action.payload.postId]: {
+                    ...state[action.payload.postId],
+                    vote_count: action.payload.voteCount,
+                    voted: action.payload.voted,
                 },
             };
-        case RECEIVE_POST:
-            if (!payload || !payload.post) {
-                return state;
-            }
+        case RECEIVE_POST: {
             const childrenEntities: { [key: string]: IPost } = {};
-            const post = payload.post;
+            const post = action.payload.post;
             const postChildren = post.children;
 
             if (postChildren) {
@@ -101,11 +96,11 @@ function posts(state: { readonly [key: string]: IPost } = {}, action: IJodelActi
                 ...oldPost,
                 ...post,
                 children: convertApiReplyPostToReplyPost(postChildren),
-                next_reply: payload.nextReply,
-                shareable: payload.shareable,
+                next_reply: action.payload.nextReply,
+                shareable: action.payload.shareable,
             };
             if (oldPost && oldPost.children && newPost.children) {
-                if (payload.append === true) {
+                if (action.payload.append === true) {
                     newPost.child_count = (newPost.child_count ? newPost.child_count : 0) +
                         (oldPost.children ? oldPost.children.length : 0);
                     newPost.children = [...oldPost.children, ...newPost.children];
@@ -121,28 +116,28 @@ function posts(state: { readonly [key: string]: IPost } = {}, action: IJodelActi
                 ...childrenEntities,
                 [post.post_id]: newPost,
             };
+        }
         default:
             return state;
     }
 }
 
 function channels(state: { readonly [key: string]: IChannel } = {}, action: IJodelAction): typeof state {
-    if (action.payload && action.payload.entitiesChannels !== undefined) {
-        const newState: { [key: string]: IChannel } = {};
-        action.payload.entitiesChannels.forEach(channel => {
-            newState[channel.channel] = {...state[channel.channel], ...channel};
-        });
-        state = {
-            ...state,
-            ...newState,
-        };
-    }
     switch (action.type) {
+        case SET_RECOMMENDED_CHANNELS:
+        case SET_LOCAL_CHANNELS:
+        case SET_COUNTRY_CHANNELS:
+        case SET_CHANNELS_META:
+            const newState: { [key: string]: IChannel } = {};
+            action.payload.entitiesChannels.forEach(channel => {
+                newState[channel.channel] = {...state[channel.channel], ...channel};
+            });
+            return {
+                ...state,
+                ...newState,
+            };
         case RECEIVE_POSTS:
-            if (!action.payload) {
-                return state;
-            }
-            if (action.payload.section !== undefined && action.payload.section.startsWith('channel:')) {
+            if (action.payload.section.startsWith('channel:')) {
                 const channelName = action.payload.section.substring(8);
                 return {
                     ...state,
@@ -159,9 +154,6 @@ function channels(state: { readonly [key: string]: IChannel } = {}, action: IJod
 }
 
 function notifications(state: ReadonlyArray<INotification> = [], action: IJodelAction): typeof state {
-    if (!action.payload) {
-        return state;
-    }
     switch (action.type) {
         case RECEIVE_NOTIFICATIONS:
             return action.payload.notifications ? action.payload.notifications : [];
@@ -176,14 +168,11 @@ function notifications(state: ReadonlyArray<INotification> = [], action: IJodelA
 function stickies(state: ReadonlyArray<IApiSticky> = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case RECEIVE_POSTS:
-            if (!action.payload || !action.payload.stickies) {
+            if (!action.payload.stickies) {
                 return state;
             }
             return action.payload.stickies;
         case CLOSE_STICKY:
-            if (!action.payload || !action.payload.stickyId) {
-                return state;
-            }
             const stickyId = action.payload.stickyId;
             return state.filter(sticky => sticky.stickypost_id !== stickyId);
         default:

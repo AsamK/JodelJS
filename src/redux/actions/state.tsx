@@ -10,8 +10,41 @@ import {IChannel} from '../../interfaces/IChannel';
 import {IJodelAction} from '../../interfaces/IJodelAction';
 import {INotification} from '../../interfaces/INotification';
 import {IViewStateStore} from '../reducers/viewState';
-
-export const SWITCH_POST_LIST_SORT_TYPE = 'SWITCH_POST_LIST_CONTAINER_STATE';
+import {
+    CLOSE_STICKY,
+    INVALIDATE_POSTS,
+    PINNED_POST,
+    RECEIVE_NOTIFICATIONS,
+    RECEIVE_POST,
+    RECEIVE_POSTS,
+    REPLACE_VIEW_STATE,
+    SELECT_PICTURE,
+    SELECT_POST,
+    SET_CHANNELS_META,
+    SET_CONFIG,
+    SET_COUNTRY_CHANNELS,
+    SET_DEVICE_UID,
+    SET_IMAGE_CAPTCHA,
+    SET_IS_FETCHING,
+    SET_KARMA,
+    SET_LOCAL_CHANNELS,
+    SET_LOCATION,
+    SET_NOTIFICATION_POST_READ,
+    SET_PERMISSION_DENIED,
+    SET_RECOMMENDED_CHANNELS,
+    SET_SUGGESTED_HASHTAGS,
+    SET_TOKEN,
+    SET_USE_BROWSER_LOCATION,
+    SET_USE_HOME_LOCATION,
+    SHOW_ADD_POST,
+    SHOW_CHANNEL_LIST,
+    SHOW_NOTIFICATIONS,
+    SHOW_SEARCH,
+    SHOW_SETTINGS,
+    SWITCH_POST_LIST_SORT_TYPE,
+    SWITCH_POST_SECTION,
+    VOTED_POST,
+} from './action.consts';
 
 export function _switchPostListSortType(sortType: PostListSortType): IJodelAction {
     return {
@@ -20,16 +53,12 @@ export function _switchPostListSortType(sortType: PostListSortType): IJodelActio
     };
 }
 
-export const SWITCH_POST_SECTION = 'SWITCH_POST_SECTION';
-
 export function _switchPostSection(section: Section): IJodelAction {
     return {
         payload: {section},
         type: SWITCH_POST_SECTION,
     };
 }
-
-export const SHOW_ADD_POST = 'SHOW_ADD_POST';
 
 export function _showAddPost(visible: boolean): IJodelAction {
     return {
@@ -38,16 +67,12 @@ export function _showAddPost(visible: boolean): IJodelAction {
     };
 }
 
-export const SHOW_SETTINGS = 'SHOW_SETTINGS';
-
 export function _showSettings(visible: boolean): IJodelAction {
     return {
         payload: {visible},
         type: SHOW_SETTINGS,
     };
 }
-
-export const SHOW_CHANNEL_LIST = 'SHOW_CHANNEL_LIST';
 
 export function _showChannelList(visible: boolean): IJodelAction {
     return {
@@ -56,16 +81,12 @@ export function _showChannelList(visible: boolean): IJodelAction {
     };
 }
 
-export const SHOW_NOTIFICATIONS = 'SHOW_NOTIFICATIONS';
-
 export function _showNotifications(visible: boolean): IJodelAction {
     return {
         payload: {visible},
         type: SHOW_NOTIFICATIONS,
     };
 }
-
-export const SHOW_SEARCH = 'SHOW_SEARCH';
 
 export function _showSearch(visible: boolean): IJodelAction {
     return {
@@ -74,8 +95,6 @@ export function _showSearch(visible: boolean): IJodelAction {
     };
 }
 
-export const REPLACE_VIEW_STATE = 'REPLACE_VIEW_STATE';
-
 export function replaceViewState(newViewState: IViewStateStore): IJodelAction {
     return {
         payload: {newViewState},
@@ -83,24 +102,16 @@ export function replaceViewState(newViewState: IViewStateStore): IJodelAction {
     };
 }
 
-export const RECEIVE_POSTS = 'RECEIVE_POSTS';
-
 export function receivePosts(section: Section,
                              postsBySortType: { [sortType: string]: IApiPostListPost[] },
                              append = false,
                              stickies?: IApiSticky[]): IJodelAction {
     const payload: {
-        append: boolean,
         entities: Array<IApiPostListPost | IApiPostReplyPost>,
         postsBySortType: Array<{ sortType: PostListSortType, posts: string[] }>,
-        section: Section,
-        stickies?: IApiSticky[],
     } = {
-        append,
         entities: [],
         postsBySortType: [],
-        section,
-        stickies,
     };
 
     if (postsBySortType.recent !== undefined) {
@@ -125,16 +136,19 @@ export function receivePosts(section: Section,
         });
     }
     return {
-        payload,
+        payload: {
+            ...payload,
+            append,
+            section,
+            stickies,
+        },
         receivedAt: Date.now(),
         type: RECEIVE_POSTS,
     };
 }
 
-export const RECEIVE_POST = 'RECEIVE_POST';
-
-export function receivePost(post: IApiPostDetailsPost, append = false, nextReply?: string | null,
-                            shareable?: boolean): IJodelAction {
+export function receivePost(post: IApiPostDetailsPost, append = false, nextReply: string | null = null,
+                            shareable: boolean = false): IJodelAction {
     return {
         payload: {
             append,
@@ -147,8 +161,6 @@ export function receivePost(post: IApiPostDetailsPost, append = false, nextReply
     };
 }
 
-export const RECEIVE_NOTIFICATIONS = 'RECEIVE_NOTIFICATIONS';
-
 export function receiveNotifications(notifications: INotification[]): IJodelAction {
     return {
         payload: {
@@ -159,19 +171,14 @@ export function receiveNotifications(notifications: INotification[]): IJodelActi
     };
 }
 
-export const SET_NOTIFICATION_POST_READ = 'SET_NOTIFICATION_POST_READ';
-
 export function _setNotificationPostRead(postId: string): IJodelAction {
     return {
         payload: {
             postId,
         },
-        receivedAt: Date.now(),
         type: SET_NOTIFICATION_POST_READ,
     };
 }
-
-export const PINNED_POST = 'PINNED_POST';
 
 export function pinnedPost(postId: string, pinned: boolean, pinCount: number): IJodelAction {
     return {
@@ -184,8 +191,6 @@ export function pinnedPost(postId: string, pinned: boolean, pinCount: number): I
     };
 }
 
-export const VOTED_POST = 'VOTED_POST';
-
 export function votedPost(postId: string, voted: VoteType, voteCount: number): IJodelAction {
     return {
         payload: {
@@ -197,16 +202,12 @@ export function votedPost(postId: string, voted: VoteType, voteCount: number): I
     };
 }
 
-export const SELECT_POST = 'SELECT_POST';
-
 export function _selectPost(postId: string | null): IJodelAction {
     return {
         payload: {postId},
         type: SELECT_POST,
     };
 }
-
-export const SELECT_PICTURE = 'SELECT_PICTURE';
 
 export function _selectPicture(postId: string) {
     return {
@@ -215,63 +216,46 @@ export function _selectPicture(postId: string) {
     };
 }
 
-export const SET_KARMA = 'SET_KARMA';
-
 export function _setKarma(karma: number): IJodelAction {
     return {
         payload: {karma},
-        receivedAt: Date.now(),
         type: SET_KARMA,
     };
 }
 
-export const SET_CONFIG = 'SET_CONFIG';
-
 export function _setConfig(config: IApiConfig): IJodelAction {
     return {
         payload: {config},
-        receivedAt: Date.now(),
         type: SET_CONFIG,
     };
 }
 
-export const SET_RECOMMENDED_CHANNELS = 'SET_RECOMMENDED_CHANNELS';
-
 export function setRecommendedChannels(recommendedChannels: IChannel[]): IJodelAction {
     return {
         payload: {
-            channelNames: recommendedChannels.map(c => c.channel),
             entitiesChannels: recommendedChannels,
         },
         type: SET_RECOMMENDED_CHANNELS,
     };
 }
 
-export const SET_LOCAL_CHANNELS = 'SET_LOCAL_CHANNELS';
-
 export function setLocalChannels(localChannels: IChannel[]): IJodelAction {
     return {
         payload: {
-            channelNames: localChannels.map(c => c.channel),
             entitiesChannels: localChannels,
         },
         type: SET_LOCAL_CHANNELS,
     };
 }
 
-export const SET_COUNTRY_CHANNELS = 'SET_COUNTRY_CHANNELS';
-
 export function setCountryChannels(countryChannels: IChannel[]): IJodelAction {
     return {
         payload: {
-            channelNames: countryChannels.map(c => c.channel),
             entitiesChannels: countryChannels,
         },
         type: SET_COUNTRY_CHANNELS,
     };
 }
-
-export const SET_CHANNELS_META = 'SET_CHANNELS_META';
 
 export function setChannelsMeta(channels: IChannel[]): IJodelAction {
     return {
@@ -282,18 +266,14 @@ export function setChannelsMeta(channels: IChannel[]): IJodelAction {
     };
 }
 
-export const SET_SUGGESTED_HASHTAGS = 'SET_LOCAL_CHANNELS';
-
 export function setSuggestedHashtags(suggestedHashtags: string[]): IJodelAction {
     return {
         payload: {
             suggestedHashtags,
         },
-        type: SET_LOCAL_CHANNELS,
+        type: SET_SUGGESTED_HASHTAGS,
     };
 }
-
-export const SET_DEVICE_UID = 'SET_DEVICE_UID';
 
 export function _setDeviceUID(deviceUid: string): IJodelAction {
     return {
@@ -302,16 +282,12 @@ export function _setDeviceUID(deviceUid: string): IJodelAction {
     };
 }
 
-export const SET_PERMISSION_DENIED = 'SET_PERMISSION_DENIED';
-
 export function _setPermissionDenied(permissionDenied: boolean): IJodelAction {
     return {
         payload: {permissionDenied},
         type: SET_PERMISSION_DENIED,
     };
 }
-
-export const SET_TOKEN = 'SET_TOKEN';
 
 export function _setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number,
                           tokenType: TokenType): IJodelAction {
@@ -329,8 +305,6 @@ export function _setToken(distinctId: string, accessToken: string, refreshToken:
     };
 }
 
-export const SET_LOCATION = 'SET_LOCATION';
-
 export function _setLocation(latitude: number, longitude: number, city = '', country = 'DE'): IJodelAction {
     return {
         payload: {
@@ -340,8 +314,6 @@ export function _setLocation(latitude: number, longitude: number, city = '', cou
         type: SET_LOCATION,
     };
 }
-
-export const SET_USE_BROWSER_LOCATION = 'SET_USE_BROWSER_LOCATION';
 
 export function setUseBrowserLocation(useBrowserLocation: boolean): IJodelAction {
     return {
@@ -353,8 +325,6 @@ export function setUseBrowserLocation(useBrowserLocation: boolean): IJodelAction
     };
 }
 
-export const SET_USE_HOME_LOCATION = 'SET_USE_HOME_LOCATION';
-
 export function setUseHomeLocation(useHomeLocation: boolean): IJodelAction {
     return {
         payload: {
@@ -365,16 +335,12 @@ export function setUseHomeLocation(useHomeLocation: boolean): IJodelAction {
     };
 }
 
-export const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
-
 export function invalidatePosts(section: Section): IJodelAction {
     return {
         payload: {section},
         type: INVALIDATE_POSTS,
     };
 }
-
-export const SET_IS_FETCHING = 'SET_IS_FETCHING';
 
 export function setIsFetching(section: Section, isFetching = true): IJodelAction {
     return {
@@ -386,8 +352,6 @@ export function setIsFetching(section: Section, isFetching = true): IJodelAction
     };
 }
 
-export const SET_IMAGE_CAPTCHA = 'SET_IMAGE_CAPTCHA';
-
 export function setImageCaptcha(key: string | null, imageUrl: string | null, imageWidth: number | null): IJodelAction {
     return {
         payload: {
@@ -398,8 +362,6 @@ export function setImageCaptcha(key: string | null, imageUrl: string | null, ima
         type: SET_IMAGE_CAPTCHA,
     };
 }
-
-export const CLOSE_STICKY = 'CLOSE_STICKY';
 
 export function _closeSticky(stickyId: string): IJodelAction {
     return {

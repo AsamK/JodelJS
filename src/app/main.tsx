@@ -1,10 +1,9 @@
 import * as React from 'react';
+import DocumentTitle = require('react-document-title/index');
 import * as ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {applyMiddleware, compose, createStore, Middleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
-
-import DocumentTitle = require('react-document-title/index');
 import {
     fetchPostsIfNeeded,
     getConfig,

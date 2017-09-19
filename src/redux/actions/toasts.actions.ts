@@ -1,8 +1,6 @@
 import {ToastType} from '../../enums/ToastType';
 import {IJodelAction} from '../../interfaces/IJodelAction';
-
-export const SHOW_TOAST = 'SHOW_TOAST';
-export const HIDE_TOAST = 'HIDE_TOAST';
+import {HIDE_TOAST, SHOW_TOAST} from './action.consts';
 
 let nextToastId = 0;
 

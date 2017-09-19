@@ -1,4 +1,4 @@
-export enum NotificationScrollType {
+export const enum NotificationScrollType {
     BOTTOM = 'bottom',
     TOP = 'top',
 }

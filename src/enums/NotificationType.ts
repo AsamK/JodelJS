@@ -1,4 +1,4 @@
-export enum NotificationType {
+export const enum NotificationType {
     PIN = 'pin',
     OJ_THANKS = 'oj_thanks',
     OJ_REPLY_REPLY = 'oj_reply_reply',

@@ -1,4 +1,4 @@
-export enum VoteType {
+export const enum VoteType {
     UP = 'up',
     DOWN = 'down',
 }

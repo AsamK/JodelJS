@@ -1,4 +1,4 @@
-export enum ToastType {
+export const enum ToastType {
     ERROR,
     WARNING,
     INFO,

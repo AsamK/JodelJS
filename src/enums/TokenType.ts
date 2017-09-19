@@ -1,3 +1,3 @@
-export enum TokenType {
+export const enum TokenType {
     BEARER = 'bearer',
 }

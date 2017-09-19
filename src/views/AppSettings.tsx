@@ -62,7 +62,7 @@ class AppSettings extends Component<IAppSettingsComponentProps> {
             this.updateLocation();
         }
         if (!location) {
-            if (useBrowserLocation) {
+            if (useBrowserLocation || !Settings.DEFAULT_LOCATION) {
                 return;
             }
             location = {

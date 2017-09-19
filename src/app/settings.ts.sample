@@ -1,4 +1,6 @@
-const Settings = {
+import {ISettings} from '../interfaces/ISettings';
+
+const Settings: ISettings = {
     // API Server and Path
     API_SERVER: 'https://api.go-tellm.com/api',
 
@@ -9,7 +11,7 @@ const Settings = {
     CLIENT_TYPE: 'android_4.60.0',
 
     // Default location, if browser location is not available
-    DEFAULT_LOCATION: {latitude: undefined, longitude: undefined},
+    DEFAULT_LOCATION: undefined,
 
     // Helper server url to create GCM account
     GCM_ACCOUNT_HELPER_URL: '',

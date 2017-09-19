@@ -118,8 +118,8 @@ export class AddPostComponent extends PureComponent<IAddPostComponentProps, IAdd
                         {this.state.imageUrl && this.state.image ?
                             <img src={this.state.imageUrl} alt={this.state.image.name}/> : ''}
                     </div>
-                    {ancestor === null ? <ColorPicker color={this.state.color} onChange={e => {
-                        this.setState({color: e.target.value});
+                    {ancestor === null ? <ColorPicker color={this.state.color} onChange={color => {
+                        this.setState({color});
                     }}/> : ''}
                     <button type="submit">
                         Senden

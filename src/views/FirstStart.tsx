@@ -66,7 +66,7 @@ class FirstStart extends Component<IFirstStartProps, IFirstStartState> {
                                     onChange={(useBrowserLocation, location) => {
                                         this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
                                         if (!location) {
-                                            if (useBrowserLocation) {
+                                            if (useBrowserLocation || !Settings.DEFAULT_LOCATION) {
                                                 return;
                                             }
                                             location = {

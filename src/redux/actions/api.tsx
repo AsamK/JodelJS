@@ -49,6 +49,7 @@ import {
     receiveGcmPushVerification,
 } from '../../app/api';
 import Settings from '../../app/settings';
+import {Color} from '../../enums/Color';
 import {PostListSortType} from '../../enums/PostListSortType';
 import {Section, SectionEnum} from '../../enums/Section';
 import {ToastType} from '../../enums/ToastType';
@@ -553,7 +554,7 @@ export function getConfig(): ThunkAction<void, IJodelAppStore, void> {
 }
 
 export function addPost(text: string, image?: string, channel?: string, ancestor?: string,
-                        color = 'FF9908'): ThunkAction<Promise<Section | null>, IJodelAppStore, void> {
+                        color: Color = 'FF9908'): ThunkAction<Promise<Section | null>, IJodelAppStore, void> {
     return (dispatch, getState) => {
         const loc = getLocation(getState());
         if (!loc) {

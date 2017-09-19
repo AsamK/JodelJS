@@ -57,73 +57,50 @@ function computeSignature(auth: string | undefined, method: string, url: string,
  * @returns {Promise<request.Response>}
  */
 export function getGcmAndroidAccount(): Promise<IApiGcmAccount> {
-    return new Promise((resolve, reject) => {
-        const req = request('GET', Settings.GCM_ACCOUNT_HELPER_URL)
-            .set('Accept', 'application/json');
-
-        req.send()
-            .end((err, res) => {
-                if (err) {
-                    reject(err);
-                } else if (res.body.error) {
-                    reject(res.body.error);
-                } else {
-                    resolve(res.body);
-                }
-            });
-    });
+    return request('GET', Settings.GCM_ACCOUNT_HELPER_URL)
+        .set('Accept', 'application/json')
+        .send()
+        .then(res => {
+            if (res.body.error) {
+                return res.body.error;
+            }
+            return res.body;
+        });
 }
 
 /**
  * Receive the gcm push verification sent by the jodel server via GCM
  */
 export function receiveGcmPushVerification(androidAccount: IApiAndroidAccount): Promise<IApiGcmVerification> {
-    return new Promise((resolve, reject) => {
-        const req = request('POST', Settings.GCM_RECEIVE_HELPER_URL)
-            .type('json')
-            .set('Content-Type', 'application/json; charset=UTF-8');
-
-        req.send(JSON.stringify(androidAccount))
-            .end((err, res) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(res.body);
-                }
-            });
-    });
+    return request('POST', Settings.GCM_RECEIVE_HELPER_URL)
+        .type('json')
+        .set('Content-Type', 'application/json; charset=UTF-8')
+        .send(JSON.stringify(androidAccount))
+        .then(res => res.body);
 }
 
 export function jodelRequest(auth: string | undefined, method: string, url: string, query: object | string,
                              data: any): Promise<request.Response> {
-    return new Promise((resolve, reject) => {
-        const dataString = JSON.stringify(data);
-        const timestamp = new Date().toISOString();
-        const sig = computeSignature(auth, method, url, timestamp, dataString);
+    const dataString = JSON.stringify(data);
+    const timestamp = new Date().toISOString();
+    const sig = computeSignature(auth, method, url, timestamp, dataString);
 
-        const req = request(method, url)
-            .query(query)
-            .type('json')
-            .set('Accept', 'application/json')
-            .set('X-Client-Type', Settings.CLIENT_TYPE)
-            .set('X-Api-Version', '0.2')
-            .set('X-Timestamp', timestamp)
-            .set('X-Authorization', 'HMAC ' + sig.toString())
-            .set('Content-Type', 'application/json; charset=UTF-8');
+    const req = request(method, url)
+        .query(query)
+        .type('json')
+        .set('Accept', 'application/json')
+        .set('X-Client-Type', Settings.CLIENT_TYPE)
+        .set('X-Api-Version', '0.2')
+        .set('X-Timestamp', timestamp)
+        .set('X-Authorization', 'HMAC ' + sig.toString())
+        .set('Content-Type', 'application/json; charset=UTF-8');
 
-        if (auth) {
-            req.set('Authorization', 'Bearer ' + auth);
-        }
+    if (auth) {
+        req.set('Authorization', 'Bearer ' + auth);
+    }
 
-        req.send(dataString)
-            .end((err, res) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(res);
-                }
-            });
-    });
+    return req.send(dataString)
+        .then();
 }
 
 // export function apiGetPosts(callback) {

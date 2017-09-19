@@ -85,7 +85,7 @@ export class PostComponent extends PureComponent<IPostComponentProps> {
 
     private upvote = (e: MouseEvent<HTMLElement>) => {
         e.stopPropagation();
-        const {post, parentPostId} = this.props;
+        const {post} = this.props;
         if (post.voted === 'up') {
             // Already upvoted -> Give thanks
             this.props.giveThanks();

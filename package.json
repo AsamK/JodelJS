@@ -16,7 +16,8 @@
     "redux-freeze": "^0.1.5",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
-    "superagent": "^3.6.0"
+    "superagent": "^3.6.0",
+    "tslib": "^1.7.1"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.3",

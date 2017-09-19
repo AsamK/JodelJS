@@ -4,6 +4,10 @@
     "sourceMap": true,
     "strict": true,
     "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noFallthroughCasesInSwitch": true,
+    "importHelpers": true,
+    "downlevelIteration": true,
     "module": "commonjs",
     "target": "es5",
     "lib": [

@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -5,18 +6,35 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const isProduction = (process.argv.indexOf('-p') !== -1);
 
 const extractText = new ExtractTextPlugin({
-//    filename: "[name].[contenthash].css",
-    filename: 'main.css',
+    filename: "[name].[contenthash].css",
     disable: !isProduction
 });
 
 module.exports = {
-    entry: [
-        "es5-shim",
-        "es6-shim",
+    entry: {
+      main: [
         "./src/app/main.tsx",
         "./style/main.less"
-    ],
+      ],
+      vendor: [
+	"classnames",
+        "create-hmac",
+        "es5-shim",
+        "es6-shim",
+        "nprogress",
+        "randombytes",
+        "react",
+        "react-document-title",
+        "react-dom",
+        "react-redux",
+        "redux",
+        "redux-freeze",
+        "redux-thunk",
+        "reselect",
+        "superagent",
+        "tslib"
+      ]
+    },
 
     output: {
         filename: "[name].[chunkhash].js",
@@ -102,6 +120,13 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(['dist']),
         extractText,
+        new webpack.HashedModuleIdsPlugin(),
+        new webpack.optimize.CommonsChunkPlugin({
+          name: 'vendor'
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+          name: 'runtime'
+        }),
         new HtmlWebpackPlugin({
             template: 'src/index.html'
         })

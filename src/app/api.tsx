@@ -340,6 +340,8 @@ export function apiAddPost(auth: string, channel: string | undefined, ancestorPo
         channel,
         color,
         image,
+        // has_drawing,
+        // has_hashtag,
         location: {
             city,
             country,
@@ -347,6 +349,7 @@ export function apiAddPost(auth: string, channel: string | undefined, ancestorPo
             loc_coordinates: {lat: latitude, lng: longitude},
             name: city,
         },
+        // mention
         message,
         to_home: toHome,
     })

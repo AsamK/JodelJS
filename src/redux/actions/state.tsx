@@ -148,11 +148,12 @@ export function receivePosts(section: Section,
 }
 
 export function receivePost(post: IApiPostDetailsPost, append = false, nextReply: string | null = null,
-                            shareable: boolean = false): IJodelAction {
+                            shareable: boolean = false, ojFilter: boolean): IJodelAction {
     return {
         payload: {
             append,
             nextReply,
+            ojFilter,
             post,
             shareable,
         },

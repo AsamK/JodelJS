@@ -15,10 +15,18 @@ export interface IPost {
     from_home?: boolean;
     got_thanks?: boolean;
     image_approved?: string;
+    image_headers: {
+        Host: string;
+        'X-Amz-Date': string;
+        'x-amz-content-sha256': string;
+        Authorization: string;
+    };
     image_url?: string;
     location: IApiLocation;
     message: string;
     next_reply?: string | null;
+    notifications_enabled?: boolean;
+    oj_filtered?: boolean;
     oj_replied: boolean;
     pin_count?: number;
     pinned?: boolean;

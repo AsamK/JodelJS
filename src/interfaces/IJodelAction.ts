@@ -83,6 +83,7 @@ export interface IPayloadPost {
     nextReply: string | null;
     post: IApiPostDetailsPost;
     shareable: boolean;
+    ojFilter: boolean;
 }
 
 export interface IPayloadNotifications {

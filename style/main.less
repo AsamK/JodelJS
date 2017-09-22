@@ -245,6 +245,22 @@ html, body, #content, .jodel {
   }
 }
 
+.oj-filter {
+  flex: none;
+
+  .oj-filter-button {
+    cursor: pointer;
+    display: inline-block;
+    padding: .94em;
+    &::before {
+      content: "OJ";
+    }
+    &.oj-filtered {
+      background-color: #ccc;
+    }
+  }
+}
+
 .share {
   flex: none;
 

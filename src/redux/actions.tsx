@@ -69,7 +69,7 @@ export function selectPost(postId: string | null): ThunkAction<void, IJodelAppSt
     return (dispatch, getState) => {
         dispatch(_selectPost(postId));
         if (postId != null) {
-            dispatch(updatePost(postId));
+            dispatch(updatePost(postId, true));
         }
     };
 }
@@ -79,7 +79,7 @@ export function selectPostFromNotification(postId: string): ThunkAction<void, IJ
         dispatch(setNotificationPostRead(postId));
         dispatch(_selectPost(postId));
         if (postId != null) {
-            dispatch(updatePost(postId));
+            dispatch(updatePost(postId, true));
         }
     };
 }

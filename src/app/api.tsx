@@ -262,9 +262,11 @@ export function apiGetPostsHashtag(auth: string, sortType: PostListSortType, aft
 // }
 
 export function apiGetPostDetails(auth: string, postId: string, details = true, nextReply: string | undefined,
-                                  reversed = false): Promise<IApiPostDetails> {
+                                  reversed = false, ojFilter = false, bookmark = false): Promise<IApiPostDetails> {
     return jodelRequest(auth, 'GET', Settings.API_SERVER + API_PATH_V3 + '/posts/' + postId + '/details', {
+        bookmark,
         details,
+        oj_filter: ojFilter,
         reply: nextReply,
         reversed,
     }, {})

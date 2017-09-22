@@ -92,11 +92,12 @@ function posts(state: { readonly [key: string]: IPost } = {}, action: IJodelActi
             }
 
             const oldPost = state[post.post_id];
-            const newPost = {
+            const newPost: IPost = {
                 ...oldPost,
                 ...post,
                 children: convertApiReplyPostToReplyPost(postChildren),
                 next_reply: action.payload.nextReply,
+                oj_filtered: action.payload.ojFilter,
                 shareable: action.payload.shareable,
             };
             if (oldPost && oldPost.children && newPost.children) {
@@ -104,7 +105,7 @@ function posts(state: { readonly [key: string]: IPost } = {}, action: IJodelActi
                     newPost.child_count = (newPost.child_count ? newPost.child_count : 0) +
                         (oldPost.children ? oldPost.children.length : 0);
                     newPost.children = [...oldPost.children, ...newPost.children];
-                } else if (newPost.children && newPost.children.length === 0) {
+                } else if (newPost.children.length === 0 && !action.payload.ojFilter) {
                     // The old post has children and the new post has children,
                     // which however aren't included in the new data
                     // -> keep old children

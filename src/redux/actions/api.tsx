@@ -1,6 +1,5 @@
 import {Dispatch} from 'redux';
 import {ThunkAction} from 'redux-thunk';
-import {_closeSticky} from './state';
 
 import {
     apiAddPost,
@@ -61,6 +60,7 @@ import {IJodelAppStore} from '../reducers';
 import {getPost} from '../reducers/entities';
 import {getLocation} from '../selectors/app';
 import {
+    _closeSticky,
     _setConfig,
     _setDeviceUID,
     _setKarma,
@@ -454,38 +454,38 @@ export function fetchMoreComments(): ThunkAction<void, IJodelAppStore, void> {
         if (post && post.next_reply) {
             const nextReply = post.next_reply;
             if (nextReply != null) {
-                dispatch(fetchPost(postId, nextReply));
+                dispatch(fetchPost(postId, nextReply, post.oj_filtered));
             }
         }
     };
 }
 
-export function updatePost(postId: string): ThunkAction<void, IJodelAppStore, void> {
+export function updatePost(postId: string, force = false): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
         const post = getPost(getState(), postId);
-        if (!post) {
+        if (!post || force) {
             dispatch(fetchPost(postId));
         } else {
             const count = post.child_count;
             const children = post.children;
             if (!count || !children || children.length === 0) {
-                dispatch(fetchPost(postId));
+                dispatch(fetchPost(postId, undefined, post.oj_filtered));
             } else if (children.length === count) {
-                dispatch(fetchCompletePost(postId));
+                dispatch(fetchCompletePost(postId, post.oj_filtered));
             }
         }
     };
 }
 
 function getAllPostDetails(dispatch: Dispatch<IJodelAppStore>, getState: () => IJodelAppStore, postId: string,
-                           nextReply?: string): Promise<IApiPostDetails | void> {
-    return apiGetPostDetails(getAuth(getState()), postId, true, nextReply, false)
+                           nextReply?: string, ojFilter = false): Promise<IApiPostDetails | void> {
+    return apiGetPostDetails(getAuth(getState()), postId, true, nextReply, false, ojFilter)
         .then(res => {
                 if (!res.next) {
                     return res;
                 }
 
-                return getAllPostDetails(dispatch, getState, postId, res.next)
+                return getAllPostDetails(dispatch, getState, postId, res.next, ojFilter)
                     .then(nextRes => {
                         if (!nextRes) {
                             return res;
@@ -501,22 +501,23 @@ function getAllPostDetails(dispatch: Dispatch<IJodelAppStore>, getState: () => I
             err => handleNetworkErrors(dispatch, getState, err));
 }
 
-export function fetchPost(postId: string, nextReply?: string): ThunkAction<void, IJodelAppStore, void> {
+export function fetchPost(postId: string, nextReply?: string,
+                          ojFilter = false): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        apiGetPostDetails(getAuth(getState()), postId, true, nextReply, false)
+        apiGetPostDetails(getAuth(getState()), postId, true, nextReply, false, ojFilter)
             .then(res => {
                     const post = res.details;
                     post.children = res.replies;
                     post.child_count = post.children.length + res.remaining;
-                    dispatch(receivePost(post, nextReply !== undefined, res.next, res.shareable));
+                    dispatch(receivePost(post, nextReply !== undefined, res.next, res.shareable, ojFilter));
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     };
 }
 
-export function fetchCompletePost(postId: string): ThunkAction<void, IJodelAppStore, void> {
+function fetchCompletePost(postId: string, ojFilter = false): ThunkAction<void, IJodelAppStore, void> {
     return (dispatch, getState) => {
-        getAllPostDetails(dispatch, getState, postId)
+        getAllPostDetails(dispatch, getState, postId, undefined, ojFilter)
             .then(res => {
                     if (!res) {
                         return;
@@ -524,7 +525,7 @@ export function fetchCompletePost(postId: string): ThunkAction<void, IJodelAppSt
                     const post = res.details;
                     post.children = res.replies;
                     post.child_count = post.children.length;
-                    dispatch(receivePost(post, false, null, res.shareable));
+                    dispatch(receivePost(post, false, null, res.shareable, ojFilter));
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     };
@@ -564,7 +565,7 @@ export function addPost(text: string, image?: string, channel?: string, ancestor
             loc.country, text, image, getState().settings.useHomeLocation)
             .then(res => {
                     if (ancestor) {
-                        dispatch(updatePost(ancestor));
+                        dispatch(updatePost(ancestor, true));
                         return null;
                     } else if (channel) {
                         const section = 'channel:' + channel;
@@ -826,6 +827,12 @@ export function sharePost(postId: string): ThunkAction<void, IJodelAppStore, voi
                     alert(res.url);
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
+    };
+}
+
+export function ojFilterPost(postId: string, ojFilter: boolean): ThunkAction<void, IJodelAppStore, void> {
+    return (dispatch, getState) => {
+        dispatch(fetchPost(postId, undefined, ojFilter));
     };
 }
 

@@ -694,10 +694,15 @@ html, body, #content, .jodel {
 }
 
 .hashtag,
-.channel-link {
+.channel-link,
+.sticky-link {
   cursor: pointer;
   font-weight: bold;
 
+  &:link,
+  &:visited {
+    color: white;
+  }
   &:hover {
     color: rgba(0, 16, 20, 0.33);
   }

@@ -1,9 +1,11 @@
 import * as React from 'react';
-import DocumentTitle = require('react-document-title/index');
+import * as DocumentTitle from 'react-document-title/index';
 import * as ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {applyMiddleware, compose, createStore, Middleware} from 'redux';
+import * as freeze from 'redux-freeze';
 import thunkMiddleware from 'redux-thunk';
+
 import {
     fetchPostsIfNeeded,
     getConfig,
@@ -46,7 +48,6 @@ const reduxMiddlewares: Middleware[] = [
 if (process.env.NODE_ENV !== 'production') {
     // Freeze redux state in development to prevent accidental modifications
     // Disable in production to improve performance
-    const freeze = require('redux-freeze');
     reduxMiddlewares.push(freeze);
 }
 

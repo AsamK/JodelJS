@@ -1,6 +1,11 @@
 {
   "name": "JodelJS",
   "description": "Jodel webapp",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:AsamK/JodelJS.git"
+  },
   "dependencies": {
     "classnames": "^2.2.5",
     "create-hmac": "^1.1.6",

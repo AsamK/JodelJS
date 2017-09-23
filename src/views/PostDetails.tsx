@@ -18,7 +18,7 @@ export interface IPostDetailsProps {
 export default class PostDetails extends Component<IPostDetailsProps> {
     private scrollAtBottom: boolean;
 
-    private scrollable: HTMLElement | null;
+    private scrollable: HTMLDivElement | null;
 
     constructor(props: IPostDetailsProps) {
         super(props);

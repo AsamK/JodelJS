@@ -39,6 +39,8 @@ export default class Message extends Component<IMessageProps> {
                     <a className="sticky-link"
                        key={linkLabel + linkTarget}
                        href={linkTarget}
+                       target="_blank"
+                       rel="noopener noreferrer"
                     >
                         {linkLabel}
                     </a>,

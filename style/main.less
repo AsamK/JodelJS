@@ -402,10 +402,11 @@ html, body, #content, .jodel {
 
 .post,
 .sticky {
-  margin-bottom: .5em;
-  padding: 5px;
-  overflow: hidden;
   color: #fff;
+  margin-bottom: .5em;
+  overflow: hidden;
+  padding: 5px;
+  position: relative;
 
   .postPicture {
     width: 85%;
@@ -525,6 +526,19 @@ html, body, #content, .jodel {
     .gotThanks:after {
       content: "❤";
       margin-left: .5em;
+    }
+  }
+
+  &.post-oj {
+    padding-left: 1em;
+    &::before {
+      background-color: rgba(255, 255, 255, .6);
+      bottom: 0;
+      content: ' ';
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 1em;
     }
   }
 }

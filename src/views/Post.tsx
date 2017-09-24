@@ -3,6 +3,7 @@ import * as React from 'react';
 import {MouseEvent, PureComponent} from 'react';
 import {connect, Dispatch} from 'react-redux';
 import {PostOwn} from '../enums/PostOwn';
+import {UserHandle} from '../enums/UserHandle';
 
 import {IPost} from '../interfaces/IPost';
 import {deletePost, downVote, giveThanks, selectPicture, switchPostSection, upVote} from '../redux/actions';
@@ -38,9 +39,11 @@ export class PostComponent extends PureComponent<IPostComponentProps> {
     }
 
     public render() {
-        const {post, author, onPostClick} = this.props;
+        const {post, author, parentPostId, onPostClick} = this.props;
         return (
-            <div className="post" style={{backgroundColor: '#' + post.color}} onClick={onPostClick}>
+            <div className={classnames('post', {'post-oj': !!parentPostId && post.user_handle === UserHandle.OJ})}
+                 style={{backgroundColor: '#' + post.color}}
+                 onClick={onPostClick}>
                 {post.thumbnail_url ?
                     <div className="postPicture"
                          style={{backgroundImage: 'url(https:' + post.thumbnail_url + ')'}}

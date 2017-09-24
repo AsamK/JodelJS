@@ -2,6 +2,7 @@ import * as classnames from 'classnames';
 import * as React from 'react';
 import {MouseEvent, PureComponent} from 'react';
 import {connect, Dispatch} from 'react-redux';
+import {PostOwn} from '../enums/PostOwn';
 
 import {IPost} from '../interfaces/IPost';
 import {deletePost, downVote, giveThanks, selectPicture, switchPostSection, upVote} from '../redux/actions';
@@ -75,7 +76,7 @@ export class PostComponent extends PureComponent<IPostComponentProps> {
                         </div>
                         : ''}
                 </div>
-                {post.post_own === 'own' ? <a onClick={e => {
+                {post.post_own === PostOwn.OWN ? <a onClick={e => {
                     e.stopPropagation();
                     this.props.deletePost();
                 }}>delete</a> : ''}

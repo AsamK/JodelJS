@@ -1,4 +1,6 @@
 import {Color} from '../enums/Color';
+import {PostOwn} from '../enums/PostOwn';
+import {UserHandle} from '../enums/UserHandle';
 import {VoteType} from '../enums/VoteType';
 import {IApiPostReplyPost} from './IApiPostDetailsPost';
 import {IApiLocation} from './IPost';
@@ -20,12 +22,12 @@ export interface IApiPostListPost {
     pin_count: number;
     pinned?: boolean;
     post_id: string;
-    post_own: string;
+    post_own: PostOwn;
     replier: number;
     share_count: number;
     thumbnail_url?: string;
     updated_at: string;
-    user_handle: string;
+    user_handle: UserHandle;
     vote_count: number;
     voted?: VoteType;
     image_headers: {

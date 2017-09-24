@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Component} from 'react';
+import {UserHandle} from '../enums/UserHandle';
 
 import {IPost} from '../interfaces/IPost';
 import {Post} from './Post';
@@ -72,7 +73,7 @@ export default class PostList extends Component<IPostListProps> {
                 let parentPostId;
                 if (parentPost) {
                     parentPostId = parentPost.post_id;
-                    if (post.user_handle === 'oj') {
+                    if (post.user_handle === UserHandle.OJ) {
                         author = 'OJ';
                     } else if (post.replier) {
                         author = 'C' + post.replier;

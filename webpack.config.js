@@ -1,36 +1,36 @@
 const webpack = require('webpack');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const isProduction = (process.argv.indexOf('-p') !== -1);
 
 const extractText = new ExtractTextPlugin({
-    filename: "[name].[contenthash].css",
+    filename: '[name].[contenthash].css',
     disable: !isProduction
 });
 
 module.exports = {
     entry: {
-      main: [
-        'es5-shim',
-        'es6-shim',
-        "./src/app/main.tsx",
-        "./style/main.less"
-      ]
+        main: [
+            'es5-shim',
+            'es6-shim',
+            './src/app/main.tsx',
+            './style/main.less'
+        ]
     },
 
     output: {
-        filename: "[name].[chunkhash].js",
-        path: __dirname + "/dist"
+        filename: '[name].[chunkhash].js',
+        path: __dirname + '/dist'
     },
 
     // Enable sourcemaps for debugging webpack's output.
-    devtool: "source-map",
+    devtool: 'source-map',
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: [".ts", ".tsx", ".js", ".json"]
+        extensions: ['.ts', '.tsx', '.js', '.json']
     },
 
     module: {
@@ -38,26 +38,26 @@ module.exports = {
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
             {
                 test: /\.tsx?$/,
-                loader: "ts-loader"
+                loader: 'ts-loader'
             },
 
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             {
-                enforce: "pre",
+                enforce: 'pre',
                 test: /\.js$/,
-                loader: "source-map-loader"
+                loader: 'source-map-loader'
             },
             {
                 test: /\.css$/,
                 use: extractText.extract({
                     use: [{
-                        loader: "css-loader",
+                        loader: 'css-loader',
                         options: {
                             // https://github.com/webpack-contrib/css-loader#importloaders
                             importLoaders: 0
                         }
                     }, {
-                        loader: "postcss-loader",
+                        loader: 'postcss-loader',
                         options: {
                             plugins: (loader) => [
                                 require('autoprefixer')(),
@@ -65,7 +65,7 @@ module.exports = {
                         }
                     }],
                     // use style-loader in development
-                    fallback: "style-loader"
+                    fallback: 'style-loader'
                 })
             },
             {
@@ -73,23 +73,23 @@ module.exports = {
                 use: extractText.extract({
                     //resolve-url-loader may be chained before less-loader if necessary
                     use: [{
-                        loader: "css-loader",
+                        loader: 'css-loader',
                         options: {
                             // https://github.com/webpack-contrib/css-loader#importloaders
                             importLoaders: 0
                         }
                     }, {
-                        loader: "postcss-loader",
+                        loader: 'postcss-loader',
                         options: {
                             plugins: (loader) => [
                                 require('autoprefixer')(),
                             ]
                         }
                     }, {
-                        loader: "less-loader"
+                        loader: 'less-loader'
                     }],
                     // use style-loader in development
-                    fallback: "style-loader"
+                    fallback: 'style-loader'
                 })
             },
             {
@@ -108,7 +108,7 @@ module.exports = {
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             minChunks: function (module) {
-                return module.context && module.context.indexOf("node_modules") !== -1;
+                return module.context && module.context.indexOf('node_modules') !== -1;
             }
         }),
         new webpack.optimize.CommonsChunkPlugin({
@@ -122,6 +122,6 @@ module.exports = {
 
     devServer: {
         inline: true,
-        contentBase: "dist"
+        contentBase: 'dist'
     }
 };

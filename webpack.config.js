@@ -13,26 +13,10 @@ const extractText = new ExtractTextPlugin({
 module.exports = {
     entry: {
       main: [
+        'es5-shim',
+        'es6-shim',
         "./src/app/main.tsx",
         "./style/main.less"
-      ],
-      vendor: [
-	"classnames",
-        "create-hmac",
-        "es5-shim",
-        "es6-shim",
-        "nprogress",
-        "randombytes",
-        "react",
-        "react-document-title",
-        "react-dom",
-        "react-redux",
-        "redux",
-        "redux-freeze",
-        "redux-thunk",
-        "reselect",
-        "superagent",
-        "tslib"
       ]
     },
 
@@ -122,10 +106,14 @@ module.exports = {
         extractText,
         new webpack.HashedModuleIdsPlugin(),
         new webpack.optimize.CommonsChunkPlugin({
-          name: 'vendor'
+            name: 'vendor',
+            minChunks: function (module) {
+                return module.context && module.context.indexOf("node_modules") !== -1;
+            }
         }),
         new webpack.optimize.CommonsChunkPlugin({
-          name: 'runtime'
+            name: 'runtime',
+            minChunks: Infinity
         }),
         new HtmlWebpackPlugin({
             template: 'src/index.html'

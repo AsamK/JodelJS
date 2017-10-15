@@ -26,6 +26,7 @@ import {
     SET_RECOMMENDED_CHANNELS,
     SET_SUGGESTED_HASHTAGS,
     SET_TOKEN,
+    SET_TOKEN_PENDING,
     SET_USE_BROWSER_LOCATION,
     SET_USE_HOME_LOCATION,
     SHOW_ADD_POST,
@@ -193,6 +194,7 @@ export type IJodelAction =
     { type: typeof SET_RECOMMENDED_CHANNELS; payload: IPayloadChannels; } |
     { type: typeof SET_SUGGESTED_HASHTAGS; payload: IPayloadHashtags; } |
     { type: typeof SET_TOKEN; payload: IPayloadToken; } |
+    { type: typeof SET_TOKEN_PENDING; } |
     { type: typeof SET_USE_BROWSER_LOCATION; payload: IPayloadBrowserLocation; } |
     { type: typeof SET_USE_HOME_LOCATION; payload: IPayloadHomeLocation; } |
     { type: typeof SHOW_ADD_POST; payload: IPayloadVisible; } |

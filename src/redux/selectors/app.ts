@@ -22,3 +22,12 @@ export const getLocation = (store: IJodelAppStore) => store.settings.location;
 export const isLocationKnown = (store: IJodelAppStore) => !!getLocation(store);
 
 export const getToasts = (state: IJodelAppStore) => state.toasts;
+
+export const getAccessToken = (state: IJodelAppStore) => {
+    if (!state.account.token) {
+        return undefined;
+    }
+    return state.account.token.access;
+};
+
+export const getIsRefreshingToken = (state: IJodelAppStore) => state.account.refreshingToken;

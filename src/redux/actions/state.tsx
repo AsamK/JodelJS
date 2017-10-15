@@ -34,6 +34,7 @@ import {
     SET_RECOMMENDED_CHANNELS,
     SET_SUGGESTED_HASHTAGS,
     SET_TOKEN,
+    SET_TOKEN_PENDING,
     SET_USE_BROWSER_LOCATION,
     SET_USE_HOME_LOCATION,
     SHOW_ADD_POST,
@@ -287,6 +288,12 @@ export function _setPermissionDenied(permissionDenied: boolean): IJodelAction {
     return {
         payload: {permissionDenied},
         type: SET_PERMISSION_DENIED,
+    };
+}
+
+export function beginRefreshToken(): IJodelAction {
+    return {
+        type: SET_TOKEN_PENDING,
     };
 }
 

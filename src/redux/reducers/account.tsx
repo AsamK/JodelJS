@@ -13,6 +13,7 @@ import {
     SET_RECOMMENDED_CHANNELS,
     SET_SUGGESTED_HASHTAGS,
     SET_TOKEN,
+    SET_TOKEN_PENDING,
 } from '../actions/action.consts';
 
 export const ACCOUNT_VERSION = 3;
@@ -25,6 +26,7 @@ export function migrateAccount(storedState: IAccountStore, oldVersion: number): 
     if (oldVersion < 3) {
         newState.localChannels = [];
     }
+    newState.refreshingToken = false;
     return {...storedState, ...newState};
 }
 
@@ -34,6 +36,7 @@ interface IAccountStoreMutable {
     karma: number;
     deviceUid: string | null;
     token: IToken | null;
+    refreshingToken: boolean;
     config: IApiConfig | null;
     permissionDenied: boolean;
     recommendedChannels: ReadonlyArray<string>;
@@ -50,6 +53,7 @@ export const account = combineReducers<IAccountStore>({
     localChannels,
     permissionDenied,
     recommendedChannels,
+    refreshingToken,
     suggestedHashtags,
     token,
 });
@@ -76,6 +80,17 @@ function token(state: IToken | null = null, action: IJodelAction): typeof state 
     switch (action.type) {
         case SET_TOKEN:
             return action.payload.token;
+        default:
+            return state;
+    }
+}
+
+function refreshingToken(state = false, action: IJodelAction): typeof state {
+    switch (action.type) {
+        case SET_TOKEN_PENDING:
+            return true;
+        case SET_TOKEN:
+            return false;
         default:
             return state;
     }

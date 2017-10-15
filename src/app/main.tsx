@@ -21,6 +21,7 @@ import {ACCOUNT_VERSION, IAccountStore, migrateAccount} from '../redux/reducers/
 import {ISettingsStore, migrateSettings, SETTINGS_VERSION} from '../redux/reducers/settings';
 import {getNotificationDescription} from '../utils/notification.utils';
 import {Jodel} from '../views/Jodel';
+import {JodelApi} from './api';
 
 let persistedStateAccount: IAccountStore | undefined;
 const storedAccount = localStorage.getItem('account');
@@ -41,8 +42,9 @@ const persistedState: Partial<IJodelAppStore> = {
     settings: persistedStateSettings,
 };
 
+const extraThunkArgument: { api?: JodelApi } = {};
 const reduxMiddlewares: Middleware[] = [
-    thunkMiddleware, // lets us use dispatch() functions
+    thunkMiddleware.withExtraArgument(extraThunkArgument), // lets us use dispatch() functions
 ];
 
 if (process.env.NODE_ENV !== 'production') {
@@ -62,6 +64,9 @@ const store = createStore<IJodelAppStore>(
         ),
     ),
 );
+
+const api = new JodelApi(store);
+extraThunkArgument.api = api;
 
 let userClickedBack = false;
 store.subscribe((() => {

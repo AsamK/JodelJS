@@ -1,6 +1,7 @@
 import * as classnames from 'classnames';
 import * as React from 'react';
 import {Component} from 'react';
+import {FormattedMessage, FormattedNumber} from 'react-intl';
 import {connect, Dispatch} from 'react-redux';
 import {showNotifications, showSearch, showSettings} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
@@ -50,17 +51,34 @@ class MenuComponent extends Component<IMenuComponentProps, IMenuComponentState> 
                         </li>
                         <li className="menuEntry">
                             <div className="sectionLink" onClick={showNotificationsCallback}>
-                                Benachrichtigungen {unreadNotifications === 0 ? '' : `(${unreadNotifications})`}
+                                <FormattedMessage
+                                    id="notifications"
+                                    defaultMessage="Notifications"
+                                />
+                                {unreadNotifications === 0 ?
+                                    '' :
+                                    [
+                                        '(',
+                                        <FormattedNumber value={unreadNotifications}/>,
+                                        ')',
+                                    ]
+                                }
                             </div>
                         </li>
                         <li className="menuEntry">
                             <div className="sectionLink" onClick={showSearchCallback}>
-                                Suche
+                                <FormattedMessage
+                                    id="search"
+                                    defaultMessage="Search"
+                                />
                             </div>
                         </li>
                         <li className="menuEntry">
                             <div className="sectionLink" onClick={showSettingsCallback}>
-                                Einstellungen
+                                <FormattedMessage
+                                    id="settings"
+                                    defaultMessage="Settings"
+                                />
                             </div>
                         </li>
                     </ul>

@@ -1,6 +1,9 @@
 import * as React from 'react';
 import * as DocumentTitle from 'react-document-title/index';
 import * as ReactDOM from 'react-dom';
+import {addLocaleData, IntlProvider} from 'react-intl';
+import * as de from 'react-intl/locale-data/de';
+import * as en from 'react-intl/locale-data/en';
 import {Provider} from 'react-redux';
 import {applyMiddleware, compose, createStore, Middleware} from 'redux';
 import * as freeze from 'redux-freeze';
@@ -19,6 +22,7 @@ import {getKarma, getNotifications, refreshAccessToken} from '../redux/actions/a
 import {IJodelAppStore, JodelApp} from '../redux/reducers';
 import {ACCOUNT_VERSION, IAccountStore, migrateAccount} from '../redux/reducers/account';
 import {ISettingsStore, migrateSettings, SETTINGS_VERSION} from '../redux/reducers/settings';
+import translationDe from '../translations/de';
 import {getNotificationDescription} from '../utils/notification.utils';
 import {Jodel} from '../views/Jodel';
 import {JodelApi} from './api';
@@ -165,8 +169,28 @@ window.onpopstate = event => {
     store.dispatch(replaceViewState(event.state));
 };
 
-ReactDOM.render(<Provider store={store}>
-    <DocumentTitle title="Jodel Unofficial WebApp">
-        <Jodel/>
-    </DocumentTitle>
-</Provider>, document.getElementById('content'));
+addLocaleData([...en, ...de]);
+
+const messages: { [lang: string]: { [key: string]: string } } = {
+    de: translationDe,
+    en: {},
+};
+
+const translationLocale = navigator.language || (navigator as any).userLanguage;
+const translationLanguage = translationLocale ? translationLocale.substr(0, 2) : 'en';
+
+const TextComponent = (props: any) => props.children;
+
+ReactDOM.render(
+    <IntlProvider
+        locale={translationLocale}
+        messages={messages[translationLanguage]}
+        textComponent={TextComponent}
+    >
+        <Provider store={store}>
+            <DocumentTitle title="Jodel Unofficial WebApp">
+                <Jodel/>
+            </DocumentTitle>
+        </Provider>
+    </IntlProvider>
+    , document.getElementById('content'));

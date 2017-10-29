@@ -539,6 +539,18 @@ export class JodelApi {
             .then(res => res.body);
     }
 
+    public async apiEnableFeedInternationalization(): Promise<void> {
+        const res = await this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V3 +
+            '/user/feedInternationalization/enable/', {}, {});
+        return res.body;
+    }
+
+    public async apiDisableFeedInternationalization(): Promise<void> {
+        const res = await this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V3 +
+            '/user/feedInternationalization/disable/', {}, {});
+        return res.body;
+    }
+
     private getAuth(): Promise<string> {
         if (this.nextAccessToken) {
             return this.nextAccessToken;

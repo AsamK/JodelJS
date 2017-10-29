@@ -57,8 +57,8 @@
     "start": "webpack-dev-server",
     "build": "webpack -p",
     "updatepackages": "ncu -u -a",
-    "lint": "tslint --type-check --project . --force",
-    "lint-fix": "tslint --type-check --project . --fix",
+    "lint": "tslint --project . --force",
+    "lint-fix": "tslint --project . --fix",
     "profile": "webpack --profile -p --json > profiling.json"
   }
 }

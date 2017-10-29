@@ -633,6 +633,16 @@ export function deleteHome(): JodelThunkAction {
     };
 }
 
+export function setInternationalFeed(enable: boolean): JodelThunkAction {
+    return (dispatch, getState, {api}) => {
+        (enable ? api.apiEnableFeedInternationalization() : api.apiDisableFeedInternationalization())
+            .then(() => dispatch(getConfig()))
+            .catch(err => {
+                handleNetworkErrors(dispatch, getState, err);
+            });
+    };
+}
+
 export function getRecommendedChannels(): JodelThunkAction {
     return (dispatch, getState, {api}) => {
         api.apiGetRecommendedChannels(getState().settings.useHomeLocation)

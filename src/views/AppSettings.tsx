@@ -6,7 +6,6 @@ import Settings from '../app/settings';
 import {IApiExperiment} from '../interfaces/IApiConfig';
 import {IGeoCoordinates, ILocation} from '../interfaces/ILocation';
 import {
-    _setLocation,
     deleteHome,
     getImageCaptcha,
     sendVerificationAnswer,
@@ -16,12 +15,13 @@ import {
     setUseHomeLocation,
     updateLocation,
 } from '../redux/actions';
+import {setInternationalFeed} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
 import {getDeviceUid, getLocation} from '../redux/selectors/app';
 import {SelectLocation} from './SelectLocation';
 import {VerificationImageCaptcha} from './VerificationImageCaptcha';
 
-export interface IAppSettingsProps {
+interface IAppSettingsStateProps {
     deviceUid: string | null;
     location: ILocation | null;
     homeSet: boolean;
@@ -40,26 +40,29 @@ export interface IAppSettingsProps {
     pending_deletion: boolean;
 }
 
-interface IAppSettingsComponentProps extends IAppSettingsProps {
-    dispatch: Dispatch<IJodelAppStore>;
+interface IAppSettingsDispatchProps {
+    showHome: (useHome: boolean) => void;
+    updateLocation: () => void;
+    getImageCaptcha: () => void;
+    deleteHome: () => void;
+    setHome: (location: IGeoCoordinates) => void;
+    setLocation: (location: IGeoCoordinates) => void;
+    setInternationalFeed: (enable: boolean) => void;
+    setUseBrowserLocation: (useBrowserLocation: boolean) => void;
+    sendVerificationAnswer: (answer: number[]) => void;
 }
+
+type IAppSettingsComponentProps = IAppSettingsDispatchProps & IAppSettingsStateProps;
 
 class AppSettings extends Component<IAppSettingsComponentProps> {
     constructor(props: IAppSettingsComponentProps) {
         super(props);
-        this.updateLocation = this.updateLocation.bind(this);
-        this.locationChange = this.locationChange.bind(this);
-        this.showHome = this.showHome.bind(this);
     }
 
-    public updateLocation() {
-        this.props.dispatch(updateLocation());
-    }
-
-    public locationChange(useBrowserLocation: boolean, location: IGeoCoordinates | null) {
-        this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
+    public locationChange = (useBrowserLocation: boolean, location: IGeoCoordinates | null) => {
+        this.props.setUseBrowserLocation(useBrowserLocation);
         if (useBrowserLocation && !this.props.useBrowserLocation) {
-            this.updateLocation();
+            this.props.updateLocation();
         }
         if (!location) {
             if (useBrowserLocation || !Settings.DEFAULT_LOCATION) {
@@ -70,17 +73,13 @@ class AppSettings extends Component<IAppSettingsComponentProps> {
                 longitude: Settings.DEFAULT_LOCATION.longitude,
             };
         }
-        this.props.dispatch(_setLocation(location.latitude, location.longitude));
+        this.props.setLocation(location);
     }
 
     public componentDidMount() {
         if (!this.props.verified) {
-            this.props.dispatch(getImageCaptcha());
+            this.props.getImageCaptcha();
         }
-    }
-
-    public showHome() {
-        this.props.dispatch(setUseHomeLocation(!this.props.useHomeLocation));
     }
 
     public render() {
@@ -95,7 +94,7 @@ class AppSettings extends Component<IAppSettingsComponentProps> {
                 <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
                                 location={this.props.location}
                                 onChange={this.locationChange}
-                                onLocationRequested={this.updateLocation}
+                                onLocationRequested={this.props.updateLocation}
                 />
                 <h4>
                     Heimat
@@ -105,14 +104,14 @@ class AppSettings extends Component<IAppSettingsComponentProps> {
                         <div>
                             <label>
                                 <input type="checkbox" className="homeLink"
-                                       onChange={this.showHome} checked={this.props.useHomeLocation}>
+                                       onChange={() => this.props.showHome(!this.props.useHomeLocation)}
+                                       checked={this.props.useHomeLocation}
+                                >
                                 </input>
                                 Heimat ({this.props.homeName}) verwenden
                             </label>
                             {this.props.homeClearAllowed ?
-                                <button onClick={() => {
-                                    this.props.dispatch(deleteHome());
-                                }}>
+                                <button onClick={() => this.props.deleteHome()}>
                                     Heimat löschen (nur einmal möglich)
                                 </button>
                                 : ''
@@ -123,13 +122,29 @@ class AppSettings extends Component<IAppSettingsComponentProps> {
                                 if (!this.props.location) {
                                     return;
                                 }
-                                this.props.dispatch(
-                                    setHome(this.props.location.latitude, this.props.location.longitude));
+                                this.props.setHome(this.props.location);
                             }}>
                                 Aktuellen Standort als Heimat setzen
                             </button>
                             : ''
                     }
+                </div>
+            </div>
+            <h4>
+                Internationale/Reise Jodel {!this.props.feedInternationalizable ?
+                '(Aus Gründen nicht aktivierbar)' :
+                undefined}
+            </h4>
+            <div className="block">
+                <label>
+                    <input type="checkbox" className="internationalFeedCheckbox"
+                           onChange={() => this.props.setInternationalFeed(!this.props.feedInternationalized)}
+                           checked={this.props.feedInternationalized}
+                    >
+                    </input>
+                    Internationale Jodel aktivieren
+                </label>
+                <div>
                 </div>
             </div>
             <h3>Konto</h3>
@@ -138,7 +153,7 @@ class AppSettings extends Component<IAppSettingsComponentProps> {
                     {!this.props.verified && this.props.imageUrl && this.props.imageWidth ?
                         <VerificationImageCaptcha imageUrl={this.props.imageUrl} imageWidth={this.props.imageWidth}
                                                   onFinishedClick={answer => {
-                                                      this.props.dispatch(sendVerificationAnswer(answer));
+                                                      this.props.sendVerificationAnswer(answer);
                                                   }
                                                   }/>
                         : 'Dein Jodel Konto ist verifiziert'}
@@ -161,8 +176,7 @@ class AppSettings extends Component<IAppSettingsComponentProps> {
             <button className="closeButton"
                     onClick={() => {
                         if (this.props.location) {
-                            this.props.dispatch(
-                                setLocation(this.props.location.latitude, this.props.location.longitude));
+                            this.props.setLocation(this.props.location);
                         }
                         window.history.back();
                     }}>
@@ -172,7 +186,7 @@ class AppSettings extends Component<IAppSettingsComponentProps> {
     }
 }
 
-const mapStateToProps = (state: IJodelAppStore): IAppSettingsProps => {
+const mapStateToProps = (state: IJodelAppStore): IAppSettingsStateProps => {
     return {
         deviceUid: getDeviceUid(state),
         experiments: state.account.config ? state.account.config.experiments : [],
@@ -193,4 +207,18 @@ const mapStateToProps = (state: IJodelAppStore): IAppSettingsProps => {
     };
 };
 
-export default connect(mapStateToProps)(AppSettings);
+const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>): IAppSettingsDispatchProps => {
+    return {
+        deleteHome: () => dispatch(deleteHome()),
+        getImageCaptcha: () => dispatch(getImageCaptcha()),
+        sendVerificationAnswer: (answer: number[]) => dispatch(sendVerificationAnswer(answer)),
+        setHome: (location: IGeoCoordinates) => dispatch(setHome(location.latitude, location.longitude)),
+        setInternationalFeed: (enable: boolean) => dispatch(setInternationalFeed(enable)),
+        setLocation: (location: IGeoCoordinates) => dispatch(setLocation(location.latitude, location.longitude)),
+        setUseBrowserLocation: (useBrowserLocation: boolean) => dispatch(setUseBrowserLocation(useBrowserLocation)),
+        showHome: (useHome: boolean) => dispatch(setUseHomeLocation(useHome)),
+        updateLocation: () => dispatch(updateLocation()),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppSettings);

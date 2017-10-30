@@ -52,6 +52,7 @@ function handleNetworkErrors(dispatch: Dispatch<IJodelAppStore>, getState: () =>
         console.error('Request error: Secret is probably outdated ' + err.status + ' ' + err.message + ': ' +
             err.response.text);
     } else if (err.status === 478) {
+        dispatch(verify());
         const error = err.response.body ? err.response.body.error : err.response.text;
         dispatch(showToast('Zugriff verweigert, Konto nicht verifiziert: ' + error, ToastType.ERROR));
         console.error('Request error: Account probably not verified ' + err.status + ' ' + err.message + ': ' +

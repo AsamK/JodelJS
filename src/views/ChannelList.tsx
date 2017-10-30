@@ -11,8 +11,74 @@ export interface IChannelListProps {
     onChannelClick: (channelName: string) => void;
 }
 
-export default class ChannelList extends Component<IChannelListProps> {
-    public static createChannelNode(channel: IChannel, onChannelClick: (channel: string) => void, showImage: boolean) {
+export interface IChannelListState {
+    channelFilter: string;
+}
+
+export default class ChannelList extends Component<IChannelListProps, IChannelListState> {
+    public state: IChannelListState = {channelFilter: ''};
+
+    public render() {
+        const {channels, recommendedChannels, localChannels, countryChannels, onChannelClick} = this.props;
+        const channelNodes = channels.map(channel => {
+                return this.createChannelNode(channel, onChannelClick, true);
+            },
+        );
+        const recommendedChannelNodes = recommendedChannels.map(channel => {
+                return this.createChannelNode(channel, onChannelClick, true);
+            },
+        );
+        const localChannelNodes = localChannels.map(channel => {
+                return this.createChannelNode(channel, onChannelClick, false);
+            },
+        );
+        const countryChannelNodes = countryChannels.map(channel => {
+                return this.createChannelNode(channel, onChannelClick, false);
+            },
+        );
+        return (
+            <div className="channelList">
+                <div className="channelListHeader">Kanäle(beta)</div>
+                <div className="channelFilter">
+                    <input type="text"
+                           className="channelFilterText"
+                           placeholder="Channel filtern"
+                           value={this.state.channelFilter}
+                           onChange={e => this.setState({channelFilter: e.target.value})}
+                    />
+                    {!this.state.channelFilter ? null :
+                        <div
+                            className="channelLink"
+                            onClick={() => onChannelClick(this.state.channelFilter)}>
+                            <div className="title">@{this.state.channelFilter}</div>
+                        </div>
+                    }
+                </div>
+                {channelNodes}
+                {recommendedChannelNodes.length > 0 ?
+                    <div className="channelListRecommended">Vorschläge</div>
+                    : undefined
+                }
+                {recommendedChannelNodes}
+                {localChannelNodes.length > 0 ?
+                    <div className="channelListLocal">Lokale</div>
+                    : undefined
+                }
+                {localChannelNodes}
+                {countryChannelNodes.length > 0 ?
+                    <div className="channelListCountry">Landesweit</div>
+                    : undefined
+                }
+                {countryChannelNodes}
+            </div>
+        );
+    }
+
+    private createChannelNode(channel: IChannel, onChannelClick: (channel: string) => void, showImage: boolean) {
+        if (this.state.channelFilter &&
+            !channel.channel.toLowerCase().includes(this.state.channelFilter.toLowerCase())) {
+            return;
+        }
         return <div key={channel.channel}
                     className={classnames('channelLink', {unread: channel.unread})}
                     onClick={() => onChannelClick(channel.channel)}>
@@ -33,46 +99,5 @@ export default class ChannelList extends Component<IChannelListProps> {
                     : undefined}
             </div>
         </div>;
-    }
-
-    public render() {
-        const {channels, recommendedChannels, localChannels, countryChannels, onChannelClick} = this.props;
-        const channelNodes = channels.map(channel => {
-                return ChannelList.createChannelNode(channel, onChannelClick, true);
-            },
-        );
-        const recommendedChannelNodes = recommendedChannels.map(channel => {
-                return ChannelList.createChannelNode(channel, onChannelClick, true);
-            },
-        );
-        const localChannelNodes = localChannels.map(channel => {
-                return ChannelList.createChannelNode(channel, onChannelClick, false);
-            },
-        );
-        const countryChannelNodes = countryChannels.map(channel => {
-                return ChannelList.createChannelNode(channel, onChannelClick, false);
-            },
-        );
-        return (
-            <div className="channelList">
-                <div className="channelListHeader">Kanäle(beta)</div>
-                {channelNodes}
-                {recommendedChannelNodes.length > 0 ?
-                    <div className="channelListRecommended">Vorschläge</div>
-                    : undefined
-                }
-                {recommendedChannelNodes}
-                {localChannelNodes.length > 0 ?
-                    <div className="channelListLocal">Lokale</div>
-                    : undefined
-                }
-                {localChannelNodes}
-                {countryChannelNodes.length > 0 ?
-                    <div className="channelListCountry">Landesweit</div>
-                    : undefined
-                }
-                {countryChannelNodes}
-            </div>
-        );
     }
 }

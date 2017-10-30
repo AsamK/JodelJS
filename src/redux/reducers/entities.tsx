@@ -144,6 +144,7 @@ function channels(state: { readonly [key: string]: IChannel } = {}, action: IJod
                     ...state,
                     [channelName]: {
                         ...state[channelName],
+                        channel: channelName,
                         unread: false,
                     },
                 };

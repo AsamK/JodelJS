@@ -676,13 +676,7 @@ export function getFollowedChannelsMeta(): JodelThunkAction {
 
 export function followChannel(channel: string, follow = true): JodelThunkAction {
     return (dispatch, getState, {api}) => {
-        let fn;
-        if (follow) {
-            fn = api.apiFollowChannel;
-        } else {
-            fn = api.apiUnfollowChannel;
-        }
-        fn(channel)
+        (follow ? api.apiFollowChannel(channel) : api.apiUnfollowChannel(channel))
             .then(res => {
                     dispatch(getConfig()); // TODO
                 },

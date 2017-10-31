@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {ChangeEvent, PureComponent} from 'react';
+import {FormattedMessage} from 'react-intl';
 
 import {IGeoCoordinates} from '../interfaces/ILocation';
 
@@ -60,29 +61,50 @@ export class SelectLocation extends PureComponent<ISelectLocationProps> {
                     <label>
                         <input type="radio" value={USE_BROWSER_LOCATION} checked={useBrowserLocation}
                                onChange={this.handleChangeRadio}/>
-                        Standort vom Browser abfragen
+                        <FormattedMessage
+                            id="location_use_browser"
+                            defaultMessage="Request location from browser"
+                        />
                     </label>
                     <label>
                         <input type="radio" value={MANUAL} checked={!useBrowserLocation}
                                onChange={this.handleChangeRadio}/>
-                        Standort manuell setzen
+                        <FormattedMessage
+                            id="location_manual"
+                            defaultMessage="Select location manually"
+                        />
                     </label>
                 </div>
                 {useBrowserLocation ? <div className="browserLocation">
-                    <p>Aktueller
-                        Standort: {!location ? '(Unbekannt)' : location.latitude + ', ' + location.longitude}</p>
-                    <a onClick={onLocationRequested}>Standort aktualisieren</a>
+                    <p>
+                        <FormattedMessage
+                            id="location_current"
+                            defaultMessage="Current location"
+                        />:
+                        {!location ? '(Unbekannt)' : location.latitude + ', ' + location.longitude}</p>
+                    <a onClick={onLocationRequested}>
+                        <FormattedMessage
+                            id="location_refresh"
+                            defaultMessage="Refresh location"
+                        />
+                    </a>
                 </div> : ''}
                 {!useBrowserLocation ?
                     <div className="manualLocation">
                         <label>
-                            Breitengrad:
+                            <FormattedMessage
+                                id="location_latitude"
+                                defaultMessage="Latitude"
+                            />:
                             <input type="number" min="-90" max="90" step="0.01"
                                    value={location ? location.latitude : ''}
                                    onChange={this.handleChangeLatitude}/>
                         </label>
                         <label>
-                            Längengrad:
+                            <FormattedMessage
+                                id="location_longitude"
+                                defaultMessage="Longitude"
+                            />:
                             <input type="number" min="-180" max="180" step="0.01"
                                    value={location ? location.longitude : ''}
                                    onChange={this.handleChangeLongitude}/>

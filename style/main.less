@@ -28,6 +28,24 @@ html, body, #content, .jodel {
   width: 100%;
 }
 
+.formError {
+  display: block;
+  background-color: red;
+  padding: 1em;
+  margin-top: 1em;
+}
+
+input[type=checkbox],
+input[type=radio] {
+  margin: 4px;
+}
+
+input[type=text],
+input[type=number] {
+  margin-left: 4px;
+}
+
+
 .list {
   display: flex;
   flex: auto;
@@ -660,6 +678,8 @@ html, body, #content, .jodel {
 }
 
 .firstStart {
+  margin: 1em;
+
   .block {
     margin-bottom: 2em;
     margin-left: 2em;
@@ -675,7 +695,6 @@ html, body, #content, .jodel {
 }
 
 .locationError {
-  background-color: red;
   a {
     cursor: pointer;
     text-decoration: underline;
@@ -764,11 +783,6 @@ html, body, #content, .jodel {
 
 .appSettings {
   margin: 1em;
-
-  input[type=checkbox],
-  input[type=radio] {
-    margin: 4px;
-  }
 
   .block {
     margin-bottom: 2em;

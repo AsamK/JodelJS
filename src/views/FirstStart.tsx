@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Component} from 'react';
+import {FormattedMessage} from 'react-intl';
 import {connect, Dispatch} from 'react-redux';
 
 import Settings from '../app/settings';
@@ -44,22 +45,35 @@ class FirstStart extends Component<IFirstStartProps, IFirstStartState> {
 
     public render() {
         return <div className="firstStart">
-            <h1>Willkommen bei der inoffiziellen Jodel Web App</h1>
+            <h1>
+                <FormattedMessage
+                    id="welcome_title"
+                    defaultMessage="Welcome to the unofficial Jodel web app"
+                />
+            </h1>
             <form onSubmit={e => {
                 e.preventDefault();
                 if (!this.state.deviceUid) {
                     this.props.dispatch(createNewAccount());
-                } else if (this.state.deviceUid.length !== 64) {
-                    alert('Die Device UID muss aus genau 64 hexadezimal Ziffern bestehen.');
                 } else {
                     this.props.dispatch(setDeviceUid(this.state.deviceUid));
                 }
             }}>
-                <h3>Konto</h3>
+                <h3>
+                    <FormattedMessage
+                        id="account"
+                        defaultMessage="Account"
+                    />
+                </h3>
                 <div className="block">
                     <SelectDeviceUid deviceUid={this.state.deviceUid} setDeviceUid={this.setDeviceUid}/>
                 </div>
-                <h3>Standort</h3>
+                <h3>
+                    <FormattedMessage
+                        id="location"
+                        defaultMessage="Location"
+                    />
+                </h3>
                 <div className="block">
                     <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
                                     location={this.props.location}
@@ -79,17 +93,28 @@ class FirstStart extends Component<IFirstStartProps, IFirstStartState> {
                                     onLocationRequested={this.updateLocation}
                     />
                     {!this.props.location ?
-                        <div className="locationError">
-                            <p>Zum erstmaligen Anmelden muss der aktuelle Standort bekannt sein.
-                                Die Standort Abfrage war jedoch noch nicht erfolgreich.
-                            </p>
-                            <a onClick={this.updateLocation}>Erneut versuchen</a> oder oben den Standort manuell
-                            festlegen
+                        <div className="locationError formError">
+                            <div>
+                                <FormattedMessage
+                                    id="location_error"
+                                    defaultMessage={'The current Location must be known for the first registration.\n' +
+                                    'However the location request was unsuccessful.'}
+                                />
+                            </div>
+                            <a onClick={this.updateLocation}>
+                                <FormattedMessage
+                                    id="location_error_retry"
+                                    defaultMessage="Retry location request"
+                                />
+                            </a>
                         </div>
                         : ''}
                 </div>
                 <button type="submit" disabled={!this.props.location}>
-                    Jodeln beginnen
+                    <FormattedMessage
+                        id="jodel_register"
+                        defaultMessage="Start Jodeling"
+                    />
                 </button>
             </form>
         </div>;

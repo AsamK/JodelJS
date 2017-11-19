@@ -1,3 +1,6 @@
+import 'intl';
+import 'intl/locale-data/jsonp/de.js';
+import 'intl/locale-data/jsonp/en.js';
 import * as React from 'react';
 import * as DocumentTitle from 'react-document-title/index';
 import * as ReactDOM from 'react-dom';

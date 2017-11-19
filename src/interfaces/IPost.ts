@@ -30,11 +30,13 @@ export interface IPost {
     notifications_enabled?: boolean;
     oj_filtered?: boolean;
     oj_replied: boolean;
+    parent_id?: string;
     pin_count?: number;
     pinned?: boolean;
     post_id: string;
     post_own: PostOwn;
     replier?: number;
+    reply_timestamp?: string;
     share_count?: number;
     shareable?: boolean;
     thumbnail_url?: string;

@@ -35,7 +35,7 @@ class FirstStart extends Component<IFirstStartProps, IFirstStartState> {
         this.setState({deviceUid: this.props.deviceUid});
     }
 
-    public setDeviceUid(deviceUid: string) {
+    public setDeviceUid(deviceUid: string | null) {
         this.setState({deviceUid});
     }
 

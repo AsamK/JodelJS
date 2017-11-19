@@ -318,7 +318,6 @@ export function _setLocation(latitude: number, longitude: number, city = '', cou
         payload: {
             location: {latitude, longitude, city, country},
         },
-        receivedAt: Date.now(),
         type: SET_LOCATION,
     };
 }
@@ -328,7 +327,6 @@ export function setUseBrowserLocation(useBrowserLocation: boolean): IJodelAction
         payload: {
             useBrowserLocation,
         },
-        receivedAt: Date.now(),
         type: SET_USE_BROWSER_LOCATION,
     };
 }
@@ -338,7 +336,6 @@ export function setUseHomeLocation(useHomeLocation: boolean): IJodelAction {
         payload: {
             useHomeLocation,
         },
-        receivedAt: Date.now(),
         type: SET_USE_HOME_LOCATION,
     };
 }

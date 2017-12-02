@@ -2,5 +2,6 @@ node_modules/
 *.swp
 *~
 dist/
-.idea/
+.idea/*
+!.idea/codeStyles/
 /src/app/settings.ts

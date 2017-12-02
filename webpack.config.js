@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isProduction = (process.argv.indexOf('-p') !== -1);
 
@@ -117,7 +118,10 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             template: 'src/index.html'
-        })
+        }),
+        new CopyWebpackPlugin([
+            'src/manifest.webmanifest'
+        ])
     ],
 
     devServer: {

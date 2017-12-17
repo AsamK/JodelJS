@@ -2,9 +2,10 @@ import * as classnames from 'classnames';
 import * as React from 'react';
 import {MouseEvent, PureComponent} from 'react';
 import {connect, Dispatch} from 'react-redux';
+
 import {PostOwn} from '../enums/PostOwn';
 import {UserHandle} from '../enums/UserHandle';
-
+import {VoteType} from '../enums/VoteType';
 import {IPost} from '../interfaces/IPost';
 import {deletePost, downVote, giveThanks, selectPicture, switchPostSection, upVote} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
@@ -66,7 +67,7 @@ export class PostComponent extends PureComponent<IPostComponentProps> {
                         this.props.switchToHashtag(hashtag);
                     }}/>
                 }
-                <Vote vote_count={post.vote_count} voted={post.voted ? post.voted : ''}
+                <Vote vote_count={post.vote_count} voted={post.voted ? post.voted : VoteType.NOT_VOTED}
                       upvote={this.upvote} downvote={this.downvote}/>
                 <Time time={post.created_at}/>
                 <ChildInfo child_count={post.child_count ? post.child_count : 0}/>

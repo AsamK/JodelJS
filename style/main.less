@@ -45,7 +45,6 @@ input[type=number] {
   margin-left: 4px;
 }
 
-
 .list {
   display: flex;
   flex: auto;
@@ -471,6 +470,7 @@ input[type=number] {
       }
       &.up {
         cursor: inherit;
+        opacity: .5;
       }
     }
 
@@ -496,7 +496,11 @@ input[type=number] {
       }
       &.down {
         cursor: inherit;
+        opacity: .5;
       }
+    }
+    .justVoted {
+      animation: 400ms voting;
     }
   }
 
@@ -562,6 +566,21 @@ input[type=number] {
       top: 0;
       width: 1em;
     }
+  }
+}
+
+@keyframes voting {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1);
+    opacity: .5;
   }
 }
 

@@ -117,17 +117,19 @@ export function giveThanks(postId: string, parentPostId?: string): JodelThunkAct
 
 export function pin(postId: string, pinned = true): JodelThunkAction {
     return (dispatch, getState, {api}) => {
-        let fn;
         if (pinned) {
-            fn = api.apiPin;
+            api.apiPin(postId)
+                .then(res => {
+                        dispatch(pinnedPost(postId, pinned, res.pin_count));
+                    },
+                    err => handleNetworkErrors(dispatch, getState, err));
         } else {
-            fn = api.apiUnpin;
+            api.apiUnpin(postId)
+                .then(res => {
+                        dispatch(pinnedPost(postId, pinned, res.pin_count));
+                    },
+                    err => handleNetworkErrors(dispatch, getState, err));
         }
-        fn(postId)
-            .then(res => {
-                    dispatch(pinnedPost(postId, pinned, res.pin_count));
-                },
-                err => handleNetworkErrors(dispatch, getState, err));
     };
 }
 

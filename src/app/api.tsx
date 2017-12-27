@@ -73,20 +73,21 @@ export class JodelApi {
     //     return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/', {});
     // }
 
-    public apiGetPostsCombo(latitude: number, longitude: number, stickies = true,
-                            home = false): Promise<IApiLocationPostListCombo> {
+    public apiGetPostsCombo(latitude: number, longitude: number, stickies = true, home: boolean, skipHometown: boolean,
+                            channels: boolean): Promise<IApiLocationPostListCombo> {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/posts/location/combo', {
                 channels,
                 home,
                 lat: latitude,
                 lng: longitude,
+                skipHometown,
                 stickies,
             })
             .then(res => res.body);
     }
 
-    public apiGetPosts(sortType: PostListSortType, afterPostId: string | undefined, latitude: number,
-                       longitude: number, home: boolean, postType?: PostListPostType): Promise<IApiPostListSingle> {
+    public apiGetPosts(sortType: PostListSortType, afterPostId: string | undefined, latitude: number, longitude: number,
+                       home: boolean, channels: boolean, postType?: PostListPostType): Promise<IApiPostListSingle> {
         let apiSortType;
         switch (sortType) {
             case PostListSortType.RECENT:
@@ -103,6 +104,7 @@ export class JodelApi {
         }
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/location/' + apiSortType, {
                 after: afterPostId,
+                channels,
                 home,
                 lat: latitude,
                 lng: longitude,

@@ -8,6 +8,7 @@ export interface IApiLocation {
 }
 
 export interface IPost {
+    channel?: string;
     child_count?: number;
     children?: string[];
     color: Color;
@@ -42,6 +43,7 @@ export interface IPost {
     thumbnail_url?: string;
     updated_at: string;
     user_handle: UserHandle;
+    view_count?: number;
     vote_count: number;
     voted?: VoteType;
 }

@@ -15,10 +15,15 @@ export interface IApiConfig {
     home_name: string;
     home_clear_allowed: boolean;
     location: string;
+    min_post_length: number;
+    home_min_post_length: number;
     moderation_notify: boolean;
     moderator: boolean;
     pending_deletion: boolean;
+    special_post_colors: string[];
     triple_feed_enabled: boolean;
+    user_blocked: boolean;
+    user_profiling_types: string[];
     user_type: string | null;
     verified: boolean;
 }

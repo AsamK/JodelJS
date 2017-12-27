@@ -6,6 +6,7 @@ import {IApiPostReplyPost} from './IApiPostDetailsPost';
 import {IApiLocation} from './IPost';
 
 export interface IApiPostListPost {
+    channel?: string;
     child_count: number;
     children: IApiPostReplyPost[];
     color: Color;
@@ -28,6 +29,7 @@ export interface IApiPostListPost {
     thumbnail_url?: string;
     updated_at: string;
     user_handle: UserHandle;
+    view_count: number;
     vote_count: number;
     voted?: VoteType;
     image_headers: {

@@ -182,7 +182,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): JodelThunkAction {
                         }
                         dispatch(setIsFetching(section));
                         api.apiGetPostsCombo(loc.latitude, loc.longitude, true,
-                            getState().settings.useHomeLocation)
+                            getState().settings.useHomeLocation, false, true)
                             .then(res => {
                                 dispatch(receivePosts(section, {
                                     discussed: res.replied,
@@ -305,7 +305,7 @@ export function fetchMorePosts(sectionToFetch?: Section,
                     }
                     dispatch(setIsFetching(section));
                     api.apiGetPosts(sortType, afterId, loc.latitude, loc.longitude,
-                        getState().settings.useHomeLocation)
+                        getState().settings.useHomeLocation, true)
                         .then(res => {
                             const p: { [sortType: string]: IApiPostListPost[] } = {};
                             p[sortType] = res.posts;

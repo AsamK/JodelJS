@@ -45,6 +45,16 @@ export class PostComponent extends PureComponent<IPostComponentProps> {
             <div className={classnames('post', {'post-oj': !!parentPostId && post.user_handle === UserHandle.OJ})}
                  style={{backgroundColor: '#' + post.color}}
                  onClick={onPostClick}>
+                {post.channel ? <div
+                    className="channel-link"
+                    onClick={e => {
+                        if (!post.channel) {
+                            return;
+                        }
+                        e.stopPropagation();
+                        this.props.switchToChannel(post.channel);
+                    }}
+                >{post.channel}</div> : null}
                 {post.thumbnail_url ?
                     <div className="postPicture"
                          style={{backgroundImage: 'url(https:' + post.thumbnail_url + ')'}}

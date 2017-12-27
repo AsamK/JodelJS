@@ -21,6 +21,7 @@ import {IApiNotifications} from '../interfaces/IApiNotifications';
 import {IApiPin} from '../interfaces/IApiPin';
 import {IApiPostAdded} from '../interfaces/IApiPostAdded';
 import {IApiPostDetails} from '../interfaces/IApiPostDetails';
+import {IApiPostDetailsPost} from '../interfaces/IApiPostDetailsPost';
 import {IApiPostListCombo} from '../interfaces/IApiPostListCombo';
 import {IApiPostListSingle} from '../interfaces/IApiPostListSingle';
 import {IApiRecommendedChannels} from '../interfaces/IApiRecommendedChannels';
@@ -545,6 +546,12 @@ export class JodelApi {
         return res.body;
     }
 
+    public async apiGetPictureOfDay(): Promise<IApiPostDetailsPost> {
+        const res = await this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 +
+            '/posts/pictureOfDay', {});
+        return res.body;
+    }
+
     public async apiDisableFeedInternationalization(): Promise<void> {
         const res = await this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V3 +
             '/user/feedInternationalization/disable/', {}, {});
@@ -604,19 +611,19 @@ export class JodelApi {
     }
 
     private async jodelRequestWithAuth(method: string, url: string, query: object | string,
-                                       data: any): Promise<request.Response> {
+                                       data?: object | string): Promise<request.Response> {
         const auth = await this.getAuth();
         return this.jodelRequest(auth, method, url, query, data);
     }
 
     private jodelRequestWithoutAuth(method: string, url: string, query: object | string,
-                                    data: any): Promise<request.Response> {
+                                    data?: object | string): Promise<request.Response> {
         return this.jodelRequest(undefined, method, url, query, data);
     }
 
     private jodelRequest(auth: string | undefined, method: string, url: string, query: object | string,
-                         data: any): Promise<request.Response> {
-        const dataString = JSON.stringify(data);
+                         data?: object | string): Promise<request.Response> {
+        const dataString = data ? JSON.stringify(data) : '';
         const timestamp = new Date().toISOString();
         const sig = this.computeSignature(auth, method, url, timestamp, dataString);
 

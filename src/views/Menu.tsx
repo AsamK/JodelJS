@@ -4,6 +4,7 @@ import {Component} from 'react';
 import {FormattedMessage, FormattedNumber} from 'react-intl';
 import {connect, Dispatch} from 'react-redux';
 import {showNotifications, showSearch, showSettings} from '../redux/actions';
+import {showPictureOfDay} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
 import {getUnreadNotificationsCount} from '../redux/selectors/notifications';
 
@@ -13,6 +14,7 @@ interface IMenuComponentProps {
     showSettingsCallback: () => void;
     showNotificationsCallback: () => void;
     showSearchCallback: () => void;
+    showPictureOfDayCallback: () => void;
     unreadNotifications: number;
 }
 
@@ -29,7 +31,13 @@ class MenuComponent extends Component<IMenuComponentProps, IMenuComponentState> 
     }
 
     public render() {
-        const {unreadNotifications, showNotificationsCallback, showSettingsCallback, showSearchCallback} = this.props;
+        const {
+            unreadNotifications,
+            showPictureOfDayCallback,
+            showNotificationsCallback,
+            showSettingsCallback,
+            showSearchCallback,
+        } = this.props;
         return (
             <div className={classnames('menu', {newNotifications: unreadNotifications > 0})}
                  tabIndex={99999999}
@@ -37,6 +45,14 @@ class MenuComponent extends Component<IMenuComponentProps, IMenuComponentState> 
             >
                 {!this.state.menuOpen ? '' :
                     <ul className="menuContent">
+                        <li className="menuEntry">
+                            <div className="pictureOfDayLink" onClick={showPictureOfDayCallback}>
+                                <FormattedMessage
+                                    id="showPictureOfDay"
+                                    defaultMessage="Picture of the day"
+                                />
+                            </div>
+                        </li>
                         <li className="menuEntry">
                             <SectionLink section="mine"/>
                         </li>
@@ -97,6 +113,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
 const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: {}) => {
     return {
         showNotificationsCallback: () => dispatch(showNotifications(true)),
+        showPictureOfDayCallback: () => dispatch(showPictureOfDay()),
         showSearchCallback: () => dispatch(showSearch(true)),
         showSettingsCallback: () => dispatch(showSettings(true)),
     };

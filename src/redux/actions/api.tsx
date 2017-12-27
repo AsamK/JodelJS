@@ -15,25 +15,9 @@ import {IJodelAppStore} from '../reducers';
 import {getPost} from '../reducers/entities';
 import {getLocation} from '../selectors/app';
 import {
-    _closeSticky,
-    _setConfig,
-    _setDeviceUID,
-    _setKarma,
-    _setLocation,
-    _setNotificationPostRead,
-    beginRefreshToken,
-    invalidatePosts,
-    pinnedPost,
-    receiveNotifications,
-    receivePost,
-    receivePosts,
-    setChannelsMeta,
-    setCountryChannels,
-    setImageCaptcha,
-    setIsFetching,
-    setLocalChannels,
-    setRecommendedChannels,
-    setSuggestedHashtags,
+    _closeSticky, _selectPost, _setConfig, _setDeviceUID, _setKarma, _setLocation, _setNotificationPostRead,
+    beginRefreshToken, invalidatePosts, pinnedPost, receiveNotifications, receivePost, receivePosts, setChannelsMeta,
+    setCountryChannels, setImageCaptcha, setIsFetching, setLocalChannels, setRecommendedChannels, setSuggestedHashtags,
     votedPost,
 } from './state';
 import {showToast} from './toasts.actions';
@@ -809,6 +793,22 @@ export function closeSticky(stickyId: string): JodelThunkAction {
         api.apiStickyPostClose(stickyId)
             .then(res => {
                     dispatch(_closeSticky(stickyId));
+                },
+                err => handleNetworkErrors(dispatch, getState, err));
+    };
+}
+
+export function showPictureOfDay(): JodelThunkAction {
+    return (dispatch, getState, {api}) => {
+        api.apiGetPictureOfDay()
+            .then(res => {
+                    if (!res) {
+                        console.info('No picture of the day available');
+                        return;
+                    }
+                    dispatch(receivePost(res, false, null, false, false));
+                    dispatch(_selectPost(res.post_id));
+                    dispatch(updatePost(res.post_id, true));
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     };

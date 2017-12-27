@@ -595,13 +595,17 @@ export class JodelApi {
         return parser;
     }
 
-    private computeSignature(auth: string | undefined, method: string, url: string, timestamp: string, data: string) {
+    private computeSignature(auth: string | undefined, method: string, url: string, timestamp: string,
+                             query: { [key: string]: any }, data: string) {
         const u = this.parseUrl(url);
         let path = u.pathname;
         if (!path.startsWith('/')) {
             path = '/' + path;
         }
-        const raw = `${method}%${u.hostname}%${443}%${path}%${auth || ''}%${timestamp}%%${data}`;
+        const queryPart = Object.keys(query)
+            .map(key => encodeURIComponent(key) + '%' + encodeURIComponent(query[key]))
+            .join('%');
+        const raw = `${method}%${u.hostname}%${443}%${path}%${auth || ''}%${timestamp}%${queryPart}%${data}`;
 
         const hmac = createHmac('sha1', Settings.KEY);
         hmac.setEncoding('hex');
@@ -610,22 +614,22 @@ export class JodelApi {
         return hmac.read();
     }
 
-    private async jodelRequestWithAuth(method: string, url: string, query: object | string,
+    private async jodelRequestWithAuth(method: string, url: string, query: { [key: string]: any },
                                        data?: object | string): Promise<request.Response> {
         const auth = await this.getAuth();
         return this.jodelRequest(auth, method, url, query, data);
     }
 
-    private jodelRequestWithoutAuth(method: string, url: string, query: object | string,
+    private jodelRequestWithoutAuth(method: string, url: string, query: { [key: string]: any },
                                     data?: object | string): Promise<request.Response> {
         return this.jodelRequest(undefined, method, url, query, data);
     }
 
-    private jodelRequest(auth: string | undefined, method: string, url: string, query: object | string,
+    private jodelRequest(auth: string | undefined, method: string, url: string, query: { [key: string]: any },
                          data?: object | string): Promise<request.Response> {
         const dataString = data ? JSON.stringify(data) : '';
         const timestamp = new Date().toISOString();
-        const sig = this.computeSignature(auth, method, url, timestamp, dataString);
+        const sig = this.computeSignature(auth, method, url, timestamp, query, dataString);
 
         const req = request(method, url)
             .query(query)

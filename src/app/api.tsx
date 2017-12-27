@@ -69,7 +69,7 @@ export class JodelApi {
     }
 
     // public apiGetPosts(callback) {
-    //     return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/', {}, {});
+    //     return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/', {});
     // }
 
     public apiGetPostsCombo(latitude: number, longitude: number, stickies = true,
@@ -79,7 +79,7 @@ export class JodelApi {
                 lat: latitude,
                 lng: longitude,
                 stickies,
-            }, {})
+            })
             .then(res => res.body);
     }
 
@@ -104,12 +104,12 @@ export class JodelApi {
                 home,
                 lat: latitude,
                 lng: longitude,
-            }, {})
+            })
             .then(res => res.body);
     }
 
     public apiGetPostsMineCombo(): Promise<IApiPostListCombo> {
-        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/combo', {}, {})
+        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/combo', {})
             .then(res => res.body);
     }
 
@@ -131,7 +131,7 @@ export class JodelApi {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/' + type, {
                 limit,
                 skip,
-            }, {})
+            })
             .then(res => res.body);
     }
 
@@ -139,7 +139,7 @@ export class JodelApi {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/replies', {
                 limit,
                 skip,
-            }, {})
+            })
             .then(res => res.body);
     }
 
@@ -147,7 +147,7 @@ export class JodelApi {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/pinned', {
                 limit,
                 skip,
-            }, {})
+            })
             .then(res => res.body);
     }
 
@@ -155,7 +155,7 @@ export class JodelApi {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/votes', {
                 limit,
                 skip,
-            }, {})
+            })
             .then(res => res.body);
     }
 
@@ -188,7 +188,7 @@ export class JodelApi {
             channel,
             home,
         };
-        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/posts/channel/' + type, query, {})
+        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/posts/channel/' + type, query)
             .then(res => res.body);
     }
 
@@ -221,12 +221,12 @@ export class JodelApi {
             hashtag,
             home,
         };
-        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/posts/hashtag/' + type, query, {})
+        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/posts/hashtag/' + type, query)
             .then(res => res.body);
     }
 
     // public apiGetPost(postId: string) {
-    //     return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId, {}, {});
+    //     return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId, {});
     // }
 
     public apiGetPostDetails(postId: string, details = true, nextReply: string | undefined,
@@ -237,7 +237,7 @@ export class JodelApi {
                 oj_filter: ojFilter,
                 reply: nextReply,
                 reversed,
-            }, {})
+            })
             .then(res => res.body);
     }
 
@@ -305,7 +305,7 @@ export class JodelApi {
     }
 
     public apiGetSuggestedHashtags(home = false) {
-        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/hashtags/suggested', {home}, {});
+        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/hashtags/suggested', {home});
     }
 
     public apiAddPost(channel: string | undefined, ancestorPostId: string | undefined,
@@ -335,12 +335,12 @@ export class JodelApi {
     }
 
     public apiGetConfig(): Promise<IApiConfig> {
-        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/user/config', {}, {})
+        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/user/config', {})
             .then(res => res.body);
     }
 
     public apiGetKarma(): Promise<IApiKarma> {
-        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/users/karma', {}, {})
+        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/users/karma', {})
             .then(res => res.body);
     }
 
@@ -351,7 +351,7 @@ export class JodelApi {
      */
     public apiGetImageCaptcha(): Promise<IApiImageCaptcha> {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/user/verification/imageCaptcha',
-            {}, {})
+            {})
             .then(res => res.body);
     }
 
@@ -474,7 +474,7 @@ export class JodelApi {
     }
 
     public apiIsNotificationAvailable(): Promise<IApiNotificationAvailable> {
-        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/user/notifications/new', {}, {})
+        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/user/notifications/new', {})
             .then(res => res.body);
     }
 

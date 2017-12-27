@@ -5,6 +5,7 @@ import * as request from 'superagent';
 import Settings from '../app/settings';
 import {ApiAction} from '../enums/ApiAction';
 import {Color} from '../enums/Color';
+import {PostListPostType} from '../enums/PostListPostType';
 import {PostListSortType} from '../enums/PostListSortType';
 import {UserType} from '../enums/UserType';
 import {IApiChannelPostListCombo} from '../interfaces/IApiChannelPostListCombo';
@@ -75,6 +76,7 @@ export class JodelApi {
     public apiGetPostsCombo(latitude: number, longitude: number, stickies = true,
                             home = false): Promise<IApiLocationPostListCombo> {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/posts/location/combo', {
+                channels,
                 home,
                 lat: latitude,
                 lng: longitude,
@@ -84,26 +86,27 @@ export class JodelApi {
     }
 
     public apiGetPosts(sortType: PostListSortType, afterPostId: string | undefined, latitude: number,
-                       longitude: number, home = false): Promise<IApiPostListSingle> {
-        let type;
+                       longitude: number, home: boolean, postType?: PostListPostType): Promise<IApiPostListSingle> {
+        let apiSortType;
         switch (sortType) {
             case PostListSortType.RECENT:
-                type = '';
+                apiSortType = '';
                 break;
             case PostListSortType.DISCUSSED:
-                type = 'discussed';
+                apiSortType = 'discussed';
                 break;
             case PostListSortType.POPULAR:
-                type = 'popular';
+                apiSortType = 'popular';
                 break;
             default:
                 throw new Error('Unknown sort type');
         }
-        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/location/' + type, {
+        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/location/' + apiSortType, {
                 after: afterPostId,
                 home,
                 lat: latitude,
                 lng: longitude,
+                type: postType,
             })
             .then(res => res.body);
     }
@@ -603,6 +606,7 @@ export class JodelApi {
             path = '/' + path;
         }
         const queryPart = Object.keys(query)
+            .filter(key => query[key] !== undefined)
             .map(key => encodeURIComponent(key) + '%' + encodeURIComponent(query[key]))
             .join('%');
         const raw = `${method}%${u.hostname}%${443}%${path}%${auth || ''}%${timestamp}%${queryPart}%${data}`;

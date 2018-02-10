@@ -33,7 +33,7 @@ interface IPostComponentProps extends IPostProps {
 }
 
 export class PostComponent extends PureComponent<IPostComponentProps> {
-    private pressTimer: number;
+    private pressTimer: number | undefined;
 
     constructor(props: IPostComponentProps) {
         super(props);
@@ -58,14 +58,22 @@ export class PostComponent extends PureComponent<IPostComponentProps> {
                 {post.thumbnail_url ?
                     <div className="postPicture"
                          style={{backgroundImage: 'url(https:' + post.thumbnail_url + ')'}}
-                         onMouseUp={e => clearTimeout(this.pressTimer)}
+                         onMouseUp={e => {
+                             if (this.pressTimer !== undefined) {
+                                 clearTimeout(this.pressTimer);
+                             }
+                         }}
                          onContextMenu={e => {
                              e.preventDefault();
-                             clearTimeout(this.pressTimer);
+                             if (this.pressTimer !== undefined) {
+                                 clearTimeout(this.pressTimer);
+                             }
                              this.props.selectPicture();
                          }}
                          onMouseDown={e => {
-                             clearTimeout(this.pressTimer);
+                             if (this.pressTimer !== undefined) {
+                                 clearTimeout(this.pressTimer);
+                             }
                              this.pressTimer = window.setTimeout(() => this.props.selectPicture(), 300);
                          }}/>
                     :

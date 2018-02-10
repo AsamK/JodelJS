@@ -71,14 +71,16 @@ export interface IJodelProps {
 }
 
 class JodelComponent extends Component<IJodelProps> {
-    private timer: number;
+    private timer: number | undefined;
 
     public componentDidMount() {
         this.timer = setInterval(this.refresh.bind(this), 20000);
     }
 
     public componentWillUnmount() {
-        clearInterval(this.timer);
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
     }
 
     public onRefresh() {

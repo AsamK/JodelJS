@@ -16,9 +16,9 @@ export interface IPostListProps {
 }
 
 export default class PostList extends Component<IPostListProps> {
-    private scrollAtBottom: boolean;
+    private scrollAtBottom = false;
 
-    private scrollable: HTMLElement | null;
+    private scrollable: HTMLElement | null = null;
 
     constructor(props: IPostListProps) {
         super(props);

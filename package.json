@@ -8,9 +8,8 @@
   },
   "dependencies": {
     "classnames": "~2.2.5",
+    "core-js": "~2.5.4",
     "create-hmac": "~1.1.6",
-    "es5-shim": "~4.5.10",
-    "es6-shim": "~0.35.3",
     "intl": "~1.2.5",
     "nprogress": "~0.2.0",
     "randombytes": "~2.0.6",

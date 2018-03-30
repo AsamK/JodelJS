@@ -9,8 +9,7 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 module.exports = {
     entry: {
         main: [
-            'es5-shim',
-            'es6-shim',
+            './src/app/polyfills.ts',
             './src/app/main.tsx',
             './style/main.less'
         ]

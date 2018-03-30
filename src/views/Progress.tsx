@@ -1,40 +1,45 @@
 import NProgress from 'nprogress';
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
 
 import {IJodelAppStore} from '../redux/reducers';
 import {getIsSelectedSectionFetching} from '../redux/selectors/posts';
 
 interface IProgressProps {
     isFetching: boolean;
-    dispatch: Dispatch<IJodelAppStore>;
 }
 
-class Progress extends React.Component<IProgressProps> {
-    public state = {
-        shown: false,
-    };
+class Progress extends React.PureComponent<IProgressProps> {
+    private timer: number | null = null;
 
-    public componentWillReceiveProps(nextProps: IProgressProps) {
-        if (nextProps.isFetching) {
-            setTimeout(() => {
-                if (this.props.isFetching && !this.state.shown) {
-                    NProgress.start();
-                    this.setState({shown: true});
-                }
-            }, 150);
+    public componentDidUpdate(prevProps: IProgressProps) {
+        if (prevProps.isFetching === this.props.isFetching) {
+            return;
+        }
+
+        if (this.props.isFetching) {
+            this.timer = window.setTimeout(() => NProgress.start(), 150);
         } else {
-            NProgress.done();
-            this.setState({shown: false});
+            if (this.timer) {
+                clearTimeout(this.timer);
+            }
+            if (NProgress.isStarted()) {
+                NProgress.done();
+            }
         }
     }
 
-    public shouldComponentUpdate(nextProps: IProgressProps) {
-        return false;
+    public componentWillUnmount() {
+        if (this.timer) {
+            clearTimeout(this.timer);
+        }
+        if (NProgress.isStarted()) {
+            NProgress.done();
+        }
     }
 
     public render() {
-        return <span/>;
+        return null;
     }
 }
 

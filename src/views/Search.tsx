@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {Component} from 'react';
+import React from 'react';
 import {connect, Dispatch} from 'react-redux';
 import {searchPosts} from '../redux/actions/api';
 
@@ -14,7 +13,7 @@ interface ISearchComponentState {
     searchText: string;
 }
 
-class SearchComponent extends Component<ISearchComponentProps, ISearchComponentState> {
+class SearchComponent extends React.Component<ISearchComponentProps, ISearchComponentState> {
     constructor(props: ISearchComponentProps) {
         super(props);
         this.state = {

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {Component, MouseEvent} from 'react';
+import React from 'react';
 
 import {IPost} from '../interfaces/IPost';
 import AddButton from './AddButton';
@@ -10,12 +9,12 @@ export interface IPostDetailsProps {
     post: IPost;
     postChildren: IPost[] | null;
     locationKnown: boolean;
-    onAddClick: (e: MouseEvent<HTMLElement>) => void;
+    onAddClick: (e: React.MouseEvent<HTMLElement>) => void;
     onPostClick: () => void;
     onLoadMore: () => void;
 }
 
-export default class PostDetails extends Component<IPostDetailsProps> {
+export default class PostDetails extends React.Component<IPostDetailsProps> {
     private scrollAtBottom = false;
 
     private scrollable: HTMLDivElement | null = null;

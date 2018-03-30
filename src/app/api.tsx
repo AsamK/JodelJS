@@ -1,6 +1,6 @@
-import * as createHmac from 'create-hmac';
+import createHmac from 'create-hmac';
 import {Store} from 'redux';
-import * as request from 'superagent';
+import request from 'superagent';
 
 import Settings from '../app/settings';
 import {ApiAction} from '../enums/ApiAction';

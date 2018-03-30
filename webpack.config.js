@@ -26,7 +26,8 @@ module.exports = {
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: ['.ts', '.tsx', '.js', '.json']
+        extensions: ['.ts', '.tsx', '.js', '.json'],
+        mainFields: ['browser', 'module', 'jsnext:main', 'main'],
     },
 
     module: {
@@ -34,7 +35,8 @@ module.exports = {
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
             {
                 test: /\.tsx?$/,
-                loader: 'ts-loader'
+                loader: 'ts-loader',
+//                type: 'javascript/esm', // Disabled, until #6913 is resolved
             },
 
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.

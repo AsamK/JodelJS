@@ -1,4 +1,4 @@
-import {Component} from 'react';
+import React from 'react';
 
 export = DocumentTitle;
 
@@ -8,5 +8,5 @@ declare namespace DocumentTitle {
     }
 }
 
-declare class DocumentTitle extends Component<DocumentTitle.IDocumentTitleProps> {
+declare class DocumentTitle extends React.Component<DocumentTitle.IDocumentTitleProps> {
 }

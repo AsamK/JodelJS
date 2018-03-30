@@ -1,6 +1,5 @@
-import * as classnames from 'classnames';
-import * as React from 'react';
-import {MouseEvent, PureComponent} from 'react';
+import classnames from 'classnames';
+import React from 'react';
 import {connect, Dispatch} from 'react-redux';
 
 import {PostOwn} from '../enums/PostOwn';
@@ -32,7 +31,7 @@ interface IPostComponentProps extends IPostProps {
     switchToChannel: (channel: string) => void;
 }
 
-export class PostComponent extends PureComponent<IPostComponentProps> {
+export class PostComponent extends React.PureComponent<IPostComponentProps> {
     private pressTimer: number | undefined;
 
     constructor(props: IPostComponentProps) {
@@ -106,7 +105,7 @@ export class PostComponent extends PureComponent<IPostComponentProps> {
         );
     }
 
-    private upvote = (e: MouseEvent<HTMLElement>) => {
+    private upvote = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
         const {post} = this.props;
         if (post.voted === 'up') {
@@ -117,7 +116,7 @@ export class PostComponent extends PureComponent<IPostComponentProps> {
         }
     }
 
-    private downvote = (e: MouseEvent<HTMLElement>) => {
+    private downvote = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
         this.props.downVote();
     }

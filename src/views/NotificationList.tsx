@@ -1,6 +1,5 @@
-import * as classnames from 'classnames';
-import * as React from 'react';
-import {PureComponent} from 'react';
+import classnames from 'classnames';
+import React from 'react';
 import {connect, Dispatch} from 'react-redux';
 
 import {INotification} from '../interfaces/INotification';
@@ -15,7 +14,7 @@ export interface INotificationListComponentProps {
     selectPost: (postId: string) => void;
 }
 
-class NotificationListComponent extends PureComponent<INotificationListComponentProps> {
+class NotificationListComponent extends React.PureComponent<INotificationListComponentProps> {
     public constructor(props: INotificationListComponentProps) {
         super(props);
     }

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {Component} from 'react';
+import React from 'react';
 import {connect, Dispatch} from 'react-redux';
 
 import {IApiSticky} from '../interfaces/IApiSticky';
@@ -18,7 +17,7 @@ export interface IStickyListProps {
     switchToChannel: (channel: string) => void;
 }
 
-class StickyListComponent extends Component<IStickyListProps> {
+class StickyListComponent extends React.Component<IStickyListProps> {
 
     constructor(props: IStickyListProps) {
         super(props);

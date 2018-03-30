@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {PureComponent} from 'react';
+import React from 'react';
 
 import {IApiSticky} from '../interfaces/IApiSticky';
 import Message from './Message';
@@ -13,7 +12,7 @@ export interface IStickyProps {
     switchToChannel: (channel: string) => void;
 }
 
-export class Sticky extends PureComponent<IStickyProps> {
+export class Sticky extends React.PureComponent<IStickyProps> {
     constructor(props: IStickyProps) {
         super(props);
     }

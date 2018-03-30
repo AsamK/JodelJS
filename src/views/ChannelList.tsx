@@ -1,6 +1,5 @@
-import * as classnames from 'classnames';
-import * as React from 'react';
-import {Component} from 'react';
+import classnames from 'classnames';
+import React from 'react';
 import {IChannel} from '../interfaces/IChannel';
 
 export interface IChannelListProps {
@@ -15,7 +14,7 @@ export interface IChannelListState {
     channelFilter: string;
 }
 
-export default class ChannelList extends Component<IChannelListProps, IChannelListState> {
+export default class ChannelList extends React.Component<IChannelListProps, IChannelListState> {
     public state: IChannelListState = {channelFilter: ''};
 
     public render() {

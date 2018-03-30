@@ -1,6 +1,5 @@
-import * as NProgress from 'nprogress';
-import * as React from 'react';
-import {Component} from 'react';
+import NProgress from 'nprogress';
+import React from 'react';
 import {connect, Dispatch} from 'react-redux';
 
 import {IJodelAppStore} from '../redux/reducers';
@@ -11,7 +10,7 @@ interface IProgressProps {
     dispatch: Dispatch<IJodelAppStore>;
 }
 
-class Progress extends Component<IProgressProps> {
+class Progress extends React.Component<IProgressProps> {
     public state = {
         shown: false,
     };

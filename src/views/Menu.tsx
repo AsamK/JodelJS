@@ -1,6 +1,5 @@
-import * as classnames from 'classnames';
-import * as React from 'react';
-import {Component} from 'react';
+import classnames from 'classnames';
+import React from 'react';
 import {FormattedMessage, FormattedNumber} from 'react-intl';
 import {connect, Dispatch} from 'react-redux';
 import {showNotifications, showSearch, showSettings} from '../redux/actions';
@@ -22,7 +21,7 @@ interface IMenuComponentState {
     menuOpen: boolean;
 }
 
-class MenuComponent extends Component<IMenuComponentProps, IMenuComponentState> {
+class MenuComponent extends React.Component<IMenuComponentProps, IMenuComponentState> {
     constructor(props: IMenuComponentProps) {
         super(props);
         this.state = {

@@ -1,6 +1,5 @@
-import * as classnames from 'classnames';
-import * as React from 'react';
-import {Component} from 'react';
+import classnames from 'classnames';
+import React from 'react';
 import {connect, Dispatch} from 'react-redux';
 
 import {IChannel} from '../interfaces/IChannel';
@@ -70,7 +69,7 @@ export interface IJodelProps {
     dispatch: Dispatch<IJodelAppStore>;
 }
 
-class JodelComponent extends Component<IJodelProps> {
+class JodelComponent extends React.Component<IJodelProps> {
     private timer: number | undefined;
 
     public componentDidMount() {

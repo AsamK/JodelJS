@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {Component, MouseEvent} from 'react';
+import React from 'react';
 
 export interface IVerificationImageCaptchaProps {
     imageUrl: string;
@@ -12,7 +11,7 @@ interface IVerificationImageCaptchaState {
 }
 
 export class VerificationImageCaptcha
-    extends Component<IVerificationImageCaptchaProps, IVerificationImageCaptchaState> {
+    extends React.Component<IVerificationImageCaptchaProps, IVerificationImageCaptchaState> {
 
     constructor(props: IVerificationImageCaptchaProps) {
         super(props);
@@ -21,7 +20,7 @@ export class VerificationImageCaptcha
         };
     }
 
-    public onImageClick = (e: MouseEvent<HTMLImageElement>) => {
+    public onImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
         const {imageWidth} = this.props;
 
         const actualHeight = (e.target as HTMLElement).offsetHeight;

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {Component} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {connect, Dispatch} from 'react-redux';
 
@@ -23,7 +22,7 @@ export interface IFirstStartState {
     deviceUid: string | null;
 }
 
-class FirstStart extends Component<IFirstStartProps, IFirstStartState> {
+class FirstStart extends React.Component<IFirstStartProps, IFirstStartState> {
     constructor(props: IFirstStartProps) {
         super(props);
         this.state = {deviceUid: null};

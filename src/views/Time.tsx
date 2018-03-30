@@ -1,11 +1,10 @@
-import * as React from 'react';
-import {Component} from 'react';
+import React from 'react';
 
 export interface ITimeProps {
     time: string;
 }
 
-export class Time extends Component<ITimeProps> {
+export class Time extends React.Component<ITimeProps> {
     private timer?: number;
 
     public componentDidMount() {

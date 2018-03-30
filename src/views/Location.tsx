@@ -1,6 +1,5 @@
-import * as classnames from 'classnames';
-import * as React from 'react';
-import {Component} from 'react';
+import classnames from 'classnames';
+import React from 'react';
 
 export interface ILocationProps {
     distance: number;
@@ -8,7 +7,7 @@ export interface ILocationProps {
     fromHome: boolean;
 }
 
-export default class Location extends Component<ILocationProps> {
+export default class Location extends React.Component<ILocationProps> {
     public render() {
         const {distance, location, fromHome} = this.props;
         return (

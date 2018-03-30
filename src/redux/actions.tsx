@@ -1,4 +1,4 @@
-import * as randomBytes from 'randombytes';
+import randomBytes from 'randombytes';
 import {ThunkAction} from 'redux-thunk';
 
 import {PostListSortType} from '../enums/PostListSortType';

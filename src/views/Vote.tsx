@@ -1,14 +1,13 @@
-import * as classnames from 'classnames';
-import * as React from 'react';
-import {Component, MouseEvent} from 'react';
+import classnames from 'classnames';
+import React from 'react';
 
 import {VoteType} from '../enums/VoteType';
 
 export interface IVoteProps {
     vote_count: number;
     voted: VoteType;
-    upvote: (e: MouseEvent<HTMLElement>) => void;
-    downvote: (e: MouseEvent<HTMLElement>) => void;
+    upvote: (e: React.MouseEvent<HTMLElement>) => void;
+    downvote: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 interface IVoteState {
@@ -16,7 +15,7 @@ interface IVoteState {
     justUpVoted: boolean;
 }
 
-export default class Vote extends Component<IVoteProps, IVoteState> {
+export default class Vote extends React.Component<IVoteProps, IVoteState> {
     public state = {
         justDownVoted: false,
         justUpVoted: false,

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {FormattedMessage, FormattedNumber} from 'react-intl';
 
 import {Menu} from './Menu';

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {Component} from 'react';
+import React from 'react';
 import {UserHandle} from '../enums/UserHandle';
 
 import {IPost} from '../interfaces/IPost';
@@ -15,7 +14,7 @@ export interface IPostListProps {
     onLoadMore?: () => void;
 }
 
-export default class PostList extends Component<IPostListProps> {
+export default class PostList extends React.Component<IPostListProps> {
     private scrollAtBottom = false;
 
     private scrollable: HTMLElement | null = null;

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {ChangeEvent, PureComponent} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 const CREATE_NEW = 'CREATE_NEW';
@@ -15,7 +14,7 @@ export interface ISelectDeviceUidState {
     radioState: string;
 }
 
-export class SelectDeviceUid extends PureComponent<ISelectDeviceUidProps, ISelectDeviceUidState> {
+export class SelectDeviceUid extends React.PureComponent<ISelectDeviceUidProps, ISelectDeviceUidState> {
     constructor(props: ISelectDeviceUidProps) {
         super(props);
         this.state = {
@@ -26,12 +25,12 @@ export class SelectDeviceUid extends PureComponent<ISelectDeviceUidProps, ISelec
         this.handleChangeRadio = this.handleChangeRadio.bind(this);
     }
 
-    public handleChangeText(event: ChangeEvent<HTMLInputElement>) {
+    public handleChangeText(event: React.ChangeEvent<HTMLInputElement>) {
         this.setState({deviceUid: event.target.value});
         this.props.setDeviceUid(event.target.value);
     }
 
-    public handleChangeRadio(event: ChangeEvent<HTMLInputElement>) {
+    public handleChangeRadio(event: React.ChangeEvent<HTMLInputElement>) {
         switch (event.target.value) {
             case CREATE_NEW:
                 this.props.setDeviceUid(null);

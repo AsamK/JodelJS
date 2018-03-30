@@ -8,6 +8,8 @@
     "noFallthroughCasesInSwitch": true,
     "importHelpers": true,
     "downlevelIteration": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "module": "es6",
     "moduleResolution": "node",
     "target": "es5",

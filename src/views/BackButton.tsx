@@ -1,8 +1,7 @@
-import * as React from 'react';
-import {MouseEvent} from 'react';
+import React from 'react';
 
 export interface IBackButtonProps {
-    onClick: (e: MouseEvent<HTMLElement>) => void;
+    onClick: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 const BackButton = ({onClick}: IBackButtonProps) => {

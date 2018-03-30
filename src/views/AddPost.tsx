@@ -1,6 +1,5 @@
-import * as classnames from 'classnames';
-import * as React from 'react';
-import {ChangeEvent, FormEvent, PureComponent} from 'react';
+import classnames from 'classnames';
+import React from 'react';
 import {connect, Dispatch} from 'react-redux';
 import {Color} from '../enums/Color';
 import {addPost, switchPostSection} from '../redux/actions';
@@ -28,7 +27,7 @@ export interface IAddPostComponentState {
 const MAX_PICTURE_WIDTH = 640;
 const MAX_POST_CHARS = 230;
 
-export class AddPostComponent extends PureComponent<IAddPostComponentProps, IAddPostComponentState> {
+export class AddPostComponent extends React.PureComponent<IAddPostComponentProps, IAddPostComponentState> {
     constructor(props: IAddPostComponentProps) {
         super(props);
         const messageDraft = sessionStorage.getItem('messageDraft');
@@ -42,7 +41,7 @@ export class AddPostComponent extends PureComponent<IAddPostComponentProps, IAdd
         this.resetForm = this.resetForm.bind(this);
     }
 
-    public handleChangeImage(event: ChangeEvent<HTMLInputElement>) {
+    public handleChangeImage(event: React.ChangeEvent<HTMLInputElement>) {
         if (this.state.imageUrl) {
             window.URL.revokeObjectURL(this.state.imageUrl);
         }
@@ -64,7 +63,7 @@ export class AddPostComponent extends PureComponent<IAddPostComponentProps, IAdd
         sessionStorage.removeItem('messageDraft');
     }
 
-    public handleAddPost(event: FormEvent<HTMLFormElement>) {
+    public handleAddPost(event: React.FormEvent<HTMLFormElement>) {
         const {channel, ancestor} = this.props;
         event.preventDefault();
         if ((this.state.message.trim() === '' && this.state.image === null) ||

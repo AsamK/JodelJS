@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {ChangeEvent, PureComponent} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import {IGeoCoordinates} from '../interfaces/ILocation';
@@ -14,7 +13,7 @@ export interface ISelectLocationProps {
     onLocationRequested: () => void;
 }
 
-export class SelectLocation extends PureComponent<ISelectLocationProps> {
+export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
     constructor(props: ISelectLocationProps) {
         super(props);
         this.handleChangeLatitude = this.handleChangeLatitude.bind(this);
@@ -22,7 +21,7 @@ export class SelectLocation extends PureComponent<ISelectLocationProps> {
         this.handleChangeRadio = this.handleChangeRadio.bind(this);
     }
 
-    public handleChangeLatitude(event: ChangeEvent<HTMLInputElement>) {
+    public handleChangeLatitude(event: React.ChangeEvent<HTMLInputElement>) {
         let latitudeNumber = Number.parseFloat(event.target.value);
         if (isNaN(latitudeNumber) || latitudeNumber < -90 || latitudeNumber > 90) {
             return;
@@ -32,7 +31,7 @@ export class SelectLocation extends PureComponent<ISelectLocationProps> {
         this.props.onChange(this.props.useBrowserLocation, {latitude: latitudeNumber, longitude});
     }
 
-    public handleChangeLongitude(event: ChangeEvent<HTMLInputElement>) {
+    public handleChangeLongitude(event: React.ChangeEvent<HTMLInputElement>) {
         let longitudeNumber = Number.parseFloat(event.target.value.replace(',', '.'));
         if (isNaN(longitudeNumber) || longitudeNumber < -180 || longitudeNumber > 180) {
             return;
@@ -42,7 +41,7 @@ export class SelectLocation extends PureComponent<ISelectLocationProps> {
         this.props.onChange(this.props.useBrowserLocation, {latitude, longitude: longitudeNumber});
     }
 
-    public handleChangeRadio(event: ChangeEvent<HTMLInputElement>) {
+    public handleChangeRadio(event: React.ChangeEvent<HTMLInputElement>) {
         switch (event.target.value) {
             case USE_BROWSER_LOCATION:
                 this.props.onChange(true, this.props.location);

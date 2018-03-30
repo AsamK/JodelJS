@@ -1,5 +1,5 @@
-import * as classnames from 'classnames';
-import * as React from 'react';
+import classnames from 'classnames';
+import React from 'react';
 import {connect, Dispatch} from 'react-redux';
 import {followChannel} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';

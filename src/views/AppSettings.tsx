@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {Component} from 'react';
+import React from 'react';
 import {connect, Dispatch} from 'react-redux';
 
 import Settings from '../app/settings';
@@ -54,7 +53,7 @@ interface IAppSettingsDispatchProps {
 
 type IAppSettingsComponentProps = IAppSettingsDispatchProps & IAppSettingsStateProps;
 
-class AppSettings extends Component<IAppSettingsComponentProps> {
+class AppSettings extends React.Component<IAppSettingsComponentProps> {
     constructor(props: IAppSettingsComponentProps) {
         super(props);
     }

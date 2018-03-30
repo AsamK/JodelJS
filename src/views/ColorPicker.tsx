@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {PureComponent} from 'react';
+import React from 'react';
 
 import Settings from '../app/settings';
 import {Color} from '../enums/Color';
@@ -9,7 +8,7 @@ export interface IColorPickerProps {
     onChange: (color: Color) => void;
 }
 
-export default class ColorPicker extends PureComponent<IColorPickerProps> {
+export default class ColorPicker extends React.PureComponent<IColorPickerProps> {
     constructor(props: IColorPickerProps) {
         super(props);
     }

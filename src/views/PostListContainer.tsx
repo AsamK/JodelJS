@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {MouseEvent, PureComponent} from 'react';
+import React from 'react';
 import {connect, Dispatch} from 'react-redux';
 
 import {PostListSortType} from '../enums/PostListSortType';
@@ -15,7 +14,7 @@ import {SortTypeLink} from './SortTypeLink';
 export interface IPostListContainerProps {
     onPostClick: (post: IPost) => void;
     onLoadMore?: () => void;
-    onAddClick: (e: MouseEvent<HTMLElement>) => void;
+    onAddClick: (e: React.MouseEvent<HTMLElement>) => void;
     onRefresh: () => void; // TODO implement
 }
 
@@ -27,7 +26,7 @@ export interface IPostListContainerComponentProps extends IPostListContainerProp
     locationKnown: boolean;
 }
 
-class PostListContainerComponent extends PureComponent<IPostListContainerComponentProps> {
+class PostListContainerComponent extends React.PureComponent<IPostListContainerComponentProps> {
     public constructor(props: IPostListContainerComponentProps) {
         super(props);
     }

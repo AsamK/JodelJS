@@ -1,15 +1,15 @@
 import 'intl';
 import 'intl/locale-data/jsonp/de.js';
 import 'intl/locale-data/jsonp/en.js';
-import * as React from 'react';
-import * as DocumentTitle from 'react-document-title/index';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import DocumentTitle from 'react-document-title/index';
+import ReactDOM from 'react-dom';
 import {addLocaleData, IntlProvider} from 'react-intl';
-import * as de from 'react-intl/locale-data/de';
-import * as en from 'react-intl/locale-data/en';
+import de from 'react-intl/locale-data/de';
+import en from 'react-intl/locale-data/en';
 import {Provider} from 'react-redux';
 import {applyMiddleware, compose, createStore, Middleware} from 'redux';
-import * as freeze from 'redux-freeze';
+import freeze from 'redux-freeze';
 import thunkMiddleware from 'redux-thunk';
 
 import {

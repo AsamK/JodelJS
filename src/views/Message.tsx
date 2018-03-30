@@ -1,13 +1,12 @@
-import * as React from 'react';
-import {Component, MouseEvent} from 'react';
+import React from 'react';
 
 export interface IMessageProps {
     message: string;
-    onAtClick: (e: MouseEvent<HTMLElement>, channel: string) => void;
-    onHashtagClick: (e: MouseEvent<HTMLElement>, channel: string) => void;
+    onAtClick: (e: React.MouseEvent<HTMLElement>, channel: string) => void;
+    onHashtagClick: (e: React.MouseEvent<HTMLElement>, channel: string) => void;
 }
 
-export default class Message extends Component<IMessageProps> {
+export default class Message extends React.Component<IMessageProps> {
     public render() {
         const {message, onAtClick, onHashtagClick} = this.props;
         const linkReg = /([^#@]*)([@#])([^\s#@:;.,]*)|([^[]*)\[([^[\]]*)\]\(([^()]*)\)/mg;

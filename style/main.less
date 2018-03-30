@@ -13,6 +13,7 @@
 
 @z-index-overlay: 200;
 @z-index-toast-layer: 150;
+@z-index-menu-layer: 100;
 @z-index-top-layer: 100;
 @z-index-sub-layer: 80;
 
@@ -682,6 +683,7 @@ input[type=number] {
       list-style-type: none;
       padding: 0;
       position: absolute;
+      z-index: @z-index-menu-layer;
 
       .menuEntry {
         > * {

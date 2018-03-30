@@ -41,8 +41,11 @@ export class Sticky extends PureComponent<IStickyProps> {
                     stickyButtons ?
                         <div className="stickButtons">
                             {
-                                stickyButtons.map(button => <button type="button" onClick={() => onButtonClick(
-                                    button.title)}>{button.title}</button>)
+                                stickyButtons.map((button, index) =>
+                                    <button key={index} type="button" onClick={() => onButtonClick(button.title)}>
+                                        {button.title}
+                                    </button>,
+                                )
                             }
                         </div>
                         : undefined

@@ -719,6 +719,10 @@ export function verify(): JodelThunkAction {
 
         const gcmVerification = await api.receiveGcmPushVerification(android_account);
         const verification = gcmVerification.verification;
+        if (!verification) {
+            console.warn('Failed to get gcm verification', gcmVerification);
+            return;
+        }
 
         try {
             await api.apiVerifyPush(verification.server_time, verification.verification_code);

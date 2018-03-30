@@ -5,3 +5,4 @@ dist/
 .idea/*
 !.idea/codeStyles/
 /src/app/settings.ts
+/profiling.json

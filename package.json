@@ -55,6 +55,7 @@
     "typescript": "~2.8.1",
     "uglifyjs-webpack-plugin": "~1.2.4",
     "webpack": "~4.4.1",
+    "webpack-bundle-analyzer": "~2.11.1",
     "webpack-cli": "~2.0.13",
     "webpack-dev-server": "~3.1.1"
   },
@@ -64,6 +65,7 @@
     "updatepackages": "ncu -u -a",
     "lint": "tslint --project . --force",
     "lint-fix": "tslint --project . --fix",
-    "profile": "webpack --profile -p --json > profiling.json"
+    "profile": "webpack --profile --mode=production --json > profiling.json",
+    "bundle-report": "npm run profile && webpack-bundle-analyzer profiling.json"
   }
 }

@@ -4,6 +4,7 @@ import 'intl/locale-data/jsonp/en.js';
 import React from 'react';
 import DocumentTitle from 'react-document-title/index';
 import ReactDOM from 'react-dom';
+import {hot} from 'react-hot-loader';
 import {addLocaleData, IntlProvider} from 'react-intl';
 import de from 'react-intl/locale-data/de';
 import en from 'react-intl/locale-data/en';
@@ -184,8 +185,7 @@ const translationLanguage = translationLocale ? translationLocale.substr(0, 2) :
 
 const TextComponent = (props: any) => props.children;
 
-ReactDOM.render(
-    <IntlProvider
+const App = hot(module)(() => <IntlProvider
         locale={translationLocale}
         messages={messages[translationLanguage]}
         textComponent={TextComponent}
@@ -195,5 +195,8 @@ ReactDOM.render(
                 <Jodel/>
             </DocumentTitle>
         </Provider>
-    </IntlProvider>
+    </IntlProvider>,
+);
+ReactDOM.render(
+    <App/>
     , document.getElementById('content'));

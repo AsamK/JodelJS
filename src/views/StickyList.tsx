@@ -1,7 +1,8 @@
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
 
 import {IApiSticky} from '../interfaces/IApiSticky';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {selectPost, switchPostSection} from '../redux/actions';
 import {closeSticky} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
@@ -52,7 +53,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
         clickStickyButton: (postId: string, buttonTitle: string) => {
             /* TODO implement */

@@ -13,6 +13,8 @@ import {applyMiddleware, compose, createStore, Middleware} from 'redux';
 import freeze from 'redux-freeze';
 import thunkMiddleware from 'redux-thunk';
 
+import {IJodelAction} from '../interfaces/IJodelAction';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {
     fetchPostsIfNeeded,
     getConfig,
@@ -63,7 +65,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const composeEnhancers = (process.env.NODE_ENV !== 'production' &&
     (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
-const store = createStore<IJodelAppStore>(
+const store = createStore<IJodelAppStore, IJodelAction, { dispatch: JodelThunkDispatch }, {}>(
     JodelApp,
     persistedState as IJodelAppStore,
     composeEnhancers(

@@ -1,8 +1,9 @@
 import classnames from 'classnames';
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
 
 import {PostListSortType} from '../enums/PostListSortType';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {switchPostListSortType} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 import {getSelectedSortType} from '../redux/selectors/view';
@@ -34,7 +35,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: ISortTypeLinkProps) =>
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: ISortTypeLinkProps) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: ISortTypeLinkProps) => {
     return {
         onClick: () => {
             dispatch(switchPostListSortType(ownProps.sortType));

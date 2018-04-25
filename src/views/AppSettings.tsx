@@ -1,9 +1,10 @@
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
 
 import Settings from '../app/settings';
 import {IApiExperiment} from '../interfaces/IApiConfig';
 import {IGeoCoordinates, ILocation} from '../interfaces/ILocation';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {
     deleteHome,
     getImageCaptcha,
@@ -206,7 +207,7 @@ const mapStateToProps = (state: IJodelAppStore): IAppSettingsStateProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>): IAppSettingsDispatchProps => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch): IAppSettingsDispatchProps => {
     return {
         deleteHome: () => dispatch(deleteHome()),
         getImageCaptcha: () => dispatch(getImageCaptcha()),

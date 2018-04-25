@@ -1,6 +1,8 @@
 import classnames from 'classnames';
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
+
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {followChannel} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 import {
@@ -39,7 +41,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
         onFollowClick: (channel: string, follow: boolean) => {
             dispatch(followChannel(channel, follow));

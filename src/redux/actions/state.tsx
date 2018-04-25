@@ -211,7 +211,7 @@ export function _selectPost(postId: string | null): IJodelAction {
     };
 }
 
-export function _selectPicture(postId: string) {
+export function _selectPicture(postId: string): IJodelAction {
     return {
         payload: {postId},
         type: SELECT_PICTURE,

@@ -1,8 +1,9 @@
 import classnames from 'classnames';
 import React from 'react';
-import {FormattedMessage } from 'react-intl';
-import {connect, Dispatch} from 'react-redux';
+import {FormattedMessage} from 'react-intl';
+import {connect} from 'react-redux';
 
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {switchPostSection} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 import {getSelectedSection} from '../redux/selectors/view';
@@ -44,7 +45,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: ISectionLinkProps): Pa
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>,
+const mapDispatchToProps = (dispatch: JodelThunkDispatch,
                             ownProps: ISectionLinkProps): Partial<ISectionLinkComponentProps> => {
     return {
         onClick: () => {

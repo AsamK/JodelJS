@@ -1,9 +1,10 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
 
 import Settings from '../app/settings';
 import {ILocation} from '../interfaces/ILocation';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {_setLocation, createNewAccount, setUseBrowserLocation, updateLocation} from '../redux/actions';
 import {setDeviceUid} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
@@ -15,7 +16,7 @@ export interface IFirstStartProps {
     deviceUid: string | null;
     location: ILocation | null;
     useBrowserLocation: boolean;
-    dispatch: Dispatch<IJodelAppStore>;
+    dispatch: JodelThunkDispatch;
 }
 
 export interface IFirstStartState {

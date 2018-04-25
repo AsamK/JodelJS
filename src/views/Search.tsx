@@ -1,7 +1,8 @@
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
-import {searchPosts} from '../redux/actions/api';
+import {connect} from 'react-redux';
 
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
+import {searchPosts} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
 
 interface ISearchComponentProps {
@@ -49,7 +50,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
         searchPosts: (message: string, suggested: boolean) => dispatch(searchPosts(message, suggested)),
     };

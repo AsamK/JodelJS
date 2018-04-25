@@ -1,9 +1,10 @@
 import classnames from 'classnames';
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
 
 import {IChannel} from '../interfaces/IChannel';
 import {IPost} from '../interfaces/IPost';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {
     fetchMoreComments,
     fetchMorePosts,
@@ -66,7 +67,7 @@ export interface IJodelProps {
     notificationsVisible: boolean;
     searchVisible: boolean;
     isConfigAvailable: boolean;
-    dispatch: Dispatch<IJodelAppStore>;
+    dispatch: JodelThunkDispatch;
 }
 
 class JodelComponent extends React.Component<IJodelProps> {

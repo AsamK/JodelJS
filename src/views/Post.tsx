@@ -1,11 +1,12 @@
 import classnames from 'classnames';
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
 
 import {PostOwn} from '../enums/PostOwn';
 import {UserHandle} from '../enums/UserHandle';
 import {VoteType} from '../enums/VoteType';
 import {IPost} from '../interfaces/IPost';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {deletePost, downVote, giveThanks, selectPicture, switchPostSection, upVote} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 import ChildInfo from './ChildInfo';
@@ -126,7 +127,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
     return {};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: IPostProps) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: IPostProps) => {
     return {
         deletePost: () => dispatch(deletePost(ownProps.post.post_id)),
         downVote: () => dispatch(downVote(ownProps.post.post_id)),

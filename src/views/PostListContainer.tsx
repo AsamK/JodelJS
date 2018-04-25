@@ -1,8 +1,9 @@
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
 
 import {PostListSortType} from '../enums/PostListSortType';
 import {IPost} from '../interfaces/IPost';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {IJodelAppStore} from '../redux/reducers';
 import {isLocationKnown} from '../redux/selectors/app';
 import {getSelectedSectionLastUpdated, getSelectedSectionSortPosts} from '../redux/selectors/posts';
@@ -58,7 +59,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: IPostListContainerProp
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: IPostListContainerProps) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: IPostListContainerProps) => {
     return {};
 };
 

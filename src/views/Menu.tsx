@@ -1,7 +1,8 @@
 import classnames from 'classnames';
 import React from 'react';
 import {FormattedMessage, FormattedNumber} from 'react-intl';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {showNotifications, showSearch, showSettings} from '../redux/actions';
 import {showPictureOfDay} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
@@ -109,7 +110,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: {}) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: {}) => {
     return {
         showNotificationsCallback: () => dispatch(showNotifications(true)),
         showPictureOfDayCallback: () => dispatch(showPictureOfDay()),

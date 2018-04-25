@@ -1,7 +1,8 @@
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
 
 import {IToast} from '../interfaces/IToast';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {hideToast} from '../redux/actions/toasts.actions';
 import {IJodelAppStore} from '../redux/reducers';
 import {getToasts} from '../redux/selectors/app';
@@ -30,7 +31,7 @@ const mapStateToProps = (state: IJodelAppStore): Partial<IToastContainerComponen
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>): Partial<IToastContainerComponentProps> => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch): Partial<IToastContainerComponentProps> => {
     return {
         onToastClick: (toastId: number) => {
             dispatch(hideToast(toastId));

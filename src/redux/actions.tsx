@@ -1,9 +1,9 @@
 import randomBytes from 'randombytes';
-import {ThunkAction} from 'redux-thunk';
 
 import {PostListSortType} from '../enums/PostListSortType';
 import {Section} from '../enums/Section';
 import {TokenType} from '../enums/TokenType';
+import {JodelThunkAction} from '../interfaces/JodelThunkAction';
 import {
     fetchPostsIfNeeded,
     getConfig,
@@ -31,13 +31,12 @@ import {
     _switchPostSection,
     invalidatePosts,
 } from './actions/state';
-import {IJodelAppStore} from './reducers';
 import {getLocation} from './selectors/app';
 
 export * from './actions/state';
 export * from './actions/api';
 
-export function switchPostSection(section: Section): ThunkAction<void, IJodelAppStore, void> {
+export function switchPostSection(section: Section): JodelThunkAction {
     return (dispatch, getState) => {
         if (getState().viewState.postSection !== section) {
             dispatch(switchPostListSortType(PostListSortType.RECENT));
@@ -49,7 +48,7 @@ export function switchPostSection(section: Section): ThunkAction<void, IJodelApp
     };
 }
 
-export function switchPostListSortType(sortType: PostListSortType): ThunkAction<void, IJodelAppStore, void> {
+export function switchPostListSortType(sortType: PostListSortType): JodelThunkAction {
     return (dispatch, getState) => {
         if (getState().viewState.postListSortType !== sortType) {
             dispatch(_switchPostListSortType(sortType));
@@ -57,7 +56,7 @@ export function switchPostListSortType(sortType: PostListSortType): ThunkAction<
     };
 }
 
-export function updatePosts(): ThunkAction<void, IJodelAppStore, void> {
+export function updatePosts(): JodelThunkAction {
     return (dispatch, getState) => {
         const section = getState().viewState.postSection;
         dispatch(invalidatePosts(section));
@@ -65,7 +64,7 @@ export function updatePosts(): ThunkAction<void, IJodelAppStore, void> {
     };
 }
 
-export function selectPost(postId: string | null): ThunkAction<void, IJodelAppStore, void> {
+export function selectPost(postId: string | null): JodelThunkAction {
     return (dispatch, getState) => {
         dispatch(_selectPost(postId));
         if (postId != null) {
@@ -74,7 +73,7 @@ export function selectPost(postId: string | null): ThunkAction<void, IJodelAppSt
     };
 }
 
-export function selectPostFromNotification(postId: string): ThunkAction<void, IJodelAppStore, void> {
+export function selectPostFromNotification(postId: string): JodelThunkAction {
     return (dispatch, getState) => {
         dispatch(setNotificationPostRead(postId));
         dispatch(_selectPost(postId));
@@ -84,13 +83,13 @@ export function selectPostFromNotification(postId: string): ThunkAction<void, IJ
     };
 }
 
-export function selectPicture(postId: string): ThunkAction<void, IJodelAppStore, void> {
+export function selectPicture(postId: string): JodelThunkAction {
     return (dispatch, getState) => {
         dispatch(_selectPicture(postId));
     };
 }
 
-export function updateLocation(): ThunkAction<void, IJodelAppStore, void> {
+export function updateLocation(): JodelThunkAction {
     return (dispatch, getState) => {
         if (getState().settings.useBrowserLocation && 'geolocation' in navigator) {
             /* geolocation is available */
@@ -121,7 +120,7 @@ export function updateLocation(): ThunkAction<void, IJodelAppStore, void> {
 }
 
 export function setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number,
-                         tokenType: TokenType): ThunkAction<void, IJodelAppStore, void> {
+                         tokenType: TokenType): JodelThunkAction {
     return (dispatch, getState) => {
         // TODO clear cached posts
         dispatch(_setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType));
@@ -155,14 +154,14 @@ function randomValueHex(byteCount: number) {
     return rawBytes.toString('hex'); // convert to hexadecimal format
 }
 
-export function createNewAccount(): ThunkAction<void, IJodelAppStore, void> {
+export function createNewAccount(): JodelThunkAction {
     return (dispatch, getState) => {
         const deviceUid = randomValueHex(32);
         dispatch(setDeviceUid(deviceUid));
     };
 }
 
-export function setPermissionDenied(permissionDenied: boolean): ThunkAction<void, IJodelAppStore, void> {
+export function setPermissionDenied(permissionDenied: boolean): JodelThunkAction {
     return (dispatch, getState) => {
         const account = getState().account;
         if (account.deviceUid && permissionDenied && !account.permissionDenied) {
@@ -171,19 +170,19 @@ export function setPermissionDenied(permissionDenied: boolean): ThunkAction<void
     };
 }
 
-export function showAddPost(visible: boolean): ThunkAction<void, IJodelAppStore, void> {
+export function showAddPost(visible: boolean): JodelThunkAction {
     return (dispatch, getState) => {
         dispatch(_showAddPost(visible));
     };
 }
 
-export function showSettings(visible: boolean): ThunkAction<void, IJodelAppStore, void> {
+export function showSettings(visible: boolean): JodelThunkAction {
     return (dispatch, getState) => {
         dispatch(_showSettings(visible));
     };
 }
 
-export function showChannelList(visible: boolean): ThunkAction<void, IJodelAppStore, void> {
+export function showChannelList(visible: boolean): JodelThunkAction {
     return (dispatch, getState) => {
         if (visible) {
             dispatch(getRecommendedChannels());
@@ -193,13 +192,13 @@ export function showChannelList(visible: boolean): ThunkAction<void, IJodelAppSt
     };
 }
 
-export function showNotifications(visible: boolean): ThunkAction<void, IJodelAppStore, void> {
+export function showNotifications(visible: boolean): JodelThunkAction {
     return (dispatch, getState) => {
         dispatch(_showNotifications(visible));
     };
 }
 
-export function showSearch(visible: boolean): ThunkAction<void, IJodelAppStore, void> {
+export function showSearch(visible: boolean): JodelThunkAction {
     return (dispatch, getState) => {
         dispatch(getSuggestedHashtags());
         dispatch(_showSearch(visible));

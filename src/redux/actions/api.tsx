@@ -1,6 +1,3 @@
-import {Dispatch} from 'redux';
-import {ThunkAction} from 'redux-thunk';
-
 import {JodelApi} from '../../app/api';
 import Settings from '../../app/settings';
 import {Color} from '../../enums/Color';
@@ -10,19 +7,38 @@ import {ToastType} from '../../enums/ToastType';
 import {VoteType} from '../../enums/VoteType';
 import {IApiPostDetails} from '../../interfaces/IApiPostDetails';
 import {IApiPostListPost} from '../../interfaces/IApiPostListPost';
+import {JodelThunkAction, JodelThunkDispatch} from '../../interfaces/JodelThunkAction';
 import {setPermissionDenied, setToken, showSettings, switchPostSection, updatePosts} from '../actions';
 import {IJodelAppStore} from '../reducers';
 import {getPost} from '../reducers/entities';
 import {getLocation} from '../selectors/app';
 import {
-    _closeSticky, _selectPost, _setConfig, _setDeviceUID, _setKarma, _setLocation, _setNotificationPostRead,
-    beginRefreshToken, invalidatePosts, pinnedPost, receiveNotifications, receivePost, receivePosts, setChannelsMeta,
-    setCountryChannels, setImageCaptcha, setIsFetching, setLocalChannels, setRecommendedChannels, setSuggestedHashtags,
+    _closeSticky,
+    _selectPost,
+    _setConfig,
+    _setDeviceUID,
+    _setKarma,
+    _setLocation,
+    _setNotificationPostRead,
+    beginRefreshToken,
+    invalidatePosts,
+    pinnedPost,
+    receiveNotifications,
+    receivePost,
+    receivePosts,
+    setChannelsMeta,
+    setCountryChannels,
+    setImageCaptcha,
+    setIsFetching,
+    setLocalChannels,
+    setRecommendedChannels,
+    setSuggestedHashtags,
     votedPost,
 } from './state';
 import {showToast} from './toasts.actions';
 
-function handleNetworkErrors(dispatch: Dispatch<IJodelAppStore>, getState: () => IJodelAppStore, err: any) {
+function handleNetworkErrors(dispatch: JodelThunkDispatch,
+                             getState: () => IJodelAppStore, err: any) {
     if (err.status === undefined) {
         dispatch(showToast('Kein Internet Zugriff oder Server down.', ToastType.WARNING));
         console.error('No internet access or server down…,', err);
@@ -48,12 +64,6 @@ function handleNetworkErrors(dispatch: Dispatch<IJodelAppStore>, getState: () =>
         console.error('Request error: ' + err.status + ' ' + err.message + ': ' + err.response.text);
     }
 }
-
-interface IExtraArgument {
-    api: JodelApi;
-}
-
-type JodelThunkAction = ThunkAction<void, IJodelAppStore, IExtraArgument>;
 
 export function deletePost(postId: string): JodelThunkAction {
     return (dispatch, getState, {api}) => {
@@ -426,7 +436,7 @@ export function updatePost(postId: string, force = false): JodelThunkAction {
     };
 }
 
-function getAllPostDetails(api: JodelApi, dispatch: Dispatch<IJodelAppStore>, getState: () => IJodelAppStore,
+function getAllPostDetails(api: JodelApi, dispatch: JodelThunkDispatch, getState: () => IJodelAppStore,
                            postId: string,
                            nextReply?: string, ojFilter = false): Promise<IApiPostDetails | void> {
     return api.apiGetPostDetails(postId, true, nextReply, false, ojFilter)
@@ -505,7 +515,7 @@ export function getConfig(): JodelThunkAction {
 }
 
 export function addPost(text: string, image?: string, channel?: string, ancestor?: string,
-                        color: Color = 'FF9908'): ThunkAction<Promise<Section | null>, IJodelAppStore, IExtraArgument> {
+                        color: Color = 'FF9908'): JodelThunkAction<Promise<Section | null>> {
     return (dispatch, getState, {api}) => {
         const loc = getLocation(getState());
         if (!loc) {

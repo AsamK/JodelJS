@@ -1,7 +1,9 @@
 import classnames from 'classnames';
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
+
 import {Color} from '../enums/Color';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {addPost, switchPostSection} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 import {getAddPostChannel} from '../redux/selectors/app';
@@ -14,7 +16,7 @@ export interface IAddPostComponentProps {
     ancestor: string;
     channel: string;
     visible: boolean;
-    dispatch: Dispatch<IJodelAppStore>;
+    dispatch: JodelThunkDispatch;
 }
 
 export interface IAddPostComponentState {

@@ -1,5 +1,6 @@
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 
 import {IJodelAppStore} from '../redux/reducers';
 import {getSelectedHashtagName} from '../redux/selectors/view';
@@ -23,7 +24,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {};
 };
 

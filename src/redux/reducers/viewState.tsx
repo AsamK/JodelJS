@@ -32,7 +32,7 @@ export interface IViewStateStore {
     readonly search: IVisible;
 }
 
-export function viewState(state: IViewStateStore, action: IJodelAction): typeof state {
+export function viewState(state: IViewStateStore | undefined, action: IJodelAction): IViewStateStore {
     switch (action.type) {
         case REPLACE_VIEW_STATE:
             return {...state, ...action.payload.newViewState};

@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux';
 
+import {IJodelAction} from '../interfaces/IJodelAction';
 import {IToast} from '../interfaces/IToast';
 import {account, IAccountStore} from './reducers/account';
 import {entities, IEntitiesStore} from './reducers/entities';
@@ -21,7 +22,7 @@ interface IJodelAppStoreMutable {
     toasts: ReadonlyArray<IToast>;
 }
 
-export const JodelApp = combineReducers<IJodelAppStore>({
+export const JodelApp = combineReducers<IJodelAppStore, IJodelAction>({
     account,
     entities,
     imageCaptcha,

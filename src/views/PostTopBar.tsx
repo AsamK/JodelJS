@@ -1,7 +1,8 @@
 import classnames from 'classnames';
 import React from 'react';
-import {connect, Dispatch} from 'react-redux';
+import {connect} from 'react-redux';
 import {IPost} from '../interfaces/IPost';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {pin} from '../redux/actions';
 import {ojFilterPost, sharePost} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
@@ -51,7 +52,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
     return {};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IJodelAppStore>, ownProps: IPostTopBarProps) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: IPostTopBarProps) => {
     return {
         onBackClick: () => {
             window.history.back();

@@ -23,23 +23,6 @@ export class SelectDeviceUid extends React.PureComponent<ISelectDeviceUidProps, 
         };
     }
 
-    public handleChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({deviceUid: event.target.value});
-        this.props.setDeviceUid(event.target.value);
-    }
-
-    public handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {
-        switch (event.target.value) {
-            case CREATE_NEW:
-                this.props.setDeviceUid(null);
-                break;
-            case USE_EXISTING:
-                this.props.setDeviceUid(this.state.deviceUid);
-                break;
-        }
-        this.setState({radioState: event.target.value});
-    }
-
     public render() {
         return (
             <div className="selectDeviceUid">
@@ -78,5 +61,22 @@ export class SelectDeviceUid extends React.PureComponent<ISelectDeviceUidProps, 
                     : ''}
             </div>
         );
+    }
+
+    private handleChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({deviceUid: event.target.value});
+        this.props.setDeviceUid(event.target.value);
+    }
+
+    private handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {
+        switch (event.target.value) {
+            case CREATE_NEW:
+                this.props.setDeviceUid(null);
+                break;
+            case USE_EXISTING:
+                this.props.setDeviceUid(this.state.deviceUid);
+                break;
+        }
+        this.setState({radioState: event.target.value});
     }
 }

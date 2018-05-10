@@ -48,20 +48,6 @@ export default class PostDetails extends React.Component<IPostDetailsProps> {
         }
     }
 
-    public onScroll = () => {
-        if (!this.scrollable || !this.props.onLoadMore) {
-            return;
-        }
-        const isNearBottom = this.scrollable.scrollTop > 0 &&
-            (this.scrollable.scrollTop + this.scrollable.clientHeight) >= (this.scrollable.scrollHeight - 500);
-        if (isNearBottom && this.scrollAtBottom !== isNearBottom) {
-            this.scrollAtBottom = isNearBottom;
-            this.props.onLoadMore();
-        } else {
-            this.scrollAtBottom = isNearBottom;
-        }
-    }
-
     public render() {
         const {post, postChildren, locationKnown, onPostClick, onAddClick} = this.props;
         const childPosts = postChildren ? postChildren : [];
@@ -73,5 +59,19 @@ export default class PostDetails extends React.Component<IPostDetailsProps> {
                 {locationKnown ? <AddButton onClick={onAddClick}/> : ''}
             </div>
         );
+    }
+
+    private onScroll = () => {
+        if (!this.scrollable || !this.props.onLoadMore) {
+            return;
+        }
+        const isNearBottom = this.scrollable.scrollTop > 0 &&
+            (this.scrollable.scrollTop + this.scrollable.clientHeight) >= (this.scrollable.scrollHeight - 500);
+        if (isNearBottom && this.scrollAtBottom !== isNearBottom) {
+            this.scrollAtBottom = isNearBottom;
+            this.props.onLoadMore();
+        } else {
+            this.scrollAtBottom = isNearBottom;
+        }
     }
 }

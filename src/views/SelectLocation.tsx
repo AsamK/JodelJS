@@ -18,37 +18,6 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
         super(props);
     }
 
-    public handleChangeLatitude = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let latitudeNumber = Number.parseFloat(event.target.value);
-        if (isNaN(latitudeNumber) || latitudeNumber < -90 || latitudeNumber > 90) {
-            return;
-        }
-        latitudeNumber = Math.round(latitudeNumber * 100) / 100;
-        const longitude = this.props.location ? this.props.location.longitude : 0;
-        this.props.onChange(this.props.useBrowserLocation, {latitude: latitudeNumber, longitude});
-    }
-
-    public handleChangeLongitude = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let longitudeNumber = Number.parseFloat(event.target.value.replace(',', '.'));
-        if (isNaN(longitudeNumber) || longitudeNumber < -180 || longitudeNumber > 180) {
-            return;
-        }
-        longitudeNumber = Math.round(longitudeNumber * 100) / 100;
-        const latitude = this.props.location ? this.props.location.latitude : 0;
-        this.props.onChange(this.props.useBrowserLocation, {latitude, longitude: longitudeNumber});
-    }
-
-    public handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {
-        switch (event.target.value) {
-            case USE_BROWSER_LOCATION:
-                this.props.onChange(true, this.props.location);
-                break;
-            case MANUAL:
-                this.props.onChange(false, this.props.location);
-                break;
-        }
-    }
-
     public render() {
         const {location, useBrowserLocation, onLocationRequested} = this.props;
         return (
@@ -109,5 +78,36 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                     : ''}
             </div>
         );
+    }
+
+    private handleChangeLatitude = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let latitudeNumber = Number.parseFloat(event.target.value);
+        if (isNaN(latitudeNumber) || latitudeNumber < -90 || latitudeNumber > 90) {
+            return;
+        }
+        latitudeNumber = Math.round(latitudeNumber * 100) / 100;
+        const longitude = this.props.location ? this.props.location.longitude : 0;
+        this.props.onChange(this.props.useBrowserLocation, {latitude: latitudeNumber, longitude});
+    }
+
+    private handleChangeLongitude = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let longitudeNumber = Number.parseFloat(event.target.value.replace(',', '.'));
+        if (isNaN(longitudeNumber) || longitudeNumber < -180 || longitudeNumber > 180) {
+            return;
+        }
+        longitudeNumber = Math.round(longitudeNumber * 100) / 100;
+        const latitude = this.props.location ? this.props.location.latitude : 0;
+        this.props.onChange(this.props.useBrowserLocation, {latitude, longitude: longitudeNumber});
+    }
+
+    private handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {
+        switch (event.target.value) {
+            case USE_BROWSER_LOCATION:
+                this.props.onChange(true, this.props.location);
+                break;
+            case MANUAL:
+                this.props.onChange(false, this.props.location);
+                break;
+        }
     }
 }

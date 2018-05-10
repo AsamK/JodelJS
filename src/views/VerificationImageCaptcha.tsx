@@ -20,7 +20,25 @@ export class VerificationImageCaptcha
         };
     }
 
-    public onImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    public render() {
+        const {imageUrl, onFinishedClick} = this.props;
+
+        return (
+            <div className="verificationImage">
+                Wähle alle Bilder mit Waschbär aus, um dein Jodel Konto zu verifizieren:
+                <img src={imageUrl} onClick={this.onImageClick}/>
+                <div>
+                    Gewählte Bilder: {this.state.clickedImages.sort().join(', ')}
+                </div>
+                <input type="button" value="Verify" onClick={e => {
+                    onFinishedClick(this.state.clickedImages);
+                    this.setState({clickedImages: []});
+                }}/>
+            </div>
+        );
+    }
+
+    private onImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
         const {imageWidth} = this.props;
 
         const actualHeight = (e.target as HTMLElement).offsetHeight;
@@ -39,23 +57,5 @@ export class VerificationImageCaptcha
 
         // Update state
         this.setState({clickedImages});
-    }
-
-    public render() {
-        const {imageUrl, onFinishedClick} = this.props;
-
-        return (
-            <div className="verificationImage">
-                Wähle alle Bilder mit Waschbär aus, um dein Jodel Konto zu verifizieren:
-                <img src={imageUrl} onClick={this.onImageClick}/>
-                <div>
-                    Gewählte Bilder: {this.state.clickedImages.sort().join(', ')}
-                </div>
-                <input type="button" value="Verify" onClick={e => {
-                    onFinishedClick(this.state.clickedImages);
-                    this.setState({clickedImages: []});
-                }}/>
-            </div>
-        );
     }
 }

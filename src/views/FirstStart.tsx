@@ -33,14 +33,6 @@ class FirstStart extends React.Component<IFirstStartProps, IFirstStartState> {
         this.setState({deviceUid: this.props.deviceUid});
     }
 
-    public setDeviceUid = (deviceUid: string | null) => {
-        this.setState({deviceUid});
-    }
-
-    public updateLocation = () => {
-        this.props.dispatch(updateLocation());
-    }
-
     public render() {
         return <div className="firstStart">
             <h1>
@@ -116,6 +108,14 @@ class FirstStart extends React.Component<IFirstStartProps, IFirstStartState> {
                 </button>
             </form>
         </div>;
+    }
+
+    private setDeviceUid = (deviceUid: string | null) => {
+        this.setState({deviceUid});
+    }
+
+    private updateLocation = () => {
+        this.props.dispatch(updateLocation());
     }
 }
 

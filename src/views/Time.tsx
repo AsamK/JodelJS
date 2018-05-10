@@ -11,10 +11,6 @@ export class Time extends React.Component<ITimeProps> {
         this.timer = window.setInterval(this.tick, 1000);
     }
 
-    public tick = () => {
-        this.forceUpdate();
-    }
-
     public componentWillUnmount() {
         if (this.timer) {
             clearInterval(this.timer);
@@ -57,5 +53,9 @@ export class Time extends React.Component<ITimeProps> {
                 {age}
             </div>
         );
+    }
+
+    private tick = () => {
+        this.forceUpdate();
     }
 }

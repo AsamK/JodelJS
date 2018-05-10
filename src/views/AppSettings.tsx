@@ -59,23 +59,6 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
         super(props);
     }
 
-    public locationChange = (useBrowserLocation: boolean, location: IGeoCoordinates | null) => {
-        this.props.setUseBrowserLocation(useBrowserLocation);
-        if (useBrowserLocation && !this.props.useBrowserLocation) {
-            this.props.updateLocation();
-        }
-        if (!location) {
-            if (useBrowserLocation || !Settings.DEFAULT_LOCATION) {
-                return;
-            }
-            location = {
-                latitude: Settings.DEFAULT_LOCATION.latitude,
-                longitude: Settings.DEFAULT_LOCATION.longitude,
-            };
-        }
-        this.props.setLocation(location);
-    }
-
     public componentDidMount() {
         if (!this.props.verified) {
             this.props.getImageCaptcha();
@@ -183,6 +166,23 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
                 Schließen
             </button>
         </div>;
+    }
+
+    private locationChange = (useBrowserLocation: boolean, location: IGeoCoordinates | null) => {
+        this.props.setUseBrowserLocation(useBrowserLocation);
+        if (useBrowserLocation && !this.props.useBrowserLocation) {
+            this.props.updateLocation();
+        }
+        if (!location) {
+            if (useBrowserLocation || !Settings.DEFAULT_LOCATION) {
+                return;
+            }
+            location = {
+                latitude: Settings.DEFAULT_LOCATION.latitude,
+                longitude: Settings.DEFAULT_LOCATION.longitude,
+            };
+        }
+        this.props.setLocation(location);
     }
 }
 

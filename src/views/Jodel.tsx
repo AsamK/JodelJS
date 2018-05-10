@@ -74,45 +74,13 @@ class JodelComponent extends React.Component<IJodelProps> {
     private timer: number | undefined;
 
     public componentDidMount() {
-        this.timer = setInterval(this.refresh.bind(this), 20000);
+        this.timer = window.setInterval(this.refresh, 20000);
     }
 
     public componentWillUnmount() {
         if (this.timer) {
             clearInterval(this.timer);
         }
-    }
-
-    public onRefresh() {
-        this.props.dispatch(updatePosts());
-    }
-
-    public refresh() {
-        if (!this.props.isRegistered) {
-            return;
-        }
-        this.props.dispatch(fetchPostsIfNeeded());
-        this.props.dispatch(getNotificationsIfAvailable());
-    }
-
-    public handleClick(post: IPost) {
-        this.props.dispatch(selectPost(post != null ? post.post_id : null));
-    }
-
-    public handleAddClick() {
-        this.props.dispatch(showAddPost(true));
-    }
-
-    public handleAddCommentClick() {
-        this.props.dispatch(showAddPost(true));
-    }
-
-    public onLoadMore() {
-        this.props.dispatch(fetchMorePosts());
-    }
-
-    public onLoadMoreComments() {
-        this.props.dispatch(fetchMoreComments());
     }
 
     public render() {
@@ -124,10 +92,8 @@ class JodelComponent extends React.Component<IJodelProps> {
         } else if (this.props.isConfigAvailable) {
             return <div className="jodel">
                 <TopBar karma={this.props.karma}
-                        showSettings={() => this.props.dispatch(showSettings(true))}
-                        showChannelList={() => {
-                            this.props.dispatch(showChannelList(!this.props.channelListVisible));
-                        }}
+                        showSettings={this.onShowSettings}
+                        showChannelList={this.onShowChannelList}
                 />
                 <ToastContainer/>
                 <div className={classnames('list', {
@@ -136,19 +102,19 @@ class JodelComponent extends React.Component<IJodelProps> {
                     <ChannelTopBar/>
                     <HashtagTopBar/>
                     <StickyList/>
-                    <PostListContainer onPostClick={this.handleClick.bind(this)}
-                                       onRefresh={this.onRefresh} onAddClick={this.handleAddClick.bind(this)}
-                                       onLoadMore={this.onLoadMore.bind(this)}/>
+                    <PostListContainer onPostClick={this.handleClick}
+                                       onRefresh={this.onRefresh} onAddClick={this.handleAddClick}
+                                       onLoadMore={this.onLoadMore}/>
                 </div>
                 {this.props.selectedPost ?
                     <div className={classnames('detail', {postShown: this.props.selectedPost != null})}>
                         <PostTopBar post={this.props.selectedPost}/>
                         <PostDetails post={this.props.selectedPost}
                                      postChildren={this.props.selectedPostChildren}
-                                     onPostClick={this.refresh.bind(this)}
-                                     onAddClick={this.handleAddCommentClick.bind(this)}
+                                     onPostClick={this.refresh}
+                                     onAddClick={this.handleAddCommentClick}
                                      locationKnown={this.props.locationKnown}
-                                     onLoadMore={this.onLoadMoreComments.bind(this)}/>
+                                     onLoadMore={this.onLoadMoreComments}/>
                     </div>
                     : null}
                 {this.props.selectedPicturePost ?
@@ -165,8 +131,7 @@ class JodelComponent extends React.Component<IJodelProps> {
                                  recommendedChannels={this.props.recommendedChannels}
                                  localChannels={this.props.localChannels}
                                  countryChannels={this.props.countryChannels}
-                                 onChannelClick={hashtag => this.props.dispatch(
-                                     switchPostSection('channel:' + hashtag))}/>
+                                 onChannelClick={this.onChannelClick}/>
                 </div>
                 <div className={classnames('notifications', {notificationsShown: this.props.notificationsVisible})}>
                     <NotificationList/>
@@ -182,6 +147,50 @@ class JodelComponent extends React.Component<IJodelProps> {
         } else {
             return null;
         }
+    }
+
+    private onRefresh = () => {
+        this.props.dispatch(updatePosts());
+    }
+
+    private refresh = () => {
+        if (!this.props.isRegistered) {
+            return;
+        }
+        this.props.dispatch(fetchPostsIfNeeded());
+        this.props.dispatch(getNotificationsIfAvailable());
+    }
+
+    private handleClick = (post: IPost) => {
+        this.props.dispatch(selectPost(post != null ? post.post_id : null));
+    }
+
+    private handleAddClick = () => {
+        this.props.dispatch(showAddPost(true));
+    }
+
+    private handleAddCommentClick = () => {
+        this.props.dispatch(showAddPost(true));
+    }
+
+    private onLoadMore = () => {
+        this.props.dispatch(fetchMorePosts());
+    }
+
+    private onLoadMoreComments = () => {
+        this.props.dispatch(fetchMoreComments());
+    }
+
+    private onShowSettings = () => {
+        this.props.dispatch(showSettings(true));
+    }
+
+    private onShowChannelList = () => {
+        this.props.dispatch(showChannelList(!this.props.channelListVisible));
+    }
+
+    private onChannelClick = (channelName: string) => {
+        this.props.dispatch(switchPostSection('channel:' + channelName));
     }
 }
 

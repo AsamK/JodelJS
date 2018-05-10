@@ -39,11 +39,9 @@ export class AddPostComponent extends React.PureComponent<IAddPostComponentProps
             imageUrl: undefined,
             message: messageDraft !== null ? messageDraft : '',
         };
-        this.handleChangeImage = this.handleChangeImage.bind(this);
-        this.resetForm = this.resetForm.bind(this);
     }
 
-    public handleChangeImage(event: React.ChangeEvent<HTMLInputElement>) {
+    public handleChangeImage = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (this.state.imageUrl) {
             window.URL.revokeObjectURL(this.state.imageUrl);
         }
@@ -59,13 +57,13 @@ export class AddPostComponent extends React.PureComponent<IAddPostComponentProps
         }
     }
 
-    public resetForm(form: HTMLFormElement) {
+    public resetForm = (form: HTMLFormElement) => {
         this.setState({message: '', image: undefined, imageUrl: undefined});
         form.reset();
         sessionStorage.removeItem('messageDraft');
     }
 
-    public handleAddPost(event: React.FormEvent<HTMLFormElement>) {
+    public handleAddPost = (event: React.FormEvent<HTMLFormElement>) => {
         const {channel, ancestor} = this.props;
         event.preventDefault();
         if ((this.state.message.trim() === '' && this.state.image === null) ||
@@ -107,7 +105,7 @@ export class AddPostComponent extends React.PureComponent<IAddPostComponentProps
                     :
                     'Jodel Kommentar schreiben'
                 }:
-                <form onSubmit={this.handleAddPost.bind(this)}>
+                <form onSubmit={this.handleAddPost}>
                     <textarea maxLength={MAX_POST_CHARS} value={this.state.message} onChange={event => {
                         this.setState({message: event.target.value});
                         sessionStorage.setItem('messageDraft', event.target.value);

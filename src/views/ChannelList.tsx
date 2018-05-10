@@ -1,6 +1,7 @@
-import classnames from 'classnames';
 import React from 'react';
+
 import {IChannel} from '../interfaces/IChannel';
+import {ChannelListItem} from './ChannelListItem';
 
 export interface IChannelListProps {
     channels: IChannel[];
@@ -43,12 +44,12 @@ export default class ChannelList extends React.Component<IChannelListProps, ICha
                            className="channelFilterText"
                            placeholder="Channel filtern"
                            value={this.state.channelFilter}
-                           onChange={e => this.setState({channelFilter: e.target.value})}
+                           onChange={this.onFilterChange}
                     />
                     {!this.state.channelFilter ? null :
                         <div
                             className="channelLink"
-                            onClick={() => onChannelClick(this.state.channelFilter)}>
+                            onClick={this.onNewChannelClick}>
                             <div className="title">@{this.state.channelFilter}</div>
                         </div>
                     }
@@ -78,25 +79,19 @@ export default class ChannelList extends React.Component<IChannelListProps, ICha
             !channel.channel.toLowerCase().includes(this.state.channelFilter.toLowerCase())) {
             return;
         }
-        return <div key={channel.channel}
-                    className={classnames('channelLink', {unread: channel.unread})}
-                    onClick={() => onChannelClick(channel.channel)}>
-            {showImage && channel.image_url ?
-                <div className="channelPicture"
-                     style={{backgroundImage: 'url(https:' + channel.image_url + ')'}}/>
-                : undefined}
-            <div className="title">@{channel.channel}</div>
-            <div className="channel-info">
-                {channel.sponsored ?
-                    <div className="sponsored"> (Sponsored)</div>
-                    : undefined}
-                {channel.followers ?
-                    <div className="followers">{channel.followers} Followers</div>
-                    : undefined}
-                {channel.country_followers ?
-                    <div className="countryFollowers">{channel.country_followers} Country wide</div>
-                    : undefined}
-            </div>
-        </div>;
+        return <ChannelListItem
+            key={channel.channel}
+            channel={channel}
+            onChannelClick={onChannelClick}
+            showImage={showImage}
+        />;
+    }
+
+    private onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({channelFilter: e.target.value});
+    }
+
+    private onNewChannelClick = () => {
+        this.props.onChannelClick(this.state.channelFilter);
     }
 }

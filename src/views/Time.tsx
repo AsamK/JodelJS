@@ -8,10 +8,10 @@ export class Time extends React.Component<ITimeProps> {
     private timer?: number;
 
     public componentDidMount() {
-        this.timer = setInterval(this.tick.bind(this), 1000);
+        this.timer = window.setInterval(this.tick, 1000);
     }
 
-    public tick() {
+    public tick = () => {
         this.forceUpdate();
     }
 
@@ -50,7 +50,7 @@ export class Time extends React.Component<ITimeProps> {
         }
         if (this.timer) {
             clearInterval(this.timer);
-            this.timer = setInterval(this.tick.bind(this), timerInterval);
+            this.timer = window.setInterval(this.tick, timerInterval);
         }
         return (
             <div className="time" title={time}>

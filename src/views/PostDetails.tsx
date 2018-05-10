@@ -21,7 +21,6 @@ export default class PostDetails extends React.Component<IPostDetailsProps> {
 
     constructor(props: IPostDetailsProps) {
         super(props);
-        this._onScroll = this._onScroll.bind(this);
     }
 
     public componentDidUpdate(prevProps: IPostDetailsProps) {
@@ -38,18 +37,18 @@ export default class PostDetails extends React.Component<IPostDetailsProps> {
 
     public componentDidMount() {
         if (this.scrollable) {
-            this.scrollable.addEventListener('scroll', this._onScroll);
+            this.scrollable.addEventListener('scroll', this.onScroll);
         }
         this.scrollAtBottom = false;
     }
 
     public componentWillUnmount() {
         if (this.scrollable) {
-            this.scrollable.removeEventListener('scroll', this._onScroll);
+            this.scrollable.removeEventListener('scroll', this.onScroll);
         }
     }
 
-    public _onScroll() {
+    public onScroll = () => {
         if (!this.scrollable || !this.props.onLoadMore) {
             return;
         }

@@ -27,19 +27,17 @@ class FirstStart extends React.Component<IFirstStartProps, IFirstStartState> {
     constructor(props: IFirstStartProps) {
         super(props);
         this.state = {deviceUid: null};
-        this.setDeviceUid = this.setDeviceUid.bind(this);
-        this.updateLocation = this.updateLocation.bind(this);
     }
 
     public componentDidMount() {
         this.setState({deviceUid: this.props.deviceUid});
     }
 
-    public setDeviceUid(deviceUid: string | null) {
+    public setDeviceUid = (deviceUid: string | null) => {
         this.setState({deviceUid});
     }
 
-    public updateLocation() {
+    public updateLocation = () => {
         this.props.dispatch(updateLocation());
     }
 

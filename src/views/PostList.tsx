@@ -1,8 +1,7 @@
 import React from 'react';
-import {UserHandle} from '../enums/UserHandle';
 
 import {IPost} from '../interfaces/IPost';
-import {Post} from './Post';
+import {PostListItem} from './PostListItem';
 
 export interface IPostListProps {
     posts: IPost[];
@@ -14,24 +13,18 @@ export interface IPostListProps {
     onLoadMore?: () => void;
 }
 
-export default class PostList extends React.Component<IPostListProps> {
+export default class PostList extends React.PureComponent<IPostListProps> {
     private scrollAtBottom = false;
 
     private scrollable: HTMLElement | null = null;
 
     constructor(props: IPostListProps) {
         super(props);
-        this._onPostClick = this._onPostClick.bind(this);
-        this._onScroll = this._onScroll.bind(this);
-    }
-
-    public _onPostClick(post: IPost) {
-        this.props.onPostClick(post);
     }
 
     public componentDidMount() {
         if (this.scrollable) {
-            this.scrollable.addEventListener('scroll', this._onScroll);
+            this.scrollable.addEventListener('scroll', this.onScroll);
         }
         this.scrollAtBottom = false;
     }
@@ -47,11 +40,29 @@ export default class PostList extends React.Component<IPostListProps> {
 
     public componentWillUnmount() {
         if (this.scrollable) {
-            this.scrollable.removeEventListener('scroll', this._onScroll);
+            this.scrollable.removeEventListener('scroll', this.onScroll);
         }
     }
 
-    public _onScroll() {
+    public render() {
+        const {posts, parentPost, onPostClick} = this.props;
+        const postNodes = posts.map(post => (
+                <PostListItem
+                    key={post.post_id}
+                    parentPostId={parentPost ? parentPost.post_id : undefined}
+                    onPostClick={onPostClick}
+                    post={post}
+                />
+            ),
+        );
+        return (
+            <div className="postList" ref={c => this.scrollable = c}>
+                {postNodes}
+            </div>
+        );
+    }
+
+    private onScroll = () => {
         if (!this.scrollable || !this.props.onLoadMore) {
             return;
         }
@@ -63,29 +74,5 @@ export default class PostList extends React.Component<IPostListProps> {
         } else {
             this.scrollAtBottom = newFlag;
         }
-    }
-
-    public render() {
-        const {posts, parentPost, onPostClick} = this.props;
-        const postNodes = posts.map(post => {
-                let author;
-                let parentPostId;
-                if (parentPost) {
-                    parentPostId = parentPost.post_id;
-                    if (post.user_handle === UserHandle.OJ) {
-                        author = 'OJ';
-                    } else if (post.replier) {
-                        author = 'C' + post.replier;
-                    }
-                }
-                return <Post key={post.post_id} post={post} parentPostId={parentPostId}
-                             onPostClick={() => onPostClick(post)} author={author}/>;
-            },
-        );
-        return (
-            <div className="postList" ref={c => this.scrollable = c}>
-                {postNodes}
-            </div>
-        );
     }
 }

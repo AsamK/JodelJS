@@ -21,16 +21,14 @@ export class SelectDeviceUid extends React.PureComponent<ISelectDeviceUidProps, 
             deviceUid: !props.deviceUid ? '' : props.deviceUid,
             radioState: CREATE_NEW,
         };
-        this.handleChangeText = this.handleChangeText.bind(this);
-        this.handleChangeRadio = this.handleChangeRadio.bind(this);
     }
 
-    public handleChangeText(event: React.ChangeEvent<HTMLInputElement>) {
+    public handleChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({deviceUid: event.target.value});
         this.props.setDeviceUid(event.target.value);
     }
 
-    public handleChangeRadio(event: React.ChangeEvent<HTMLInputElement>) {
+    public handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {
         switch (event.target.value) {
             case CREATE_NEW:
                 this.props.setDeviceUid(null);

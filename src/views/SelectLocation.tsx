@@ -16,12 +16,9 @@ export interface ISelectLocationProps {
 export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
     constructor(props: ISelectLocationProps) {
         super(props);
-        this.handleChangeLatitude = this.handleChangeLatitude.bind(this);
-        this.handleChangeLongitude = this.handleChangeLongitude.bind(this);
-        this.handleChangeRadio = this.handleChangeRadio.bind(this);
     }
 
-    public handleChangeLatitude(event: React.ChangeEvent<HTMLInputElement>) {
+    public handleChangeLatitude = (event: React.ChangeEvent<HTMLInputElement>) => {
         let latitudeNumber = Number.parseFloat(event.target.value);
         if (isNaN(latitudeNumber) || latitudeNumber < -90 || latitudeNumber > 90) {
             return;
@@ -31,7 +28,7 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
         this.props.onChange(this.props.useBrowserLocation, {latitude: latitudeNumber, longitude});
     }
 
-    public handleChangeLongitude(event: React.ChangeEvent<HTMLInputElement>) {
+    public handleChangeLongitude = (event: React.ChangeEvent<HTMLInputElement>) => {
         let longitudeNumber = Number.parseFloat(event.target.value.replace(',', '.'));
         if (isNaN(longitudeNumber) || longitudeNumber < -180 || longitudeNumber > 180) {
             return;
@@ -41,7 +38,7 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
         this.props.onChange(this.props.useBrowserLocation, {latitude, longitude: longitudeNumber});
     }
 
-    public handleChangeRadio(event: React.ChangeEvent<HTMLInputElement>) {
+    public handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {
         switch (event.target.value) {
             case USE_BROWSER_LOCATION:
                 this.props.onChange(true, this.props.location);

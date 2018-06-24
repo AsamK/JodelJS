@@ -550,6 +550,7 @@ export function setDeviceUid(deviceUid: string): JodelThunkAction {
     return (dispatch, getState, {api}) => {
         const loc = getLocation(getState());
         if (!loc) {
+            dispatch(showToast('Standort nicht bekannt. Registrierung nicht möglich.', ToastType.ERROR));
             return;
         }
         api.apiGetAccessToken(deviceUid, loc.latitude, loc.longitude, loc.city, loc.country)

@@ -11,6 +11,7 @@ export interface IPostListProps {
     parentPost?: IPost;
     onPostClick: (post: IPost) => void;
     onLoadMore?: () => void;
+    connectScrollTarget?: (element: HTMLElement) => void;
 }
 
 export default class PostList extends React.PureComponent<IPostListProps> {
@@ -56,10 +57,17 @@ export default class PostList extends React.PureComponent<IPostListProps> {
             ),
         );
         return (
-            <div className="postList" ref={c => this.scrollable = c}>
+            <div className="postList" ref={this.postListRef}>
                 {postNodes}
             </div>
         );
+    }
+
+    private postListRef = (element: HTMLDivElement) => {
+        this.scrollable = element;
+        if (this.props.connectScrollTarget) {
+            this.props.connectScrollTarget(element);
+        }
     }
 
     private onScroll = () => {

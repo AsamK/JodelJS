@@ -77,17 +77,18 @@ input[type=number] {
   bottom: 0;
   left: 0;
   right: 0;
-  overflow-y: scroll;
   background-color: #eee;
   z-index: @z-index-sub-layer;
 
   display: none;
   &.channelListShown {
-    display: block;
+    display: flex;
   }
 }
 
 .channelList {
+  overflow-y: scroll;
+
   .channelListHeader {
     text-transform: uppercase;
     letter-spacing: .25em;

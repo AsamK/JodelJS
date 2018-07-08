@@ -16,7 +16,17 @@ export interface IChannelListState {
 }
 
 export default class ChannelList extends React.Component<IChannelListProps, IChannelListState> {
+    private static lastScrollPosition = 0;
+
     public state: IChannelListState = {channelFilter: ''};
+
+    private scrollable: HTMLElement | undefined;
+
+    public componentWillUnmount() {
+        if (this.scrollable) {
+            ChannelList.lastScrollPosition = this.scrollable.scrollTop;
+        }
+    }
 
     public render() {
         const {channels, recommendedChannels, localChannels, countryChannels, onChannelClick} = this.props;
@@ -37,7 +47,7 @@ export default class ChannelList extends React.Component<IChannelListProps, ICha
             },
         );
         return (
-            <div className="channelList">
+            <div className="channelList" ref={this.channelListRef}>
                 <div className="channelListHeader">Kanäle(beta)</div>
                 <div className="channelFilter">
                     <input type="text"
@@ -93,5 +103,12 @@ export default class ChannelList extends React.Component<IChannelListProps, ICha
 
     private onNewChannelClick = () => {
         this.props.onChannelClick(this.state.channelFilter);
+    }
+
+    private channelListRef = (element: HTMLDivElement) => {
+        this.scrollable = element;
+        if (this.scrollable) {
+            this.scrollable.scrollTop = ChannelList.lastScrollPosition;
+        }
     }
 }

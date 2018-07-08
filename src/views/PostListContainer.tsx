@@ -28,8 +28,20 @@ export interface IPostListContainerComponentProps extends IPostListContainerProp
 }
 
 class PostListContainerComponent extends React.PureComponent<IPostListContainerComponentProps> {
+    private static lastScrollPosition: number = 0;
+    private static lastScrollSection: string | undefined;
+
+    private scrollable: HTMLElement | undefined;
+
     public constructor(props: IPostListContainerComponentProps) {
         super(props);
+    }
+
+    public componentWillUnmount() {
+        if (this.scrollable) {
+            PostListContainerComponent.lastScrollPosition = this.scrollable.scrollTop;
+            PostListContainerComponent.lastScrollSection = this.props.section + this.props.sortType;
+        }
     }
 
     public render() {
@@ -37,7 +49,9 @@ class PostListContainerComponent extends React.PureComponent<IPostListContainerC
         return (
             <div className="postListContainer">
                 <PostList section={section} sortType={sortType} lastUpdated={lastUpdated} posts={posts}
-                          onPostClick={onPostClick} onLoadMore={onLoadMore}/>
+                          onPostClick={onPostClick} onLoadMore={onLoadMore}
+                          connectScrollTarget={this.connectScrollTarget}
+                />
                 {locationKnown ? <AddButton onClick={onAddClick}/> : ''}
                 <div className="sortTypes">
                     <SortTypeLink sortType={PostListSortType.RECENT}/>
@@ -46,6 +60,18 @@ class PostListContainerComponent extends React.PureComponent<IPostListContainerC
                 </div>
             </div>
         );
+    }
+
+    private connectScrollTarget = (target: HTMLElement) => {
+        this.scrollable = target;
+        if (!target) {
+            return;
+        }
+        if (PostListContainerComponent.lastScrollSection === this.props.section + this.props.sortType) {
+            target.scrollTop = PostListContainerComponent.lastScrollPosition;
+        } else {
+            PostListContainerComponent.lastScrollPosition = 0;
+        }
     }
 }
 

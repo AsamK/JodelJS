@@ -10,6 +10,7 @@
 @bar-shadow: 0 0 6px 3px rgba(0, 0, 0, 0.16), 0 0 6px 3px rgba(0, 0, 0, 0.23);
 @menu-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
 @toast-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
+@button-shadow: 0 5px 5px rgba(0, 0, 0, 0.16);
 
 @z-index-overlay: 200;
 @z-index-toast-layer: 150;
@@ -419,6 +420,28 @@ input[type=number] {
 
   .postList .post {
     margin-bottom: .1em;
+  }
+  .scrollToBottomButton {
+    box-shadow: @button-shadow;
+    width: 2em;
+    height: 2em;
+    position: fixed;
+    text-align: center;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 1);
+    &:active,
+    &:hover {
+      background-color: rgba(200, 200, 200, 1);
+    }
+    color: #888;
+    border-radius: 4em;
+    right: 1em;
+    bottom: 1em;
+    &::before {
+      content: '\\/';
+      display: block;
+      margin-top: .5em;
+    }
   }
 }
 

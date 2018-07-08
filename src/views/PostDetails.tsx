@@ -4,6 +4,7 @@ import {IPost} from '../interfaces/IPost';
 import AddButton from './AddButton';
 import {Post} from './Post';
 import PostList from './PostList';
+import ScrollToBottomButton from './ScrollToBottomButton';
 
 export interface IPostDetailsProps {
     post: IPost;
@@ -57,6 +58,7 @@ export default class PostDetails extends React.Component<IPostDetailsProps> {
                 <Post post={post} onPostClick={onPostClick}/>
                 <PostList parentPost={post} posts={childPosts} onPostClick={onPostClick}/>
                 {locationKnown ? <AddButton onClick={onAddClick}/> : ''}
+                <ScrollToBottomButton onClick={this.scrollToBottom}/>
             </div>
         );
     }
@@ -72,6 +74,12 @@ export default class PostDetails extends React.Component<IPostDetailsProps> {
             this.props.onLoadMore();
         } else {
             this.scrollAtBottom = isNearBottom;
+        }
+    }
+
+    private scrollToBottom = () => {
+        if (this.scrollable) {
+            this.scrollable.scrollTop = this.scrollable.scrollHeight;
         }
     }
 }

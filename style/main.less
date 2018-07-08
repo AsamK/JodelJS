@@ -71,7 +71,7 @@ input[type=number] {
   }
 }
 
-.channels {
+.channelList {
   position: absolute;
   top: @top-bar-height;
   bottom: 0;
@@ -79,14 +79,6 @@ input[type=number] {
   right: 0;
   background-color: #eee;
   z-index: @z-index-sub-layer;
-
-  display: none;
-  &.channelListShown {
-    display: flex;
-  }
-}
-
-.channelList {
   overflow-y: scroll;
 
   .channelListHeader {
@@ -153,7 +145,7 @@ input[type=number] {
   }
 }
 
-.notifications {
+.notificationList {
   position: absolute;
   top: @top-bar-height;
   bottom: 0;
@@ -161,12 +153,7 @@ input[type=number] {
   right: 0;
   overflow-y: scroll;
   background-color: #eee;
-  display: none;
   z-index: @z-index-sub-layer;
-
-  &.notificationsShown {
-    display: block;
-  }
 }
 
 .notification {
@@ -213,7 +200,7 @@ input[type=number] {
   }
 }
 
-.search {
+.searchContainer {
   position: absolute;
   top: @top-bar-height;
   bottom: 0;
@@ -221,12 +208,7 @@ input[type=number] {
   right: 0;
   overflow-y: scroll;
   background-color: #eee;
-  display: none;
   z-index: @z-index-sub-layer;
-
-  &.searchShown {
-    display: block;
-  }
 }
 
 .postTopBar {
@@ -810,7 +792,7 @@ input[type=number] {
   }
 }
 
-.settings {
+.appSettings {
   position: absolute;
   top: @top-bar-height;
   bottom: 0;
@@ -818,16 +800,8 @@ input[type=number] {
   right: 0;
   overflow-y: scroll;
   background-color: #eee;
-  display: none;
   z-index: @z-index-sub-layer;
-
-  &.settingsShown {
-    display: block;
-  }
-}
-
-.appSettings {
-  margin: 1em;
+  padding: 1em;
 
   .block {
     margin-bottom: 2em;

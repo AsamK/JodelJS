@@ -27,6 +27,7 @@ import {
 } from '../redux/selectors/channels';
 import {getSelectedPicturePost, getSelectedPost, getSelectedPostChildren} from '../redux/selectors/posts';
 import {
+    getAddPostVisible,
     getChannelListVisible,
     getNotificationsVisible,
     getSearchVisible,
@@ -45,11 +46,11 @@ import {PostListContainer} from './PostListContainer';
 import {PostTopBar} from './PostTopBar';
 import Progress from './Progress';
 import {Search} from './Search';
-import {StickyList} from './StickyList';
 import {ToastContainer} from './ToastContainer';
 import {TopBar} from './TopBar';
 
 export interface IJodelProps {
+    addPostVisible: boolean;
     section: string;
     selectedPost: IPost | null;
     selectedPostChildren: IPost[] | null;
@@ -90,58 +91,63 @@ class JodelComponent extends React.Component<IJodelProps> {
                 <FirstStart/>
             </div>;
         } else if (this.props.isConfigAvailable) {
+            let content = null;
+
+            if (this.props.addPostVisible) {
+                content = <AddPost/>;
+            } else if (this.props.notificationsVisible) {
+                content = <NotificationList/>;
+            } else if (this.props.searchVisible) {
+                content = <Search/>;
+            } else if (this.props.settingsVisible) {
+                content = <AppSettings/>;
+            } else if (this.props.channelListVisible) {
+                content = <ChannelList
+                    channels={this.props.followedChannels}
+                    recommendedChannels={this.props.recommendedChannels}
+                    localChannels={this.props.localChannels}
+                    countryChannels={this.props.countryChannels}
+                    onChannelClick={this.onChannelClick}
+                />;
+            } else if (this.props.selectedPost != null) {
+                content = <div className={classnames('detail', {postShown: this.props.selectedPost != null})}>
+                    <PostTopBar post={this.props.selectedPost}/>
+                    <PostDetails post={this.props.selectedPost}
+                                 postChildren={this.props.selectedPostChildren}
+                                 onPostClick={this.refresh}
+                                 onAddClick={this.handleAddCommentClick}
+                                 locationKnown={this.props.locationKnown}
+                                 onLoadMore={this.onLoadMoreComments}/>
+                </div>;
+            } else {
+                content = <div className={classnames('list', {
+                    postShown: this.props.selectedPost != null,
+                })}>
+                    <ChannelTopBar/>
+                    <HashtagTopBar/>
+                    <PostListContainer onPostClick={this.handleClick}
+                                       onRefresh={this.onRefresh} onAddClick={this.handleAddClick}
+                                       onLoadMore={this.onLoadMore}/>
+                </div>;
+            }
+            let overlay = null;
+            if (this.props.selectedPicturePost) {
+                overlay = <div className="bigPicture" onMouseUp={e => window.history.back()}>
+                    <img alt={this.props.selectedPicturePost.message}
+                         src={'https:' + this.props.selectedPicturePost.image_url}/>
+                    <img alt={this.props.selectedPicturePost.message}
+                         src={'https:' + this.props.selectedPicturePost.thumbnail_url}/>
+                </div>;
+            }
+
             return <div className="jodel">
                 <TopBar karma={this.props.karma}
                         showSettings={this.onShowSettings}
                         showChannelList={this.onShowChannelList}
                 />
                 <ToastContainer/>
-                <div className={classnames('list', {
-                    postShown: this.props.selectedPost != null,
-                })}>
-                    <ChannelTopBar/>
-                    <HashtagTopBar/>
-                    <StickyList/>
-                    <PostListContainer onPostClick={this.handleClick}
-                                       onRefresh={this.onRefresh} onAddClick={this.handleAddClick}
-                                       onLoadMore={this.onLoadMore}/>
-                </div>
-                {this.props.selectedPost ?
-                    <div className={classnames('detail', {postShown: this.props.selectedPost != null})}>
-                        <PostTopBar post={this.props.selectedPost}/>
-                        <PostDetails post={this.props.selectedPost}
-                                     postChildren={this.props.selectedPostChildren}
-                                     onPostClick={this.refresh}
-                                     onAddClick={this.handleAddCommentClick}
-                                     locationKnown={this.props.locationKnown}
-                                     onLoadMore={this.onLoadMoreComments}/>
-                    </div>
-                    : null}
-                {this.props.selectedPicturePost ?
-                    <div className="bigPicture" onMouseUp={e => window.history.back()}>
-                        <img alt={this.props.selectedPicturePost.message}
-                             src={'https:' + this.props.selectedPicturePost.image_url}/>
-                        <img alt={this.props.selectedPicturePost.message}
-                             src={'https:' + this.props.selectedPicturePost.thumbnail_url}/>
-                    </div>
-                    : null}
-                <AddPost/>
-                <div className={classnames('channels', {channelListShown: this.props.channelListVisible})}>
-                    <ChannelList channels={this.props.followedChannels}
-                                 recommendedChannels={this.props.recommendedChannels}
-                                 localChannels={this.props.localChannels}
-                                 countryChannels={this.props.countryChannels}
-                                 onChannelClick={this.onChannelClick}/>
-                </div>
-                <div className={classnames('notifications', {notificationsShown: this.props.notificationsVisible})}>
-                    <NotificationList/>
-                </div>
-                <div className={classnames('search', {searchShown: this.props.searchVisible})}>
-                    <Search/>
-                </div>
-                <div className={classnames('settings', {settingsShown: this.props.settingsVisible})}>
-                    <AppSettings/>
-                </div>
+                {content}
+                {overlay}
                 <Progress/>
             </div>;
         } else {
@@ -196,6 +202,7 @@ class JodelComponent extends React.Component<IJodelProps> {
 
 const mapStateToProps = (state: IJodelAppStore): Partial<IJodelProps> => {
     return {
+        addPostVisible: getAddPostVisible(state),
         channelListVisible: getChannelListVisible(state),
         countryChannels: getCountryChannels(state),
         deviceUid: getDeviceUid(state),

@@ -11,6 +11,7 @@ import {getSelectedSection, getSelectedSortType} from '../redux/selectors/view';
 import AddButton from './AddButton';
 import PostList from './PostList';
 import {SortTypeLink} from './SortTypeLink';
+import {StickyList} from './StickyList';
 
 export interface IPostListContainerProps {
     onPostClick: (post: IPost) => void;
@@ -48,6 +49,7 @@ class PostListContainerComponent extends React.PureComponent<IPostListContainerC
         const {posts, section, sortType, lastUpdated, locationKnown, onPostClick, onAddClick, onLoadMore} = this.props;
         return (
             <div className="postListContainer">
+                {section !== 'location' ? null : <StickyList/>}
                 <PostList section={section} sortType={sortType} lastUpdated={lastUpdated} posts={posts}
                           onPostClick={onPostClick} onLoadMore={onLoadMore}
                           connectScrollTarget={this.connectScrollTarget}

@@ -8,7 +8,7 @@ const Settings: ISettings = {
     CLIENT_ID: '81e8a76e-1e02-4d17-9ba0-8a7020261b26',
 
     // Client type for signed requests
-    CLIENT_TYPE: 'android_4.91.4',
+    CLIENT_TYPE: 'android_4.92.2',
 
     // Default location, if browser location is not available
     DEFAULT_LOCATION: undefined,
@@ -20,7 +20,7 @@ const Settings: ISettings = {
     GCM_RECEIVE_HELPER_URL: '',
 
     // Key for signed requests
-    KEY: 'srqUcsAQEXClurodAMSYAbAdAyPQOrDqiLIkPezE',
+    KEY: 'zesPNKhQCzRZhXsHOUeqZZzllYjCUZLuIdVHFdZH',
 
     // Colors for posts, the Server prevents other colors
     POST_COLORS: ['06A3CB', 'DD5F5F', 'FFBA00', 'FF9908', '8ABDB0', '9EC41C'],

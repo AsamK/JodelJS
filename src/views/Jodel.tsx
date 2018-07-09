@@ -27,6 +27,7 @@ import {PostListContainer} from './PostListContainer';
 import {PostTopBar} from './PostTopBar';
 import Progress from './Progress';
 import {Search} from './Search';
+import ShareLink from './ShareLink';
 import {ToastContainer} from './ToastContainer';
 import {TopBar} from './TopBar';
 
@@ -102,6 +103,7 @@ class JodelComponent extends React.Component<IJodelProps> {
                 <ToastContainer/>
                 {content}
                 {overlay}
+                <ShareLink/>
                 <Progress/>
             </div>;
         } else {

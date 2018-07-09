@@ -7,6 +7,8 @@ import {
     REPLACE_VIEW_STATE,
     SELECT_PICTURE,
     SELECT_POST,
+    SHARE_LINK,
+    SHARE_LINK_CLOSE,
     SHOW_ADD_POST,
     SHOW_CHANNEL_LIST,
     SHOW_NOTIFICATIONS,
@@ -23,6 +25,7 @@ export interface IVisible {
 export interface IViewStateStore {
     readonly selectedPostId: string | null;
     readonly selectedPicturePostId: string | null;
+    readonly shareLink: string | null;
     readonly postSection: Section;
     readonly postListSortType: PostListSortType;
     readonly addPost: IVisible;
@@ -51,6 +54,7 @@ const viewStateCombined = combineReducers<IViewStateStore>({
     selectedPicturePostId,
     selectedPostId,
     settings,
+    shareLink,
 });
 
 function selectedPostId(state: string | null = null, action: IJodelAction): typeof state {
@@ -66,6 +70,17 @@ function selectedPicturePostId(state: string | null = null, action: IJodelAction
     switch (action.type) {
         case SELECT_PICTURE:
             return action.payload.postId;
+        default:
+            return state;
+    }
+}
+
+function shareLink(state: string | null = null, action: IJodelAction): typeof state {
+    switch (action.type) {
+        case SHARE_LINK:
+            return action.payload.link;
+        case SHARE_LINK_CLOSE:
+            return null;
         default:
             return state;
     }

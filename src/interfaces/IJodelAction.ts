@@ -29,6 +29,8 @@ import {
     SET_TOKEN_PENDING,
     SET_USE_BROWSER_LOCATION,
     SET_USE_HOME_LOCATION,
+    SHARE_LINK,
+    SHARE_LINK_CLOSE,
     SHOW_ADD_POST,
     SHOW_CHANNEL_LIST,
     SHOW_NOTIFICATIONS,
@@ -61,6 +63,12 @@ export interface IPayloadSection {
 export interface IPayloadSectionIsFetching {
     section: Section;
     isFetching: boolean;
+}
+
+export interface IPayloadShareLink {
+    postId: string;
+    link: string;
+    shareCount: number;
 }
 
 export interface IPayloadVisible {
@@ -197,6 +205,8 @@ export type IJodelAction =
     { type: typeof SET_TOKEN_PENDING; } |
     { type: typeof SET_USE_BROWSER_LOCATION; payload: IPayloadBrowserLocation; } |
     { type: typeof SET_USE_HOME_LOCATION; payload: IPayloadHomeLocation; } |
+    { type: typeof SHARE_LINK; payload: IPayloadShareLink; } |
+    { type: typeof SHARE_LINK_CLOSE; payload: {}; } |
     { type: typeof SHOW_ADD_POST; payload: IPayloadVisible; } |
     { type: typeof SHOW_CHANNEL_LIST; payload: IPayloadVisible; } |
     { type: typeof SHOW_NOTIFICATIONS; payload: IPayloadVisible; } |

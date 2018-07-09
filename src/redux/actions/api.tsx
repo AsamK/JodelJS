@@ -8,7 +8,7 @@ import {VoteType} from '../../enums/VoteType';
 import {IApiPostDetails} from '../../interfaces/IApiPostDetails';
 import {IApiPostListPost} from '../../interfaces/IApiPostListPost';
 import {JodelThunkAction, JodelThunkDispatch} from '../../interfaces/JodelThunkAction';
-import {setPermissionDenied, setToken, showSettings, switchPostSection, updatePosts} from '../actions';
+import {setPermissionDenied, setToken, shareLink, showSettings, switchPostSection, updatePosts} from '../actions';
 import {IJodelAppStore} from '../reducers';
 import {getPost} from '../reducers/entities';
 import {getLocation} from '../selectors/app';
@@ -781,7 +781,7 @@ export function sharePost(postId: string): JodelThunkAction {
     return (dispatch, getState, {api}) => {
         api.apiSharePost(postId)
             .then(res => {
-                    alert(res.url);
+                    dispatch(shareLink(postId, res.share_count, res.url));
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
     };

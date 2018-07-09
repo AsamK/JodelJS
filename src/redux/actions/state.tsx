@@ -37,6 +37,8 @@ import {
     SET_TOKEN_PENDING,
     SET_USE_BROWSER_LOCATION,
     SET_USE_HOME_LOCATION,
+    SHARE_LINK,
+    SHARE_LINK_CLOSE,
     SHOW_ADD_POST,
     SHOW_CHANNEL_LIST,
     SHOW_NOTIFICATIONS,
@@ -374,5 +376,23 @@ export function _closeSticky(stickyId: string): IJodelAction {
             stickyId,
         },
         type: CLOSE_STICKY,
+    };
+}
+
+export function shareLink(postId: string, shareCount: number, link: string): IJodelAction {
+    return {
+        payload: {
+            link,
+            postId,
+            shareCount,
+        },
+        type: SHARE_LINK,
+    };
+}
+
+export function closeShareLink(): IJodelAction {
+    return {
+        payload: {},
+        type: SHARE_LINK_CLOSE,
     };
 }

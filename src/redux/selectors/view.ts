@@ -6,6 +6,8 @@ export const getSelectedSortType = (state: IJodelAppStore) => state.viewState.po
 
 export const getSelectedSection = (state: IJodelAppStore) => state.viewState.postSection;
 
+export const getShareLink = (state: IJodelAppStore) => state.viewState.shareLink;
+
 export const getSelectedHashtagName = createSelector(
     getSelectedSection,
     selectedSection => !selectedSection || !selectedSection.startsWith('hashtag:')

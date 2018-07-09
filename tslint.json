@@ -24,6 +24,7 @@
       "always",
       "strict-bound-class-methods"
     ],
+    "no-empty-interface": false,
     "no-var-requires": false
   },
   "rulesDirectory": []

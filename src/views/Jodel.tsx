@@ -1,18 +1,8 @@
-import classnames from 'classnames';
 import React from 'react';
 import {connect} from 'react-redux';
 import {IPost} from '../interfaces/IPost';
 import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {
-    fetchMoreComments,
-    fetchMorePosts,
-    fetchPostsIfNeeded,
-    selectPost,
-    showAddPost,
-    showChannelList,
-    showSettings,
-    updatePosts,
-} from '../redux/actions';
+import {fetchMoreComments, fetchPostsIfNeeded, showAddPost, showChannelList, showSettings} from '../redux/actions';
 import {getNotificationsIfAvailable} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
 import {getDeviceUid, getIsConfigAvailable, getIsRegistered, getKarma, isLocationKnown} from '../redux/selectors/app';
@@ -91,7 +81,7 @@ class JodelComponent extends React.Component<IJodelProps> {
             } else if (this.props.channelListVisible) {
                 content = <ChannelList/>;
             } else if (this.props.selectedPost != null) {
-                content = <div className={classnames('detail', {postShown: this.props.selectedPost != null})}>
+                content = <div className="detail">
                     <PostTopBar post={this.props.selectedPost}/>
                     <PostDetails post={this.props.selectedPost}
                                  postChildren={this.props.selectedPostChildren}
@@ -101,14 +91,10 @@ class JodelComponent extends React.Component<IJodelProps> {
                                  onLoadMore={this.onLoadMoreComments}/>
                 </div>;
             } else {
-                content = <div className={classnames('list', {
-                    postShown: this.props.selectedPost != null,
-                })}>
+                content = <div className="list">
                     <ChannelTopBar/>
                     <HashtagTopBar/>
-                    <PostListContainer onPostClick={this.handleClick}
-                                       onRefresh={this.onRefresh} onAddClick={this.handleAddClick}
-                                       onLoadMore={this.onLoadMore}/>
+                    <PostListContainer/>
                 </div>;
             }
             let overlay = null;
@@ -136,10 +122,6 @@ class JodelComponent extends React.Component<IJodelProps> {
         }
     }
 
-    private onRefresh = () => {
-        this.props.dispatch(updatePosts());
-    };
-
     private refresh = () => {
         if (!this.props.isRegistered) {
             return;
@@ -148,20 +130,8 @@ class JodelComponent extends React.Component<IJodelProps> {
         this.props.dispatch(getNotificationsIfAvailable());
     };
 
-    private handleClick = (post: IPost) => {
-        this.props.dispatch(selectPost(post != null ? post.post_id : null));
-    };
-
-    private handleAddClick = () => {
-        this.props.dispatch(showAddPost(true));
-    };
-
     private handleAddCommentClick = () => {
         this.props.dispatch(showAddPost(true));
-    };
-
-    private onLoadMore = () => {
-        this.props.dispatch(fetchMorePosts());
     };
 
     private onLoadMoreComments = () => {

@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {PostListSortType} from '../enums/PostListSortType';
 import {IPost} from '../interfaces/IPost';
 import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
+import {fetchMorePosts, selectPost, showAddPost, updatePosts} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 import {isLocationKnown} from '../redux/selectors/app';
 import {getSelectedSectionLastUpdated, getSelectedSectionSortPosts} from '../redux/selectors/posts';
@@ -14,10 +15,6 @@ import {SortTypeLink} from './SortTypeLink';
 import {StickyList} from './StickyList';
 
 export interface IPostListContainerProps {
-    onPostClick: (post: IPost) => void;
-    onLoadMore?: () => void;
-    onAddClick: (e: React.MouseEvent<HTMLElement>) => void;
-    onRefresh: () => void; // TODO implement
 }
 
 export interface IPostListContainerComponentProps extends IPostListContainerProps {
@@ -26,6 +23,10 @@ export interface IPostListContainerComponentProps extends IPostListContainerProp
     lastUpdated: number;
     posts: IPost[];
     locationKnown: boolean;
+    onPostClick: (post: IPost) => void;
+    onLoadMore?: () => void;
+    onAddClick: (e: React.MouseEvent<HTMLElement>) => void;
+    onRefresh: () => void; // TODO implement
 }
 
 class PostListContainerComponent extends React.PureComponent<IPostListContainerComponentProps> {
@@ -87,8 +88,22 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: IPostListContainerProp
     };
 };
 
-const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: IPostListContainerProps) => {
-    return {};
+const mapDispatchToProps = (dispatch: JodelThunkDispatch,
+                            ownProps: IPostListContainerProps): Partial<IPostListContainerComponentProps> => {
+    return {
+        onAddClick() {
+            dispatch(showAddPost(true));
+        },
+        onLoadMore() {
+            dispatch(fetchMorePosts());
+        },
+        onPostClick(post: IPost) {
+            dispatch(selectPost(post != null ? post.post_id : null));
+        },
+        onRefresh() {
+            dispatch(updatePosts());
+        },
+    };
 };
 
 export const PostListContainer = connect(mapStateToProps, mapDispatchToProps)(PostListContainerComponent);

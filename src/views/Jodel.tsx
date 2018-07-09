@@ -16,6 +16,7 @@ import {
 } from '../redux/selectors/view';
 import {AddPost} from './AddPost';
 import AppSettings from './AppSettings';
+import BigPicture from './BigPicture';
 import ChannelList from './ChannelList';
 import ChannelTopBar from './ChannelTopBar';
 import FirstStart from './FirstStart';
@@ -90,12 +91,7 @@ class JodelComponent extends React.Component<IJodelProps> {
             }
             let overlay = null;
             if (this.props.selectedPicturePost) {
-                overlay = <div className="bigPicture" onMouseUp={e => window.history.back()}>
-                    <img alt={this.props.selectedPicturePost.message}
-                         src={'https:' + this.props.selectedPicturePost.image_url}/>
-                    <img alt={this.props.selectedPicturePost.message}
-                         src={'https:' + this.props.selectedPicturePost.thumbnail_url}/>
-                </div>;
+                overlay = <BigPicture post={this.props.selectedPicturePost}/>;
             }
 
             return <div className="jodel">

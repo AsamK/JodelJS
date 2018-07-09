@@ -2,17 +2,16 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {IPost} from '../interfaces/IPost';
 import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {fetchMoreComments, fetchPostsIfNeeded, showAddPost, showChannelList, showSettings} from '../redux/actions';
+import {fetchPostsIfNeeded, showChannelList, showSettings} from '../redux/actions';
 import {getNotificationsIfAvailable} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
-import {getDeviceUid, getIsConfigAvailable, getIsRegistered, getKarma, isLocationKnown} from '../redux/selectors/app';
-import {getSelectedPicturePost, getSelectedPost, getSelectedPostChildren} from '../redux/selectors/posts';
+import {getDeviceUid, getIsConfigAvailable, getIsRegistered, getKarma} from '../redux/selectors/app';
+import {getSelectedPicturePost, getSelectedPostId} from '../redux/selectors/posts';
 import {
     getAddPostVisible,
     getChannelListVisible,
     getNotificationsVisible,
     getSearchVisible,
-    getSelectedSection,
     getSettingsVisible,
 } from '../redux/selectors/view';
 import {AddPost} from './AddPost';
@@ -32,11 +31,8 @@ import {TopBar} from './TopBar';
 
 export interface IJodelProps {
     addPostVisible: boolean;
-    section: string;
-    selectedPost: IPost | null;
-    selectedPostChildren: IPost[] | null;
+    selectedPostId: string | null;
     selectedPicturePost: IPost | null;
-    locationKnown: boolean;
     settingsVisible: boolean;
     karma: number;
     deviceUid: string | null;
@@ -80,15 +76,10 @@ class JodelComponent extends React.Component<IJodelProps> {
                 content = <AppSettings/>;
             } else if (this.props.channelListVisible) {
                 content = <ChannelList/>;
-            } else if (this.props.selectedPost != null) {
+            } else if (this.props.selectedPostId != null) {
                 content = <div className="detail">
-                    <PostTopBar post={this.props.selectedPost}/>
-                    <PostDetails post={this.props.selectedPost}
-                                 postChildren={this.props.selectedPostChildren}
-                                 onPostClick={this.refresh}
-                                 onAddClick={this.handleAddCommentClick}
-                                 locationKnown={this.props.locationKnown}
-                                 onLoadMore={this.onLoadMoreComments}/>
+                    <PostTopBar/>
+                    <PostDetails/>
                 </div>;
             } else {
                 content = <div className="list">
@@ -130,14 +121,6 @@ class JodelComponent extends React.Component<IJodelProps> {
         this.props.dispatch(getNotificationsIfAvailable());
     };
 
-    private handleAddCommentClick = () => {
-        this.props.dispatch(showAddPost(true));
-    };
-
-    private onLoadMoreComments = () => {
-        this.props.dispatch(fetchMoreComments());
-    };
-
     private onShowSettings = () => {
         this.props.dispatch(showSettings(true));
     };
@@ -155,13 +138,10 @@ const mapStateToProps = (state: IJodelAppStore): Partial<IJodelProps> => {
         isConfigAvailable: getIsConfigAvailable(state),
         isRegistered: getIsRegistered(state),
         karma: getKarma(state),
-        locationKnown: isLocationKnown(state),
         notificationsVisible: getNotificationsVisible(state),
         searchVisible: getSearchVisible(state),
-        section: getSelectedSection(state),
         selectedPicturePost: getSelectedPicturePost(state),
-        selectedPost: getSelectedPost(state),
-        selectedPostChildren: getSelectedPostChildren(state),
+        selectedPostId: getSelectedPostId(state),
         settingsVisible: getSettingsVisible(state),
     };
 };

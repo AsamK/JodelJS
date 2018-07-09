@@ -6,13 +6,14 @@ import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {pin} from '../redux/actions';
 import {ojFilterPost, sharePost} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
+import {getSelectedPost} from '../redux/selectors/posts';
 import BackButton from './BackButton';
 
 export interface IPostTopBarProps {
-    post: IPost;
 }
 
 export interface IPostTopBarComponentProps extends IPostTopBarProps {
+    post: IPost | null;
     onBackClick: () => void;
     onPinClick: () => void;
     onShareClick: () => void;
@@ -21,6 +22,9 @@ export interface IPostTopBarComponentProps extends IPostTopBarProps {
 
 const PostTopBarComponent = (props: IPostTopBarComponentProps) => {
     const {onBackClick, onOjFilterClick, onPinClick, onShareClick, post} = props;
+    if (!post) {
+        return null;
+    }
     const pinned = post.pinned && post.pinned;
     return (
         <div className="postTopBar">
@@ -48,26 +52,37 @@ const PostTopBarComponent = (props: IPostTopBarComponentProps) => {
     );
 };
 
-const mapStateToProps = (state: IJodelAppStore) => {
-    return {};
+const mapStateToProps = (state: IJodelAppStore, ownProps: IPostTopBarProps): Partial<IPostTopBarComponentProps> => {
+    return {
+        post: getSelectedPost(state),
+    };
 };
 
-const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: IPostTopBarProps) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: IPostTopBarComponentProps) => {
     return {
         onBackClick: () => {
             window.history.back();
         },
         onOjFilterClick: () => {
+            if (!ownProps.post) {
+                return;
+            }
             dispatch(ojFilterPost(ownProps.post.post_id, !ownProps.post.oj_filtered));
         },
         onPinClick: () => {
+            if (!ownProps.post) {
+                return;
+            }
             const isPinned = ownProps.post.pinned && ownProps.post.pinned;
             dispatch(pin(ownProps.post.post_id, !isPinned));
         },
         onShareClick: () => {
+            if (!ownProps.post) {
+                return;
+            }
             dispatch(sharePost(ownProps.post.post_id));
         },
     };
 };
 
-export const PostTopBar = connect(mapStateToProps, mapDispatchToProps)(PostTopBarComponent);
+export const PostTopBar = connect(mapStateToProps)(connect(() => ({}), mapDispatchToProps)(PostTopBarComponent));

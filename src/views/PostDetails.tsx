@@ -1,13 +1,19 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
 import {IPost} from '../interfaces/IPost';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
+import {fetchMoreComments, showAddPost} from '../redux/actions';
+import {IJodelAppStore} from '../redux/reducers';
+import {isLocationKnown} from '../redux/selectors/app';
+import {getSelectedPost, getSelectedPostChildren} from '../redux/selectors/posts';
 import AddButton from './AddButton';
 import {Post} from './Post';
 import PostList from './PostList';
 import ScrollToBottomButton from './ScrollToBottomButton';
 
-export interface IPostDetailsProps {
-    post: IPost;
+interface IPostDetailsPropsComponent {
+    post: IPost | null;
     postChildren: IPost[] | null;
     locationKnown: boolean;
     onAddClick: (e: React.MouseEvent<HTMLElement>) => void;
@@ -15,16 +21,16 @@ export interface IPostDetailsProps {
     onLoadMore: () => void;
 }
 
-export default class PostDetails extends React.Component<IPostDetailsProps> {
+export class PostDetailsComponent extends React.Component<IPostDetailsPropsComponent> {
     private scrollAtBottom = false;
 
     private scrollable: HTMLDivElement | null = null;
 
-    constructor(props: IPostDetailsProps) {
+    constructor(props: IPostDetailsPropsComponent) {
         super(props);
     }
 
-    public componentDidUpdate(prevProps: IPostDetailsProps) {
+    public componentDidUpdate(prevProps: IPostDetailsPropsComponent) {
         if (this.props.post === null) {
             return;
         } else if (prevProps.post !== null && prevProps.post.post_id === this.props.post.post_id) {
@@ -51,6 +57,9 @@ export default class PostDetails extends React.Component<IPostDetailsProps> {
 
     public render() {
         const {post, postChildren, locationKnown, onPostClick, onAddClick} = this.props;
+        if (!post) {
+            return null;
+        }
         const childPosts = postChildren ? postChildren : [];
 
         return (
@@ -83,3 +92,25 @@ export default class PostDetails extends React.Component<IPostDetailsProps> {
         }
     };
 }
+
+const mapStateToProps = (state: IJodelAppStore, ownProps: {}): Partial<IPostDetailsPropsComponent> => {
+    return {
+        locationKnown: isLocationKnown(state),
+        post: getSelectedPost(state),
+        postChildren: getSelectedPostChildren(state),
+    };
+};
+
+const mapDispatchToProps = (dispatch: JodelThunkDispatch,
+                            ownProps: {}): Partial<IPostDetailsPropsComponent> => {
+    return {
+        onAddClick() {
+            dispatch(showAddPost(true));
+        },
+        onLoadMore() {
+            dispatch(fetchMoreComments());
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostDetailsComponent);

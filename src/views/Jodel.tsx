@@ -1,8 +1,6 @@
 import classnames from 'classnames';
 import React from 'react';
 import {connect} from 'react-redux';
-
-import {IChannel} from '../interfaces/IChannel';
 import {IPost} from '../interfaces/IPost';
 import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {
@@ -13,18 +11,11 @@ import {
     showAddPost,
     showChannelList,
     showSettings,
-    switchPostSection,
     updatePosts,
 } from '../redux/actions';
 import {getNotificationsIfAvailable} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
 import {getDeviceUid, getIsConfigAvailable, getIsRegistered, getKarma, isLocationKnown} from '../redux/selectors/app';
-import {
-    getCountryChannels,
-    getFollowedChannels,
-    getLocalChannels,
-    getRecommendedChannels,
-} from '../redux/selectors/channels';
 import {getSelectedPicturePost, getSelectedPost, getSelectedPostChildren} from '../redux/selectors/posts';
 import {
     getAddPostVisible,
@@ -60,10 +51,6 @@ export interface IJodelProps {
     karma: number;
     deviceUid: string | null;
     isRegistered: boolean;
-    followedChannels: IChannel[];
-    recommendedChannels: IChannel[];
-    localChannels: IChannel[];
-    countryChannels: IChannel[];
     channelListVisible: boolean;
     notificationsVisible: boolean;
     searchVisible: boolean;
@@ -102,13 +89,7 @@ class JodelComponent extends React.Component<IJodelProps> {
             } else if (this.props.settingsVisible) {
                 content = <AppSettings/>;
             } else if (this.props.channelListVisible) {
-                content = <ChannelList
-                    channels={this.props.followedChannels}
-                    recommendedChannels={this.props.recommendedChannels}
-                    localChannels={this.props.localChannels}
-                    countryChannels={this.props.countryChannels}
-                    onChannelClick={this.onChannelClick}
-                />;
+                content = <ChannelList/>;
             } else if (this.props.selectedPost != null) {
                 content = <div className={classnames('detail', {postShown: this.props.selectedPost != null})}>
                     <PostTopBar post={this.props.selectedPost}/>
@@ -194,26 +175,18 @@ class JodelComponent extends React.Component<IJodelProps> {
     private onShowChannelList = () => {
         this.props.dispatch(showChannelList(!this.props.channelListVisible));
     };
-
-    private onChannelClick = (channelName: string) => {
-        this.props.dispatch(switchPostSection('channel:' + channelName));
-    };
 }
 
 const mapStateToProps = (state: IJodelAppStore): Partial<IJodelProps> => {
     return {
         addPostVisible: getAddPostVisible(state),
         channelListVisible: getChannelListVisible(state),
-        countryChannels: getCountryChannels(state),
         deviceUid: getDeviceUid(state),
-        followedChannels: getFollowedChannels(state),
         isConfigAvailable: getIsConfigAvailable(state),
         isRegistered: getIsRegistered(state),
         karma: getKarma(state),
-        localChannels: getLocalChannels(state),
         locationKnown: isLocationKnown(state),
         notificationsVisible: getNotificationsVisible(state),
-        recommendedChannels: getRecommendedChannels(state),
         searchVisible: getSearchVisible(state),
         section: getSelectedSection(state),
         selectedPicturePost: getSelectedPicturePost(state),

@@ -96,12 +96,26 @@ input[type=number] {
   .channelListRecommended,
   .channelListLocal,
   .channelListCountry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     text-transform: uppercase;
     letter-spacing: .25em;
     background: #ddd;
     padding: 1em;
     margin-bottom: 1px;
     color: #555;
+  }
+  .channelListLocal,
+  .channelListCountry {
+    cursor: pointer;
+    &:hover {
+      background: #eee;
+    }
+  }
+  .channelCount {
+    font-size: .7rem;
+    letter-spacing: initial;
   }
   .channelLink {
     background: #fff;

@@ -1,9 +1,19 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
 import {IChannel} from '../interfaces/IChannel';
+import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
+import {switchPostSection} from '../redux/actions';
+import {IJodelAppStore} from '../redux/reducers';
+import {
+    getCountryChannels,
+    getFollowedChannels,
+    getLocalChannels,
+    getRecommendedChannels,
+} from '../redux/selectors/channels';
 import {ChannelListItem} from './ChannelListItem';
 
-export interface IChannelListProps {
+interface IChannelListComponentProps {
     channels: IChannel[];
     recommendedChannels: IChannel[];
     localChannels: IChannel[];
@@ -11,20 +21,26 @@ export interface IChannelListProps {
     onChannelClick: (channelName: string) => void;
 }
 
-export interface IChannelListState {
+interface IChannelListComponentState {
     channelFilter: string;
+    showLocalChannels: boolean;
+    showCountryChannels: boolean;
 }
 
-export default class ChannelList extends React.Component<IChannelListProps, IChannelListState> {
+export class ChannelListComponent extends React.Component<IChannelListComponentProps, IChannelListComponentState> {
     private static lastScrollPosition = 0;
 
-    public state: IChannelListState = {channelFilter: ''};
+    public state: IChannelListComponentState = {
+        channelFilter: '',
+        showCountryChannels: false,
+        showLocalChannels: false,
+    };
 
     private scrollable: HTMLElement | undefined;
 
     public componentWillUnmount() {
         if (this.scrollable) {
-            ChannelList.lastScrollPosition = this.scrollable.scrollTop;
+            ChannelListComponent.lastScrollPosition = this.scrollable.scrollTop;
         }
     }
 
@@ -38,11 +54,11 @@ export default class ChannelList extends React.Component<IChannelListProps, ICha
                 return this.createChannelNode(channel, onChannelClick, true);
             },
         );
-        const localChannelNodes = localChannels.map(channel => {
+        const localChannelNodes = !this.state.showLocalChannels ? null : localChannels.map(channel => {
                 return this.createChannelNode(channel, onChannelClick, false);
             },
         );
-        const countryChannelNodes = countryChannels.map(channel => {
+        const countryChannelNodes = !this.state.showCountryChannels ? null : countryChannels.map(channel => {
                 return this.createChannelNode(channel, onChannelClick, false);
             },
         );
@@ -65,19 +81,25 @@ export default class ChannelList extends React.Component<IChannelListProps, ICha
                     }
                 </div>
                 {channelNodes}
-                {recommendedChannelNodes.length > 0 ?
-                    <div className="channelListRecommended">Vorschläge</div>
-                    : undefined
+                {recommendedChannelNodes.length === 0 ? null :
+                    <div className="channelListRecommended">
+                        Vorschläge
+                        <div className="channelCount">{recommendedChannels.length}</div>
+                    </div>
                 }
                 {recommendedChannelNodes}
-                {localChannelNodes.length > 0 ?
-                    <div className="channelListLocal">Lokale</div>
-                    : undefined
+                {localChannels.length === 0 ? null :
+                    <div className="channelListLocal" onClick={this.onToggleLocalChannels}>
+                        Lokale
+                        <div className="channelCount">{localChannels.length}</div>
+                    </div>
                 }
                 {localChannelNodes}
-                {countryChannelNodes.length > 0 ?
-                    <div className="channelListCountry">Landesweit</div>
-                    : undefined
+                {countryChannels.length === 0 ? null :
+                    <div className="channelListCountry" onClick={this.onToggleCountryChannels}>
+                        Landesweit
+                        <div className="channelCount">{countryChannels.length}</div>
+                    </div>
                 }
                 {countryChannelNodes}
             </div>
@@ -101,6 +123,14 @@ export default class ChannelList extends React.Component<IChannelListProps, ICha
         this.setState({channelFilter: e.target.value});
     };
 
+    private onToggleLocalChannels = (e: React.MouseEvent<HTMLDivElement>) => {
+        this.setState({showLocalChannels: !this.state.showLocalChannels});
+    };
+
+    private onToggleCountryChannels = (e: React.MouseEvent<HTMLDivElement>) => {
+        this.setState({showCountryChannels: !this.state.showCountryChannels});
+    };
+
     private onNewChannelClick = () => {
         this.props.onChannelClick(this.state.channelFilter);
     };
@@ -108,7 +138,26 @@ export default class ChannelList extends React.Component<IChannelListProps, ICha
     private channelListRef = (element: HTMLDivElement) => {
         this.scrollable = element;
         if (this.scrollable) {
-            this.scrollable.scrollTop = ChannelList.lastScrollPosition;
+            this.scrollable.scrollTop = ChannelListComponent.lastScrollPosition;
         }
     };
 }
+
+const mapStateToProps = (state: IJodelAppStore, ownProps: {}) => {
+    return {
+        channels: getFollowedChannels(state),
+        countryChannels: getCountryChannels(state),
+        localChannels: getLocalChannels(state),
+        recommendedChannels: getRecommendedChannels(state),
+    };
+};
+
+const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: {}) => {
+    return {
+        onChannelClick(channelName: string) {
+            dispatch(switchPostSection('channel:' + channelName));
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChannelListComponent);

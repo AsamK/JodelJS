@@ -74,7 +74,7 @@ class PostListContainerComponent extends React.PureComponent<IPostListContainerC
         } else {
             PostListContainerComponent.lastScrollPosition = 0;
         }
-    }
+    };
 }
 
 const mapStateToProps = (state: IJodelAppStore, ownProps: IPostListContainerProps) => {

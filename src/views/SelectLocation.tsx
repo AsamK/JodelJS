@@ -88,7 +88,7 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
         latitudeNumber = Math.round(latitudeNumber * 100) / 100;
         const longitude = this.props.location ? this.props.location.longitude : 0;
         this.props.onChange(this.props.useBrowserLocation, {latitude: latitudeNumber, longitude});
-    }
+    };
 
     private handleChangeLongitude = (event: React.ChangeEvent<HTMLInputElement>) => {
         let longitudeNumber = Number.parseFloat(event.target.value.replace(',', '.'));
@@ -98,7 +98,7 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
         longitudeNumber = Math.round(longitudeNumber * 100) / 100;
         const latitude = this.props.location ? this.props.location.latitude : 0;
         this.props.onChange(this.props.useBrowserLocation, {latitude, longitude: longitudeNumber});
-    }
+    };
 
     private handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {
         switch (event.target.value) {
@@ -109,5 +109,5 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                 this.props.onChange(false, this.props.location);
                 break;
         }
-    }
+    };
 }

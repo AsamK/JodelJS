@@ -183,7 +183,7 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
             };
         }
         this.props.setLocation(location);
-    }
+    };
 }
 
 const mapStateToProps = (state: IJodelAppStore): IAppSettingsStateProps => {

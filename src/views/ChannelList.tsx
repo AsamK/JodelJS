@@ -99,16 +99,16 @@ export default class ChannelList extends React.Component<IChannelListProps, ICha
 
     private onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({channelFilter: e.target.value});
-    }
+    };
 
     private onNewChannelClick = () => {
         this.props.onChannelClick(this.state.channelFilter);
-    }
+    };
 
     private channelListRef = (element: HTMLDivElement) => {
         this.scrollable = element;
         if (this.scrollable) {
             this.scrollable.scrollTop = ChannelList.lastScrollPosition;
         }
-    }
+    };
 }

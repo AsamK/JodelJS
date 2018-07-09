@@ -66,7 +66,7 @@ export class SelectDeviceUid extends React.PureComponent<ISelectDeviceUidProps, 
     private handleChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({deviceUid: event.target.value});
         this.props.setDeviceUid(event.target.value);
-    }
+    };
 
     private handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {
         switch (event.target.value) {
@@ -78,5 +78,5 @@ export class SelectDeviceUid extends React.PureComponent<ISelectDeviceUidProps, 
                 break;
         }
         this.setState({radioState: event.target.value});
-    }
+    };
 }

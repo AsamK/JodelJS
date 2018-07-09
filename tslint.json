@@ -19,6 +19,11 @@
       true,
       "log"
     ],
+    "semicolon": [
+      true,
+      "always",
+      "strict-bound-class-methods"
+    ],
     "no-var-requires": false
   },
   "rulesDirectory": []

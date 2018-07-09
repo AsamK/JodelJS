@@ -23,5 +23,5 @@ export class PostListItem
 
     private onPostClick = () => {
         this.props.onPostClick(this.props.post);
-    }
+    };
 }

@@ -57,5 +57,5 @@ export class Time extends React.Component<ITimeProps> {
 
     private tick = () => {
         this.forceUpdate();
-    }
+    };
 }

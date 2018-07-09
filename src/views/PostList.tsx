@@ -68,7 +68,7 @@ export default class PostList extends React.PureComponent<IPostListProps> {
         if (this.props.connectScrollTarget) {
             this.props.connectScrollTarget(element);
         }
-    }
+    };
 
     private onScroll = () => {
         if (!this.scrollable || !this.props.onLoadMore) {
@@ -82,5 +82,5 @@ export default class PostList extends React.PureComponent<IPostListProps> {
         } else {
             this.scrollAtBottom = newFlag;
         }
-    }
+    };
 }

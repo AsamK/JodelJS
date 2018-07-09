@@ -112,11 +112,11 @@ class FirstStart extends React.Component<IFirstStartProps, IFirstStartState> {
 
     private setDeviceUid = (deviceUid: string | null) => {
         this.setState({deviceUid});
-    }
+    };
 
     private updateLocation = () => {
         this.props.dispatch(updateLocation());
-    }
+    };
 }
 
 const mapStateToProps = (state: IJodelAppStore) => {

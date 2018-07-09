@@ -75,11 +75,11 @@ export default class PostDetails extends React.Component<IPostDetailsProps> {
         } else {
             this.scrollAtBottom = isNearBottom;
         }
-    }
+    };
 
     private scrollToBottom = () => {
         if (this.scrollable) {
             this.scrollable.scrollTop = this.scrollable.scrollHeight;
         }
-    }
+    };
 }

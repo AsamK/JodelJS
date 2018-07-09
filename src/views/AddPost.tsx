@@ -95,13 +95,13 @@ export class AddPostComponent extends React.PureComponent<IAddPostComponentProps
             const url = window.URL.createObjectURL(input.files[0]);
             this.setState({imageUrl: url});
         }
-    }
+    };
 
     private resetForm = (form: HTMLFormElement) => {
         this.setState({message: '', image: undefined, imageUrl: undefined});
         form.reset();
         sessionStorage.removeItem('messageDraft');
-    }
+    };
 
     private handleAddPost = (event: React.FormEvent<HTMLFormElement>) => {
         const {channel, ancestor} = this.props;
@@ -121,7 +121,7 @@ export class AddPostComponent extends React.PureComponent<IAddPostComponentProps
             this.sendAddPost(this.state.message, undefined, channel, ancestor, this.state.color, form);
         }
         window.history.back();
-    }
+    };
 
     private sendAddPost(message: string, encodedImage: string | undefined, channel: string | undefined,
                         ancestor: string | undefined, color: Color | undefined, form: HTMLFormElement) {

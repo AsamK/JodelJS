@@ -115,12 +115,12 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
         } else {
             this.props.upVote();
         }
-    }
+    };
 
     private downvote = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
         this.props.downVote();
-    }
+    };
 }
 
 const mapStateToProps = (state: IJodelAppStore) => {

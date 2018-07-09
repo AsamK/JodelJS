@@ -157,7 +157,7 @@ class JodelComponent extends React.Component<IJodelProps> {
 
     private onRefresh = () => {
         this.props.dispatch(updatePosts());
-    }
+    };
 
     private refresh = () => {
         if (!this.props.isRegistered) {
@@ -165,39 +165,39 @@ class JodelComponent extends React.Component<IJodelProps> {
         }
         this.props.dispatch(fetchPostsIfNeeded());
         this.props.dispatch(getNotificationsIfAvailable());
-    }
+    };
 
     private handleClick = (post: IPost) => {
         this.props.dispatch(selectPost(post != null ? post.post_id : null));
-    }
+    };
 
     private handleAddClick = () => {
         this.props.dispatch(showAddPost(true));
-    }
+    };
 
     private handleAddCommentClick = () => {
         this.props.dispatch(showAddPost(true));
-    }
+    };
 
     private onLoadMore = () => {
         this.props.dispatch(fetchMorePosts());
-    }
+    };
 
     private onLoadMoreComments = () => {
         this.props.dispatch(fetchMoreComments());
-    }
+    };
 
     private onShowSettings = () => {
         this.props.dispatch(showSettings(true));
-    }
+    };
 
     private onShowChannelList = () => {
         this.props.dispatch(showChannelList(!this.props.channelListVisible));
-    }
+    };
 
     private onChannelClick = (channelName: string) => {
         this.props.dispatch(switchPostSection('channel:' + channelName));
-    }
+    };
 }
 
 const mapStateToProps = (state: IJodelAppStore): Partial<IJodelProps> => {

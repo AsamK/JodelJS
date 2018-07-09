@@ -32,5 +32,5 @@ export class ChannelListItem
 
     private onChannelClick = () => {
         this.props.onChannelClick(this.props.channel.channel);
-    }
+    };
 }

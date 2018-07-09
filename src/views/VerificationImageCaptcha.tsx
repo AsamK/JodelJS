@@ -57,5 +57,5 @@ export class VerificationImageCaptcha
 
         // Update state
         this.setState({clickedImages});
-    }
+    };
 }

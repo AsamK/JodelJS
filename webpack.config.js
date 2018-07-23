@@ -31,7 +31,7 @@ module.exports = function (env, argv) {
                 {
                     test: /\.tsx?$/,
                     loader: 'ts-loader',
-//                type: 'javascript/esm', // Disabled, until #6913 is resolved
+                    //                type: 'javascript/esm', // Disabled, until #6913 is resolved
                 },
 
                 // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
@@ -39,6 +39,15 @@ module.exports = function (env, argv) {
                     enforce: 'pre',
                     test: /\.js$/,
                     loader: 'source-map-loader'
+                },
+                {
+                    test: /\.(png|jpg|gif)$/,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {}
+                        }
+                    ]
                 },
                 {
                     test: /\.css$/,
@@ -85,7 +94,7 @@ module.exports = function (env, argv) {
                     use: [
                         {
                             loader: 'html-loader',
-                            options: {minimize: true}
+                            options: { minimize: true }
                         }
                     ]
                 },

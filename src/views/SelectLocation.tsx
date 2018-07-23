@@ -1,7 +1,9 @@
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
-import {IGeoCoordinates} from '../interfaces/ILocation';
+import { IGeoCoordinates } from '../interfaces/ILocation';
+import MapComponent from './Map';
+import MapMarkerComponent from './MapMarker';
 
 const USE_BROWSER_LOCATION = 'USE_BROWSER_LOCATION';
 const MANUAL = 'MANUAL';
@@ -19,13 +21,13 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
     }
 
     public render() {
-        const {location, useBrowserLocation, onLocationRequested} = this.props;
+        const { location, useBrowserLocation, onLocationRequested } = this.props;
         return (
             <div className="selectLocation">
                 <div className="locationType">
                     <label>
                         <input type="radio" value={USE_BROWSER_LOCATION} checked={useBrowserLocation}
-                               onChange={this.handleChangeRadio}/>
+                            onChange={this.handleChangeRadio} />
                         <FormattedMessage
                             id="location_use_browser"
                             defaultMessage="Request location from browser"
@@ -33,7 +35,7 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                     </label>
                     <label>
                         <input type="radio" value={MANUAL} checked={!useBrowserLocation}
-                               onChange={this.handleChangeRadio}/>
+                            onChange={this.handleChangeRadio} />
                         <FormattedMessage
                             id="location_manual"
                             defaultMessage="Select location manually"
@@ -53,17 +55,22 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                             defaultMessage="Refresh location"
                         />
                     </a>
-                </div> : ''}
-                {!useBrowserLocation ?
+                </div> :
                     <div className="manualLocation">
+                        <MapComponent location={location}>
+                            <MapMarkerComponent
+                                location={location}
+                                onMarkerMoved={this.handleChangeLocation}
+                            ></MapMarkerComponent>
+                        </MapComponent>
                         <label>
                             <FormattedMessage
                                 id="location_latitude"
                                 defaultMessage="Latitude"
                             />:
                             <input type="number" min="-90" max="90" step="0.01"
-                                   value={location ? location.latitude : ''}
-                                   onChange={this.handleChangeLatitude}/>
+                                value={location ? location.latitude : ''}
+                                onChange={this.handleChangeLatitude} />
                         </label>
                         <label>
                             <FormattedMessage
@@ -71,14 +78,18 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                                 defaultMessage="Longitude"
                             />:
                             <input type="number" min="-180" max="180" step="0.01"
-                                   value={location ? location.longitude : ''}
-                                   onChange={this.handleChangeLongitude}/>
+                                value={location ? location.longitude : ''}
+                                onChange={this.handleChangeLongitude} />
                         </label>
                     </div>
-                    : ''}
+                }
             </div>
         );
     }
+
+    private handleChangeLocation = (location: IGeoCoordinates) => {
+        this.props.onChange(this.props.useBrowserLocation, location);
+    };
 
     private handleChangeLatitude = (event: React.ChangeEvent<HTMLInputElement>) => {
         let latitudeNumber = Number.parseFloat(event.target.value);
@@ -87,7 +98,7 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
         }
         latitudeNumber = Math.round(latitudeNumber * 100) / 100;
         const longitude = this.props.location ? this.props.location.longitude : 0;
-        this.props.onChange(this.props.useBrowserLocation, {latitude: latitudeNumber, longitude});
+        this.props.onChange(this.props.useBrowserLocation, { latitude: latitudeNumber, longitude });
     };
 
     private handleChangeLongitude = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +108,7 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
         }
         longitudeNumber = Math.round(longitudeNumber * 100) / 100;
         const latitude = this.props.location ? this.props.location.latitude : 0;
-        this.props.onChange(this.props.useBrowserLocation, {latitude, longitude: longitudeNumber});
+        this.props.onChange(this.props.useBrowserLocation, { latitude, longitude: longitudeNumber });
     };
 
     private handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {

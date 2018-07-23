@@ -5,6 +5,7 @@
   "display": "standalone",
   "background_color": "#fff",
   "description": "A web app for using Jodel.",
+  "theme_color": "#ff9908",
   "icons": [{
     "src": "/favicon.ico",
     "sizes": "16x16",

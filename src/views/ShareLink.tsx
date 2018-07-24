@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {IJodelAppStore} from '../redux/reducers';
 import {getShareLink} from '../redux/selectors/view';
+import './ShareLink.scss';
 
 interface IShareLinkProps {
     link: string | null;

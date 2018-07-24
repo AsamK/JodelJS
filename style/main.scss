@@ -1,5 +1,4 @@
-@import "~normalize.css";
-@import "~nprogress/nprogress.css";
+@import "settings.scss";
 
 $top-bar-height: 3em;
 $post-top-bar-height: 3em;
@@ -11,12 +10,6 @@ $bar-shadow: 0 0 6px 3px rgba(0, 0, 0, 0.16), 0 0 6px 3px rgba(0, 0, 0, 0.23);
 $menu-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
 $toast-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
 $button-shadow: 0 5px 5px rgba(0, 0, 0, 0.16);
-
-$z-index-overlay: 200;
-$z-index-toast-layer: 150;
-$z-index-menu-layer: 100;
-$z-index-top-layer: 100;
-$z-index-sub-layer: 80;
 
 html {
   font-family: sans-serif;
@@ -868,30 +861,5 @@ input[type=number] {
     &-info {
       background-color: white;
     }
-  }
-}
-
-.shareLink {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 5em;
-  left: 5em;
-  right: 5em;
-  z-index: $z-index-overlay;
-  background-color: gray;
-  padding: 1em;
-
-  .link {
-    display: flex;
-    margin-bottom: 1em;
-  }
-  .linkDisplay {
-    flex: auto;
-    min-width: 0;
-  }
-  .shareButton {
-    flex: none;
-    margin-left: 1em
   }
 }

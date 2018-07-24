@@ -1,4 +1,5 @@
 import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 import React from 'react';
 import {connect} from 'react-redux';
 

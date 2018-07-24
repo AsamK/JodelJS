@@ -32,7 +32,7 @@ export default class MapComponent extends React.Component<IMapComponentProps, IM
         const tiles = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '\xa9 <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>' +
                 ' contributors',
-            maxZoom: 20,
+            maxZoom: 18,
         });
         tiles.addTo(leafletMap);
 

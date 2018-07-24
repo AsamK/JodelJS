@@ -68,8 +68,8 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                                 id="location_latitude"
                                 defaultMessage="Latitude"
                             />:
-                            <input type="number" min="-90" max="90" step="0.01"
-                                value={location ? location.latitude : ''}
+                            <input type="number" min="-90" max="90" step="0.001"
+                                value={location ? Math.round(location.latitude * 1000) / 1000 : ''}
                                 onChange={this.handleChangeLatitude} />
                         </label>
                         <label>
@@ -77,8 +77,8 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                                 id="location_longitude"
                                 defaultMessage="Longitude"
                             />:
-                            <input type="number" min="-180" max="180" step="0.01"
-                                value={location ? location.longitude : ''}
+                            <input type="number" min="-180" max="180" step="0.001"
+                                value={location ? Math.round(location.longitude * 1000) / 1000 : ''}
                                 onChange={this.handleChangeLongitude} />
                         </label>
                     </div>
@@ -92,21 +92,19 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
     };
 
     private handleChangeLatitude = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let latitudeNumber = Number.parseFloat(event.target.value);
+        const latitudeNumber = Number.parseFloat(event.target.value);
         if (isNaN(latitudeNumber) || latitudeNumber < -90 || latitudeNumber > 90) {
             return;
         }
-        latitudeNumber = Math.round(latitudeNumber * 100) / 100;
         const longitude = this.props.location ? this.props.location.longitude : 0;
         this.props.onChange(this.props.useBrowserLocation, { latitude: latitudeNumber, longitude });
     };
 
     private handleChangeLongitude = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let longitudeNumber = Number.parseFloat(event.target.value.replace(',', '.'));
+        const longitudeNumber = Number.parseFloat(event.target.value.replace(',', '.'));
         if (isNaN(longitudeNumber) || longitudeNumber < -180 || longitudeNumber > 180) {
             return;
         }
-        longitudeNumber = Math.round(longitudeNumber * 100) / 100;
         const latitude = this.props.location ? this.props.location.latitude : 0;
         this.props.onChange(this.props.useBrowserLocation, { latitude, longitude: longitudeNumber });
     };

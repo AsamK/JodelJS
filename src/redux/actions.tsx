@@ -97,9 +97,10 @@ export function updateLocation(): JodelThunkAction {
 
                 const state = getState();
                 const loc = getLocation(state);
-                if (!loc || loc.latitude !== position.coords.latitude ||
-                    loc.longitude !== position.coords.longitude) {
-                    dispatch(setLocation(position.coords.latitude, position.coords.longitude));
+                const latitude = Math.round(position.coords.latitude * 100) / 100;
+                const longitude = Math.round(position.coords.longitude * 100) / 100;
+                if (!loc || loc.latitude !== latitude || loc.longitude !== longitude) {
+                    dispatch(setLocation(latitude, longitude));
                     if (state.account.token && state.account.token.access !== undefined) {
                         dispatch(updatePosts());
                     }

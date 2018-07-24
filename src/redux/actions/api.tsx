@@ -594,8 +594,6 @@ export function refreshAccessToken(): JodelThunkAction {
 export function setLocation(latitude: number, longitude: number, city: string = '',
                             country = 'DE'): JodelThunkAction {
     return (dispatch, getState, {api}) => {
-        latitude = Math.round(latitude * 100) / 100;
-        longitude = Math.round(longitude * 100) / 100;
         dispatch(_setLocation(latitude, longitude, city, country));
         if (getState().account.token) {
             api.apiSetLocation(latitude, longitude, city, country)
@@ -609,8 +607,6 @@ export function setLocation(latitude: number, longitude: number, city: string = 
 export function setHome(latitude: number, longitude: number, city: string = '',
                         country = 'DE'): JodelThunkAction {
     return (dispatch, getState, {api}) => {
-        latitude = Math.round(latitude * 100) / 100;
-        longitude = Math.round(longitude * 100) / 100;
         api.apiSetAction('SetHomeStarted')
             .then(() => api.apiSetHome(latitude, longitude, city, country))
             .then(() => dispatch(getConfig()))

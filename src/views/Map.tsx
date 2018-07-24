@@ -20,8 +20,10 @@ export default class MapComponent extends React.Component<IMapComponentProps, IM
         map: undefined,
     };
 
+    private mapElement: HTMLElement | undefined;
+
     public componentDidMount() {
-        const leafletMap = map('mapid');
+        const leafletMap = map(this.mapElement!);
         if (this.props.location) {
             leafletMap.setView({
                 lat: this.props.location.latitude,
@@ -42,7 +44,7 @@ export default class MapComponent extends React.Component<IMapComponentProps, IM
     }
 
     public render() {
-        return <div id="mapid">
+        return <div className="map-root" ref={this.mapRef}>
             <LeafletMapContext.Provider value={this.state.map}>
                 {this.props.children}
             </LeafletMapContext.Provider>
@@ -58,4 +60,8 @@ export default class MapComponent extends React.Component<IMapComponentProps, IM
             });
         }
     }
+
+    private mapRef = (ref: HTMLDivElement) => {
+        this.mapElement = ref;
+    };
 }

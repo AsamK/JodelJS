@@ -1,0 +1,48 @@
+{
+    "plugins": [
+        "stylelint-order",
+        "stylelint-scss"
+    ],
+    "ignoreFiles": [
+    ],
+    "rules": {
+        "block-closing-brace-newline-before": ["always"],
+        "block-no-empty": true,
+        "block-opening-brace-newline-after": ["always"],
+        "color-hex-case": "lower",
+        "color-hex-length": "short",
+        "color-no-invalid-hex": true,
+        "declaration-block-trailing-semicolon": "always",
+        "declaration-colon-space-after": "always",
+        "declaration-colon-space-before": "never",
+        "length-zero-no-unit": true,
+        "max-empty-lines": 1,
+        "media-feature-colon-space-after": "always",
+        "media-feature-colon-space-before": "never",
+        "no-empty-source": true,
+        "no-eol-whitespace": true,
+        "no-extra-semicolons": true,
+        "no-missing-end-of-source-newline": true,
+        "number-leading-zero": "never",
+        "number-no-trailing-zeros": true,
+        "order/properties-alphabetical-order": true,
+        "property-case": "lower",
+        "rule-empty-line-before": [
+            "always-multi-line",
+            {
+                "except": ["first-nested"],
+                "ignore": ["after-comment"]
+            }
+        ],
+        "scss/selector-no-redundant-nesting-selector": true,
+        "selector-list-comma-newline-after": "always",
+        "selector-list-comma-newline-before": "never-multi-line",
+        "selector-max-empty-lines": 0,
+        "selector-max-specificity": "0,4,0",
+        "selector-max-id": 0,
+        "selector-pseudo-element-colon-notation": "double",
+        "string-quotes": "double",
+        "unit-case": "lower",
+        "unit-no-unknown": true
+    }
+}

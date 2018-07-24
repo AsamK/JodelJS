@@ -6,17 +6,21 @@ $channel-top-bar-height: 3em;
 
 $bottom-bar-height: 3em;
 
-$bar-shadow: 0 0 6px 3px rgba(0, 0, 0, 0.16), 0 0 6px 3px rgba(0, 0, 0, 0.23);
-$menu-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
-$toast-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
-$button-shadow: 0 5px 5px rgba(0, 0, 0, 0.16);
+$bar-shadow: 0 0 6px 3px rgba(0, 0, 0, .16), 0 0 6px 3px rgba(0, 0, 0, .23);
+$menu-shadow: 0 0 6px rgba(0, 0, 0, .16), 0 0 6px rgba(0, 0, 0, .23);
+$toast-shadow: 0 0 6px rgba(0, 0, 0, .16), 0 0 6px rgba(0, 0, 0, .23);
+$button-shadow: 0 5px 5px rgba(0, 0, 0, .16);
 
 html {
   font-family: sans-serif;
   font-size: 15px;
 }
 
-html, body, #content, .jodel {
+/* stylelint-disable-next-line selector-max-specificity, selector-max-id */
+html,
+body,
+#content,
+.jodel {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -24,10 +28,10 @@ html, body, #content, .jodel {
 }
 
 .formError {
-  display: block;
   background-color: red;
-  padding: 1em;
+  display: block;
   margin-top: 1em;
+  padding: 1em;
 }
 
 input[type=checkbox],
@@ -57,59 +61,65 @@ input[type=number] {
 }
 
 .channelList {
-  position: absolute;
-  top: $top-bar-height;
+  background-color: #eee;
   bottom: 0;
   left: 0;
-  right: 0;
-  background-color: #eee;
-  z-index: $z-index-sub-layer;
   overflow-y: scroll;
+  position: absolute;
+  right: 0;
+  top: $top-bar-height;
+  z-index: $z-index-sub-layer;
 
   .channelListHeader {
-    text-transform: uppercase;
-    letter-spacing: .25em;
     background-color: orange;
-    padding: 1em;
-    margin-bottom: 1px;
     color: white;
+    letter-spacing: .25em;
+    margin-bottom: 1px;
+    padding: 1em;
+    text-transform: uppercase;
   }
+
   .channelFilter {
     display: flex;
     flex-direction: column;
   }
+
   .channelListRecommended,
   .channelListLocal,
   .channelListCountry {
+    align-items: center;
+    background: #ddd;
+    color: #555;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    text-transform: uppercase;
     letter-spacing: .25em;
-    background: #ddd;
-    padding: 1em;
     margin-bottom: 1px;
-    color: #555;
+    padding: 1em;
+    text-transform: uppercase;
   }
+
   .channelListLocal,
   .channelListCountry {
     cursor: pointer;
+
     &:hover {
       background: #eee;
     }
   }
+
   .channelCount {
     font-size: .7rem;
     letter-spacing: initial;
   }
+
   .channelLink {
     background: #fff;
     color: #333;
+    cursor: pointer;
     display: flex;
     justify-items: center;
     margin-bottom: 1px;
     padding: 1em;
-    cursor: pointer;
 
     &.unread {
       font-weight: bold;
@@ -125,8 +135,8 @@ input[type=number] {
 
     .title {
       flex: auto;
-      margin-top: .5em;
       margin-bottom: .5em;
+      margin-top: .5em;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -145,20 +155,20 @@ input[type=number] {
 }
 
 .notificationList {
-  position: absolute;
-  top: $top-bar-height;
+  background-color: #eee;
   bottom: 0;
   left: 0;
-  right: 0;
   overflow-y: scroll;
-  background-color: #eee;
+  position: absolute;
+  right: 0;
+  top: $top-bar-height;
   z-index: $z-index-sub-layer;
 }
 
 .notification {
+  background-color: white;
   cursor: pointer;
   display: flex;
-  background-color: white;
   margin-bottom: 1px;
   padding: 10px 0;
 
@@ -169,8 +179,8 @@ input[type=number] {
   .type {
     flex: none;
     font-size: .6em;
-    width: 40px;
     overflow: hidden;
+    width: 40px;
   }
 
   .details {
@@ -187,9 +197,9 @@ input[type=number] {
     .message,
     .info-text {
       flex: auto;
-      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
@@ -200,13 +210,13 @@ input[type=number] {
 }
 
 .searchContainer {
-  position: absolute;
-  top: $top-bar-height;
+  background-color: #eee;
   bottom: 0;
   left: 0;
-  right: 0;
   overflow-y: scroll;
-  background-color: #eee;
+  position: absolute;
+  right: 0;
+  top: $top-bar-height;
   z-index: $z-index-sub-layer;
 }
 
@@ -215,8 +225,8 @@ input[type=number] {
   box-shadow: $bar-shadow;
   display: flex;
   flex: none;
-  justify-content: space-between;
   height: $post-top-bar-height;
+  justify-content: space-between;
   width: 100%;
   z-index: $z-index-sub-layer;
 
@@ -229,24 +239,26 @@ input[type=number] {
 .backButton {
   cursor: pointer;
   flex: none;
-  padding-top: 1em;
   padding-bottom: 1em;
   padding-left: 1em;
+  padding-top: 1em;
 }
 
 .pin {
   flex: none;
+}
 
-  .pinButton {
-    cursor: pointer;
-    display: inline-block;
-    padding: 1em;
-    &::before {
-      content: "Pin";
-    }
-    &.pinned::before {
-      content: "Unpin";
-    }
+.pinButton {
+  cursor: pointer;
+  display: inline-block;
+  padding: 1em;
+
+  &::before {
+    content: "Pin";
+  }
+
+  &.pinned::before {
+    content: "Unpin";
   }
 }
 
@@ -257,9 +269,11 @@ input[type=number] {
     cursor: pointer;
     display: inline-block;
     padding: .94em;
+
     &::before {
       content: "OJ";
     }
+
     &.oj-filtered {
       background-color: #ccc;
     }
@@ -273,6 +287,7 @@ input[type=number] {
     cursor: pointer;
     display: inline-block;
     padding: 1em;
+
     &::before {
       content: "Share";
     }
@@ -293,25 +308,28 @@ input[type=number] {
     flex: auto;
     font-weight: bold;
     overflow: hidden;
-    padding-top: 1em;
     padding-bottom: 1em;
     padding-left: 1em;
+    padding-top: 1em;
     text-overflow: ellipsis;
   }
 }
 
 .follow {
   flex: none;
-  .followButton {
-    cursor: pointer;
-    display: inline-block;
-    padding: 1em;
-    &::before {
-      content: "Follow";
-    }
-    &.isFollowing::before {
-      content: "Unfollow";
-    }
+}
+
+.followButton {
+  cursor: pointer;
+  display: inline-block;
+  padding: 1em;
+
+  &::before {
+    content: "Follow";
+  }
+
+  &.isFollowing::before {
+    content: "Unfollow";
   }
 }
 
@@ -330,27 +348,30 @@ input[type=number] {
 }
 
 .addButton {
-  width: 4em;
+  background-color: rgba(0, 0, 0, .3);
+  border: solid .3em #fff;
+  border-radius: 4em;
+  color: #fff;
+  cursor: pointer;
   height: 4em;
+  left: 50%;
+  margin-left: -2em;
   position: fixed;
   text-align: center;
-  cursor: pointer;
-  background-color: rgba(0, 0, 0, .3);
+  width: 4em;
+
   &:hover {
     background-color: rgba(66, 189, 255, .76);
   }
+
   &:active {
     background-color: rgba(66, 189, 255, .76);
   }
-  color: #fff;
-  border: solid .3em #fff;
-  border-radius: 4em;
+
   &::before {
-    font-size: 3em;
     content: "+";
+    font-size: 3em;
   }
-  margin-left: -2em;
-  left: 50%;
 }
 
 .postListContainer .addButton {
@@ -372,9 +393,9 @@ input[type=number] {
 
   .sortType {
     background: no-repeat center;
+    cursor: pointer;
     flex: auto;
     height: $bottom-bar-height;
-    cursor: pointer;
 
     &.active {
       background-color: #ccc;
@@ -384,10 +405,12 @@ input[type=number] {
       background-image: url("../img/clock.svg");
       background-size: $bottom-bar-height / 2;
     }
+
     &.discussed {
       background-image: url("../img/comments.svg");
       background-size: $bottom-bar-height / 2;
     }
+
     &.popular {
       background-image: url("../img/popular.svg");
       background-size: $bottom-bar-height / 2;
@@ -403,24 +426,27 @@ input[type=number] {
   .postList .post {
     margin-bottom: .1em;
   }
+
   .scrollToBottomButton {
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 4em;
+    bottom: 1em;
     box-shadow: $button-shadow;
-    width: 2em;
+    color: #888;
+    cursor: pointer;
     height: 2em;
     position: fixed;
+    right: 1em;
     text-align: center;
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 1);
+    width: 2em;
+
     &:active,
     &:hover {
       background-color: rgba(200, 200, 200, 1);
     }
-    color: #888;
-    border-radius: 4em;
-    right: 1em;
-    bottom: 1em;
+
     &::before {
-      content: '\\/';
+      content: "\\/";
       display: block;
       margin-top: .5em;
     }
@@ -436,44 +462,47 @@ input[type=number] {
   position: relative;
 
   .postPicture {
-    width: 85%;
-    float: left;
+    background-size: cover;
     clear: both;
     filter: blur(5px);
-    background-size: cover;
+    float: left;
     height: 100px;
     margin: .2em;
+    width: 85%;
   }
 
   .postMessage {
-    width: 85%;
-    float: left;
     clear: both;
-    white-space: pre-wrap;
+    float: left;
     margin: .2em;
+    white-space: pre-wrap;
+    width: 85%;
   }
 
   .vote {
-    width: 10%;
     float: left;
     text-align: center;
+    width: 10%;
 
     .upVote {
       cursor: pointer;
-      width: 3em;
-      padding-top: .5em;
       padding-bottom: .5em;
+      padding-top: .5em;
+      width: 3em;
+
       &::before {
-        content: "";
-        height: 1em;
-        margin-left: .75em;
         background: url("../img/up.svg") no-repeat;
         background-size: 1.5em auto;
+        content: "";
         display: block;
+        height: 1em;
+        margin-left: .75em;
       }
+
       &.down {
         visibility: hidden;
       }
+
       &.up {
         cursor: inherit;
         opacity: .5;
@@ -486,50 +515,54 @@ input[type=number] {
 
     .downVote {
       cursor: pointer;
-      width: 3em;
-      padding-top: .5em;
       padding-bottom: .5em;
+      padding-top: .5em;
+      width: 3em;
+
       &::before {
-        content: "";
-        height: 1em;
-        margin-left: .75em;
         background: url("../img/down.svg") no-repeat;
         background-size: 1.5em auto;
+        content: "";
         display: block;
+        height: 1em;
+        margin-left: .75em;
       }
+
       &.up {
         visibility: hidden;
       }
+
       &.down {
         cursor: inherit;
         opacity: .5;
       }
     }
+
     .justVoted {
       animation: 400ms voting;
     }
   }
 
   .time {
-    float: left;
-    width: 30%;
-    font-size: .8em;
     color: rgba(255, 255, 255, .5);
+    float: left;
+    font-size: .8em;
+    width: 30%;
   }
 
   .childInfo {
-    float: left;
-    width: 30%;
-    text-align: center;
-    font-size: .8em;
     color: rgba(255, 255, 255, .5);
+    float: left;
+    font-size: .8em;
+    text-align: center;
+    width: 30%;
   }
 
   .location {
-    float: left;
-    width: 30%;
-    font-size: .8em;
     color: rgba(255, 255, 255, .5);
+    float: left;
+    font-size: .8em;
+    width: 30%;
 
     .distance {
       float: left;
@@ -540,22 +573,25 @@ input[type=number] {
       float: left;
       width: 60%;
     }
-    .fromHome:after {
+
+    .fromHome::after {
       content: "🏠";
       margin-left: .5em;
     }
   }
 
   .author {
-    width: 10%;
+    color: rgba(255, 255, 255, .5);
     float: left;
     font-size: .8em;
-    color: rgba(255, 255, 255, .5);
-    .OJ:after {
+    width: 10%;
+
+    .OJ::after {
       content: "👑";
       margin-left: .5em;
     }
-    .gotThanks:after {
+
+    .gotThanks::after {
       content: "❤";
       margin-left: .5em;
     }
@@ -563,10 +599,11 @@ input[type=number] {
 
   &.post-oj {
     padding-left: 1em;
+
     &::before {
       background-color: rgba(255, 255, 255, .6);
       bottom: 0;
-      content: ' ';
+      content: " ";
       left: 0;
       position: absolute;
       top: 0;
@@ -577,32 +614,35 @@ input[type=number] {
 
 @keyframes voting {
   from {
-    transform: scale(1);
     opacity: 1;
+    transform: scale(1);
   }
+
   50% {
-    transform: scale(1.5);
     opacity: 1;
+    transform: scale(1.5);
   }
+
   to {
-    transform: scale(1);
     opacity: .5;
+    transform: scale(1);
   }
 }
 
 .addPost {
+  background-color: #eee;
+  bottom: 0;
   display: none;
+  left: 0;
+  position: fixed;
+  right: 0;
+  text-align: center;
+  top: 0;
+  z-index: $z-index-overlay;
+
   &.visible {
     display: block;
   }
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: $z-index-overlay;
-  background-color: #eeeeee;
-  text-align: center;
 
   textarea {
     height: 10em;
@@ -612,6 +652,7 @@ input[type=number] {
   img {
     height: 100px;
   }
+
   .colorPicker {
     color: white;
   }
@@ -619,9 +660,9 @@ input[type=number] {
 
 .topBar {
   background-color: #eee;
+  box-shadow: $bar-shadow;
   display: flex;
   flex: none;
-  box-shadow: $bar-shadow;
   height: $top-bar-height;
   width: 100%;
   z-index: $z-index-top-layer;
@@ -646,58 +687,60 @@ input[type=number] {
       cursor: pointer;
       flex: none;
       height: $top-bar-height / 3;
-      padding: ($top-bar-height/3) .6em;
-      white-space: nowrap;
       overflow: hidden;
+      padding: ($top-bar-height/3) .6em;
       text-overflow: ellipsis;
+      white-space: nowrap;
 
       &.active {
         background-color: #ccc;
       }
     }
   }
-  .menu {
-    flex: none;
-    cursor: pointer;
+}
+
+.menu {
+  cursor: pointer;
+  flex: none;
+  height: $top-bar-height / 3;
+  padding: ($top-bar-height/3) .6em;
+
+  &::before {
+    background: url("../img/menu.svg") no-repeat center;
+    content: "  ";
+    display: block;
     height: $top-bar-height / 3;
-    padding: ($top-bar-height/3) .6em;
+    width: $top-bar-height / 2;
+  }
 
-    &::before {
-      background: url('../img/menu.svg') no-repeat center;
-      content: '  ';
-      display: block;
-      height: $top-bar-height / 3;
-      width: $top-bar-height / 2;
-    }
+  &.newNotifications::after {
+    background-color: blue;
+    border-radius: 10px;
+    content: " ";
+    height: 10px;
+    left: $top-bar-height / 2;
+    position: absolute;
+    top: $top-bar-height / 4;
+    width: 10px;
+  }
 
-    &.newNotifications::after {
-      content: ' ';
-      background-color: blue;
-      border-radius: 10px;
-      position: absolute;
-      left: $top-bar-height / 2;
-      top: $top-bar-height / 4;
-      width: 10px;
-      height: 10px;
-    }
+  .menuContent {
+    background-color: #eee;
+    box-shadow: $menu-shadow;
+    left: 0;
+    list-style-type: none;
+    padding: 0;
+    position: absolute;
+    z-index: $z-index-menu-layer;
 
-    .menuContent {
-      background-color: #eee;
-      box-shadow: $menu-shadow;
-      left: 0;
-      list-style-type: none;
-      padding: 0;
-      position: absolute;
-      z-index: $z-index-menu-layer;
+    .menuEntry {
+      > * {
+        height: 2em;
+        padding: 1em 1.3em 1em 1em;
+      }
 
-      .menuEntry {
-        > * {
-          padding: 1em 1.3em 1em 1em;
-          height: 2em;
-        }
-        &.active {
-          background-color: #ccc;
-        }
+      &.active {
+        background-color: #ccc;
       }
     }
   }
@@ -710,9 +753,6 @@ input[type=number] {
     margin-bottom: 2em;
     margin-left: 2em;
   }
-}
-
-.selectDeviceUid {
 }
 
 .selectDeviceUid label {
@@ -732,6 +772,7 @@ input[type=number] {
     display: flex;
     flex-wrap: wrap;
     margin-bottom: .5rem;
+
     label {
       flex: none;
       margin-right: 1rem;
@@ -767,22 +808,24 @@ input[type=number] {
   &:visited {
     color: white;
   }
+
   &:hover {
-    color: rgba(0, 16, 20, 0.33);
+    color: rgba(0, 16, 20, .33);
   }
+
   &:active {
-    color: rgba(0, 16, 20, 0.33);
+    color: rgba(0, 16, 20, .33);
   }
 }
 
 .bigPicture {
-  position: fixed;
-  top: 0;
-  right: 0;
+  background-color: black;
   bottom: 0;
   left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
   z-index: $z-index-overlay;
-  background-color: black;
 
   img {
     height: 100%;
@@ -792,15 +835,15 @@ input[type=number] {
 }
 
 .appSettings {
-  position: absolute;
-  top: $top-bar-height;
+  background-color: #eee;
   bottom: 0;
   left: 0;
-  right: 0;
   overflow-y: scroll;
-  background-color: #eee;
-  z-index: $z-index-sub-layer;
   padding: 1em;
+  position: absolute;
+  right: 0;
+  top: $top-bar-height;
+  z-index: $z-index-sub-layer;
 
   .block {
     margin-bottom: 2em;
@@ -822,8 +865,8 @@ input[type=number] {
 .userType,
 .pendingDeletion,
 .internationalFeed {
-  margin-top: 1em;
   margin-bottom: 1em;
+  margin-top: 1em;
   width: 100%;
 }
 

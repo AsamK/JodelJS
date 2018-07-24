@@ -51,6 +51,9 @@
     "sass-loader": "^7.0.3",
     "source-map-loader": "~0.2.3",
     "style-loader": "~0.21.0",
+    "stylelint": "^9.3.0",
+    "stylelint-order": "^0.8.1",
+    "stylelint-scss": "^3.2.0",
     "svg-url-loader": "~2.3.2",
     "ts-loader": "~4.4.2",
     "tslint": "~5.11.0",
@@ -64,8 +67,12 @@
   "scripts": {
     "start": "webpack-dev-server --mode=development",
     "build": "webpack --mode=production",
-    "lint": "tslint --project . --force",
-    "lint-fix": "tslint --project . --fix",
+    "stylelint": "stylelint ./***/*.scss",
+    "stylelint-fix": "stylelint ./***/*.scss --fix",
+    "tslint": "tslint --project . --force",
+    "tslint-fix": "tslint --project . --fix",
+    "lint": "npm run tslint && npm run stylelint",
+    "lint-fix": "npm run tslint-fix && npm run stylelint-fix",
     "profile": "webpack --profile --mode=production --json > profiling.json",
     "bundle-report": "npm run profile && webpack-bundle-analyzer profiling.json"
   }

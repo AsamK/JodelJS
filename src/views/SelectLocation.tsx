@@ -58,10 +58,12 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                 </div> :
                     <div className="manualLocation">
                         <MapComponent location={location}>
-                            <MapMarkerComponent
-                                location={location}
-                                onMarkerMoved={this.handleChangeLocation}
-                            ></MapMarkerComponent>
+                            {!location ? null :
+                                <MapMarkerComponent
+                                    location={location}
+                                    onMarkerMoved={this.handleChangeLocation}
+                                ></MapMarkerComponent>
+                            }
                         </MapComponent>
                         <label>
                             <FormattedMessage

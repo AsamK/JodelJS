@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import React from 'react';
 
 import { IGeoCoordinates } from '../interfaces/ILocation';
-import './Map.less';
+import './Map.scss';
 
 interface IMapComponentProps {
     location: IGeoCoordinates | null;

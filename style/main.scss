@@ -1,22 +1,22 @@
 @import "~normalize.css";
 @import "~nprogress/nprogress.css";
 
-@top-bar-height: 3em;
-@post-top-bar-height: 3em;
-@channel-top-bar-height: 3em;
+$top-bar-height: 3em;
+$post-top-bar-height: 3em;
+$channel-top-bar-height: 3em;
 
-@bottom-bar-height: 3em;
+$bottom-bar-height: 3em;
 
-@bar-shadow: 0 0 6px 3px rgba(0, 0, 0, 0.16), 0 0 6px 3px rgba(0, 0, 0, 0.23);
-@menu-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
-@toast-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
-@button-shadow: 0 5px 5px rgba(0, 0, 0, 0.16);
+$bar-shadow: 0 0 6px 3px rgba(0, 0, 0, 0.16), 0 0 6px 3px rgba(0, 0, 0, 0.23);
+$menu-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
+$toast-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
+$button-shadow: 0 5px 5px rgba(0, 0, 0, 0.16);
 
-@z-index-overlay: 200;
-@z-index-toast-layer: 150;
-@z-index-menu-layer: 100;
-@z-index-top-layer: 100;
-@z-index-sub-layer: 80;
+$z-index-overlay: 200;
+$z-index-toast-layer: 150;
+$z-index-menu-layer: 100;
+$z-index-top-layer: 100;
+$z-index-sub-layer: 80;
 
 html {
   font-family: sans-serif;
@@ -65,12 +65,12 @@ input[type=number] {
 
 .channelList {
   position: absolute;
-  top: @top-bar-height;
+  top: $top-bar-height;
   bottom: 0;
   left: 0;
   right: 0;
   background-color: #eee;
-  z-index: @z-index-sub-layer;
+  z-index: $z-index-sub-layer;
   overflow-y: scroll;
 
   .channelListHeader {
@@ -153,13 +153,13 @@ input[type=number] {
 
 .notificationList {
   position: absolute;
-  top: @top-bar-height;
+  top: $top-bar-height;
   bottom: 0;
   left: 0;
   right: 0;
   overflow-y: scroll;
   background-color: #eee;
-  z-index: @z-index-sub-layer;
+  z-index: $z-index-sub-layer;
 }
 
 .notification {
@@ -208,24 +208,24 @@ input[type=number] {
 
 .searchContainer {
   position: absolute;
-  top: @top-bar-height;
+  top: $top-bar-height;
   bottom: 0;
   left: 0;
   right: 0;
   overflow-y: scroll;
   background-color: #eee;
-  z-index: @z-index-sub-layer;
+  z-index: $z-index-sub-layer;
 }
 
 .postTopBar {
   background-color: #eee;
-  box-shadow: @bar-shadow;
+  box-shadow: $bar-shadow;
   display: flex;
   flex: none;
   justify-content: space-between;
-  height: @post-top-bar-height;
+  height: $post-top-bar-height;
   width: 100%;
-  z-index: @z-index-sub-layer;
+  z-index: $z-index-sub-layer;
 
   .rightButtons {
     display: flex;
@@ -289,12 +289,12 @@ input[type=number] {
 .channelTopBar,
 .hashtagTopBar {
   background-color: #eee;
-  box-shadow: @bar-shadow;
+  box-shadow: $bar-shadow;
   display: flex;
   flex: none;
-  height: @channel-top-bar-height;
+  height: $channel-top-bar-height;
   width: 100%;
-  z-index: @z-index-sub-layer;
+  z-index: $z-index-sub-layer;
 
   .title {
     flex: auto;
@@ -370,17 +370,17 @@ input[type=number] {
 
 .postListContainer .sortTypes {
   background-color: #eee;
-  box-shadow: @bar-shadow;
+  box-shadow: $bar-shadow;
   display: flex;
   flex: none;
   text-align: center;
   width: 100%;
-  z-index: @z-index-sub-layer;
+  z-index: $z-index-sub-layer;
 
   .sortType {
     background: no-repeat center;
     flex: auto;
-    height: @bottom-bar-height;
+    height: $bottom-bar-height;
     cursor: pointer;
 
     &.active {
@@ -389,15 +389,15 @@ input[type=number] {
 
     &.recent {
       background-image: url("../img/clock.svg");
-      background-size: @bottom-bar-height / 2;
+      background-size: $bottom-bar-height / 2;
     }
     &.discussed {
       background-image: url("../img/comments.svg");
-      background-size: @bottom-bar-height / 2;
+      background-size: $bottom-bar-height / 2;
     }
     &.popular {
       background-image: url("../img/popular.svg");
-      background-size: @bottom-bar-height / 2;
+      background-size: $bottom-bar-height / 2;
     }
   }
 }
@@ -411,7 +411,7 @@ input[type=number] {
     margin-bottom: .1em;
   }
   .scrollToBottomButton {
-    box-shadow: @button-shadow;
+    box-shadow: $button-shadow;
     width: 2em;
     height: 2em;
     position: fixed;
@@ -607,7 +607,7 @@ input[type=number] {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: @z-index-overlay;
+  z-index: $z-index-overlay;
   background-color: #eeeeee;
   text-align: center;
 
@@ -628,10 +628,10 @@ input[type=number] {
   background-color: #eee;
   display: flex;
   flex: none;
-  box-shadow: @bar-shadow;
-  height: @top-bar-height;
+  box-shadow: $bar-shadow;
+  height: $top-bar-height;
   width: 100%;
-  z-index: @z-index-top-layer;
+  z-index: $z-index-top-layer;
 
   .karma {
     flex: none;
@@ -652,8 +652,8 @@ input[type=number] {
     > * {
       cursor: pointer;
       flex: none;
-      height: @top-bar-height / 3;
-      padding: (@top-bar-height/3) .6em;
+      height: $top-bar-height / 3;
+      padding: ($top-bar-height/3) .6em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -666,15 +666,15 @@ input[type=number] {
   .menu {
     flex: none;
     cursor: pointer;
-    height: @top-bar-height / 3;
-    padding: (@top-bar-height/3) .6em;
+    height: $top-bar-height / 3;
+    padding: ($top-bar-height/3) .6em;
 
     &::before {
       background: url('../img/menu.svg') no-repeat center;
       content: '  ';
       display: block;
-      height: @top-bar-height / 3;
-      width: @top-bar-height / 2;
+      height: $top-bar-height / 3;
+      width: $top-bar-height / 2;
     }
 
     &.newNotifications::after {
@@ -682,20 +682,20 @@ input[type=number] {
       background-color: blue;
       border-radius: 10px;
       position: absolute;
-      left: @top-bar-height / 2;
-      top: @top-bar-height / 4;
+      left: $top-bar-height / 2;
+      top: $top-bar-height / 4;
       width: 10px;
       height: 10px;
     }
 
     .menuContent {
       background-color: #eee;
-      box-shadow: @menu-shadow;
+      box-shadow: $menu-shadow;
       left: 0;
       list-style-type: none;
       padding: 0;
       position: absolute;
-      z-index: @z-index-menu-layer;
+      z-index: $z-index-menu-layer;
 
       .menuEntry {
         > * {
@@ -788,7 +788,7 @@ input[type=number] {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: @z-index-overlay;
+  z-index: $z-index-overlay;
   background-color: black;
 
   img {
@@ -800,13 +800,13 @@ input[type=number] {
 
 .appSettings {
   position: absolute;
-  top: @top-bar-height;
+  top: $top-bar-height;
   bottom: 0;
   left: 0;
   right: 0;
   overflow-y: scroll;
   background-color: #eee;
-  z-index: @z-index-sub-layer;
+  z-index: $z-index-sub-layer;
   padding: 1em;
 
   .block {
@@ -842,10 +842,10 @@ input[type=number] {
 
 .toast-container {
   position: relative;
-  z-index: @z-index-toast-layer;
+  z-index: $z-index-toast-layer;
 
   .toast {
-    box-shadow: @toast-shadow;
+    box-shadow: $toast-shadow;
     cursor: pointer;
     left: 0;
     margin: 10px 20px;
@@ -878,7 +878,7 @@ input[type=number] {
   top: 5em;
   left: 5em;
   right: 5em;
-  z-index: @z-index-overlay;
+  z-index: $z-index-overlay;
   background-color: gray;
   padding: 1em;
 

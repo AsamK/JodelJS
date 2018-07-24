@@ -65,7 +65,7 @@ module.exports = function (env, argv) {
                     ],
                 },
                 {
-                    test: /\.less$/,
+                    test: /\.scss$/,
                     use: [
                         isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
                         'css-loader',
@@ -77,9 +77,7 @@ module.exports = function (env, argv) {
                                 ]
                             }
                         },
-                        {
-                            loader: 'less-loader'
-                        }
+                        'sass-loader',
                     ],
                 },
                 {

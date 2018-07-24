@@ -3,7 +3,7 @@ import React from 'react';
 
 import { IGeoCoordinates } from '../interfaces/ILocation';
 import { LeafletMapContext } from './Map';
-import './MapMarker.less';
+import './MapMarker.scss';
 
 interface IMapMarkerProps {
     map: LeafletMap;

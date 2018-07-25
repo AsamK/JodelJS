@@ -2,7 +2,6 @@ import createHmac from 'create-hmac';
 import {Store} from 'redux';
 import request from 'superagent';
 
-import Settings from '../app/settings';
 import {ApiAction} from '../enums/ApiAction';
 import {Color} from '../enums/Color';
 import {PostListPostType} from '../enums/PostListPostType';
@@ -33,6 +32,7 @@ import {IApiVerify} from '../interfaces/IApiVerify';
 import {IApiVote} from '../interfaces/IApiVote';
 import {IJodelAppStore} from '../redux/reducers';
 import {getAccessToken, getIsRefreshingToken} from '../redux/selectors/app';
+import Settings from './settings';
 
 const API_PATH_V2 = '/v2';
 const API_PATH_V3 = '/v3';

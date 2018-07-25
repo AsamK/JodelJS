@@ -1,7 +1,7 @@
 import { divIcon, Map as LeafletMap, marker, Marker } from 'leaflet';
 import React from 'react';
 
-import { IGeoCoordinates } from '../interfaces/ILocation';
+import { IGeoCoordinates } from '../../interfaces/ILocation';
 import { LeafletMapContext } from './Map';
 import './MapMarker.scss';
 

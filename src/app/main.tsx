@@ -2,7 +2,7 @@ import 'intl';
 import 'intl/locale-data/jsonp/de.js';
 import 'intl/locale-data/jsonp/en.js';
 import React from 'react';
-import DocumentTitle from 'react-document-title/index';
+import DocumentTitle from 'react-document-title';
 import ReactDOM from 'react-dom';
 import {hot} from 'react-hot-loader';
 import {addLocaleData, IntlProvider} from 'react-intl';

@@ -2,7 +2,7 @@ import { map, Map as LeafletMap, tileLayer } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import React from 'react';
 
-import { IGeoCoordinates } from '../interfaces/ILocation';
+import { IGeoCoordinates } from '../../interfaces/ILocation';
 import './Map.scss';
 
 interface IMapComponentProps {
@@ -58,6 +58,13 @@ export default class MapComponent extends React.Component<IMapComponentProps, IM
                 lat: this.props.location.latitude,
                 lng: this.props.location.longitude,
             });
+        }
+    }
+
+    public componentWillUnmount() {
+        const leafletMap = this.state.map;
+        if (leafletMap) {
+            leafletMap.remove();
         }
     }
 

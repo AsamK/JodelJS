@@ -2,8 +2,8 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { IGeoCoordinates } from '../interfaces/ILocation';
-import MapComponent from './Map';
-import MapMarkerComponent from './MapMarker';
+import MapComponent from './map/Map';
+import MapMarkerComponent from './map/MapMarker';
 
 const USE_BROWSER_LOCATION = 'USE_BROWSER_LOCATION';
 const MANUAL = 'MANUAL';

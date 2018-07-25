@@ -1,13 +1,16 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import loadable from 'react-loadable';
 
 import { IGeoCoordinates } from '../interfaces/ILocation';
-import MapComponent from './map/Map';
-import MapCircleComponent from './map/MapCircle';
-import MapMarkerComponent from './map/MapMarker';
 
 const USE_BROWSER_LOCATION = 'USE_BROWSER_LOCATION';
 const MANUAL = 'MANUAL';
+
+const LoadableMapComponent = loadable({
+    loader: () => import('./SelectLocationMap'),
+    loading: () => null,
+});
 
 export interface ISelectLocationProps {
     location: IGeoCoordinates | null;
@@ -58,20 +61,11 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                     </a>
                 </div> :
                     <div className="manualLocation">
-                        <MapComponent location={location}>
-                            {!location ? null :
-                                <>
-                                    <MapMarkerComponent
-                                        location={location}
-                                        onMarkerMoved={this.handleChangeLocation}
-                                    ></MapMarkerComponent>
-                                    <MapCircleComponent
-                                        location={location}
-                                        radius={10000}
-                                    ></MapCircleComponent>
-                                </>
-                            }
-                        </MapComponent>
+                        <LoadableMapComponent
+                            location={location}
+                            onLocationChanged={this.handleChangeLocation}
+                        >
+                        </LoadableMapComponent>
                         <label>
                             <FormattedMessage
                                 id="location_latitude"

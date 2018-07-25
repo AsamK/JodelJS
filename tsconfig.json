@@ -10,7 +10,7 @@
     "downlevelIteration": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "module": "es6",
+    "module": "esNext",
     "moduleResolution": "node",
     "target": "es5",
     "lib": [

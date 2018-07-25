@@ -3,6 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import React from 'react';
 
 import { IGeoCoordinates } from '../../interfaces/ILocation';
+import { LeafletMapContext } from './map-utils';
 import './Map.scss';
 
 interface IMapComponentProps {
@@ -12,8 +13,6 @@ interface IMapComponentProps {
 interface IMapComponentState {
     map: LeafletMap | undefined;
 }
-
-export const LeafletMapContext = React.createContext<LeafletMap | undefined>(undefined);
 
 export default class MapComponent extends React.Component<IMapComponentProps, IMapComponentState> {
     public state: IMapComponentState = {

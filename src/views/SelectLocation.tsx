@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { IGeoCoordinates } from '../interfaces/ILocation';
 import MapComponent from './map/Map';
+import MapCircleComponent from './map/MapCircle';
 import MapMarkerComponent from './map/MapMarker';
 
 const USE_BROWSER_LOCATION = 'USE_BROWSER_LOCATION';
@@ -59,10 +60,16 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                     <div className="manualLocation">
                         <MapComponent location={location}>
                             {!location ? null :
-                                <MapMarkerComponent
-                                    location={location}
-                                    onMarkerMoved={this.handleChangeLocation}
-                                ></MapMarkerComponent>
+                                <>
+                                    <MapMarkerComponent
+                                        location={location}
+                                        onMarkerMoved={this.handleChangeLocation}
+                                    ></MapMarkerComponent>
+                                    <MapCircleComponent
+                                        location={location}
+                                        radius={10000}
+                                    ></MapCircleComponent>
+                                </>
                             }
                         </MapComponent>
                         <label>

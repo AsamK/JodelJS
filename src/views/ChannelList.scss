@@ -1,0 +1,53 @@
+@import '../../style/settings.scss';
+
+.channel-list {
+    background-color: #eee;
+    bottom: 0;
+    left: 0;
+    overflow-y: scroll;
+    position: absolute;
+    right: 0;
+    top: $top-bar-height;
+    z-index: $z-index-sub-layer;
+}
+
+.channel-list_header {
+    background-color: orange;
+    color: white;
+    letter-spacing: .25em;
+    margin-bottom: 1px;
+    padding: 1em;
+    text-transform: uppercase;
+}
+
+.channel-list_filter {
+    display: flex;
+    flex-direction: column;
+}
+
+.channel-list_recommended,
+.channel-list_local,
+.channel-list_country {
+    align-items: center;
+    background: #ddd;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+    letter-spacing: .25em;
+    margin-bottom: 1px;
+    padding: 1em;
+    text-transform: uppercase;
+}
+
+.channel-list_local,
+.channel-list_country {
+    cursor: pointer;
+    &:hover {
+        background: #eee;
+    }
+}
+
+.channel-count {
+    font-size: .7rem;
+    letter-spacing: initial;
+}

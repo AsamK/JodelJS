@@ -1,30 +1,10 @@
 @import "settings.scss";
 
-$top-bar-height: 3em;
-$post-top-bar-height: 3em;
-$channel-top-bar-height: 3em;
-
-$bottom-bar-height: 3em;
-
-$bar-shadow: 0 0 6px 3px rgba(0, 0, 0, .16), 0 0 6px 3px rgba(0, 0, 0, .23);
-$menu-shadow: 0 0 6px rgba(0, 0, 0, .16), 0 0 6px rgba(0, 0, 0, .23);
-$toast-shadow: 0 0 6px rgba(0, 0, 0, .16), 0 0 6px rgba(0, 0, 0, .23);
-$button-shadow: 0 5px 5px rgba(0, 0, 0, .16);
+// General
 
 html {
   font-family: sans-serif;
   font-size: 15px;
-}
-
-/* stylelint-disable-next-line selector-max-specificity, selector-max-id */
-html,
-body,
-#content,
-.jodel {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
 }
 
 .formError {
@@ -44,6 +24,19 @@ input[type=number] {
   margin-left: 4px;
 }
 
+// Layout
+
+/* stylelint-disable-next-line selector-max-specificity, selector-max-id */
+html,
+body,
+#content,
+.jodel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
 .list {
   display: flex;
   flex: auto;
@@ -58,100 +51,6 @@ input[type=number] {
   flex-direction: column;
   overflow: hidden;
   width: 100%;
-}
-
-.channelList {
-  background-color: #eee;
-  bottom: 0;
-  left: 0;
-  overflow-y: scroll;
-  position: absolute;
-  right: 0;
-  top: $top-bar-height;
-  z-index: $z-index-sub-layer;
-
-  .channelListHeader {
-    background-color: orange;
-    color: white;
-    letter-spacing: .25em;
-    margin-bottom: 1px;
-    padding: 1em;
-    text-transform: uppercase;
-  }
-
-  .channelFilter {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .channelListRecommended,
-  .channelListLocal,
-  .channelListCountry {
-    align-items: center;
-    background: #ddd;
-    color: #555;
-    display: flex;
-    justify-content: space-between;
-    letter-spacing: .25em;
-    margin-bottom: 1px;
-    padding: 1em;
-    text-transform: uppercase;
-  }
-
-  .channelListLocal,
-  .channelListCountry {
-    cursor: pointer;
-
-    &:hover {
-      background: #eee;
-    }
-  }
-
-  .channelCount {
-    font-size: .7rem;
-    letter-spacing: initial;
-  }
-
-  .channelLink {
-    background: #fff;
-    color: #333;
-    cursor: pointer;
-    display: flex;
-    justify-items: center;
-    margin-bottom: 1px;
-    padding: 1em;
-
-    &.unread {
-      font-weight: bold;
-    }
-
-    .channelPicture {
-      background-size: cover;
-      flex: none;
-      height: 2em;
-      margin-right: 1em;
-      width: 2em;
-    }
-
-    .title {
-      flex: auto;
-      margin-bottom: .5em;
-      margin-top: .5em;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .channel-info {
-      flex: 0 1 auto;
-      margin-left: .5em;
-    }
-
-    .followers,
-    .countryFollowers {
-      font-size: .7rem;
-      text-align: right;
-    }
-  }
 }
 
 .notificationList {

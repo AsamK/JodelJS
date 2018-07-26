@@ -1,0 +1,39 @@
+.channel-list-item {
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    justify-items: center;
+    margin-bottom: 1px;
+    padding: 1em;
+    &.unread {
+        font-weight: bold;
+    }
+}
+
+.channel-list-item_picture {
+    background-size: cover;
+    flex: none;
+    height: 2em;
+    margin-right: 1em;
+    width: 2em;
+}
+
+.channel-list-item_title {
+    flex: auto;
+    margin-bottom: .5em;
+    margin-top: .5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.channel-list-item_info {
+    flex: 0 1 auto;
+    margin-left: .5em;
+}
+
+.channel-list-item_info-followers,
+.channel-list-item_info-country-followers {
+    font-size: .7rem;
+    text-align: right;
+}

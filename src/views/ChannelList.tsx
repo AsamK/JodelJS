@@ -1,17 +1,18 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {IChannel} from '../interfaces/IChannel';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {switchPostSection} from '../redux/actions';
-import {IJodelAppStore} from '../redux/reducers';
+import { IChannel } from '../interfaces/IChannel';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { switchPostSection } from '../redux/actions';
+import { IJodelAppStore } from '../redux/reducers';
 import {
     getCountryChannels,
     getFollowedChannels,
     getLocalChannels,
     getRecommendedChannels,
 } from '../redux/selectors/channels';
-import {ChannelListItem} from './ChannelListItem';
+import './ChannelList.scss';
+import { ChannelListItem } from './ChannelListItem';
 
 interface IChannelListComponentProps {
     channels: IChannel[];
@@ -45,60 +46,60 @@ export class ChannelListComponent extends React.Component<IChannelListComponentP
     }
 
     public render() {
-        const {channels, recommendedChannels, localChannels, countryChannels, onChannelClick} = this.props;
+        const { channels, recommendedChannels, localChannels, countryChannels, onChannelClick } = this.props;
         const channelNodes = channels.map(channel => {
-                return this.createChannelNode(channel, onChannelClick, true);
-            },
+            return this.createChannelNode(channel, onChannelClick, true);
+        },
         );
         const recommendedChannelNodes = recommendedChannels.map(channel => {
-                return this.createChannelNode(channel, onChannelClick, true);
-            },
+            return this.createChannelNode(channel, onChannelClick, true);
+        },
         );
         const localChannelNodes = !this.state.showLocalChannels ? null : localChannels.map(channel => {
-                return this.createChannelNode(channel, onChannelClick, false);
-            },
+            return this.createChannelNode(channel, onChannelClick, false);
+        },
         );
         const countryChannelNodes = !this.state.showCountryChannels ? null : countryChannels.map(channel => {
-                return this.createChannelNode(channel, onChannelClick, false);
-            },
+            return this.createChannelNode(channel, onChannelClick, false);
+        },
         );
         return (
-            <div className="channelList" ref={this.channelListRef}>
-                <div className="channelListHeader">Kanäle(beta)</div>
-                <div className="channelFilter">
+            <div className="channel-list" ref={this.channelListRef}>
+                <div className="channel-list_header">Kanäle(beta)</div>
+                <div className="channel-list_filter">
                     <input type="text"
-                           className="channelFilterText"
-                           placeholder="Channel filtern"
-                           value={this.state.channelFilter}
-                           onChange={this.onFilterChange}
+                        placeholder="Channel filtern"
+                        value={this.state.channelFilter}
+                        onChange={this.onFilterChange}
                     />
                     {!this.state.channelFilter ? null :
-                        <div
-                            className="channelLink"
-                            onClick={this.onNewChannelClick}>
-                            <div className="title">@{this.state.channelFilter}</div>
-                        </div>
+                        <ChannelListItem
+                            key={this.state.channelFilter}
+                            channel={{ unread: false, channel: this.state.channelFilter }}
+                            onChannelClick={onChannelClick}
+                            showImage={false}
+                        />
                     }
                 </div>
                 {channelNodes}
                 {recommendedChannelNodes.length === 0 ? null :
-                    <div className="channelListRecommended">
+                    <div className="channel-list_recommended">
                         Vorschläge
-                        <div className="channelCount">{recommendedChannels.length}</div>
+                        <div className="channel-count">{recommendedChannels.length}</div>
                     </div>
                 }
                 {recommendedChannelNodes}
                 {localChannels.length === 0 ? null :
-                    <div className="channelListLocal" onClick={this.onToggleLocalChannels}>
+                    <div className="channel-list_local" onClick={this.onToggleLocalChannels}>
                         Lokale
-                        <div className="channelCount">{localChannels.length}</div>
+                        <div className="channel-count">{localChannels.length}</div>
                     </div>
                 }
                 {localChannelNodes}
                 {countryChannels.length === 0 ? null :
-                    <div className="channelListCountry" onClick={this.onToggleCountryChannels}>
+                    <div className="channel-list_country" onClick={this.onToggleCountryChannels}>
                         Landesweit
-                        <div className="channelCount">{countryChannels.length}</div>
+                        <div className="channel-count">{countryChannels.length}</div>
                     </div>
                 }
                 {countryChannelNodes}
@@ -120,19 +121,15 @@ export class ChannelListComponent extends React.Component<IChannelListComponentP
     }
 
     private onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({channelFilter: e.target.value});
+        this.setState({ channelFilter: e.target.value });
     };
 
     private onToggleLocalChannels = (e: React.MouseEvent<HTMLDivElement>) => {
-        this.setState({showLocalChannels: !this.state.showLocalChannels});
+        this.setState({ showLocalChannels: !this.state.showLocalChannels });
     };
 
     private onToggleCountryChannels = (e: React.MouseEvent<HTMLDivElement>) => {
-        this.setState({showCountryChannels: !this.state.showCountryChannels});
-    };
-
-    private onNewChannelClick = () => {
-        this.props.onChannelClick(this.state.channelFilter);
+        this.setState({ showCountryChannels: !this.state.showCountryChannels });
     };
 
     private channelListRef = (element: HTMLDivElement) => {

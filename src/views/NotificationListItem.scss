@@ -1,0 +1,43 @@
+.notification-list-item {
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  margin-bottom: 1px;
+  padding: 10px 0;
+
+  &.unread .details {
+    font-weight: bolder;
+  }
+
+  .type {
+    flex: none;
+    font-size: .6em;
+    overflow: hidden;
+    width: 40px;
+  }
+
+  .details {
+    display: flex;
+    flex: 1 1;
+    flex-direction: column;
+    margin: 0 10px;
+    overflow: hidden;
+
+    .info-text {
+      font-size: .8em;
+    }
+
+    .message,
+    .info-text {
+      flex: auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .time {
+    flex: none;
+    font-size: .8em;
+  }
+}

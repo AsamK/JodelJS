@@ -53,61 +53,6 @@ body,
   width: 100%;
 }
 
-.notificationList {
-  background-color: #eee;
-  bottom: 0;
-  left: 0;
-  overflow-y: scroll;
-  position: absolute;
-  right: 0;
-  top: $top-bar-height;
-  z-index: $z-index-sub-layer;
-}
-
-.notification {
-  background-color: white;
-  cursor: pointer;
-  display: flex;
-  margin-bottom: 1px;
-  padding: 10px 0;
-
-  &.unread .details {
-    font-weight: bolder;
-  }
-
-  .type {
-    flex: none;
-    font-size: .6em;
-    overflow: hidden;
-    width: 40px;
-  }
-
-  .details {
-    display: flex;
-    flex: 1 1;
-    flex-direction: column;
-    margin: 0 10px;
-    overflow: hidden;
-
-    .info-text {
-      font-size: .8em;
-    }
-
-    .message,
-    .info-text {
-      flex: auto;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
-
-  .time {
-    flex: none;
-    font-size: .8em;
-  }
-}
-
 .searchContainer {
   background-color: #eee;
   bottom: 0;

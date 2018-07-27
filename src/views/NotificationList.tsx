@@ -1,14 +1,13 @@
-import classnames from 'classnames';
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {INotification} from '../interfaces/INotification';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {selectPostFromNotification} from '../redux/actions';
-import {IJodelAppStore} from '../redux/reducers';
-import {getNotifications} from '../redux/selectors/notifications';
-import {getNotificationDescription} from '../utils/notification.utils';
-import {Time} from './Time';
+import { INotification } from '../interfaces/INotification';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { selectPostFromNotification } from '../redux/actions';
+import { IJodelAppStore } from '../redux/reducers';
+import { getNotifications } from '../redux/selectors/notifications';
+import './NotificationList.scss';
+import { NotificationListItem } from './NotificationListItem';
 
 export interface INotificationListComponentProps {
     notifications: INotification[];
@@ -21,26 +20,16 @@ class NotificationListComponent extends React.PureComponent<INotificationListCom
     }
 
     public render() {
-        const {notifications, selectPost} = this.props;
+        const { notifications, selectPost } = this.props;
         return (
-            <div className="notificationList">
+            <div className="notification-list">
                 {notifications.length === 0 ?
                     'Noch keine Benachrichtigungen vorhanden' :
-                    notifications.map(n =>
-                        <div className={classnames('notification', {unread: !n.read})}
-                             key={n.notification_id}
-                             onClick={() => {
-                                 selectPost(n.post_id);
-                             }}
-                        >
-                            <div className="type">{n.type}</div>
-                            <div className="details">
-                                <div className="info-text">{getNotificationDescription(n)}</div>
-                                <div className="message">{n.message}</div>
-                            </div>
-                            <Time time={n.last_interaction}/>
-                        </div>,
-                    )}
+                    notifications.map(n => <NotificationListItem
+                        notification={n}
+                        selectPost={selectPost}
+                    ></NotificationListItem>,
+                )}
             </div>
         );
     }

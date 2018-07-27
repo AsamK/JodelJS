@@ -1,0 +1,12 @@
+@import '../../style/settings.scss';
+
+.notification-list {
+  background-color: #eee;
+  bottom: 0;
+  left: 0;
+  overflow-y: scroll;
+  position: absolute;
+  right: 0;
+  top: $top-bar-height;
+  z-index: $z-index-sub-layer;
+}

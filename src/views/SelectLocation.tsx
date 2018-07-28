@@ -3,6 +3,7 @@ import { FormattedMessage, FormattedNumber } from 'react-intl';
 import loadable from 'react-loadable';
 
 import { IGeoCoordinates } from '../interfaces/ILocation';
+import './SelectLocation.scss';
 
 const USE_BROWSER_LOCATION = 'USE_BROWSER_LOCATION';
 const MANUAL = 'MANUAL';
@@ -27,8 +28,8 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
     public render() {
         const { location, useBrowserLocation, onLocationRequested } = this.props;
         return (
-            <div className="selectLocation">
-                <div className="locationType">
+            <div className="select-location">
+                <div className="select-location_type">
                     <label>
                         <input type="radio" value={USE_BROWSER_LOCATION} checked={useBrowserLocation}
                             onChange={this.handleChangeRadio} />
@@ -46,7 +47,7 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                         />
                     </label>
                 </div>
-                {useBrowserLocation ? <div className="browserLocation">
+                {useBrowserLocation ? <div className="select-location_browser">
                     <p>
                         <FormattedMessage
                             id="location_current"
@@ -68,7 +69,7 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                         />
                     </a>
                 </div> :
-                    <div className="manualLocation">
+                    <div className="select-location_manual">
                         <LoadableMapComponent
                             location={location}
                             onLocationChanged={this.handleChangeLocation}

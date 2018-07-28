@@ -1,0 +1,28 @@
+.select-location {
+  &_type {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: .5rem;
+
+    label {
+      flex: none;
+      margin-right: 1rem;
+      white-space: nowrap;
+    }
+  }
+
+  &_manual {
+    label {
+      display: block;
+    }
+
+    input {
+      height: 2rem;
+    }
+  }
+
+  a {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}

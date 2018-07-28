@@ -611,37 +611,6 @@ body,
   }
 }
 
-.selectLocation {
-  .locationType {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: .5rem;
-
-    label {
-      flex: none;
-      margin-right: 1rem;
-      white-space: nowrap;
-    }
-  }
-
-  .manualLocation {
-    label {
-      display: block;
-    }
-  }
-
-  .manualLocation {
-    input {
-      height: 2rem;
-    }
-  }
-
-  a {
-    cursor: pointer;
-    text-decoration: underline;
-  }
-}
-
 .hashtag,
 .channel-link,
 .sticky-link {

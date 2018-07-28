@@ -3,6 +3,7 @@ import React from 'react';
 
 import {ToastType} from '../enums/ToastType';
 import {IToast} from '../interfaces/IToast';
+import './Toast.scss';
 
 export interface IToastProps {
     toast: IToast;

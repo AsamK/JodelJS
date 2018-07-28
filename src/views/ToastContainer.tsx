@@ -7,6 +7,7 @@ import {hideToast} from '../redux/actions/toasts.actions';
 import {IJodelAppStore} from '../redux/reducers';
 import {getToasts} from '../redux/selectors/app';
 import {Toast} from './Toast';
+import './ToastContainer.scss';
 
 interface IToastContainerComponentProps {
     toasts: ReadonlyArray<IToast>;

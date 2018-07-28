@@ -1,0 +1,22 @@
+@import '../../style/settings.scss';
+.toast {
+    box-shadow: $toast-shadow;
+    cursor: pointer;
+    left: 0;
+    margin: 10px 20px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    &-message {
+        padding: 10px;
+    }
+    &-error {
+        background-color: red;
+    }
+    &-warning {
+        background-color: orange;
+    }
+    &-info {
+        background-color: white;
+    }
+}

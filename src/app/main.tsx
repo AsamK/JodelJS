@@ -184,11 +184,11 @@ const translationLanguage = translationLocale ? translationLocale.substr(0, 2) :
 let localeData;
 switch (translationLanguage) {
     case 'de':
-        localeData = import('react-intl/locale-data/de');
+        localeData = import(/* webpackChunkName: "locale-data-de" */ 'react-intl/locale-data/de');
         break;
     case 'en':
     default:
-        localeData = import('react-intl/locale-data/en');
+        localeData = import(/* webpackChunkName: "locale-data-en" */ 'react-intl/locale-data/en');
         break;
 }
 

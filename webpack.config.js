@@ -11,8 +11,7 @@ module.exports = function (env, argv) {
 
     return {
         output: {
-            // filename: '[name].[chunkhash].js',
-            filename: '[name].[hash].js',
+            filename: isProduction ? '[name].[contenthash].js' : '[name].js',
             path: __dirname + '/dist'
         },
 
@@ -99,19 +98,23 @@ module.exports = function (env, argv) {
             ]
         },
         plugins: [
-            new CleanWebpackPlugin(['dist']),
-            new MiniCssExtractPlugin({
-                filename: '[name].css',
-                chunkFilename: '[name].[contenthash].css'
-            }),
-            new webpack.HashedModuleIdsPlugin(),
             new HtmlWebpackPlugin({
                 template: 'src/index.html'
             }),
             new CopyWebpackPlugin([
                 'src/manifest.webmanifest'
             ]),
-            new webpack.HotModuleReplacementPlugin(),
+            ...(isProduction ?
+                [
+                    new CleanWebpackPlugin(['dist']),
+                    new MiniCssExtractPlugin({
+                        filename: '[name].css',
+                        chunkFilename: '[name].[contenthash].css'
+                    }),
+                    new webpack.HashedModuleIdsPlugin(),
+                ] : [
+                    new webpack.HotModuleReplacementPlugin()
+                ]),
         ],
         optimization: {
             splitChunks: {
@@ -127,7 +130,6 @@ module.exports = function (env, argv) {
                 new OptimizeCSSAssetsPlugin({})
             ]
         },
-
 
         devServer: {
             inline: true,

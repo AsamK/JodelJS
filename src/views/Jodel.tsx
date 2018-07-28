@@ -29,27 +29,28 @@ import {ToastContainer} from './ToastContainer';
 import {TopBar} from './TopBar';
 
 const LoadableAddPost = loadable({
-    loader: () => import('./AddPost').then(module => module.AddPost),
+    loader: () => import(/* webpackChunkName: "add-post" */ './AddPost').then(module => module.AddPost),
     loading: () => null,
 });
 
 const LoadableNotificationList = loadable({
-    loader: () => import('./NotificationList').then(module => module.NotificationList),
+    loader: () => import(/* webpackChunkName: "notifications" */ './NotificationList')
+        .then(module => module.NotificationList),
     loading: () => null,
 });
 
 const LoadableSearch = loadable({
-    loader: () => import('./Search').then(module => module.Search),
+    loader: () => import(/* webpackChunkName: "search" */ './Search').then(module => module.Search),
     loading: () => null,
 });
 
 const LoadableAppSettings = loadable({
-    loader: () => import('./AppSettings'),
+    loader: () => import(/* webpackChunkName: "settings" */ './AppSettings'),
     loading: () => null,
 });
 
 const LoadableChannelList = loadable({
-    loader: () => import('./ChannelList'),
+    loader: () => import(/* webpackChunkName: "channels" */ './ChannelList'),
     loading: () => null,
 });
 

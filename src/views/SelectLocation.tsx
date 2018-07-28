@@ -8,7 +8,7 @@ const USE_BROWSER_LOCATION = 'USE_BROWSER_LOCATION';
 const MANUAL = 'MANUAL';
 
 const LoadableMapComponent = loadable({
-    loader: () => import('./SelectLocationMap'),
+    loader: () => import(/* webpackChunkName: "map" */ './SelectLocationMap'),
     loading: () => null,
 });
 

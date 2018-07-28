@@ -5,6 +5,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const OfflinePlugin = require('offline-plugin');
 
 module.exports = function (env, argv) {
     const isProduction = argv.mode === 'production';
@@ -112,6 +113,33 @@ module.exports = function (env, argv) {
                         chunkFilename: '[name].[contenthash].css'
                     }),
                     new webpack.HashedModuleIdsPlugin(),
+                    new OfflinePlugin({
+                        excludes: [
+                            '**/*.map',
+                            '**/*.png',
+                        ],
+                        autoUpdate: true,
+                        ServiceWorker: {
+                            cacheName: 'jodel',
+                            events: true,
+                        },
+                        version: '[hash]',
+                        caches: {
+                            main: [
+                                'index.html',
+                                '*.webmanifest',
+                                'runtime~*',
+                                'main.*',
+                                'vendors~main.*',
+                            ],
+                            additional: [
+                                ':rest:',
+                            ],
+                            optional: [
+                                'locale-data-*',
+                            ],
+                        },
+                    }),
                 ] : [
                     new webpack.HotModuleReplacementPlugin()
                 ]),

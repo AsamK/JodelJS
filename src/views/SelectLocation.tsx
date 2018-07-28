@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import loadable from 'react-loadable';
 
 import { IGeoCoordinates } from '../interfaces/ILocation';
@@ -51,8 +51,16 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                         <FormattedMessage
                             id="location_current"
                             defaultMessage="Current location"
-                        />:
-                        {!location ? '(Unbekannt)' : location.latitude + ', ' + location.longitude}</p>
+                        />:{' '}
+                        {!location ? '(Unbekannt)' :
+                            <>
+                                <FormattedNumber value={location.latitude}
+                                ></FormattedNumber>,{' '}
+                                <FormattedNumber value={location.longitude}
+                                ></FormattedNumber>
+                            </>
+                        }
+                    </p>
                     <a onClick={onLocationRequested}>
                         <FormattedMessage
                             id="location_refresh"

@@ -6,8 +6,6 @@ import DocumentTitle from 'react-document-title';
 import ReactDOM from 'react-dom';
 import {hot} from 'react-hot-loader';
 import {addLocaleData, IntlProvider} from 'react-intl';
-import de from 'react-intl/locale-data/de';
-import en from 'react-intl/locale-data/en';
 import {Provider} from 'react-redux';
 import {applyMiddleware, compose, createStore, Middleware} from 'redux';
 import freeze from 'redux-freeze';
@@ -175,8 +173,6 @@ window.onpopstate = event => {
     store.dispatch(replaceViewState(event.state));
 };
 
-addLocaleData([...en, ...de]);
-
 const messages: { [lang: string]: { [key: string]: string } } = {
     de: translationDe,
     en: {},
@@ -185,20 +181,38 @@ const messages: { [lang: string]: { [key: string]: string } } = {
 const translationLocale = navigator.language || (navigator as any).userLanguage;
 const translationLanguage = translationLocale ? translationLocale.substr(0, 2) : 'en';
 
+let localeData;
+switch (translationLanguage) {
+    case 'de':
+        localeData = import('react-intl/locale-data/de');
+        break;
+    case 'en':
+    default:
+        localeData = import('react-intl/locale-data/en');
+        break;
+}
+
 const TextComponent = (props: any) => props.children;
 
-const App = hot(module)(() => <IntlProvider
-        locale={translationLocale}
-        messages={messages[translationLanguage]}
-        textComponent={TextComponent}
-    >
-        <Provider store={store}>
-            <DocumentTitle title="Jodel Unofficial WebApp">
-                <Jodel/>
-            </DocumentTitle>
-        </Provider>
-    </IntlProvider>,
-);
-ReactDOM.render(
-    <App/>
-    , document.getElementById('content'));
+const App = () => <IntlProvider
+    locale={translationLocale}
+    messages={messages[translationLanguage]}
+    textComponent={TextComponent}
+>
+    <Provider store={store}>
+        <DocumentTitle title="Jodel Unofficial WebApp">
+            <Jodel />
+        </DocumentTitle>
+    </Provider>
+</IntlProvider>;
+
+const HotloadableApp = hot(module)(App);
+
+localeData
+    .then(data => addLocaleData(data.default))
+    .then(() => {
+        ReactDOM.render(
+            <HotloadableApp />,
+            document.getElementById('content'),
+        );
+    });

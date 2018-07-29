@@ -473,35 +473,6 @@ body,
   }
 }
 
-.addPost {
-  background-color: #eee;
-  bottom: 0;
-  display: none;
-  left: 0;
-  position: fixed;
-  right: 0;
-  text-align: center;
-  top: 0;
-  z-index: $z-index-overlay;
-
-  &.visible {
-    display: block;
-  }
-
-  textarea {
-    height: 10em;
-    width: 100%;
-  }
-
-  img {
-    height: 100px;
-  }
-
-  .colorPicker {
-    color: white;
-  }
-}
-
 .topBar {
   background-color: #eee;
   box-shadow: $bar-shadow;

@@ -1,8 +1,8 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 
-import {IApiConfig} from '../../interfaces/IApiConfig';
-import {IJodelAction} from '../../interfaces/IJodelAction';
-import {IToken} from '../../interfaces/IToken';
+import { IApiConfig } from '../../interfaces/IApiConfig';
+import { IJodelAction } from '../../interfaces/IJodelAction';
+import { IToken } from '../../interfaces/IToken';
 import {
     SET_CONFIG,
     SET_COUNTRY_CHANNELS,
@@ -14,6 +14,7 @@ import {
     SET_SUGGESTED_HASHTAGS,
     SET_TOKEN,
     SET_TOKEN_PENDING,
+    SET_USER_TYPE_RESPONSE,
 } from '../actions/action.consts';
 
 export const ACCOUNT_VERSION = 3;
@@ -27,7 +28,7 @@ export function migrateAccount(storedState: IAccountStore, oldVersion: number): 
         newState.localChannels = [];
     }
     newState.refreshingToken = false;
-    return {...storedState, ...newState};
+    return { ...storedState, ...newState };
 }
 
 export type IAccountStore = Readonly<IAccountStoreMutable>;
@@ -100,6 +101,16 @@ function config(state: IApiConfig | null = null, action: IJodelAction): typeof s
     switch (action.type) {
         case SET_CONFIG:
             return action.payload.config;
+        case SET_USER_TYPE_RESPONSE:
+            if (!state) {
+                return state;
+            }
+
+            return {
+                ...state,
+                can_change_type: false,
+                user_type: action.payload.userType,
+            };
         default:
             return state;
     }

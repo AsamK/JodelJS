@@ -1,10 +1,12 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 
 import Settings from '../app/settings';
-import {IApiExperiment} from '../interfaces/IApiConfig';
-import {IGeoCoordinates, ILocation} from '../interfaces/ILocation';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
+import { UserType } from '../enums/UserType';
+import { IApiExperiment } from '../interfaces/IApiConfig';
+import { IGeoCoordinates, ILocation } from '../interfaces/ILocation';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import {
     deleteHome,
     getImageCaptcha,
@@ -15,13 +17,14 @@ import {
     setUseHomeLocation,
     updateLocation,
 } from '../redux/actions';
-import {setInternationalFeed} from '../redux/actions/api';
-import {IJodelAppStore} from '../redux/reducers';
-import {getDeviceUid, getLocation} from '../redux/selectors/app';
-import {SelectLocation} from './SelectLocation';
-import {VerificationImageCaptcha} from './VerificationImageCaptcha';
+import { setInternationalFeed, updateUserType } from '../redux/actions/api';
+import { IJodelAppStore } from '../redux/reducers';
+import { canChangeUserType, getDeviceUid, getLocation } from '../redux/selectors/app';
+import { SelectLocation } from './SelectLocation';
+import { VerificationImageCaptcha } from './VerificationImageCaptcha';
 
 interface IAppSettingsStateProps {
+    canChangeUserType: boolean;
     deviceUid: string | null;
     location: ILocation | null;
     homeSet: boolean;
@@ -33,7 +36,7 @@ interface IAppSettingsStateProps {
     imageUrl: string | null;
     imageWidth: number | null;
     experiments: IApiExperiment[];
-    user_type: string | null;
+    user_type: UserType | null;
     moderator: boolean;
     feedInternationalized: boolean;
     feedInternationalizable: boolean;
@@ -41,6 +44,7 @@ interface IAppSettingsStateProps {
 }
 
 interface IAppSettingsDispatchProps {
+    updateUserType: (userType: UserType) => void;
     showHome: (useHome: boolean) => void;
     updateLocation: () => void;
     getImageCaptcha: () => void;
@@ -75,9 +79,9 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
             <h3>Standort:</h3>
             <div className="block">
                 <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
-                                location={this.props.location}
-                                onChange={this.locationChange}
-                                onLocationRequested={this.props.updateLocation}
+                    location={this.props.location}
+                    onChange={this.locationChange}
+                    onLocationRequested={this.props.updateLocation}
                 />
                 <h4>
                     Heimat
@@ -87,8 +91,8 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
                         <div>
                             <label>
                                 <input type="checkbox" className="homeLink"
-                                       onChange={() => this.props.showHome(!this.props.useHomeLocation)}
-                                       checked={this.props.useHomeLocation}
+                                    onChange={() => this.props.showHome(!this.props.useHomeLocation)}
+                                    checked={this.props.useHomeLocation}
                                 >
                                 </input>
                                 Heimat ({this.props.homeName}) verwenden
@@ -115,14 +119,14 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
             </div>
             <h4>
                 Internationale/Reise Jodel {!this.props.feedInternationalizable ?
-                '(Aus Gründen nicht aktivierbar)' :
-                undefined}
+                    '(Aus Gründen nicht aktivierbar)' :
+                    undefined}
             </h4>
             <div className="block">
                 <label>
                     <input type="checkbox" className="internationalFeedCheckbox"
-                           onChange={() => this.props.setInternationalFeed(!this.props.feedInternationalized)}
-                           checked={this.props.feedInternationalized}
+                        onChange={() => this.props.setInternationalFeed(!this.props.feedInternationalized)}
+                        checked={this.props.feedInternationalized}
                     >
                     </input>
                     Internationale Jodel aktivieren
@@ -135,17 +139,51 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
                 <div className="accountVerification">
                     {!this.props.verified && this.props.imageUrl && this.props.imageWidth ?
                         <VerificationImageCaptcha imageUrl={this.props.imageUrl} imageWidth={this.props.imageWidth}
-                                                  onFinishedClick={answer => {
-                                                      this.props.sendVerificationAnswer(answer);
-                                                  }
-                                                  }/>
+                            onFinishedClick={answer => {
+                                this.props.sendVerificationAnswer(answer);
+                            }
+                            } />
                         : 'Dein Jodel Konto ist verifiziert'}
                 </div>
                 <div className="features">
                     Features: {this.props.experiments.map(e => e.features.join(', ')).join(', ')}
                 </div>
                 <div className="userType">
-                    Benutzertyp: {this.props.user_type || 'Unbekannt'}
+                    <FormattedMessage
+                        id="user_type"
+                        defaultMessage="User type"
+                    />:
+                    <select
+                        value={this.props.user_type || undefined}
+                        disabled={!this.props.canChangeUserType}
+                        onChange={e => this.props.updateUserType(e.target.value as UserType)}
+                    >
+                        <option value={undefined}>-</option>
+                        <option value={UserType.STUDENT}><FormattedMessage
+                            id="user_type.student"
+                            defaultMessage="Student"
+                        /></option>
+                        <option value={UserType.APPRENTICE}><FormattedMessage
+                            id="user_type.apprentice"
+                            defaultMessage="Apprentice"
+                        /></option>
+                        <option value={UserType.EMPLOYEE}><FormattedMessage
+                            id="user_type.employee"
+                            defaultMessage="Employee"
+                        /></option>
+                        <option value={UserType.HIGH_SCHOOL}><FormattedMessage
+                            id="user_type.high_school"
+                            defaultMessage="High school"
+                        /></option>
+                        <option value={UserType.HIGH_SCHOOL_GRADUATE}><FormattedMessage
+                            id="user_type.high_school_graduate"
+                            defaultMessage="High school graduate"
+                        /></option>
+                        <option value={UserType.OTHER}><FormattedMessage
+                            id="user_type.other"
+                            defaultMessage="Other"
+                        /></option>
+                    </select>
                     {this.props.moderator ? ', Moderator' : ', kein Moderator'}
                 </div>
                 <div className="pendingDeletion">
@@ -157,12 +195,12 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
                 </div>
             </div>
             <button className="closeButton"
-                    onClick={() => {
-                        if (this.props.location) {
-                            this.props.setLocation(this.props.location);
-                        }
-                        window.history.back();
-                    }}>
+                onClick={() => {
+                    if (this.props.location) {
+                        this.props.setLocation(this.props.location);
+                    }
+                    window.history.back();
+                }}>
                 Schließen
             </button>
         </div>;
@@ -188,6 +226,7 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
 
 const mapStateToProps = (state: IJodelAppStore): IAppSettingsStateProps => {
     return {
+        canChangeUserType: canChangeUserType(state),
         deviceUid: getDeviceUid(state),
         experiments: state.account.config ? state.account.config.experiments : [],
         feedInternationalizable: state.account.config ? state.account.config.feedInternationalizable : false,
@@ -218,6 +257,7 @@ const mapDispatchToProps = (dispatch: JodelThunkDispatch): IAppSettingsDispatchP
         setUseBrowserLocation: (useBrowserLocation: boolean) => dispatch(setUseBrowserLocation(useBrowserLocation)),
         showHome: (useHome: boolean) => dispatch(setUseHomeLocation(useHome)),
         updateLocation: () => dispatch(updateLocation()),
+        updateUserType: userType => dispatch(updateUserType(userType)),
     };
 };
 

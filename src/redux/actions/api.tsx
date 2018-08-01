@@ -4,14 +4,17 @@ import {Color} from '../../enums/Color';
 import {PostListSortType} from '../../enums/PostListSortType';
 import {Section, SectionEnum} from '../../enums/Section';
 import {ToastType} from '../../enums/ToastType';
+import { UserType } from '../../enums/UserType';
 import {VoteType} from '../../enums/VoteType';
 import {IApiPostDetails} from '../../interfaces/IApiPostDetails';
 import {IApiPostListPost} from '../../interfaces/IApiPostListPost';
+import { IJodelAction } from '../../interfaces/IJodelAction';
 import {JodelThunkAction, JodelThunkDispatch} from '../../interfaces/JodelThunkAction';
 import {setPermissionDenied, setToken, shareLink, showSettings, switchPostSection, updatePosts} from '../actions';
 import {IJodelAppStore} from '../reducers';
 import {getPost} from '../reducers/entities';
 import {getLocation} from '../selectors/app';
+import { SET_USER_TYPE_RESPONSE } from './action.consts';
 import {
     _closeSticky,
     _selectPost,
@@ -822,5 +825,24 @@ export function showPictureOfDay(): JodelThunkAction {
                     dispatch(updatePost(res.post_id, true));
                 },
                 err => handleNetworkErrors(dispatch, getState, err));
+    };
+}
+
+export function updateUserType(userType: UserType): JodelThunkAction {
+    return (dispatch, getState, {api}) => {
+        api.apiSetUserProfile(userType)
+            .then(res => {
+                    dispatch(updateUserTypeResponse(userType));
+                },
+                err => handleNetworkErrors(dispatch, getState, err));
+    };
+}
+
+export function updateUserTypeResponse(userType: UserType): IJodelAction {
+    return {
+        payload: {
+            userType,
+        },
+        type: SET_USER_TYPE_RESPONSE,
     };
 }

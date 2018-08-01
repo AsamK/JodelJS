@@ -1,37 +1,37 @@
 import createHmac from 'create-hmac';
-import {Store} from 'redux';
+import { Store } from 'redux';
 import request from 'superagent';
 
-import {ApiAction} from '../enums/ApiAction';
-import {Color} from '../enums/Color';
-import {PostListPostType} from '../enums/PostListPostType';
-import {PostListSortType} from '../enums/PostListSortType';
-import {UserType} from '../enums/UserType';
-import {IApiChannelPostListCombo} from '../interfaces/IApiChannelPostListCombo';
-import {IApiChannelsMeta} from '../interfaces/IApiChannelsMeta';
-import {IApiConfig} from '../interfaces/IApiConfig';
-import {IApiAndroidAccount, IApiGcmAccount} from '../interfaces/IApiGcmAccount';
-import {IApiGcmVerification} from '../interfaces/IApiGcmVerification';
-import {IApiHashtagPostListCombo} from '../interfaces/IApiHashtagPostListCombo';
-import {IApiImageCaptcha} from '../interfaces/IApiImageCaptcha';
-import {IApiKarma} from '../interfaces/IApiKarma';
-import {IApiLocationPostListCombo} from '../interfaces/IApiLocationPostListCombo';
-import {IApiNotificationAvailable} from '../interfaces/IApiNotificationAvailable';
-import {IApiNotifications} from '../interfaces/IApiNotifications';
-import {IApiPin} from '../interfaces/IApiPin';
-import {IApiPostAdded} from '../interfaces/IApiPostAdded';
-import {IApiPostDetails} from '../interfaces/IApiPostDetails';
-import {IApiPostDetailsPost} from '../interfaces/IApiPostDetailsPost';
-import {IApiPostListCombo} from '../interfaces/IApiPostListCombo';
-import {IApiPostListSingle} from '../interfaces/IApiPostListSingle';
-import {IApiRecommendedChannels} from '../interfaces/IApiRecommendedChannels';
-import {IApiRefreshToken} from '../interfaces/IApiRefreshToken';
-import {IApiRegister} from '../interfaces/IApiRegister';
-import {IApiShare} from '../interfaces/IApiShare';
-import {IApiVerify} from '../interfaces/IApiVerify';
-import {IApiVote} from '../interfaces/IApiVote';
-import {IJodelAppStore} from '../redux/reducers';
-import {getAccessToken, getIsRefreshingToken} from '../redux/selectors/app';
+import { ApiAction } from '../enums/ApiAction';
+import { Color } from '../enums/Color';
+import { PostListPostType } from '../enums/PostListPostType';
+import { PostListSortType } from '../enums/PostListSortType';
+import { UserType } from '../enums/UserType';
+import { IApiChannelPostListCombo } from '../interfaces/IApiChannelPostListCombo';
+import { IApiChannelsMeta } from '../interfaces/IApiChannelsMeta';
+import { IApiConfig } from '../interfaces/IApiConfig';
+import { IApiAndroidAccount, IApiGcmAccount } from '../interfaces/IApiGcmAccount';
+import { IApiGcmVerification } from '../interfaces/IApiGcmVerification';
+import { IApiHashtagPostListCombo } from '../interfaces/IApiHashtagPostListCombo';
+import { IApiImageCaptcha } from '../interfaces/IApiImageCaptcha';
+import { IApiKarma } from '../interfaces/IApiKarma';
+import { IApiLocationPostListCombo } from '../interfaces/IApiLocationPostListCombo';
+import { IApiNotificationAvailable } from '../interfaces/IApiNotificationAvailable';
+import { IApiNotifications } from '../interfaces/IApiNotifications';
+import { IApiPin } from '../interfaces/IApiPin';
+import { IApiPostAdded } from '../interfaces/IApiPostAdded';
+import { IApiPostDetails } from '../interfaces/IApiPostDetails';
+import { IApiPostDetailsPost } from '../interfaces/IApiPostDetailsPost';
+import { IApiPostListCombo } from '../interfaces/IApiPostListCombo';
+import { IApiPostListSingle } from '../interfaces/IApiPostListSingle';
+import { IApiRecommendedChannels } from '../interfaces/IApiRecommendedChannels';
+import { IApiRefreshToken } from '../interfaces/IApiRefreshToken';
+import { IApiRegister } from '../interfaces/IApiRegister';
+import { IApiShare } from '../interfaces/IApiShare';
+import { IApiVerify } from '../interfaces/IApiVerify';
+import { IApiVote } from '../interfaces/IApiVote';
+import { IJodelAppStore } from '../redux/reducers';
+import { getAccessToken, getIsRefreshingToken } from '../redux/selectors/app';
 import Settings from './settings';
 
 const API_PATH_V2 = '/v2';
@@ -74,20 +74,20 @@ export class JodelApi {
     // }
 
     public apiGetPostsCombo(latitude: number, longitude: number, stickies = true, home: boolean, skipHometown: boolean,
-                            channels: boolean): Promise<IApiLocationPostListCombo> {
+        channels: boolean): Promise<IApiLocationPostListCombo> {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/posts/location/combo', {
-                channels,
-                home,
-                lat: latitude,
-                lng: longitude,
-                skipHometown,
-                stickies,
-            })
+            channels,
+            home,
+            lat: latitude,
+            lng: longitude,
+            skipHometown,
+            stickies,
+        })
             .then(res => res.body);
     }
 
     public apiGetPosts(sortType: PostListSortType, afterPostId: string | undefined, latitude: number, longitude: number,
-                       home: boolean, channels: boolean, postType?: PostListPostType): Promise<IApiPostListSingle> {
+        home: boolean, channels: boolean, postType?: PostListPostType): Promise<IApiPostListSingle> {
         let apiSortType;
         switch (sortType) {
             case PostListSortType.RECENT:
@@ -103,13 +103,13 @@ export class JodelApi {
                 throw new Error('Unknown sort type');
         }
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/location/' + apiSortType, {
-                after: afterPostId,
-                channels,
-                home,
-                lat: latitude,
-                lng: longitude,
-                type: postType,
-            })
+            after: afterPostId,
+            channels,
+            home,
+            lat: latitude,
+            lng: longitude,
+            type: postType,
+        })
             .then(res => res.body);
     }
 
@@ -134,46 +134,46 @@ export class JodelApi {
                 throw new Error('Unknown sort type');
         }
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/' + type, {
-                limit,
-                skip,
-            })
+            limit,
+            skip,
+        })
             .then(res => res.body);
     }
 
     public apiGetPostsMineReplies(skip?: number, limit?: number): Promise<IApiPostListSingle> {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/replies', {
-                limit,
-                skip,
-            })
+            limit,
+            skip,
+        })
             .then(res => res.body);
     }
 
     public apiGetPostsMinePinned(skip?: number, limit?: number): Promise<IApiPostListSingle> {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/pinned', {
-                limit,
-                skip,
-            })
+            limit,
+            skip,
+        })
             .then(res => res.body);
     }
 
     public apiGetPostsMineVotes(skip?: number, limit?: number): Promise<IApiPostListSingle> {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/posts/mine/votes', {
-                limit,
-                skip,
-            })
+            limit,
+            skip,
+        })
             .then(res => res.body);
     }
 
     public apiGetPostsChannelCombo(channel: string,
-                                   home = false): Promise<IApiChannelPostListCombo> {
+        home = false): Promise<IApiChannelPostListCombo> {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/posts/channel/combo',
-            {channel, home},
+            { channel, home },
             {})
             .then(res => res.body);
     }
 
     public apiGetPostsChannel(sortType: PostListSortType, afterPostId: string | undefined,
-                              channel: string, home = false): Promise<IApiPostListSingle> {
+        channel: string, home = false): Promise<IApiPostListSingle> {
         let type;
         switch (sortType) {
             case PostListSortType.RECENT:
@@ -198,15 +198,15 @@ export class JodelApi {
     }
 
     public apiGetPostsHashtagCombo(hashtag: string,
-                                   home = false): Promise<IApiHashtagPostListCombo> {
+        home = false): Promise<IApiHashtagPostListCombo> {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/posts/hashtag/combo',
-            {hashtag, home},
+            { hashtag, home },
             {})
             .then(res => res.body);
     }
 
     public apiGetPostsHashtag(sortType: PostListSortType, afterPostId: string | undefined,
-                              hashtag: string, home = false): Promise<IApiPostListSingle> {
+        hashtag: string, home = false): Promise<IApiPostListSingle> {
         let type;
         switch (sortType) {
             case PostListSortType.RECENT:
@@ -235,14 +235,14 @@ export class JodelApi {
     // }
 
     public apiGetPostDetails(postId: string, details = true, nextReply: string | undefined,
-                             reversed = false, ojFilter = false, bookmark = false): Promise<IApiPostDetails> {
+        reversed = false, ojFilter = false, bookmark = false): Promise<IApiPostDetails> {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/posts/' + postId + '/details', {
-                bookmark,
-                details,
-                oj_filter: ojFilter,
-                reply: nextReply,
-                reversed,
-            })
+            bookmark,
+            details,
+            oj_filter: ojFilter,
+            reply: nextReply,
+            reversed,
+        })
             .then(res => res.body);
     }
 
@@ -253,14 +253,14 @@ export class JodelApi {
 
     public apiUpVote(postId: string): Promise<IApiVote> {
         return this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/upvote', {},
-            {reason_code: -1})
+            { reason_code: -1 })
             .then(res => res.body);
     }
 
     public apiDownVote(postId: string): Promise<IApiVote> {
         return this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/downvote',
             {},
-            {reason_code: -1})
+            { reason_code: -1 })
             .then(res => res.body);
     }
 
@@ -283,7 +283,7 @@ export class JodelApi {
     }
 
     public apiFollowChannel(channel: string): Promise<void> {
-        return this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V3 + '/user/followChannel', {channel},
+        return this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V3 + '/user/followChannel', { channel },
             {})
             .then(res => res.body);
     }
@@ -301,41 +301,42 @@ export class JodelApi {
     }
 
     public apiGetFollowedChannelsMeta(channels: { [channelName: string]: number },
-                                      home = false): Promise<IApiChannelsMeta> {
+        home = false): Promise<IApiChannelsMeta> {
         // Format: {"channelName": timestamp, "channel2": timestamp2}
         return this.jodelRequestWithAuth('POST', Settings.API_SERVER + API_PATH_V3 + '/user/followedChannelsMeta',
-            {home},
+            { home },
             channels)
             .then(res => res.body);
     }
 
     public apiGetSuggestedHashtags(home = false) {
-        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/hashtags/suggested', {home});
+        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/hashtags/suggested', { home });
     }
 
+    // TODO https://jodel-app.com/legal/eula-pop/en/
     public apiAddPost(channel: string | undefined, ancestorPostId: string | undefined,
-                      color: Color | undefined, locAccuracy: number, latitude: number, longitude: number,
-                      city: string, country: string, message: string, image: string | undefined,
-                      toHome = false): Promise<IApiPostAdded> {
+        color: Color | undefined, locAccuracy: number, latitude: number, longitude: number,
+        city: string, country: string, message: string, image: string | undefined,
+        toHome = false): Promise<IApiPostAdded> {
         // image must be base64 encoded string
         return this.jodelRequestWithAuth('POST', Settings.API_SERVER + API_PATH_V3 + '/posts/', {}, {
-                ancestor: ancestorPostId,
-                channel,
-                color,
-                image,
-                // has_drawing,
-                // has_hashtag,
-                location: {
-                    city,
-                    country,
-                    loc_accuracy: locAccuracy,
-                    loc_coordinates: {lat: latitude, lng: longitude},
-                    name: city,
-                },
-                // mention
-                message,
-                to_home: toHome,
-            })
+            ancestor: ancestorPostId,
+            channel,
+            color,
+            image,
+            // has_drawing,
+            // has_hashtag,
+            location: {
+                city,
+                country,
+                loc_accuracy: locAccuracy,
+                loc_coordinates: { lat: latitude, lng: longitude },
+                name: city,
+            },
+            // mention
+            message,
+            to_home: toHome,
+        })
             .then(res => res.body);
     }
 
@@ -375,7 +376,7 @@ export class JodelApi {
     }
 
     public apiSetLocation(latitude: number, longitude: number, city: string,
-                          country: string): Promise<void> {
+        country: string): Promise<void> {
         const data = {
             location: {
                 city,
@@ -393,7 +394,7 @@ export class JodelApi {
     }
 
     public apiSetHome(latitude: number, longitude: number, city: string,
-                      country: string): Promise<void> {
+        country: string): Promise<void> {
         const data = {
             location: {
                 city,
@@ -449,7 +450,7 @@ export class JodelApi {
     }
 
     public apiGetAccessToken(deviceUid: string, latitude = 0.0, longitude = 0.0, city: string,
-                             country: string): Promise<IApiRegister> {
+        country: string): Promise<IApiRegister> {
         const data = {
             client_id: Settings.CLIENT_ID,
             device_uid: deviceUid,
@@ -468,7 +469,7 @@ export class JodelApi {
     }
 
     public apiRefreshAccessToken(distinctId: string,
-                                 refreshToken: string): Promise<IApiRefreshToken> {
+        refreshToken: string): Promise<IApiRefreshToken> {
         const data = {
             current_client_id: Settings.CLIENT_ID,
             distinct_id: distinctId,
@@ -501,7 +502,7 @@ export class JodelApi {
      * @param language Language name in ISO 639-1 format, e.g. 'de-de'
      */
     public apiSetUserLanguage(language: string) {
-        return this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V3 + '/user/language', {}, {language});
+        return this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V3 + '/user/language', {}, { language });
     }
 
     /**
@@ -510,12 +511,13 @@ export class JodelApi {
      * @param {Number} [age] User's age
      * @returns {*}
      */
-    public apiSetUserProfile(userType: UserType, age = 0) {
+    public apiSetUserProfile(userType: UserType | null, age = 0): Promise<void> {
         const data = {
             age,
             user_type: userType,
         };
-        return this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V3 + '/user/profile', {}, data);
+        return this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V3 + '/user/profile', {}, data)
+            .then(res => res.body);
     }
 
     /**
@@ -530,12 +532,12 @@ export class JodelApi {
     }
 
     public apiSearchPosts(message: string, suggested = false,
-                          home = false): Promise<request.Response> {
+        home = false): Promise<request.Response> {
         const data = {
             message,
             suggested,
         };
-        return this.jodelRequestWithAuth('POST', Settings.API_SERVER + API_PATH_V3 + '/posts/search', {home}, data);
+        return this.jodelRequestWithAuth('POST', Settings.API_SERVER + API_PATH_V3 + '/posts/search', { home }, data);
     }
 
     public apiStickyPostClose(stickyPostId: string): Promise<void> {
@@ -601,7 +603,7 @@ export class JodelApi {
     }
 
     private computeSignature(auth: string | undefined, method: string, url: string, timestamp: string,
-                             query: { [key: string]: any }, data: string) {
+        query: { [key: string]: any }, data: string) {
         const u = this.parseUrl(url);
         let path = u.pathname;
         if (!path.startsWith('/')) {
@@ -621,18 +623,18 @@ export class JodelApi {
     }
 
     private async jodelRequestWithAuth(method: string, url: string, query: { [key: string]: any },
-                                       data?: object | string): Promise<request.Response> {
+        data?: object | string): Promise<request.Response> {
         const auth = await this.getAuth();
         return this.jodelRequest(auth, method, url, query, data);
     }
 
     private jodelRequestWithoutAuth(method: string, url: string, query: { [key: string]: any },
-                                    data?: object | string): Promise<request.Response> {
+        data?: object | string): Promise<request.Response> {
         return this.jodelRequest(undefined, method, url, query, data);
     }
 
     private jodelRequest(auth: string | undefined, method: string, url: string, query: { [key: string]: any },
-                         data?: object | string): Promise<request.Response> {
+        data?: object | string): Promise<request.Response> {
         const dataString = data ? JSON.stringify(data) : '';
         const timestamp = new Date().toISOString();
         const sig = this.computeSignature(auth, method, url, timestamp, query, dataString);

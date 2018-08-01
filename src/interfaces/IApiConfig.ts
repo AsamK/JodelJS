@@ -1,3 +1,5 @@
+import { UserType } from '../enums/UserType';
+
 export interface IApiExperiment {
     features: string[];
     group: string;
@@ -5,6 +7,8 @@ export interface IApiExperiment {
 }
 
 export interface IApiConfig {
+    age: number;
+    can_change_type: boolean;
     channels_follow_limit: number;
     experiments: IApiExperiment[];
     feedInternationalized: boolean;
@@ -24,6 +28,6 @@ export interface IApiConfig {
     triple_feed_enabled: boolean;
     user_blocked: boolean;
     user_profiling_types: string[];
-    user_type: string | null;
+    user_type: UserType | null;
     verified: boolean;
 }

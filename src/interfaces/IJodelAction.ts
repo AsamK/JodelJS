@@ -1,5 +1,6 @@
 import {PostListSortType} from '../enums/PostListSortType';
 import {Section} from '../enums/Section';
+import { UserType } from '../enums/UserType';
 import {VoteType} from '../enums/VoteType';
 import {
     CLOSE_STICKY,
@@ -29,6 +30,7 @@ import {
     SET_TOKEN_PENDING,
     SET_USE_BROWSER_LOCATION,
     SET_USE_HOME_LOCATION,
+    SET_USER_TYPE_RESPONSE,
     SHARE_LINK,
     SHARE_LINK_CLOSE,
     SHOW_ADD_POST,
@@ -177,6 +179,10 @@ export interface IPayloadHideToast {
     toastId: number;
 }
 
+export interface IPayloadUserType {
+    userType: UserType;
+}
+
 export type IJodelAction =
     { type: typeof CLOSE_STICKY; payload: IPayloadStickyId; } |
     { type: typeof HIDE_TOAST; payload: IPayloadHideToast; } |
@@ -215,5 +221,7 @@ export type IJodelAction =
     { type: typeof SHOW_TOAST; payload: IPayloadShowToast; } |
     { type: typeof SWITCH_POST_LIST_SORT_TYPE | 'bar'; payload: IPayloadListSort; } |
     { type: typeof SWITCH_POST_SECTION; payload: IPayloadSection; } |
-    { type: typeof VOTED_POST; payload: IPayloadVoted; }
+    { type: typeof VOTED_POST; payload: IPayloadVoted; } |
+    { type: typeof SET_USER_TYPE_RESPONSE; payload: IPayloadUserType; } |
+    never
     ;

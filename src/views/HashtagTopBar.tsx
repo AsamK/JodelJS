@@ -7,7 +7,7 @@ import {getSelectedHashtagName} from '../redux/selectors/view';
 import BackButton from './BackButton';
 
 export interface IHashtagTopBarProps {
-    hashtag: string;
+    hashtag: string | undefined;
 }
 
 const HashtagTopBarComponent = ({hashtag}: IHashtagTopBarProps) => {

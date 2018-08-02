@@ -17,7 +17,6 @@ interface IPostDetailsPropsComponent {
     postChildren: IPost[] | null;
     locationKnown: boolean;
     onAddClick: (e: React.MouseEvent<HTMLElement>) => void;
-    onPostClick: () => void;
     onLoadMore: () => void;
 }
 
@@ -56,7 +55,7 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
     }
 
     public render() {
-        const {post, postChildren, locationKnown, onPostClick, onAddClick} = this.props;
+        const {post, postChildren, locationKnown, onAddClick} = this.props;
         if (!post) {
             return null;
         }
@@ -64,8 +63,8 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
 
         return (
             <div className="postDetails" ref={c => this.scrollable = c}>
-                <Post post={post} onPostClick={onPostClick}/>
-                <PostList parentPost={post} posts={childPosts} onPostClick={onPostClick}/>
+                <Post post={post} onPostClick={this.onPostClick}/>
+                <PostList parentPost={post} posts={childPosts} onPostClick={this.onPostClick}/>
                 {locationKnown ? <AddButton onClick={onAddClick}/> : ''}
                 <ScrollToBottomButton onClick={this.scrollToBottom}/>
             </div>
@@ -91,9 +90,13 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
             this.scrollable.scrollTop = this.scrollable.scrollHeight;
         }
     };
+
+    private onPostClick = () => {
+        // Do nothing
+    };
 }
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: {}): Partial<IPostDetailsPropsComponent> => {
+const mapStateToProps = (state: IJodelAppStore) => {
     return {
         locationKnown: isLocationKnown(state),
         post: getSelectedPost(state),
@@ -101,8 +104,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: {}): Partial<IPostDeta
     };
 };
 
-const mapDispatchToProps = (dispatch: JodelThunkDispatch,
-                            ownProps: {}): Partial<IPostDetailsPropsComponent> => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
         onAddClick() {
             dispatch(showAddPost(true));

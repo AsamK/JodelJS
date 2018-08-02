@@ -10,7 +10,7 @@ import {getStickies} from '../redux/selectors/posts';
 import {Sticky} from './Sticky';
 
 export interface IStickyListProps {
-    stickies: IApiSticky[];
+    stickies: ReadonlyArray<IApiSticky>;
     clickStickyClose: (sticky: string) => void;
     clickStickyLink: (postId: string) => void;
     clickStickyButton: (postId: string, buttonTitle: string) => void;

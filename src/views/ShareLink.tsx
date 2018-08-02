@@ -35,13 +35,13 @@ function ShareLink({link}: IShareLinkProps) {
     </div>;
 }
 
-const mapStateToProps = (state: IJodelAppStore): Partial<IShareLinkProps> => {
+const mapStateToProps = (state: IJodelAppStore) => {
     return {
         link: getShareLink(state),
     };
 };
 
-const mapDispatchToProps = (dispatch: JodelThunkDispatch): Partial<IShareLinkProps> => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {};
 };
 

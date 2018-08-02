@@ -6,7 +6,7 @@ import {searchPosts} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
 
 interface ISearchComponentProps {
-    suggestedHashtags: string[];
+    suggestedHashtags: ReadonlyArray<string>;
     searchPosts: (message: string, suggested: boolean) => void;
 }
 

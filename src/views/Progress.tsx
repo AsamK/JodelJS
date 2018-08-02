@@ -44,7 +44,7 @@ class Progress extends React.PureComponent<IProgressProps> {
     }
 }
 
-function mapStateToProps(state: IJodelAppStore): Partial<IProgressProps> {
+function mapStateToProps(state: IJodelAppStore) {
     return {
         isFetching: getIsSelectedSectionFetching(state),
     };

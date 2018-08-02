@@ -17,7 +17,13 @@ function convertImageUrlToImage(url: string) {
 function convertBlobToDataUrl(blob: Blob) {
     return new Promise<string>((resolve, reject) => {
         const fileReader = new FileReader();
-        fileReader.onload = () => resolve(fileReader.result);
+        fileReader.onload = () => {
+            if (fileReader.result) {
+                resolve(fileReader.result as string);
+            } else {
+                reject('Failed to read file');
+            }
+        };
         fileReader.readAsDataURL(blob);
     });
 }

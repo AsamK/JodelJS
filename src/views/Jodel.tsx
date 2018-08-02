@@ -151,7 +151,7 @@ class JodelComponent extends React.Component<IJodelProps> {
     };
 }
 
-const mapStateToProps = (state: IJodelAppStore): Partial<IJodelProps> => {
+const mapStateToProps = (state: IJodelAppStore) => {
     return {
         addPostVisible: getAddPostVisible(state),
         channelListVisible: getChannelListVisible(state),

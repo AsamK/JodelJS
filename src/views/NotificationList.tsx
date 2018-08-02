@@ -10,7 +10,7 @@ import './NotificationList.scss';
 import { NotificationListItem } from './NotificationListItem';
 
 export interface INotificationListComponentProps {
-    notifications: INotification[];
+    notifications: ReadonlyArray<INotification>;
     selectPost: (postId: string) => void;
 }
 

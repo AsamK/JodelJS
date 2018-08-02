@@ -14,8 +14,8 @@ import './AddPost.scss';
 import ColorPicker from './ColorPicker';
 
 export interface IAddPostComponentProps {
-    ancestor: string;
-    channel: string;
+    ancestor?: string;
+    channel?: string;
     visible: boolean;
     dispatch: JodelThunkDispatch;
 }
@@ -139,7 +139,7 @@ export class AddPostComponent extends React.PureComponent<IAddPostComponentProps
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        ancestor: getSelectedPostId(state),
+        ancestor: getSelectedPostId(state) || undefined,
         channel: getAddPostChannel(state),
         visible: getAddPostVisible(state),
     };

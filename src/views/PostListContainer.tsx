@@ -20,7 +20,7 @@ export interface IPostListContainerProps {
 export interface IPostListContainerComponentProps extends IPostListContainerProps {
     section: string;
     sortType: PostListSortType;
-    lastUpdated: number;
+    lastUpdated?: number;
     posts: IPost[];
     locationKnown: boolean;
     onPostClick: (post: IPost) => void;
@@ -80,7 +80,7 @@ class PostListContainerComponent extends React.PureComponent<IPostListContainerC
 
 const mapStateToProps = (state: IJodelAppStore, ownProps: IPostListContainerProps) => {
     return {
-        lastUpdated: getSelectedSectionLastUpdated(state),
+        lastUpdated: getSelectedSectionLastUpdated(state) || undefined,
         locationKnown: isLocationKnown(state),
         posts: getSelectedSectionSortPosts(state),
         section: getSelectedSection(state),
@@ -89,7 +89,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: IPostListContainerProp
 };
 
 const mapDispatchToProps = (dispatch: JodelThunkDispatch,
-                            ownProps: IPostListContainerProps): Partial<IPostListContainerComponentProps> => {
+                            ownProps: IPostListContainerProps) => {
     return {
         onAddClick() {
             dispatch(showAddPost(true));

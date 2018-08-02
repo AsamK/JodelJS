@@ -12,8 +12,11 @@ import BackButton from './BackButton';
 export interface IPostTopBarProps {
 }
 
-export interface IPostTopBarComponentProps extends IPostTopBarProps {
+export interface IPostTopBarStateProps extends IPostTopBarProps {
     post: IPost | null;
+}
+
+export interface IPostTopBarComponentProps extends IPostTopBarStateProps {
     onBackClick: () => void;
     onPinClick: () => void;
     onShareClick: () => void;
@@ -52,13 +55,13 @@ const PostTopBarComponent = (props: IPostTopBarComponentProps) => {
     );
 };
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: IPostTopBarProps): Partial<IPostTopBarComponentProps> => {
+const mapStateToProps = (state: IJodelAppStore, ownProps: IPostTopBarProps) => {
     return {
         post: getSelectedPost(state),
     };
 };
 
-const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: IPostTopBarComponentProps) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: IPostTopBarStateProps) => {
     return {
         onBackClick: () => {
             window.history.back();

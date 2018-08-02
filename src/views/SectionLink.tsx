@@ -39,14 +39,14 @@ const SectionLinkComponent = ({section, active, onClick}: ISectionLinkComponentP
     return <div className={classnames('sectionLink', section.toLowerCase(), {active})} onClick={onClick}>{name}</div>;
 };
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: ISectionLinkProps): Partial<ISectionLinkComponentProps> => {
+const mapStateToProps = (state: IJodelAppStore, ownProps: ISectionLinkProps) => {
     return {
         active: ownProps.section === getSelectedSection(state),
     };
 };
 
 const mapDispatchToProps = (dispatch: JodelThunkDispatch,
-                            ownProps: ISectionLinkProps): Partial<ISectionLinkComponentProps> => {
+                            ownProps: ISectionLinkProps) => {
     return {
         onClick: () => {
             dispatch(switchPostSection(ownProps.section));

@@ -26,13 +26,13 @@ const ToastContainerComponent = ({toasts, onToastClick}: IToastContainerComponen
     </div>;
 };
 
-const mapStateToProps = (state: IJodelAppStore): Partial<IToastContainerComponentProps> => {
+const mapStateToProps = (state: IJodelAppStore) => {
     return {
         toasts: getToasts(state),
     };
 };
 
-const mapDispatchToProps = (dispatch: JodelThunkDispatch): Partial<IToastContainerComponentProps> => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
         onToastClick: (toastId: number) => {
             dispatch(hideToast(toastId));

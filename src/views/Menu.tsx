@@ -8,6 +8,7 @@ import {showPictureOfDay} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
 import {getUnreadNotificationsCount} from '../redux/selectors/notifications';
 
+import './Menu.scss';
 import {SectionLink} from './SectionLink';
 
 interface IMenuComponentProps {
@@ -39,34 +40,34 @@ class MenuComponent extends React.Component<IMenuComponentProps, IMenuComponentS
             showSearchCallback,
         } = this.props;
         return (
-            <div className={classnames('menu', {newNotifications: unreadNotifications > 0})}
+            <div className={classnames('menu', {'menu_new-notifications': unreadNotifications > 0})}
                  tabIndex={99999999}
                  onClick={() => this.setState({menuOpen: !this.state.menuOpen})}
             >
                 {!this.state.menuOpen ? '' :
-                    <ul className="menuContent">
-                        <li className="menuEntry">
-                            <div className="pictureOfDayLink" onClick={showPictureOfDayCallback}>
+                    <ul className="menu_content">
+                        <li className="menu_entry">
+                            <div onClick={showPictureOfDayCallback}>
                                 <FormattedMessage
                                     id="showPictureOfDay"
                                     defaultMessage="Picture of the day"
                                 />
                             </div>
                         </li>
-                        <li className="menuEntry">
+                        <li className="menu_entry">
                             <SectionLink section="mine"/>
                         </li>
-                        <li className="menuEntry">
+                        <li className="menu_entry">
                             <SectionLink section="mineReplies"/>
                         </li>
-                        <li className="menuEntry">
+                        <li className="menu_entry">
                             <SectionLink section="mineVotes"/>
                         </li>
-                        <li className="menuEntry">
+                        <li className="menu_entry">
                             <SectionLink section="minePinned"/>
                         </li>
-                        <li className="menuEntry">
-                            <div className="sectionLink" onClick={showNotificationsCallback}>
+                        <li className="menu_entry">
+                            <div onClick={showNotificationsCallback}>
                                 <FormattedMessage
                                     id="notifications"
                                     defaultMessage="Notifications"
@@ -81,16 +82,16 @@ class MenuComponent extends React.Component<IMenuComponentProps, IMenuComponentS
                                 }
                             </div>
                         </li>
-                        <li className="menuEntry">
-                            <div className="sectionLink" onClick={showSearchCallback}>
+                        <li className="menu_entry">
+                            <div onClick={showSearchCallback}>
                                 <FormattedMessage
                                     id="search"
                                     defaultMessage="Search"
                                 />
                             </div>
                         </li>
-                        <li className="menuEntry">
-                            <div className="sectionLink" onClick={showSettingsCallback}>
+                        <li className="menu_entry">
+                            <div onClick={showSettingsCallback}>
                                 <FormattedMessage
                                     id="settings"
                                     defaultMessage="Settings"

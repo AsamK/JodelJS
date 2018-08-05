@@ -1,0 +1,42 @@
+@import '../../style/settings.scss';
+.menu {
+    cursor: pointer;
+    flex: none;
+    height: $top-bar-height / 3;
+    padding: ($top-bar-height/3) .6em;
+    &::before {
+        background: url("../../img/menu.svg") no-repeat center;
+        content: "  ";
+        display: block;
+        height: $top-bar-height / 3;
+        width: $top-bar-height / 2;
+    }
+}
+
+.menu_new-notifications::after {
+    background-color: blue;
+    border-radius: 10px;
+    content: " ";
+    height: 10px;
+    left: $top-bar-height / 2;
+    position: absolute;
+    top: $top-bar-height / 4;
+    width: 10px;
+}
+
+.menu_content {
+    background-color: #eee;
+    box-shadow: $menu-shadow;
+    left: 0;
+    list-style-type: none;
+    padding: 0;
+    position: absolute;
+    z-index: $z-index-menu-layer;
+}
+
+.menu_entry {
+    >* {
+        height: 2em;
+        padding: 1em 1.3em 1em 1em;
+    }
+}

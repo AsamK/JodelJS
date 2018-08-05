@@ -137,6 +137,7 @@ module.exports = function (env, argv) {
                             ],
                             optional: [
                                 'locale-data-*',
+                                'messages-*',
                             ],
                         },
                     }),

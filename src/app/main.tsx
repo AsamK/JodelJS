@@ -2,17 +2,15 @@ import 'intl';
 import 'intl/locale-data/jsonp/de.js';
 import 'intl/locale-data/jsonp/en.js';
 import React from 'react';
-import DocumentTitle from 'react-document-title';
 import ReactDOM from 'react-dom';
-import {hot} from 'react-hot-loader';
-import {addLocaleData, IntlProvider} from 'react-intl';
-import {Provider} from 'react-redux';
-import {applyMiddleware, compose, createStore, Middleware} from 'redux';
+import { hot } from 'react-hot-loader';
+import { addLocaleData } from 'react-intl';
+import { applyMiddleware, compose, createStore, Middleware } from 'redux';
 import freeze from 'redux-freeze';
 import thunkMiddleware from 'redux-thunk';
 
-import {IJodelAction} from '../interfaces/IJodelAction';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
+import { IJodelAction } from '../interfaces/IJodelAction';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import {
     fetchPostsIfNeeded,
     getConfig,
@@ -22,14 +20,13 @@ import {
     switchPostSection,
     updateLocation,
 } from '../redux/actions';
-import {getKarma, getNotifications, refreshAccessToken} from '../redux/actions/api';
-import {IJodelAppStore, JodelApp} from '../redux/reducers';
-import {ACCOUNT_VERSION, IAccountStore, migrateAccount} from '../redux/reducers/account';
-import {ISettingsStore, migrateSettings, SETTINGS_VERSION} from '../redux/reducers/settings';
-import translationDe from '../translations/de';
-import {getNotificationDescription} from '../utils/notification.utils';
-import {Jodel} from '../views/Jodel';
-import {JodelApi} from './api';
+import { getKarma, getNotifications, refreshAccessToken } from '../redux/actions/api';
+import { IJodelAppStore, JodelApp } from '../redux/reducers';
+import { ACCOUNT_VERSION, IAccountStore, migrateAccount } from '../redux/reducers/account';
+import { ISettingsStore, migrateSettings, SETTINGS_VERSION } from '../redux/reducers/settings';
+import { getNotificationDescription } from '../utils/notification.utils';
+import { App } from '../views/App';
+import { JodelApi } from './api';
 
 let persistedStateAccount: IAccountStore | undefined;
 const storedAccount = localStorage.getItem('account');
@@ -78,67 +75,67 @@ extraThunkArgument.api = api;
 
 let userClickedBack = false;
 store.subscribe((() => {
-        let previousState = store.getState();
-        const shownNotifications: { [notificationId: string]: Notification | null } = {};
+    let previousState = store.getState();
+    const shownNotifications: { [notificationId: string]: Notification | null } = {};
 
-        return () => {
-            const state = store.getState();
-            localStorage.setItem('account', JSON.stringify(state.account));
-            localStorage.setItem('accountVersion', ACCOUNT_VERSION.toString());
+    return () => {
+        const state = store.getState();
+        localStorage.setItem('account', JSON.stringify(state.account));
+        localStorage.setItem('accountVersion', ACCOUNT_VERSION.toString());
 
-            localStorage.setItem('settings', JSON.stringify(state.settings));
-            localStorage.setItem('settingsVersion', SETTINGS_VERSION.toString());
+        localStorage.setItem('settings', JSON.stringify(state.settings));
+        localStorage.setItem('settingsVersion', SETTINGS_VERSION.toString());
 
-            if (previousState.viewState !== state.viewState) {
-                if (userClickedBack) {
-                    userClickedBack = false;
-                } else {
-                    history.pushState(state.viewState, '');
-                }
+        if (previousState.viewState !== state.viewState) {
+            if (userClickedBack) {
+                userClickedBack = false;
+            } else {
+                history.pushState(state.viewState, '');
             }
-            if (previousState.entities.notifications !== state.entities.notifications && 'Notification' in window) {
-                state.entities.notifications
-                    .filter(n => n.read)
-                    .forEach(n => {
-                        const notification = shownNotifications[n.notification_id];
-                        if (!notification) {
-                            return;
-                        }
-                        notification.close();
-                        shownNotifications[n.notification_id] = null;
-                    });
-
-                const newNotifications = state.entities.notifications
-                    .filter(n => !n.read)
-                    .filter(n => 10 * 60 * 1000 > (Date.now() - new Date(n.last_interaction).getTime()));
-                Notification.requestPermission(permission => {
-                    if (permission !== 'granted') {
+        }
+        if (previousState.entities.notifications !== state.entities.notifications && 'Notification' in window) {
+            state.entities.notifications
+                .filter(n => n.read)
+                .forEach(n => {
+                    const notification = shownNotifications[n.notification_id];
+                    if (!notification) {
                         return;
                     }
-                    newNotifications.forEach(n => {
-                            const oldNotification = shownNotifications[n.notification_id];
-                            if (oldNotification) {
-                                if (oldNotification.body === n.message) {
-                                    return;
-                                }
-                                oldNotification.close();
-                            }
-                            const notification = new Notification(getNotificationDescription(n), {
-                                body: n.message,
-                                tag: n.notification_id,
-                            });
-                            notification.onclick = () => {
-                                store.dispatch(selectPostFromNotification(n.post_id));
-                            };
-                            shownNotifications[n.notification_id] = notification;
-                        },
-                    );
+                    notification.close();
+                    shownNotifications[n.notification_id] = null;
                 });
-            }
 
-            previousState = state;
-        };
-    })(),
+            const newNotifications = state.entities.notifications
+                .filter(n => !n.read)
+                .filter(n => 10 * 60 * 1000 > (Date.now() - new Date(n.last_interaction).getTime()));
+            Notification.requestPermission(permission => {
+                if (permission !== 'granted') {
+                    return;
+                }
+                newNotifications.forEach(n => {
+                    const oldNotification = shownNotifications[n.notification_id];
+                    if (oldNotification) {
+                        if (oldNotification.body === n.message) {
+                            return;
+                        }
+                        oldNotification.close();
+                    }
+                    const notification = new Notification(getNotificationDescription(n), {
+                        body: n.message,
+                        tag: n.notification_id,
+                    });
+                    notification.onclick = () => {
+                        store.dispatch(selectPostFromNotification(n.post_id));
+                    };
+                    shownNotifications[n.notification_id] = notification;
+                },
+                );
+            });
+        }
+
+        previousState = state;
+    };
+})(),
 );
 
 const account = store.getState().account;
@@ -173,46 +170,37 @@ window.onpopstate = event => {
     store.dispatch(replaceViewState(event.state));
 };
 
-const messages: { [lang: string]: { [key: string]: string } } = {
-    de: translationDe,
-    en: {},
-};
-
 const translationLocale = navigator.language || (navigator as any).userLanguage;
 const translationLanguage = translationLocale ? translationLocale.substr(0, 2) : 'en';
 
 let localeData;
+let translationMessages: Promise<{ [key: string]: string }>;
 switch (translationLanguage) {
     case 'de':
         localeData = import(/* webpackChunkName: "locale-data-de" */ 'react-intl/locale-data/de');
+        translationMessages = import(/* webpackChunkName: "messages-de" */ '../translations/de').then(m => m.default);
         break;
     case 'en':
     default:
         localeData = import(/* webpackChunkName: "locale-data-en" */ 'react-intl/locale-data/en');
+        translationMessages = Promise.resolve({});
         break;
 }
 
-const TextComponent = (props: any) => props.children;
+const HotloadableApp = process.env.NODE_ENV !== 'production' ? hot(module)(App) : App;
 
-const App = () => <IntlProvider
-    locale={translationLocale}
-    messages={messages[translationLanguage]}
-    textComponent={TextComponent}
->
-    <Provider store={store}>
-        <DocumentTitle title="Jodel Unofficial WebApp">
-            <Jodel />
-        </DocumentTitle>
-    </Provider>
-</IntlProvider>;
-
-const HotloadableApp = hot(module)(App);
-
-localeData
-    .then(data => addLocaleData(data.default))
-    .then(() => {
+Promise.all([localeData, translationMessages])
+    .then(([data, message]) => {
+        addLocaleData(data.default);
+        return message;
+    })
+    .then(messages => {
         ReactDOM.render(
-            <HotloadableApp />,
+            <HotloadableApp
+                locale={translationLocale}
+                messages={messages}
+                store={store}
+            />,
             document.getElementById('content'),
         );
     });

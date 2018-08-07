@@ -1,0 +1,60 @@
+@import '../../style/settings.scss';
+.post-top-bar {
+    background-color: #eee;
+    box-shadow: $bar-shadow;
+    display: flex;
+    flex: none;
+    height: $post-top-bar-height;
+    justify-content: space-between;
+    width: 100%;
+    z-index: $z-index-sub-layer;
+    .right-buttons {
+        display: flex;
+        flex: none;
+    }
+}
+
+.share {
+    flex: none;
+}
+
+.share-button {
+    cursor: pointer;
+    display: inline-block;
+    padding: 1em;
+    &::before {
+        content: "Share";
+    }
+}
+
+.oj-filter {
+    flex: none;
+}
+
+.oj-filter-button {
+    cursor: pointer;
+    display: inline-block;
+    padding: .94em;
+    &::before {
+        content: "OJ";
+    }
+    &.oj-filtered {
+        background-color: #ccc;
+    }
+}
+
+.pin {
+    flex: none;
+}
+
+.pin-button {
+    cursor: pointer;
+    display: inline-block;
+    padding: 1em;
+    &::before {
+        content: "Pin";
+    }
+    &.pinned::before {
+        content: "Unpin";
+    }
+}

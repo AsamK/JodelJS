@@ -1,7 +1,8 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import {VoteType} from '../enums/VoteType';
+import { VoteType } from '../enums/VoteType';
+import './Vote.scss';
 
 export interface IVoteProps {
     vote_count: number;
@@ -22,19 +23,33 @@ export default class Vote extends React.Component<IVoteProps, IVoteState> {
     };
 
     public render() {
-        const {vote_count, voted, upvote, downvote} = this.props;
-        const {justUpVoted, justDownVoted} = this.state;
+        const { vote_count, voted, upvote, downvote } = this.props;
+        const { justUpVoted, justDownVoted } = this.state;
         return (
-            <div className="vote">
-                <div className={classnames('upVote', voted, {justVoted: justUpVoted})} title="Up" onClick={e => {
-                    this.setState({justUpVoted: true});
-                    upvote(e);
-                }}/>
-                <div className="voteCount">{vote_count}</div>
-                <div className={classnames('downVote', voted, {justVoted: justDownVoted})} title="Down" onClick={e => {
-                    this.setState({justDownVoted: true});
-                    downvote(e);
-                }}/>
+            <div className="post-vote">
+                <div
+                    className={classnames('post-vote_up-vote',
+                        'post-vote_' + voted,
+                        { 'post-vote_just-voted': justUpVoted },
+                    )}
+                    title="Up"
+                    onClick={e => {
+                        this.setState({ justUpVoted: true });
+                        upvote(e);
+                    }}
+                />
+                <div className="post-vote_count">{vote_count}</div>
+                <div
+                    className={classnames('post-vote_down-vote',
+                        'post-vote_' + voted,
+                        { 'post-vote_just-voted': justDownVoted },
+                    )}
+                    title="Down"
+                    onClick={e => {
+                        this.setState({ justDownVoted: true });
+                        downvote(e);
+                    }}
+                />
             </div>
         );
     }

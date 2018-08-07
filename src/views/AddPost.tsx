@@ -46,7 +46,7 @@ export class AddPostComponent extends React.PureComponent<IAddPostComponentProps
         const { channel, ancestor, visible } = this.props;
 
         return (
-            <div className={classnames('addPost', { visible })}>
+            <div className={classnames('add-post', { visible })}>
                 {ancestor === null ?
                     'Neuen Jodel schreiben' + (channel != null ? ' (Kanal: ' + channel + ')' : '')
                     :

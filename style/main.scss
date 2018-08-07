@@ -64,78 +64,12 @@ body,
   z-index: $z-index-sub-layer;
 }
 
-.postTopBar {
-  background-color: #eee;
-  box-shadow: $bar-shadow;
-  display: flex;
-  flex: none;
-  height: $post-top-bar-height;
-  justify-content: space-between;
-  width: 100%;
-  z-index: $z-index-sub-layer;
-
-  .rightButtons {
-    display: flex;
-    flex: none;
-  }
-}
-
 .backButton {
   cursor: pointer;
   flex: none;
   padding-bottom: 1em;
   padding-left: 1em;
   padding-top: 1em;
-}
-
-.pin {
-  flex: none;
-}
-
-.pinButton {
-  cursor: pointer;
-  display: inline-block;
-  padding: 1em;
-
-  &::before {
-    content: "Pin";
-  }
-
-  &.pinned::before {
-    content: "Unpin";
-  }
-}
-
-.oj-filter {
-  flex: none;
-
-  .oj-filter-button {
-    cursor: pointer;
-    display: inline-block;
-    padding: .94em;
-
-    &::before {
-      content: "OJ";
-    }
-
-    &.oj-filtered {
-      background-color: #ccc;
-    }
-  }
-}
-
-.share {
-  flex: none;
-
-  .shareButton {
-    cursor: pointer;
-    display: inline-block;
-    padding: 1em;
-
-    &::before {
-      content: "Share";
-    }
-  }
 }
 
 .channelTopBar,
@@ -191,38 +125,11 @@ body,
   width: 100%;
 }
 
-.addButton {
-  background-color: rgba(0, 0, 0, .3);
-  border: solid .3em #fff;
-  border-radius: 4em;
-  color: #fff;
-  cursor: pointer;
-  height: 4em;
-  left: 50%;
-  margin-left: -2em;
-  position: fixed;
-  text-align: center;
-  width: 4em;
-
-  &:hover {
-    background-color: rgba(66, 189, 255, .76);
-  }
-
-  &:active {
-    background-color: rgba(66, 189, 255, .76);
-  }
-
-  &::before {
-    content: "+";
-    font-size: 3em;
-  }
-}
-
-.postListContainer .addButton {
+.postListContainer .add-button {
   bottom: 3.5em;
 }
 
-.postDetails .addButton {
+.postDetails .add-button {
   bottom: 1em;
 }
 
@@ -321,77 +228,6 @@ body,
     margin: .2em;
     white-space: pre-wrap;
     width: 85%;
-  }
-
-  .vote {
-    float: left;
-    text-align: center;
-    width: 10%;
-
-    .upVote {
-      cursor: pointer;
-      padding-bottom: .5em;
-      padding-top: .5em;
-      width: 3em;
-
-      &::before {
-        background: url("../img/up.svg") no-repeat;
-        background-size: 1.5em auto;
-        content: "";
-        display: block;
-        height: 1em;
-        margin-left: .75em;
-      }
-
-      &.down {
-        visibility: hidden;
-      }
-
-      &.up {
-        cursor: inherit;
-        opacity: .5;
-      }
-    }
-
-    .voteCount {
-      width: 3em;
-    }
-
-    .downVote {
-      cursor: pointer;
-      padding-bottom: .5em;
-      padding-top: .5em;
-      width: 3em;
-
-      &::before {
-        background: url("../img/down.svg") no-repeat;
-        background-size: 1.5em auto;
-        content: "";
-        display: block;
-        height: 1em;
-        margin-left: .75em;
-      }
-
-      &.up {
-        visibility: hidden;
-      }
-
-      &.down {
-        cursor: inherit;
-        opacity: .5;
-      }
-    }
-
-    .justVoted {
-      animation: 400ms voting;
-    }
-  }
-
-  .time {
-    color: rgba(255, 255, 255, .5);
-    float: left;
-    font-size: .8em;
-    width: 30%;
   }
 
   .childInfo {

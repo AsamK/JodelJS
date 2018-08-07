@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './Time.scss';
+
 export interface ITimeProps {
     time: string;
 }
@@ -49,7 +51,7 @@ export class Time extends React.Component<ITimeProps> {
             this.timer = window.setInterval(this.tick, timerInterval);
         }
         return (
-            <div className="time" title={time}>
+            <div className="post-time" title={time}>
                 {age}
             </div>
         );

@@ -9,6 +9,8 @@ import {IJodelAppStore} from '../redux/reducers';
 import {getSelectedPost} from '../redux/selectors/posts';
 import BackButton from './BackButton';
 
+import './PostTopBar.scss';
+
 export interface IPostTopBarProps {
 }
 
@@ -30,13 +32,13 @@ const PostTopBarComponent = (props: IPostTopBarComponentProps) => {
     }
     const pinned = post.pinned && post.pinned;
     return (
-        <div className="postTopBar">
+        <div className="post-top-bar">
             <BackButton onClick={onBackClick}/>
-            <div className="rightButtons">
+            <div className="right-buttons">
                 {post.shareable && post.shareable ?
                     <div className="share">
                         {post.share_count && post.share_count > 0 ? post.share_count : ''}
-                        <div className="shareButton" onClick={onShareClick}>
+                        <div className="share-button" onClick={onShareClick}>
                         </div>
                     </div>
                     : ''}
@@ -47,7 +49,7 @@ const PostTopBarComponent = (props: IPostTopBarComponentProps) => {
                 </div>
                 <div className="pin">
                     {post.pin_count && post.pin_count > 0 ? post.pin_count : ''}
-                    <div className={classnames('pinButton', {pinned})} onClick={onPinClick}>
+                    <div className={classnames('pin-button', {pinned})} onClick={onPinClick}>
                     </div>
                 </div>
             </div>

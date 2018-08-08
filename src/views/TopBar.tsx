@@ -1,31 +1,36 @@
 import React from 'react';
-import {FormattedMessage, FormattedNumber} from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 
-import {Menu} from './Menu';
-import {SectionLink} from './SectionLink';
+import { connect } from 'react-redux';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { showChannelList, showSettings } from '../redux/actions';
+import { IJodelAppStore } from '../redux/reducers';
+import { getKarma } from '../redux/selectors/app';
+import { Menu } from './Menu';
+import { SectionLink } from './SectionLink';
 
-interface ITopBarProps {
+interface ITopBarComponentProps {
     karma: number;
-    showSettings: () => void;
-    showChannelList: () => void;
+    onKarmaClick: () => void;
+    onChannelsClick: () => void;
 }
 
-export function TopBar({karma, showSettings, showChannelList}: ITopBarProps) {
+function TopBarComponent({ karma, onKarmaClick, onChannelsClick }: ITopBarComponentProps) {
     return (
         <div className="topBar">
-            <Menu/>
+            <Menu />
             <div className="barEntries">
-                <SectionLink section="location"/>
-                <div className="sectionLink channelListLink" onClick={showChannelList}>
+                <SectionLink section="location" />
+                <div className="sectionLink channelListLink" onClick={onChannelsClick}>
                     <FormattedMessage
                         id="channels"
                         defaultMessage="Channels"
                     />
                 </div>
             </div>
-            <div className="karma" onClick={showSettings}>
+            <div className="karma" onClick={onKarmaClick}>
                 {(karma > 0 ? '+' : '')}
-                <FormattedNumber value={karma}/>
+                <FormattedNumber value={karma} />
                 <div className="subText">
                     <FormattedMessage
                         id="my_karma"
@@ -36,3 +41,22 @@ export function TopBar({karma, showSettings, showChannelList}: ITopBarProps) {
         </div>
     );
 }
+
+const mapStateToProps = (state: IJodelAppStore) => {
+    return {
+        karma: getKarma(state),
+    };
+};
+
+const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
+    return {
+        onKarmaClick() {
+            dispatch(showSettings(true));
+        },
+        onChannelsClick() {
+            dispatch(showChannelList(true));
+        },
+    };
+};
+
+export const TopBar = connect(mapStateToProps, mapDispatchToProps)(TopBarComponent);

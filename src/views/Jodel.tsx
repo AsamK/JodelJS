@@ -4,10 +4,10 @@ import {connect} from 'react-redux';
 
 import {IPost} from '../interfaces/IPost';
 import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {fetchPostsIfNeeded, showChannelList, showSettings} from '../redux/actions';
+import {fetchPostsIfNeeded} from '../redux/actions';
 import {getNotificationsIfAvailable} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
-import {getDeviceUid, getIsConfigAvailable, getIsRegistered, getKarma} from '../redux/selectors/app';
+import {getDeviceUid, getIsConfigAvailable, getIsRegistered} from '../redux/selectors/app';
 import {getSelectedPicturePost, getSelectedPostId} from '../redux/selectors/posts';
 import {
     getAddPostVisible,
@@ -59,7 +59,6 @@ export interface IJodelProps {
     selectedPostId: string | null;
     selectedPicturePost: IPost | null;
     settingsVisible: boolean;
-    karma: number;
     deviceUid: string | null;
     isRegistered: boolean;
     channelListVisible: boolean;
@@ -119,10 +118,7 @@ class JodelComponent extends React.Component<IJodelProps> {
             }
 
             return <div className="jodel">
-                <TopBar karma={this.props.karma}
-                        showSettings={this.onShowSettings}
-                        showChannelList={this.onShowChannelList}
-                />
+                <TopBar/>
                 <ToastContainer/>
                 {content}
                 {overlay}
@@ -141,14 +137,6 @@ class JodelComponent extends React.Component<IJodelProps> {
         this.props.dispatch(fetchPostsIfNeeded());
         this.props.dispatch(getNotificationsIfAvailable());
     };
-
-    private onShowSettings = () => {
-        this.props.dispatch(showSettings(true));
-    };
-
-    private onShowChannelList = () => {
-        this.props.dispatch(showChannelList(!this.props.channelListVisible));
-    };
 }
 
 const mapStateToProps = (state: IJodelAppStore) => {
@@ -158,7 +146,6 @@ const mapStateToProps = (state: IJodelAppStore) => {
         deviceUid: getDeviceUid(state),
         isConfigAvailable: getIsConfigAvailable(state),
         isRegistered: getIsRegistered(state),
-        karma: getKarma(state),
         notificationsVisible: getNotificationsVisible(state),
         searchVisible: getSearchVisible(state),
         selectedPicturePost: getSelectedPicturePost(state),

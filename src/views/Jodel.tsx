@@ -1,14 +1,14 @@
 import React from 'react';
 import loadable from 'react-loadable';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {IPost} from '../interfaces/IPost';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {fetchPostsIfNeeded} from '../redux/actions';
-import {getNotificationsIfAvailable} from '../redux/actions/api';
-import {IJodelAppStore} from '../redux/reducers';
-import {getDeviceUid, getIsConfigAvailable, getIsRegistered} from '../redux/selectors/app';
-import {getSelectedPicturePost, getSelectedPostId} from '../redux/selectors/posts';
+import { IPost } from '../interfaces/IPost';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { fetchPostsIfNeeded } from '../redux/actions';
+import { getNotificationsIfAvailable } from '../redux/actions/api';
+import { IJodelAppStore } from '../redux/reducers';
+import { getDeviceUid, getIsConfigAvailable, getIsRegistered } from '../redux/selectors/app';
+import { getSelectedPicturePost, getSelectedPostId } from '../redux/selectors/posts';
 import {
     getAddPostVisible,
     getChannelListVisible,
@@ -19,14 +19,14 @@ import {
 import BigPicture from './BigPicture';
 import ChannelTopBar from './ChannelTopBar';
 import FirstStart from './FirstStart';
-import {HashtagTopBar} from './HashtagTopBar';
+import { HashtagTopBar } from './HashtagTopBar';
 import PostDetails from './PostDetails';
-import {PostListContainer} from './PostListContainer';
-import {PostTopBar} from './PostTopBar';
+import { PostListContainer } from './PostListContainer';
+import { PostTopBar } from './PostTopBar';
 import Progress from './Progress';
 import ShareLink from './ShareLink';
-import {ToastContainer} from './ToastContainer';
-import {TopBar} from './TopBar';
+import { ToastContainer } from './ToastContainer';
+import { TopBar } from './TopBar';
 
 const LoadableAddPost = loadable({
     loader: () => import(/* webpackChunkName: "add-post" */ './AddPost').then(module => module.AddPost),
@@ -65,7 +65,7 @@ export interface IJodelProps {
     notificationsVisible: boolean;
     searchVisible: boolean;
     isConfigAvailable: boolean;
-    dispatch: JodelThunkDispatch;
+    refresh: () => void;
 }
 
 class JodelComponent extends React.Component<IJodelProps> {
@@ -84,58 +84,57 @@ class JodelComponent extends React.Component<IJodelProps> {
     public render() {
         if (!this.props.deviceUid) {
             return <div className="jodel">
-                <ToastContainer/>
-                <FirstStart/>
+                <ToastContainer />
+                <FirstStart />
             </div>;
-        } else if (this.props.isConfigAvailable) {
-            let content = null;
-
-            if (this.props.addPostVisible) {
-                content = <LoadableAddPost/>;
-            } else if (this.props.notificationsVisible) {
-                content = <LoadableNotificationList/>;
-            } else if (this.props.searchVisible) {
-                content = <LoadableSearch/>;
-            } else if (this.props.settingsVisible) {
-                content = <LoadableAppSettings/>;
-            } else if (this.props.channelListVisible) {
-                content = <LoadableChannelList/>;
-            } else if (this.props.selectedPostId != null) {
-                content = <div className="detail">
-                    <PostTopBar/>
-                    <PostDetails/>
-                </div>;
-            } else {
-                content = <div className="list">
-                    <ChannelTopBar/>
-                    <HashtagTopBar/>
-                    <PostListContainer/>
-                </div>;
-            }
-            let overlay = null;
-            if (this.props.selectedPicturePost) {
-                overlay = <BigPicture post={this.props.selectedPicturePost}/>;
-            }
-
-            return <div className="jodel">
-                <TopBar/>
-                <ToastContainer/>
-                {content}
-                {overlay}
-                <ShareLink/>
-                <Progress/>
-            </div>;
-        } else {
+        } else if (!this.props.isConfigAvailable) {
             return null;
         }
+
+        let content = null;
+
+        if (this.props.addPostVisible) {
+            content = <LoadableAddPost />;
+        } else if (this.props.notificationsVisible) {
+            content = <LoadableNotificationList />;
+        } else if (this.props.searchVisible) {
+            content = <LoadableSearch />;
+        } else if (this.props.settingsVisible) {
+            content = <LoadableAppSettings />;
+        } else if (this.props.channelListVisible) {
+            content = <LoadableChannelList />;
+        } else if (this.props.selectedPostId != null) {
+            content = <div className="detail">
+                <PostTopBar />
+                <PostDetails />
+            </div>;
+        } else {
+            content = <div className="list">
+                <ChannelTopBar />
+                <HashtagTopBar />
+                <PostListContainer />
+            </div>;
+        }
+        let overlay = null;
+        if (this.props.selectedPicturePost) {
+            overlay = <BigPicture post={this.props.selectedPicturePost} />;
+        }
+
+        return <div className="jodel">
+            <TopBar />
+            <ToastContainer />
+            {content}
+            {overlay}
+            <ShareLink />
+            <Progress />
+        </div>;
     }
 
     private refresh = () => {
         if (!this.props.isRegistered) {
             return;
         }
-        this.props.dispatch(fetchPostsIfNeeded());
-        this.props.dispatch(getNotificationsIfAvailable());
+        this.props.refresh();
     };
 }
 
@@ -154,4 +153,13 @@ const mapStateToProps = (state: IJodelAppStore) => {
     };
 };
 
-export const Jodel = connect(mapStateToProps)(JodelComponent);
+const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
+    return {
+        refresh() {
+            dispatch(fetchPostsIfNeeded());
+            dispatch(getNotificationsIfAvailable());
+        },
+    };
+};
+
+export const Jodel = connect(mapStateToProps, mapDispatchToProps)(JodelComponent);

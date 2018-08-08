@@ -501,8 +501,9 @@ export class JodelApi {
      * Set the user's language on the server
      * @param language Language name in ISO 639-1 format, e.g. 'de-de'
      */
-    public apiSetUserLanguage(language: string) {
-        return this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V3 + '/user/language', {}, { language });
+    public apiSetUserLanguage(language: string): Promise<void> {
+        return this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V3 + '/user/language', {}, { language })
+            .then(res => res.body);
     }
 
     /**

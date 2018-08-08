@@ -17,7 +17,7 @@ import {
     setUseHomeLocation,
     updateLocation,
 } from '../redux/actions';
-import { setInternationalFeed, updateUserType } from '../redux/actions/api';
+import { setInternationalFeed, setUserLanguage, updateUserType } from '../redux/actions/api';
 import { IJodelAppStore } from '../redux/reducers';
 import { canChangeUserType, getDeviceUid, getLocation } from '../redux/selectors/app';
 import { SelectLocation } from './SelectLocation';
@@ -53,12 +53,17 @@ interface IAppSettingsDispatchProps {
     setLocation: (location: IGeoCoordinates) => void;
     setInternationalFeed: (enable: boolean) => void;
     setUseBrowserLocation: (useBrowserLocation: boolean) => void;
+    setUserLanguage: (language: string) => void;
     sendVerificationAnswer: (answer: number[]) => void;
 }
 
 type IAppSettingsComponentProps = IAppSettingsDispatchProps & IAppSettingsStateProps;
 
 class AppSettings extends React.Component<IAppSettingsComponentProps> {
+    public state = {
+        user_language: '',
+    };
+
     constructor(props: IAppSettingsComponentProps) {
         super(props);
     }
@@ -146,7 +151,11 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
                         : 'Dein Jodel Konto ist verifiziert'}
                 </div>
                 <div className="features">
-                    Features: {this.props.experiments.map(e => e.features.join(', ')).join(', ')}
+                    Features: {
+                        this.props.experiments
+                            .map(e => `${e.name} (${e.features.map(f => f === e.name ? '_' : f).join(', ')})`)
+                            .join(', ')
+                    }
                 </div>
                 <div className="userType">
                     <FormattedMessage
@@ -186,12 +195,25 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
                     </select>
                     {this.props.moderator ? ', Moderator' : ', kein Moderator'}
                 </div>
+                <div className="userLanguage">
+                    <FormattedMessage
+                        id="user_language"
+                        defaultMessage="User language"
+                    />:
+                    <input
+                        value={this.state.user_language || undefined}
+                        onChange={
+                            e => {
+                                this.setState({ user_language: e.target.value });
+                                if (e.target.value.length === 5) {
+                                    this.props.setUserLanguage(e.target.value);
+                                }
+                            }
+                        }
+                    />
+                </div>
                 <div className="pendingDeletion">
                     {this.props.pending_deletion ? 'ACHTUNG: Konto ist zum löschen vorgemerkt' : ''}
-                </div>
-                <div className="internationalFeed">
-                    {this.props.feedInternationalized ? 'Internationaler Feed' : ''}
-                    {this.props.feedInternationalizable ? 'Internationalisierbarer Feed' : ''}
                 </div>
             </div>
             <button className="closeButton"
@@ -255,6 +277,7 @@ const mapDispatchToProps = (dispatch: JodelThunkDispatch): IAppSettingsDispatchP
         setInternationalFeed: (enable: boolean) => dispatch(setInternationalFeed(enable)),
         setLocation: (location: IGeoCoordinates) => dispatch(setLocation(location.latitude, location.longitude)),
         setUseBrowserLocation: (useBrowserLocation: boolean) => dispatch(setUseBrowserLocation(useBrowserLocation)),
+        setUserLanguage: language => dispatch(setUserLanguage(language)),
         showHome: (useHome: boolean) => dispatch(setUseHomeLocation(useHome)),
         updateLocation: () => dispatch(updateLocation()),
         updateUserType: userType => dispatch(updateUserType(userType)),

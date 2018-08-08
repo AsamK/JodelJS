@@ -194,6 +194,7 @@ Promise.all([localeData, translationMessages])
         addLocaleData(data.default);
         return message;
     })
+    .catch(() => ({}))
     .then(messages => {
         ReactDOM.render(
             <HotloadableApp

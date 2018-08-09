@@ -37,11 +37,17 @@ export class ChannelListComponent extends React.Component<IChannelListComponentP
         showLocalChannels: false,
     };
 
-    private scrollable: HTMLElement | undefined;
+    private scrollable = React.createRef<HTMLDivElement>();
+
+    public componentDidMount() {
+        if (this.scrollable.current) {
+            this.scrollable.current.scrollTop = ChannelListComponent.lastScrollPosition;
+        }
+    }
 
     public componentWillUnmount() {
-        if (this.scrollable) {
-            ChannelListComponent.lastScrollPosition = this.scrollable.scrollTop;
+        if (this.scrollable.current) {
+            ChannelListComponent.lastScrollPosition = this.scrollable.current.scrollTop;
         }
     }
 
@@ -64,7 +70,7 @@ export class ChannelListComponent extends React.Component<IChannelListComponentP
         },
         );
         return (
-            <div className="channel-list" ref={this.channelListRef}>
+            <div className="channel-list" ref={this.scrollable}>
                 <div className="channel-list_header">Kanäle(beta)</div>
                 <div className="channel-list_filter">
                     <input type="text"
@@ -130,13 +136,6 @@ export class ChannelListComponent extends React.Component<IChannelListComponentP
 
     private onToggleCountryChannels = (e: React.MouseEvent<HTMLDivElement>) => {
         this.setState({ showCountryChannels: !this.state.showCountryChannels });
-    };
-
-    private channelListRef = (element: HTMLDivElement) => {
-        this.scrollable = element;
-        if (this.scrollable) {
-            this.scrollable.scrollTop = ChannelListComponent.lastScrollPosition;
-        }
     };
 }
 

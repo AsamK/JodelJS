@@ -1,7 +1,7 @@
 import React from 'react';
 
-import {IPost} from '../interfaces/IPost';
-import {PostListItem} from './PostListItem';
+import { IPost } from '../interfaces/IPost';
+import { PostListItem } from './PostListItem';
 
 export interface IPostListProps {
     posts: IPost[];
@@ -17,15 +17,18 @@ export interface IPostListProps {
 export default class PostList extends React.PureComponent<IPostListProps> {
     private scrollAtBottom = false;
 
-    private scrollable: HTMLElement | null = null;
+    private scrollable = React.createRef<HTMLDivElement>();
 
     constructor(props: IPostListProps) {
         super(props);
     }
 
     public componentDidMount() {
-        if (this.scrollable) {
-            this.scrollable.addEventListener('scroll', this.onScroll);
+        if (this.scrollable.current) {
+            this.scrollable.current.addEventListener('scroll', this.onScroll);
+            if (this.props.connectScrollTarget) {
+                this.props.connectScrollTarget(this.scrollable.current);
+            }
         }
         this.scrollAtBottom = false;
     }
@@ -33,49 +36,43 @@ export default class PostList extends React.PureComponent<IPostListProps> {
     public componentDidUpdate(prevProps: IPostListProps) {
         if (prevProps.sortType !== this.props.sortType || prevProps.section !== this.props.section ||
             prevProps.lastUpdated !== this.props.lastUpdated) {
-            if (this.scrollable) {
-                this.scrollable.scrollTop = 0;
+            if (this.scrollable.current) {
+                this.scrollable.current.scrollTop = 0;
             }
         }
     }
 
     public componentWillUnmount() {
-        if (this.scrollable) {
-            this.scrollable.removeEventListener('scroll', this.onScroll);
+        if (this.scrollable.current) {
+            this.scrollable.current.removeEventListener('scroll', this.onScroll);
         }
     }
 
     public render() {
-        const {posts, parentPost, onPostClick} = this.props;
+        const { posts, parentPost, onPostClick } = this.props;
         const postNodes = posts.map(post => (
-                <PostListItem
-                    key={post.post_id}
-                    parentPostId={parentPost ? parentPost.post_id : undefined}
-                    onPostClick={onPostClick}
-                    post={post}
-                />
-            ),
+            <PostListItem
+                key={post.post_id}
+                parentPostId={parentPost ? parentPost.post_id : undefined}
+                onPostClick={onPostClick}
+                post={post}
+            />
+        ),
         );
         return (
-            <div className="postList" ref={this.postListRef}>
+            <div className="postList" ref={this.scrollable}>
                 {postNodes}
             </div>
         );
     }
 
-    private postListRef = (element: HTMLDivElement) => {
-        this.scrollable = element;
-        if (this.props.connectScrollTarget) {
-            this.props.connectScrollTarget(element);
-        }
-    };
-
     private onScroll = () => {
-        if (!this.scrollable || !this.props.onLoadMore) {
+        const element = this.scrollable.current;
+        if (!element || !this.props.onLoadMore) {
             return;
         }
-        const newFlag = this.scrollable.scrollTop > 0 &&
-            (this.scrollable.scrollTop + this.scrollable.clientHeight) >= (this.scrollable.scrollHeight - 500);
+        const newFlag = element.scrollTop > 0 &&
+            (element.scrollTop + element.clientHeight) >= (element.scrollHeight - 500);
         if (this.scrollAtBottom !== newFlag && newFlag) {
             this.scrollAtBottom = newFlag;
             this.props.onLoadMore();

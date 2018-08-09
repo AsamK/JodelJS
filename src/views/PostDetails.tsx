@@ -23,7 +23,7 @@ interface IPostDetailsPropsComponent {
 export class PostDetailsComponent extends React.Component<IPostDetailsPropsComponent> {
     private scrollAtBottom = false;
 
-    private scrollable: HTMLDivElement | null = null;
+    private scrollable = React.createRef<HTMLDivElement>();
 
     constructor(props: IPostDetailsPropsComponent) {
         super(props);
@@ -36,21 +36,21 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
             this.scrollAtBottom = false;
             return;
         }
-        if (this.scrollable) {
-            this.scrollable.scrollTop = 0;
+        if (this.scrollable.current) {
+            this.scrollable.current.scrollTop = 0;
         }
     }
 
     public componentDidMount() {
-        if (this.scrollable) {
-            this.scrollable.addEventListener('scroll', this.onScroll);
+        if (this.scrollable.current) {
+            this.scrollable.current.addEventListener('scroll', this.onScroll);
         }
         this.scrollAtBottom = false;
     }
 
     public componentWillUnmount() {
-        if (this.scrollable) {
-            this.scrollable.removeEventListener('scroll', this.onScroll);
+        if (this.scrollable.current) {
+            this.scrollable.current.removeEventListener('scroll', this.onScroll);
         }
     }
 
@@ -62,7 +62,7 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
         const childPosts = postChildren ? postChildren : [];
 
         return (
-            <div className="postDetails" ref={c => this.scrollable = c}>
+            <div className="postDetails" ref={this.scrollable}>
                 <Post post={post} onPostClick={this.onPostClick}/>
                 <PostList parentPost={post} posts={childPosts} onPostClick={this.onPostClick}/>
                 {locationKnown ? <AddButton onClick={onAddClick}/> : ''}
@@ -72,11 +72,12 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
     }
 
     private onScroll = () => {
-        if (!this.scrollable || !this.props.onLoadMore) {
+        const element = this.scrollable.current;
+        if (!element || !this.props.onLoadMore) {
             return;
         }
-        const isNearBottom = this.scrollable.scrollTop > 0 &&
-            (this.scrollable.scrollTop + this.scrollable.clientHeight) >= (this.scrollable.scrollHeight - 500);
+        const isNearBottom = element.scrollTop > 0 &&
+            (element.scrollTop + element.clientHeight) >= (element.scrollHeight - 500);
         if (isNearBottom && this.scrollAtBottom !== isNearBottom) {
             this.scrollAtBottom = isNearBottom;
             this.props.onLoadMore();
@@ -86,8 +87,8 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
     };
 
     private scrollToBottom = () => {
-        if (this.scrollable) {
-            this.scrollable.scrollTop = this.scrollable.scrollHeight;
+        if (this.scrollable.current) {
+            this.scrollable.current.scrollTop = this.scrollable.current.scrollHeight;
         }
     };
 

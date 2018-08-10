@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { showChannelList, showSettings } from '../redux/actions';
 import { IJodelAppStore } from '../redux/reducers';
-import { getKarma } from '../redux/selectors/app';
+import { karmaSelector } from '../redux/selectors/app';
 import { Menu } from './Menu';
 import { SectionLink } from './SectionLink';
 
@@ -44,7 +44,7 @@ function TopBarComponent({ karma, onKarmaClick, onChannelsClick }: ITopBarCompon
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        karma: getKarma(state),
+        karma: karmaSelector(state),
     };
 };
 

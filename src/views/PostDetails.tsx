@@ -5,8 +5,8 @@ import {IPost} from '../interfaces/IPost';
 import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {fetchMoreComments, showAddPost} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
-import {isLocationKnown} from '../redux/selectors/app';
-import {getSelectedPost, getSelectedPostChildren} from '../redux/selectors/posts';
+import {isLocationKnownSelector} from '../redux/selectors/app';
+import {selectedPostChildrenSelector, selectedPostSelector} from '../redux/selectors/posts';
 import AddButton from './AddButton';
 import {Post} from './Post';
 import PostList from './PostList';
@@ -99,9 +99,9 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        locationKnown: isLocationKnown(state),
-        post: getSelectedPost(state),
-        postChildren: getSelectedPostChildren(state),
+        locationKnown: isLocationKnownSelector(state),
+        post: selectedPostSelector(state),
+        postChildren: selectedPostChildrenSelector(state),
     };
 };
 

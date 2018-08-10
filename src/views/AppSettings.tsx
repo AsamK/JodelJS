@@ -19,7 +19,7 @@ import {
 } from '../redux/actions';
 import { setInternationalFeed, setUserLanguage, updateUserType } from '../redux/actions/api';
 import { IJodelAppStore } from '../redux/reducers';
-import { canChangeUserType, getDeviceUid, getLocation } from '../redux/selectors/app';
+import { canChangeUserTypeSelector, deviceUidSelector, locationSelector } from '../redux/selectors/app';
 import { SelectLocation } from './SelectLocation';
 import { VerificationImageCaptcha } from './VerificationImageCaptcha';
 
@@ -248,8 +248,8 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
 
 const mapStateToProps = (state: IJodelAppStore): IAppSettingsStateProps => {
     return {
-        canChangeUserType: canChangeUserType(state),
-        deviceUid: getDeviceUid(state),
+        canChangeUserType: canChangeUserTypeSelector(state),
+        deviceUid: deviceUidSelector(state),
         experiments: state.account.config ? state.account.config.experiments : [],
         feedInternationalizable: state.account.config ? state.account.config.feedInternationalizable : false,
         feedInternationalized: state.account.config ? state.account.config.feedInternationalized : false,
@@ -258,7 +258,7 @@ const mapStateToProps = (state: IJodelAppStore): IAppSettingsStateProps => {
         homeSet: state.account.config ? state.account.config.home_set : false,
         imageUrl: state.imageCaptcha.image ? state.imageCaptcha.image.url : null,
         imageWidth: state.imageCaptcha.image ? state.imageCaptcha.image.width : null,
-        location: getLocation(state),
+        location: locationSelector(state),
         moderator: state.account.config ? state.account.config.moderator : false,
         pending_deletion: state.account.config ? state.account.config.pending_deletion : false,
         useBrowserLocation: state.settings.useBrowserLocation,

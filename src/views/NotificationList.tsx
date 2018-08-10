@@ -5,7 +5,7 @@ import { INotification } from '../interfaces/INotification';
 import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { selectPostFromNotification } from '../redux/actions';
 import { IJodelAppStore } from '../redux/reducers';
-import { getNotifications } from '../redux/selectors/notifications';
+import { notificationsSelector } from '../redux/selectors/notifications';
 import './NotificationList.scss';
 import { NotificationListItem } from './NotificationListItem';
 
@@ -37,7 +37,7 @@ class NotificationListComponent extends React.PureComponent<INotificationListCom
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        notifications: getNotifications(state),
+        notifications: notificationsSelector(state),
     };
 };
 

@@ -6,9 +6,9 @@ import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {followChannel} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
 import {
-    getIsSelectedChannelFollowed,
-    getSelectedChannelFollowersCount,
-    getSelectedChannelNameLikeFollowed,
+    isSelectedChannelFollowedSelector,
+    selectedChannelFollowersCountSelector,
+    selectedChannelNameLikeFollowedSelector,
 } from '../redux/selectors/channels';
 import BackButton from './BackButton';
 
@@ -35,9 +35,9 @@ const ChannelTopBar = ({onFollowClick, channel, followerCount, isFollowing}: ICh
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        channel: getSelectedChannelNameLikeFollowed(state),
-        followerCount: getSelectedChannelFollowersCount(state),
-        isFollowing: getIsSelectedChannelFollowed(state),
+        channel: selectedChannelNameLikeFollowedSelector(state),
+        followerCount: selectedChannelFollowersCountSelector(state),
+        isFollowing: isSelectedChannelFollowedSelector(state),
     };
 };
 

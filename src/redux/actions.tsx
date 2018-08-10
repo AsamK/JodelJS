@@ -31,7 +31,7 @@ import {
     _switchPostSection,
     invalidatePosts,
 } from './actions/state';
-import {getLocation} from './selectors/app';
+import {locationSelector} from './selectors/app';
 
 export * from './actions/state';
 export * from './actions/api';
@@ -96,7 +96,7 @@ export function updateLocation(): JodelThunkAction {
             navigator.geolocation.getCurrentPosition(position => {
 
                 const state = getState();
-                const loc = getLocation(state);
+                const loc = locationSelector(state);
                 const latitude = Math.round(position.coords.latitude * 100) / 100;
                 const longitude = Math.round(position.coords.longitude * 100) / 100;
                 if (!loc || loc.latitude !== latitude || loc.longitude !== longitude) {

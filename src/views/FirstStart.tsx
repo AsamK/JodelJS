@@ -8,7 +8,7 @@ import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {_setLocation, createNewAccount, setUseBrowserLocation, updateLocation} from '../redux/actions';
 import {setDeviceUid} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
-import {getDeviceUid, getLocation} from '../redux/selectors/app';
+import {deviceUidSelector, locationSelector} from '../redux/selectors/app';
 import {SelectDeviceUid} from './SelectDeviceUid';
 import {SelectLocation} from './SelectLocation';
 
@@ -121,8 +121,8 @@ class FirstStart extends React.Component<IFirstStartProps, IFirstStartState> {
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        deviceUid: getDeviceUid(state),
-        location: getLocation(state),
+        deviceUid: deviceUidSelector(state),
+        location: locationSelector(state),
         useBrowserLocation: state.settings.useBrowserLocation,
     };
 };

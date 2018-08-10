@@ -5,7 +5,7 @@ import {IToast} from '../interfaces/IToast';
 import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {hideToast} from '../redux/actions/toasts.actions';
 import {IJodelAppStore} from '../redux/reducers';
-import {getToasts} from '../redux/selectors/app';
+import {toastsSelector} from '../redux/selectors/app';
 import {Toast} from './Toast';
 import './ToastContainer.scss';
 
@@ -28,7 +28,7 @@ const ToastContainerComponent = ({toasts, onToastClick}: IToastContainerComponen
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        toasts: getToasts(state),
+        toasts: toastsSelector(state),
     };
 };
 

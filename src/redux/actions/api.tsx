@@ -13,7 +13,7 @@ import { JodelThunkAction, JodelThunkDispatch } from '../../interfaces/JodelThun
 import { setPermissionDenied, setToken, shareLink, showSettings, switchPostSection, updatePosts } from '../actions';
 import { IJodelAppStore } from '../reducers';
 import { getPost } from '../reducers/entities';
-import { getLocation } from '../selectors/app';
+import { locationSelector } from '../selectors/app';
 import { SET_USER_TYPE_RESPONSE } from './action.consts';
 import {
     _closeSticky,
@@ -189,7 +189,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): JodelThunkAction {
             } else {
                 switch (section) {
                     case SectionEnum.LOCATION:
-                        const loc = getLocation(getState());
+                        const loc = locationSelector(getState());
                         if (!loc) {
                             break;
                         }
@@ -312,7 +312,7 @@ export function fetchMorePosts(sectionToFetch?: Section,
                     if (posts !== undefined) {
                         afterId = posts[posts.length - 1];
                     }
-                    const loc = getLocation(getState());
+                    const loc = locationSelector(getState());
                     if (!loc) {
                         break;
                     }
@@ -520,7 +520,7 @@ export function getConfig(): JodelThunkAction {
 export function addPost(text: string, image?: string, channel?: string, ancestor?: string,
     color: Color = 'FF9908'): JodelThunkAction<Promise<Section | null>> {
     return (dispatch, getState, { api }) => {
-        const loc = getLocation(getState());
+        const loc = locationSelector(getState());
         if (!loc) {
             return Promise.reject('No location available to post');
         }
@@ -551,7 +551,7 @@ export function addPost(text: string, image?: string, channel?: string, ancestor
 
 export function setDeviceUid(deviceUid: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        const loc = getLocation(getState());
+        const loc = locationSelector(getState());
         if (!loc) {
             dispatch(showToast('Standort nicht bekannt. Registrierung nicht möglich.', ToastType.ERROR));
             return;

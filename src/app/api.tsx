@@ -31,7 +31,7 @@ import { IApiShare } from '../interfaces/IApiShare';
 import { IApiVerify } from '../interfaces/IApiVerify';
 import { IApiVote } from '../interfaces/IApiVote';
 import { IJodelAppStore } from '../redux/reducers';
-import { getAccessToken, getIsRefreshingToken } from '../redux/selectors/app';
+import { accessTokenSelector, isRefreshingTokenSelector } from '../redux/selectors/app';
 import Settings from './settings';
 
 const API_PATH_V2 = '/v2';
@@ -571,9 +571,9 @@ export class JodelApi {
             return this.nextAccessToken;
         }
 
-        const currentIsRefreshing = getIsRefreshingToken(this.store.getState());
+        const currentIsRefreshing = isRefreshingTokenSelector(this.store.getState());
         if (!currentIsRefreshing) {
-            const currentAuth = getAccessToken(this.store.getState());
+            const currentAuth = accessTokenSelector(this.store.getState());
             if (currentAuth) {
                 return Promise.resolve(currentAuth);
             }
@@ -581,12 +581,12 @@ export class JodelApi {
 
         return this.nextAccessToken = new Promise(resolve => {
             const unsubscribe = this.store.subscribe(() => {
-                const isRefreshing = getIsRefreshingToken(this.store.getState());
+                const isRefreshing = isRefreshingTokenSelector(this.store.getState());
                 if (isRefreshing) {
                     return;
                 }
 
-                const auth = getAccessToken(this.store.getState());
+                const auth = accessTokenSelector(this.store.getState());
                 if (!auth) {
                     return;
                 }

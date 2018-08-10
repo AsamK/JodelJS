@@ -7,14 +7,14 @@ import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { fetchPostsIfNeeded } from '../redux/actions';
 import { getNotificationsIfAvailable } from '../redux/actions/api';
 import { IJodelAppStore } from '../redux/reducers';
-import { getDeviceUid, getIsConfigAvailable, getIsRegistered } from '../redux/selectors/app';
-import { getSelectedPicturePost, getSelectedPostId } from '../redux/selectors/posts';
+import { deviceUidSelector, isConfigAvailableSelector, isRegisteredSelector } from '../redux/selectors/app';
+import { selectedPicturePostSelector, selectedPostIdSelector } from '../redux/selectors/posts';
 import {
-    getAddPostVisible,
-    getChannelListVisible,
-    getNotificationsVisible,
-    getSearchVisible,
-    getSettingsVisible,
+    addPostVisibleSelector,
+    channelListVisibleSelector,
+    notificationsVisibleSelector,
+    searchVisibleSelector,
+    settingsVisibleSelector,
 } from '../redux/selectors/view';
 import BigPicture from './BigPicture';
 import ChannelTopBar from './ChannelTopBar';
@@ -140,16 +140,16 @@ class JodelComponent extends React.Component<IJodelProps> {
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        addPostVisible: getAddPostVisible(state),
-        channelListVisible: getChannelListVisible(state),
-        deviceUid: getDeviceUid(state),
-        isConfigAvailable: getIsConfigAvailable(state),
-        isRegistered: getIsRegistered(state),
-        notificationsVisible: getNotificationsVisible(state),
-        searchVisible: getSearchVisible(state),
-        selectedPicturePost: getSelectedPicturePost(state),
-        selectedPostId: getSelectedPostId(state),
-        settingsVisible: getSettingsVisible(state),
+        addPostVisible: addPostVisibleSelector(state),
+        channelListVisible: channelListVisibleSelector(state),
+        deviceUid: deviceUidSelector(state),
+        isConfigAvailable: isConfigAvailableSelector(state),
+        isRegistered: isRegisteredSelector(state),
+        notificationsVisible: notificationsVisibleSelector(state),
+        searchVisible: searchVisibleSelector(state),
+        selectedPicturePost: selectedPicturePostSelector(state),
+        selectedPostId: selectedPostIdSelector(state),
+        settingsVisible: settingsVisibleSelector(state),
     };
 };
 

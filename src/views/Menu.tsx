@@ -6,7 +6,7 @@ import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {showNotifications, showSearch, showSettings} from '../redux/actions';
 import {showPictureOfDay} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
-import {getUnreadNotificationsCount} from '../redux/selectors/notifications';
+import {unreadNotificationsCountSelector} from '../redux/selectors/notifications';
 
 import './Menu.scss';
 import {SectionLink} from './SectionLink';
@@ -107,7 +107,7 @@ class MenuComponent extends React.Component<IMenuComponentProps, IMenuComponentS
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        unreadNotifications: getUnreadNotificationsCount(state),
+        unreadNotifications: unreadNotificationsCountSelector(state),
     };
 };
 

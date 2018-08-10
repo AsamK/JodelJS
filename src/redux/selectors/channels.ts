@@ -2,7 +2,7 @@ import {createSelector} from 'reselect';
 
 import {IChannel} from '../../interfaces/IChannel';
 import {IJodelAppStore} from '../reducers';
-import {getSelectedSection} from './view';
+import {selectedSectionSelector} from './view';
 
 /* Begin Helpers **/
 
@@ -16,17 +16,17 @@ function getChannel(channels: { [key: string]: IChannel }, channel: string): ICh
 
 /* End Helpers */
 
-export const getSelectedChannelName = createSelector(
-    getSelectedSection,
+export const selectedChannelNameSelector = createSelector(
+    selectedSectionSelector,
     (selectedSection): string | undefined => !selectedSection || !selectedSection.startsWith('channel:')
         ? undefined : selectedSection.substring(8));
 
-const getFollowedChannelNames = (state: IJodelAppStore) => state.account.config ?
+const followedChannelNamesSelector = (state: IJodelAppStore) => state.account.config ?
     state.account.config.followed_channels :
     [];
 
-export const getIsSelectedChannelFollowed = createSelector(
-    getSelectedChannelName, getFollowedChannelNames,
+export const isSelectedChannelFollowedSelector = createSelector(
+    selectedChannelNameSelector, followedChannelNamesSelector,
     (selectedChannelName, followedChannelNames) => {
         if (!selectedChannelName) {
             return false;
@@ -35,8 +35,8 @@ export const getIsSelectedChannelFollowed = createSelector(
         return !!followedChannelNames.find(c => c.toLowerCase() === s);
     },
 );
-export const getSelectedChannelNameLikeFollowed = createSelector(
-    getSelectedChannelName, getFollowedChannelNames,
+export const selectedChannelNameLikeFollowedSelector = createSelector(
+    selectedChannelNameSelector, followedChannelNamesSelector,
     (selectedChannelName, followedChannelNames): string | undefined => {
         if (!selectedChannelName) {
             return undefined;
@@ -46,37 +46,37 @@ export const getSelectedChannelNameLikeFollowed = createSelector(
     },
 );
 
-const getRecommendedChannelNames = (state: IJodelAppStore) => state.account.recommendedChannels;
-const getLocalChannelNames = (state: IJodelAppStore) => state.account.localChannels;
-const getCountryChannelNames = (state: IJodelAppStore) => state.account.countryChannels;
+const recommendedChannelNamesSelector = (state: IJodelAppStore) => state.account.recommendedChannels;
+const localChannelNamesSelector = (state: IJodelAppStore) => state.account.localChannels;
+const countryChannelNamesSelector = (state: IJodelAppStore) => state.account.countryChannels;
 
-const getChannels = (state: IJodelAppStore) => state.entities.channels;
+const channelsSelector = (state: IJodelAppStore) => state.entities.channels;
 
-export const getFollowedChannels = createSelector(
-    getFollowedChannelNames, getChannels,
+export const followedChannelsSelector = createSelector(
+    followedChannelNamesSelector, channelsSelector,
     (followedChannelNames, channels): IChannel[] => followedChannelNames
         .map(channel => getChannel(channels, channel)));
 
-export const getRecommendedChannels = createSelector(
-    getRecommendedChannelNames, getFollowedChannelNames, getChannels,
+export const recommendedChannelsSelector = createSelector(
+    recommendedChannelNamesSelector, followedChannelNamesSelector, channelsSelector,
     (recommendedChannelNames, followedChannelNames, channels): IChannel[] => recommendedChannelNames
         .filter(channel => !followedChannelNames.find(c => c.toLowerCase() === channel.toLowerCase()))
         .map(channel => getChannel(channels, channel)));
 
-export const getLocalChannels = createSelector(
-    getLocalChannelNames, getFollowedChannelNames, getChannels,
+export const localChannelsSelector = createSelector(
+    localChannelNamesSelector, followedChannelNamesSelector, channelsSelector,
     (localChannelNames, followedChannelNames, channels): IChannel[] => localChannelNames
         .filter(channel => !followedChannelNames.find(c => c.toLowerCase() === channel.toLowerCase()))
         .map(channel => getChannel(channels, channel)));
 
-export const getCountryChannels = createSelector(
-    getCountryChannelNames, getFollowedChannelNames, getChannels,
+export const countryChannelsSelector = createSelector(
+    countryChannelNamesSelector, followedChannelNamesSelector, channelsSelector,
     (countryChannelNames, followedChannelNames, channels): IChannel[] => countryChannelNames
         .filter(channel => !followedChannelNames.find(c => c.toLowerCase() === channel.toLowerCase()))
         .map(channel => getChannel(channels, channel)));
 
-export const getSelectedChannelFollowersCount = createSelector(
-    getSelectedChannelName, getChannels,
+export const selectedChannelFollowersCountSelector = createSelector(
+    selectedChannelNameSelector, channelsSelector,
     (selectedChannelName, channels): number => {
         if (!selectedChannelName) {
             return 0;

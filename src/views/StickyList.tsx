@@ -6,7 +6,7 @@ import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {selectPost, switchPostSection} from '../redux/actions';
 import {closeSticky} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
-import {getStickies} from '../redux/selectors/posts';
+import {stickiesSelector} from '../redux/selectors/posts';
 import {Sticky} from './Sticky';
 
 export interface IStickyListProps {
@@ -49,7 +49,7 @@ class StickyListComponent extends React.Component<IStickyListProps> {
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        stickies: getStickies(state),
+        stickies: stickiesSelector(state),
     };
 };
 

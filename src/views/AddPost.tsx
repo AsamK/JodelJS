@@ -6,9 +6,9 @@ import { Color } from '../enums/Color';
 import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { addPost, switchPostSection } from '../redux/actions';
 import { IJodelAppStore } from '../redux/reducers';
-import { getAddPostChannel } from '../redux/selectors/app';
-import { getSelectedPostId } from '../redux/selectors/posts';
-import { getAddPostVisible } from '../redux/selectors/view';
+import { addPostChannelSelector } from '../redux/selectors/app';
+import { selectedPostIdSelector } from '../redux/selectors/posts';
+import { addPostVisibleSelector } from '../redux/selectors/view';
 import { resizePicture } from '../utils/picture.utils';
 import './AddPost.scss';
 import ColorPicker from './ColorPicker';
@@ -139,9 +139,9 @@ export class AddPostComponent extends React.PureComponent<IAddPostComponentProps
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        ancestor: getSelectedPostId(state) || undefined,
-        channel: getAddPostChannel(state),
-        visible: getAddPostVisible(state),
+        ancestor: selectedPostIdSelector(state) || undefined,
+        channel: addPostChannelSelector(state),
+        visible: addPostVisibleSelector(state),
     };
 };
 

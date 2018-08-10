@@ -6,7 +6,7 @@ import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {pin} from '../redux/actions';
 import {ojFilterPost, sharePost} from '../redux/actions/api';
 import {IJodelAppStore} from '../redux/reducers';
-import {getSelectedPost} from '../redux/selectors/posts';
+import {selectedPostSelector} from '../redux/selectors/posts';
 import BackButton from './BackButton';
 
 import './PostTopBar.scss';
@@ -59,7 +59,7 @@ const PostTopBarComponent = (props: IPostTopBarComponentProps) => {
 
 const mapStateToProps = (state: IJodelAppStore, ownProps: IPostTopBarProps) => {
     return {
-        post: getSelectedPost(state),
+        post: selectedPostSelector(state),
     };
 };
 

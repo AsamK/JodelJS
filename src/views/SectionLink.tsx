@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {switchPostSection} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
-import {getSelectedSection} from '../redux/selectors/view';
+import {selectedSectionSelector} from '../redux/selectors/view';
 
 interface ISectionLinkProps {
     section: string;
@@ -41,7 +41,7 @@ const SectionLinkComponent = ({section, active, onClick}: ISectionLinkComponentP
 
 const mapStateToProps = (state: IJodelAppStore, ownProps: ISectionLinkProps) => {
     return {
-        active: ownProps.section === getSelectedSection(state),
+        active: ownProps.section === selectedSectionSelector(state),
     };
 };
 

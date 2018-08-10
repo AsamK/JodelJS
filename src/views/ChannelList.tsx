@@ -6,10 +6,10 @@ import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { switchPostSection } from '../redux/actions';
 import { IJodelAppStore } from '../redux/reducers';
 import {
-    getCountryChannels,
-    getFollowedChannels,
-    getLocalChannels,
-    getRecommendedChannels,
+    countryChannelsSelector,
+    followedChannelsSelector,
+    localChannelsSelector,
+    recommendedChannelsSelector,
 } from '../redux/selectors/channels';
 import './ChannelList.scss';
 import { ChannelListItem } from './ChannelListItem';
@@ -141,10 +141,10 @@ export class ChannelListComponent extends React.Component<IChannelListComponentP
 
 const mapStateToProps = (state: IJodelAppStore, ownProps: {}) => {
     return {
-        channels: getFollowedChannels(state),
-        countryChannels: getCountryChannels(state),
-        localChannels: getLocalChannels(state),
-        recommendedChannels: getRecommendedChannels(state),
+        channels: followedChannelsSelector(state),
+        countryChannels: countryChannelsSelector(state),
+        localChannels: localChannelsSelector(state),
+        recommendedChannels: recommendedChannelsSelector(state),
     };
 };
 

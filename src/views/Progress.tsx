@@ -4,7 +4,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {IJodelAppStore} from '../redux/reducers';
-import {getIsSelectedSectionFetching} from '../redux/selectors/posts';
+import {isSelectedSectionFetchingSelector} from '../redux/selectors/posts';
 
 interface IProgressProps {
     isFetching: boolean;
@@ -46,7 +46,7 @@ class Progress extends React.PureComponent<IProgressProps> {
 
 function mapStateToProps(state: IJodelAppStore) {
     return {
-        isFetching: getIsSelectedSectionFetching(state),
+        isFetching: isSelectedSectionFetchingSelector(state),
     };
 }
 

@@ -6,9 +6,9 @@ import {IPost} from '../interfaces/IPost';
 import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {fetchMorePosts, selectPost, showAddPost, updatePosts} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
-import {isLocationKnown} from '../redux/selectors/app';
-import {getSelectedSectionLastUpdated, getSelectedSectionSortPosts} from '../redux/selectors/posts';
-import {getSelectedSection, getSelectedSortType} from '../redux/selectors/view';
+import {isLocationKnownSelector} from '../redux/selectors/app';
+import {selectedSectionLastUpdatedSelector, selectedSectionSortPostsSelector} from '../redux/selectors/posts';
+import {selectedSectionSelector, selectedSortTypeSelector} from '../redux/selectors/view';
 import AddButton from './AddButton';
 import PostList from './PostList';
 import {SortTypeLink} from './SortTypeLink';
@@ -80,11 +80,11 @@ class PostListContainerComponent extends React.PureComponent<IPostListContainerC
 
 const mapStateToProps = (state: IJodelAppStore, ownProps: IPostListContainerProps) => {
     return {
-        lastUpdated: getSelectedSectionLastUpdated(state) || undefined,
-        locationKnown: isLocationKnown(state),
-        posts: getSelectedSectionSortPosts(state),
-        section: getSelectedSection(state),
-        sortType: getSelectedSortType(state),
+        lastUpdated: selectedSectionLastUpdatedSelector(state) || undefined,
+        locationKnown: isLocationKnownSelector(state),
+        posts: selectedSectionSortPostsSelector(state),
+        section: selectedSectionSelector(state),
+        sortType: selectedSortTypeSelector(state),
     };
 };
 

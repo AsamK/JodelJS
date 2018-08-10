@@ -6,7 +6,7 @@ import {PostListSortType} from '../enums/PostListSortType';
 import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 import {switchPostListSortType} from '../redux/actions';
 import {IJodelAppStore} from '../redux/reducers';
-import {getSelectedSortType} from '../redux/selectors/view';
+import {selectedSortTypeSelector} from '../redux/selectors/view';
 
 interface ISortTypeLinkProps {
     sortType: PostListSortType;
@@ -31,7 +31,7 @@ const SortTypeLinkComponent = ({sortType, active, onClick}: ISortTypeLinkCompone
 
 const mapStateToProps = (state: IJodelAppStore, ownProps: ISortTypeLinkProps) => {
     return {
-        active: ownProps.sortType === getSelectedSortType(state),
+        active: ownProps.sortType === selectedSortTypeSelector(state),
     };
 };
 

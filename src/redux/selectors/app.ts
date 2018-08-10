@@ -1,43 +1,43 @@
 import { createSelector } from 'reselect';
 
 import { IJodelAppStore } from '../reducers';
-import { getSelectedChannelName } from './channels';
-import { getSelectedPostId } from './posts';
+import { selectedChannelNameSelector } from './channels';
+import { selectedPostIdSelector } from './posts';
 
-export const getDeviceUid = (state: IJodelAppStore) => state.account.deviceUid;
+export const deviceUidSelector = (state: IJodelAppStore) => state.account.deviceUid;
 
-export const getIsConfigAvailable = (state: IJodelAppStore) => !!state.account.config;
+export const isConfigAvailableSelector = (state: IJodelAppStore) => !!state.account.config;
 
-export const getIsRegistered = (state: IJodelAppStore) => !!state.account.token;
+export const isRegisteredSelector = (state: IJodelAppStore) => !!state.account.token;
 
-export const getKarma = (state: IJodelAppStore) => state.account.karma;
+export const karmaSelector = (state: IJodelAppStore) => state.account.karma;
 
-export const getAge = (state: IJodelAppStore) => !state.account.config ? null : state.account.config.age;
+export const userAgeSelector = (state: IJodelAppStore) => !state.account.config ? null : state.account.config.age;
 
-export const getUserType = (state: IJodelAppStore) => !state.account.config ? null : state.account.config.user_type;
+export const userTypeSelector = (state: IJodelAppStore) => !state.account.config ? null : state.account.config.user_type;
 
-export const canChangeUserType = (state: IJodelAppStore) =>
+export const canChangeUserTypeSelector = (state: IJodelAppStore) =>
 !state.account.config ? false : state.account.config.can_change_type;
 
-export const getSpecialPostColors = (state: IJodelAppStore) =>
+export const specialPostColorsSelector = (state: IJodelAppStore) =>
     !state.account.config ? [] : state.account.config.special_post_colors;
 
-export const getAddPostChannel = createSelector(
-    getSelectedPostId, getSelectedChannelName,
+export const addPostChannelSelector = createSelector(
+    selectedPostIdSelector, selectedChannelNameSelector,
     (selectedPostId, selectedChannelName) => selectedPostId ? undefined : selectedChannelName,
 );
 
-export const getLocation = (store: IJodelAppStore) => store.settings.location;
+export const locationSelector = (store: IJodelAppStore) => store.settings.location;
 
-export const isLocationKnown = (store: IJodelAppStore) => !!getLocation(store);
+export const isLocationKnownSelector = (store: IJodelAppStore) => !!locationSelector(store);
 
-export const getToasts = (state: IJodelAppStore) => state.toasts;
+export const toastsSelector = (state: IJodelAppStore) => state.toasts;
 
-export const getAccessToken = (state: IJodelAppStore) => {
+export const accessTokenSelector = (state: IJodelAppStore) => {
     if (!state.account.token) {
         return undefined;
     }
     return state.account.token.access;
 };
 
-export const getIsRefreshingToken = (state: IJodelAppStore) => state.account.refreshingToken;
+export const isRefreshingTokenSelector = (state: IJodelAppStore) => state.account.refreshingToken;

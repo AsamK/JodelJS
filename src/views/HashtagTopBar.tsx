@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
 
 import {IJodelAppStore} from '../redux/reducers';
-import {getSelectedHashtagName} from '../redux/selectors/view';
+import {selectedHashtagNameSelector} from '../redux/selectors/view';
 import BackButton from './BackButton';
 
 export interface IHashtagTopBarProps {
@@ -20,7 +20,7 @@ const HashtagTopBarComponent = ({hashtag}: IHashtagTopBarProps) => {
 
 const mapStateToProps = (state: IJodelAppStore) => {
     return {
-        hashtag: getSelectedHashtagName(state),
+        hashtag: selectedHashtagNameSelector(state),
     };
 };
 

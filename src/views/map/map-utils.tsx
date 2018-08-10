@@ -12,9 +12,20 @@ interface IWithMapProps {
  */
 type ObjectExclude<O, E> = { [K in Exclude<keyof O, keyof E>]: O[K] };
 
+type BaseComponentWrappedProps = IWithMapProps & React.ClassAttributes<any>;
+type OuterComponentProps<P, C> = ObjectExclude<P, BaseComponentWrappedProps>;
+
 export const withLeafletMap = () =>
-    <P extends IWithMapProps>(Component: React.ComponentType<P>)
-        : React.ComponentType<ObjectExclude<P, IWithMapProps>> =>
-        <T extends {}>(props: T) => <LeafletMapContext.Consumer>
-            {map => !map ? null : <Component map={map} {...props}></Component>}
-        </LeafletMapContext.Consumer>;
+    <P extends BaseComponentWrappedProps>(Component: React.ComponentType<P>)
+        : React.ComponentType<React.ClassAttributes<typeof Component> & OuterComponentProps<P, typeof Component>> => {
+        const forwardRef: React.RefForwardingComponent<typeof Component, OuterComponentProps<P, typeof Component>> =
+            (innerProps, ref) =>
+                <LeafletMapContext.Consumer>
+                    {map => !map ? null : <Component map={map} ref={ref} {...innerProps}></Component>}
+                </LeafletMapContext.Consumer>;
+
+        const name = Component.displayName || Component.name;
+        forwardRef.displayName = `withLeafletMap(${name})`;
+
+        return React.forwardRef<typeof Component, OuterComponentProps<P, typeof Component>>(forwardRef);
+    };

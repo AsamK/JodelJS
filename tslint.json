@@ -15,6 +15,13 @@
       "ban-single-arg-parens"
     ],
     "align": [],
+    "max-line-length": [
+      true,
+      {
+        "limit": 140,
+        "ignore-pattern": "^import |^export {(.*?)}"
+      }
+    ],
     "no-console": [
       true,
       "log"

@@ -290,6 +290,10 @@ body,
       width: 1em;
     }
   }
+
+  &.collapse {
+    opacity: .3;
+  }
 }
 
 @keyframes voting {

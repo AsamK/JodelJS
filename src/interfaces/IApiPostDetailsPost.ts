@@ -11,6 +11,7 @@ export interface IApiPostDetailsPost extends IApiPostListPost {
 
 export interface IApiPostReplyPost {
     child_count: number;
+    collapse: boolean;
     color: Color;
     created_at: string;
     discovered_by: number;

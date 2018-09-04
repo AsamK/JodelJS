@@ -1,18 +1,18 @@
 import classnames from 'classnames';
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {PostOwn} from '../enums/PostOwn';
-import {UserHandle} from '../enums/UserHandle';
-import {VoteType} from '../enums/VoteType';
-import {IPost} from '../interfaces/IPost';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {deletePost, downVote, giveThanks, selectPicture, switchPostSection, upVote} from '../redux/actions';
-import {IJodelAppStore} from '../redux/reducers';
+import { PostOwn } from '../enums/PostOwn';
+import { UserHandle } from '../enums/UserHandle';
+import { VoteType } from '../enums/VoteType';
+import { IPost } from '../interfaces/IPost';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { deletePost, downVote, giveThanks, selectPicture, switchPostSection, upVote } from '../redux/actions';
+import { IJodelAppStore } from '../redux/reducers';
 import ChildInfo from './ChildInfo';
 import Location from './Location';
 import Message from './Message';
-import {Time} from './Time';
+import { Time } from './Time';
 import Vote from './Vote';
 
 export interface IPostProps {
@@ -40,11 +40,14 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
     }
 
     public render() {
-        const {post, author, parentPostId, onPostClick} = this.props;
+        const { post, author, parentPostId, onPostClick } = this.props;
         return (
-            <div className={classnames('post', {'post-oj': !!parentPostId && post.user_handle === UserHandle.OJ})}
-                 style={{backgroundColor: '#' + post.color}}
-                 onClick={onPostClick}>
+            <div className={classnames('post', {
+                'collapse': post.collapse,
+                'post-oj': !!parentPostId && post.user_handle === UserHandle.OJ,
+            })}
+                style={{ backgroundColor: '#' + post.color }}
+                onClick={onPostClick}>
                 {post.channel ? <div
                     className="channel-link"
                     onClick={e => {
@@ -57,25 +60,25 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
                 >{post.channel}</div> : null}
                 {post.thumbnail_url ?
                     <div className="postPicture"
-                         style={{backgroundImage: 'url(https:' + post.thumbnail_url + ')'}}
-                         onMouseUp={e => {
-                             if (this.pressTimer !== undefined) {
-                                 clearTimeout(this.pressTimer);
-                             }
-                         }}
-                         onContextMenu={e => {
-                             e.preventDefault();
-                             if (this.pressTimer !== undefined) {
-                                 clearTimeout(this.pressTimer);
-                             }
-                             this.props.selectPicture();
-                         }}
-                         onMouseDown={e => {
-                             if (this.pressTimer !== undefined) {
-                                 clearTimeout(this.pressTimer);
-                             }
-                             this.pressTimer = window.setTimeout(() => this.props.selectPicture(), 300);
-                         }}/>
+                        style={{ backgroundImage: 'url(https:' + post.thumbnail_url + ')' }}
+                        onMouseUp={e => {
+                            if (this.pressTimer !== undefined) {
+                                clearTimeout(this.pressTimer);
+                            }
+                        }}
+                        onContextMenu={e => {
+                            e.preventDefault();
+                            if (this.pressTimer !== undefined) {
+                                clearTimeout(this.pressTimer);
+                            }
+                            this.props.selectPicture();
+                        }}
+                        onMouseDown={e => {
+                            if (this.pressTimer !== undefined) {
+                                clearTimeout(this.pressTimer);
+                            }
+                            this.pressTimer = window.setTimeout(() => this.props.selectPicture(), 300);
+                        }} />
                     :
                     <Message message={post.message} onAtClick={(e, channel) => {
                         e.stopPropagation();
@@ -83,17 +86,17 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
                     }} onHashtagClick={(e, hashtag) => {
                         e.stopPropagation();
                         this.props.switchToHashtag(hashtag);
-                    }}/>
+                    }} />
                 }
                 <Vote vote_count={post.vote_count} voted={post.voted ? post.voted : VoteType.NOT_VOTED}
-                      upvote={this.upvote} downvote={this.downvote}/>
-                <Time time={post.created_at}/>
-                <ChildInfo child_count={post.child_count ? post.child_count : 0}/>
+                    upvote={this.upvote} downvote={this.downvote} />
+                <Time time={post.created_at} />
+                <ChildInfo child_count={post.child_count ? post.child_count : 0} />
                 <Location location={post.location.name} distance={post.distance}
-                          fromHome={post.from_home || false}/>
+                    fromHome={post.from_home || false} />
                 <div className="author">
                     {author ?
-                        <div className={classnames(author, {gotThanks: post.got_thanks})}>
+                        <div className={classnames(author, { gotThanks: post.got_thanks })}>
                             {author}
                         </div>
                         : ''}
@@ -108,7 +111,7 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
 
     private upvote = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
-        const {post} = this.props;
+        const { post } = this.props;
         if (post.voted === 'up') {
             // Already upvoted -> Give thanks
             this.props.giveThanks();

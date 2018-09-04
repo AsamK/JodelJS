@@ -12,6 +12,7 @@ export interface IPost {
     child_count?: number;
     children?: string[];
     color: Color;
+    collapse?: boolean;
     created_at: string;
     discovered_by: number;
     distance: number;

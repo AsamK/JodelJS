@@ -64,7 +64,7 @@ export class JodelApi {
     public receiveGcmPushVerification(androidAccount: IApiAndroidAccount): Promise<IApiGcmVerification> {
         return request('POST', Settings.GCM_RECEIVE_HELPER_URL)
             .type('json')
-            .set('Content-Type', 'application/json; charset=UTF-8')
+            .set('Content-Type', 'application/json')
             .send(JSON.stringify(androidAccount))
             .then(res => res.body);
     }

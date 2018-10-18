@@ -25,7 +25,6 @@
     "redux-freeze": "~0.1.7",
     "redux-thunk": "~2.3.0",
     "reselect": "~4.0.0",
-    "superagent": "~3.8.3",
     "tslib": "~1.9.3"
   },
   "devDependencies": {
@@ -37,7 +36,6 @@
     "@types/react-intl": "~2.3.11",
     "@types/react-loadable": "~5.4.1",
     "@types/react-redux": "~6.0.9",
-    "@types/superagent": "~3.8.4",
     "autoprefixer": "~9.2.1",
     "clean-webpack-plugin": "~0.1.19",
     "copy-webpack-plugin": "~4.5.3",

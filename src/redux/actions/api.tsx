@@ -684,8 +684,8 @@ export function followChannel(channel: string, follow = true): JodelThunkAction 
 export function getSuggestedHashtags(): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         api.apiGetSuggestedHashtags(getState().settings.useHomeLocation)
-            .then(res => {
-                dispatch(setSuggestedHashtags(res.body.hashtags));
+            .then(body => {
+                dispatch(setSuggestedHashtags(body.hashtags));
             },
                 err => handleNetworkErrors(dispatch, getState, err));
     };

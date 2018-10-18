@@ -4,7 +4,6 @@ import {IJodelAction} from '../interfaces/IJodelAction';
 import {IToast} from '../interfaces/IToast';
 import {account, IAccountStore} from './reducers/account';
 import {entities, IEntitiesStore} from './reducers/entities';
-import {IImageCaptchaStore, imageCaptcha} from './reducers/imageCaptcha';
 import {IPostsBySectionStore, postsBySection} from './reducers/postsBySection';
 import {ISettingsStore, settings} from './reducers/settings';
 import {toasts} from './reducers/toasts';
@@ -18,14 +17,12 @@ interface IJodelAppStoreMutable {
     viewState: IViewStateStore;
     account: IAccountStore;
     settings: ISettingsStore;
-    imageCaptcha: IImageCaptchaStore;
     toasts: ReadonlyArray<IToast>;
 }
 
 export const JodelApp = combineReducers<IJodelAppStore, IJodelAction>({
     account,
     entities,
-    imageCaptcha,
     postsBySection,
     settings,
     toasts,

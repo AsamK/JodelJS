@@ -17,7 +17,6 @@ import {
     SET_CONFIG,
     SET_COUNTRY_CHANNELS,
     SET_DEVICE_UID,
-    SET_IMAGE_CAPTCHA,
     SET_IS_FETCHING,
     SET_KARMA,
     SET_LOCAL_CHANNELS,
@@ -165,12 +164,6 @@ export interface IPayloadStickyId {
     stickyId: string;
 }
 
-export interface IPayloadImageCaptcha {
-    key: string | null;
-    imageUrl: string | null;
-    imageWidth: number | null;
-}
-
 export interface IPayloadShowToast {
     toast: IToast;
 }
@@ -198,7 +191,6 @@ export type IJodelAction =
     { type: typeof SET_CONFIG; payload: IPayloadConfig; } |
     { type: typeof SET_COUNTRY_CHANNELS; payload: IPayloadChannels; } |
     { type: typeof SET_DEVICE_UID; payload: IPayloadDeviceUid; } |
-    { type: typeof SET_IMAGE_CAPTCHA; payload: IPayloadImageCaptcha; } |
     { type: typeof SET_IS_FETCHING; payload: IPayloadSectionIsFetching; } |
     { type: typeof SET_KARMA; payload: IPayloadKarma; } |
     { type: typeof SET_LOCAL_CHANNELS; payload: IPayloadChannels; } |

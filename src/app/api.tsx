@@ -12,7 +12,6 @@ import { IApiConfig } from '../interfaces/IApiConfig';
 import { IApiAndroidAccount, IApiGcmAccount } from '../interfaces/IApiGcmAccount';
 import { IApiGcmVerification } from '../interfaces/IApiGcmVerification';
 import { IApiHashtagPostListCombo } from '../interfaces/IApiHashtagPostListCombo';
-import { IApiImageCaptcha } from '../interfaces/IApiImageCaptcha';
 import { IApiKarma } from '../interfaces/IApiKarma';
 import { IApiLocationPostListCombo } from '../interfaces/IApiLocationPostListCombo';
 import { IApiNotificationAvailable } from '../interfaces/IApiNotificationAvailable';
@@ -27,7 +26,6 @@ import { IApiRecommendedChannels } from '../interfaces/IApiRecommendedChannels';
 import { IApiRefreshToken } from '../interfaces/IApiRefreshToken';
 import { IApiRegister } from '../interfaces/IApiRegister';
 import { IApiShare } from '../interfaces/IApiShare';
-import { IApiVerify } from '../interfaces/IApiVerify';
 import { IApiVote } from '../interfaces/IApiVote';
 import { IJodelAppStore } from '../redux/reducers';
 import { accessTokenSelector, isRefreshingTokenSelector } from '../redux/selectors/app';
@@ -362,31 +360,6 @@ export class JodelApi {
 
     public apiGetKarma(): Promise<IApiKarma> {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V2 + '/users/karma', {})
-            .then(res => res.json());
-    }
-
-    /**
-     * Request a link to the verification image captcha
-     * expected data from server: {key: String, image_url: String, image_size: Number}
-     * @returns {Promise}
-     */
-    public apiGetImageCaptcha(): Promise<IApiImageCaptcha> {
-        return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/user/verification/imageCaptcha',
-            {})
-            .then(res => res.json());
-    }
-
-    /**
-     * Send the user's answer back to the server
-     * expected data from server: {verified: Boolean}
-     * @returns {Promise}
-     */
-    public apiSendVerificationAnswer(key: string, answer: number[]): Promise<IApiVerify> {
-        return this.jodelRequestWithAuth('POST', Settings.API_SERVER + API_PATH_V3 + '/user/verification/imageCaptcha',
-            {}, {
-                answer,
-                key,
-            })
             .then(res => res.json());
     }
 

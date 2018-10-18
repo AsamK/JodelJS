@@ -31,7 +31,6 @@ import {
     receivePosts,
     setChannelsMeta,
     setCountryChannels,
-    setImageCaptcha,
     setIsFetching,
     setLocalChannels,
     setRecommendedChannels,
@@ -686,34 +685,6 @@ export function getSuggestedHashtags(): JodelThunkAction {
         api.apiGetSuggestedHashtags(getState().settings.useHomeLocation)
             .then(body => {
                 dispatch(setSuggestedHashtags(body.hashtags));
-            },
-                err => handleNetworkErrors(dispatch, getState, err));
-    };
-}
-
-export function getImageCaptcha(): JodelThunkAction {
-    return (dispatch, getState, { api }) => {
-        api.apiGetImageCaptcha()
-            .then(res => {
-                dispatch(setImageCaptcha(res.key, res.image_url, res.image_size));
-            },
-                err => handleNetworkErrors(dispatch, getState, err));
-    };
-}
-
-export function sendVerificationAnswer(answer: number[]): JodelThunkAction {
-    return (dispatch, getState, { api }) => {
-        const imageCaptchaKey = getState().imageCaptcha.key;
-        if (!imageCaptchaKey) {
-            return;
-        }
-        api.apiSendVerificationAnswer(imageCaptchaKey, answer)
-            .then(res => {
-                dispatch(getConfig());
-                dispatch(setImageCaptcha(null, null, null));
-                if (!res.verified) {
-                    dispatch(getImageCaptcha());
-                }
             },
                 err => handleNetworkErrors(dispatch, getState, err));
     };

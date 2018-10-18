@@ -24,7 +24,6 @@ import {
     SET_CONFIG,
     SET_COUNTRY_CHANNELS,
     SET_DEVICE_UID,
-    SET_IMAGE_CAPTCHA,
     SET_IS_FETCHING,
     SET_KARMA,
     SET_LOCAL_CHANNELS,
@@ -356,17 +355,6 @@ export function setIsFetching(section: Section, isFetching = true): IJodelAction
             section,
         },
         type: SET_IS_FETCHING,
-    };
-}
-
-export function setImageCaptcha(key: string | null, imageUrl: string | null, imageWidth: number | null): IJodelAction {
-    return {
-        payload: {
-            imageUrl,
-            imageWidth,
-            key,
-        },
-        type: SET_IMAGE_CAPTCHA,
     };
 }
 

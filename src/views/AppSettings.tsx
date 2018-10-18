@@ -9,8 +9,6 @@ import { IGeoCoordinates, ILocation } from '../interfaces/ILocation';
 import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import {
     deleteHome,
-    getImageCaptcha,
-    sendVerificationAnswer,
     setHome,
     setLocation,
     setUseBrowserLocation,
@@ -21,7 +19,6 @@ import { setInternationalFeed, setUserLanguage, updateUserType } from '../redux/
 import { IJodelAppStore } from '../redux/reducers';
 import { canChangeUserTypeSelector, deviceUidSelector, locationSelector } from '../redux/selectors/app';
 import { SelectLocation } from './SelectLocation';
-import { VerificationImageCaptcha } from './VerificationImageCaptcha';
 
 interface IAppSettingsStateProps {
     canChangeUserType: boolean;
@@ -33,8 +30,6 @@ interface IAppSettingsStateProps {
     verified: boolean;
     useBrowserLocation: boolean;
     useHomeLocation: boolean;
-    imageUrl: string | null;
-    imageWidth: number | null;
     experiments: IApiExperiment[];
     user_type: UserType | null;
     moderator: boolean;
@@ -47,14 +42,12 @@ interface IAppSettingsDispatchProps {
     updateUserType: (userType: UserType) => void;
     showHome: (useHome: boolean) => void;
     updateLocation: () => void;
-    getImageCaptcha: () => void;
     deleteHome: () => void;
     setHome: (location: IGeoCoordinates) => void;
     setLocation: (location: IGeoCoordinates) => void;
     setInternationalFeed: (enable: boolean) => void;
     setUseBrowserLocation: (useBrowserLocation: boolean) => void;
     setUserLanguage: (language: string) => void;
-    sendVerificationAnswer: (answer: number[]) => void;
 }
 
 type IAppSettingsComponentProps = IAppSettingsDispatchProps & IAppSettingsStateProps;
@@ -66,12 +59,6 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
 
     constructor(props: IAppSettingsComponentProps) {
         super(props);
-    }
-
-    public componentDidMount() {
-        if (!this.props.verified) {
-            this.props.getImageCaptcha();
-        }
     }
 
     public render() {
@@ -142,13 +129,7 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
             <h3>Konto</h3>
             <div className="block">
                 <div className="accountVerification">
-                    {!this.props.verified && this.props.imageUrl && this.props.imageWidth ?
-                        <VerificationImageCaptcha imageUrl={this.props.imageUrl} imageWidth={this.props.imageWidth}
-                            onFinishedClick={answer => {
-                                this.props.sendVerificationAnswer(answer);
-                            }
-                            } />
-                        : 'Dein Jodel Konto ist verifiziert'}
+                    {this.props.verified ? 'Account is verified' : 'Account is not verified'}
                 </div>
                 <div className="features">
                     Features: {
@@ -256,8 +237,6 @@ const mapStateToProps = (state: IJodelAppStore): IAppSettingsStateProps => {
         homeClearAllowed: state.account.config ? state.account.config.home_clear_allowed : false,
         homeName: state.account.config ? state.account.config.home_name : null,
         homeSet: state.account.config ? state.account.config.home_set : false,
-        imageUrl: state.imageCaptcha.image ? state.imageCaptcha.image.url : null,
-        imageWidth: state.imageCaptcha.image ? state.imageCaptcha.image.width : null,
         location: locationSelector(state),
         moderator: state.account.config ? state.account.config.moderator : false,
         pending_deletion: state.account.config ? state.account.config.pending_deletion : false,
@@ -271,8 +250,6 @@ const mapStateToProps = (state: IJodelAppStore): IAppSettingsStateProps => {
 const mapDispatchToProps = (dispatch: JodelThunkDispatch): IAppSettingsDispatchProps => {
     return {
         deleteHome: () => dispatch(deleteHome()),
-        getImageCaptcha: () => dispatch(getImageCaptcha()),
-        sendVerificationAnswer: (answer: number[]) => dispatch(sendVerificationAnswer(answer)),
         setHome: (location: IGeoCoordinates) => dispatch(setHome(location.latitude, location.longitude)),
         setInternationalFeed: (enable: boolean) => dispatch(setInternationalFeed(enable)),
         setLocation: (location: IGeoCoordinates) => dispatch(setLocation(location.latitude, location.longitude)),

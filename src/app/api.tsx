@@ -658,6 +658,22 @@ export class JodelApi {
             headers,
             method,
             mode: 'cors',
-        });
+        })
+            .then(res => {
+                if (res.ok) {
+                    return Promise.resolve(res);
+                }
+                return res.json()
+                    .then(body => body.error)
+                    .catch(() => res.text())
+                    .catch(() => undefined)
+                    .then(description => {
+                        return Promise.reject({
+                            message: res.statusText,
+                            description,
+                            status: res.status,
+                        });
+                    });
+            });
     }
 }

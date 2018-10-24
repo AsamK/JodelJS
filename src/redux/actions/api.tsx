@@ -39,9 +39,15 @@ import {
 } from './state';
 import { showToast } from './toasts.actions';
 
+interface IResponseError {
+    description?: string;
+    message: string;
+    status: number;
+}
+
 function handleNetworkErrors(dispatch: JodelThunkDispatch,
-    getState: () => IJodelAppStore, err: any) {
-    if (err.status === undefined) {
+    getState: () => IJodelAppStore, err: IResponseError | {}) {
+    if (!('status' in err)) {
         dispatch(showToast('Kein Internet Zugriff oder Server down.', ToastType.WARNING));
         console.error('No internet access or server down…,', err);
     } else if (err.status === 401) {
@@ -49,21 +55,18 @@ function handleNetworkErrors(dispatch: JodelThunkDispatch,
         console.error('Permission denied');
         dispatch(setPermissionDenied(true));
     } else if (err.status === 477) {
-        const error = err.response.body ? err.response.body.error : err.response.text;
-        dispatch(showToast('Zugriff verweigert, Jodel Geheimnis ist veraltet: ' + error, ToastType.ERROR));
+        dispatch(showToast('Zugriff verweigert, Jodel Geheimnis ist veraltet: ' + err.description, ToastType.ERROR));
         console.error('Request error: Secret is probably outdated ' + err.status + ' ' + err.message + ': ' +
-            err.response.text);
+            err.description);
     } else if (err.status === 478) {
         dispatch(verify());
-        const error = err.response.body ? err.response.body.error : err.response.text;
-        dispatch(showToast('Zugriff verweigert, Konto nicht verifiziert: ' + error, ToastType.ERROR));
+        dispatch(showToast('Zugriff verweigert, Konto nicht verifiziert: ' + err.description, ToastType.ERROR));
         console.error('Request error: Account probably not verified ' + err.status + ' ' + err.message + ': ' +
-            err.response.text);
+            err.description);
         dispatch(showSettings(true));
     } else {
-        const error = err.response.body ? err.response.body.error : err.response.text;
-        dispatch(showToast(`Fehler: ${err.status} ${err.message} ${error}.`, ToastType.ERROR));
-        console.error('Request error: ' + err.status + ' ' + err.message + ': ' + err.response.text);
+        dispatch(showToast(`Fehler: ${err.status} ${err.message} ${err.description}.`, ToastType.ERROR));
+        console.error('Request error: ' + err.status + ' ' + err.message + ': ' + err.description);
     }
 }
 

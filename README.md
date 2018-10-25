@@ -5,7 +5,7 @@ The account information is stored in the browser’s localStorage.
 
 <img src="https://github.com/AsamK/JodelJS/blob/master/screenshot.png" width="200" alt="DesktopJodel Screenshot">
 
-Before building the app, create your own `settings.ts` file in `src/app/` by copying `settings.ts.sample`.
+Before building the app, create your own `settings.ts` file in `src/app/` by copying `settings.sample.ts`.
 
 Build app:
 

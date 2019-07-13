@@ -27,6 +27,7 @@ import { IApiRefreshToken } from '../interfaces/IApiRefreshToken';
 import { IApiRegister } from '../interfaces/IApiRegister';
 import { IApiShare } from '../interfaces/IApiShare';
 import { IApiVote } from '../interfaces/IApiVote';
+import { IGeoCoordinates } from '../interfaces/ILocation';
 import { IJodelAppStore } from '../redux/reducers';
 import { accessTokenSelector, isRefreshingTokenSelector } from '../redux/selectors/app';
 import Settings from './settings';
@@ -591,18 +592,19 @@ export class JodelApi {
         return parser;
     }
 
-    private computeSignature(auth: string | undefined, method: string, url: string, timestamp: string,
+    private computeSignature(auth: string | undefined, location: IGeoCoordinates | null, method: string, url: string, timestamp: string,
         query: { [key: string]: any }, data: string) {
         const u = this.parseUrl(url);
         let path = u.pathname;
         if (!path.startsWith('/')) {
             path = '/' + path;
         }
+        const locationString = !location ? '' : `${location.latitude.toFixed(4)};${location.longitude.toFixed(4)}`;
         const queryPart = Object.keys(query)
             .filter(key => query[key] !== undefined)
             .map(key => encodeURIComponent(key) + '%' + encodeURIComponent(query[key]))
             .join('%');
-        const raw = `${method}%${u.hostname}%${443}%${path}%${auth || ''}%${timestamp}%${queryPart}%${data}`;
+        const raw = `${method}%${u.hostname}%${443}%${path}%${auth || ''}%${locationString}%${timestamp}%${queryPart}%${data}`;
 
         const hmac = createHmac('sha1', Settings.KEY);
         hmac.setEncoding('hex');
@@ -626,7 +628,7 @@ export class JodelApi {
         data?: object | string): Promise<Response> {
         const dataString = method !== 'GET' && method !== 'HEAD' && data ? JSON.stringify(data) : undefined;
         const timestamp = new Date().toISOString();
-        const sig = this.computeSignature(auth, method, url, timestamp, query, dataString || '');
+        const sig = this.computeSignature(auth, null, method, url, timestamp, query, dataString || '');
 
         function toFormUrlencoded(form: { [key: string]: string }): string {
             return Object.keys(form)

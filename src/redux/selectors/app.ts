@@ -17,7 +17,7 @@ export const userAgeSelector = (state: IJodelAppStore) => !state.account.config 
 export const userTypeSelector = (state: IJodelAppStore) => !state.account.config ? null : state.account.config.user_type;
 
 export const canChangeUserTypeSelector = (state: IJodelAppStore) =>
-!state.account.config ? false : state.account.config.can_change_type;
+    !state.account.config ? false : state.account.config.can_change_type;
 
 export const specialPostColorsSelector = (state: IJodelAppStore) =>
     !state.account.config ? [] : state.account.config.special_post_colors;

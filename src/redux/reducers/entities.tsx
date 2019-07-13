@@ -1,12 +1,12 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 
-import {IApiPostReplyPost} from '../../interfaces/IApiPostDetailsPost';
-import {IApiPostListPost} from '../../interfaces/IApiPostListPost';
-import {IApiSticky} from '../../interfaces/IApiSticky';
-import {IChannel} from '../../interfaces/IChannel';
-import {IJodelAction} from '../../interfaces/IJodelAction';
-import {INotification} from '../../interfaces/INotification';
-import {IPost} from '../../interfaces/IPost';
+import { IApiPostReplyPost } from '../../interfaces/IApiPostDetailsPost';
+import { IApiPostListPost } from '../../interfaces/IApiPostListPost';
+import { IApiSticky } from '../../interfaces/IApiSticky';
+import { IChannel } from '../../interfaces/IChannel';
+import { IJodelAction } from '../../interfaces/IJodelAction';
+import { INotification } from '../../interfaces/INotification';
+import { IPost } from '../../interfaces/IPost';
 import {
     CLOSE_STICKY,
     PINNED_POST,
@@ -20,7 +20,7 @@ import {
     SET_RECOMMENDED_CHANNELS,
     VOTED_POST,
 } from '../actions/action.consts';
-import {IJodelAppStore} from '../reducers';
+import { IJodelAppStore } from '../reducers';
 
 export interface IEntitiesStore {
     readonly posts: { readonly [key: string]: IPost };
@@ -62,7 +62,7 @@ function posts(state: { readonly [key: string]: IPost } = {}, action: IJodelActi
                     children: oldPost ? oldPost.children : [],
                 };
             });
-            return {...state, ...newState};
+            return { ...state, ...newState };
         }
         case PINNED_POST:
             return {
@@ -131,7 +131,7 @@ function channels(state: { readonly [key: string]: IChannel } = {}, action: IJod
         case SET_CHANNELS_META:
             const newState: { [key: string]: IChannel } = {};
             action.payload.entitiesChannels.forEach(channel => {
-                newState[channel.channel] = {...state[channel.channel], ...channel};
+                newState[channel.channel] = { ...state[channel.channel], ...channel };
             });
             return {
                 ...state,
@@ -161,7 +161,7 @@ function notifications(state: ReadonlyArray<INotification> = [], action: IJodelA
             return action.payload.notifications ? action.payload.notifications : [];
         case SET_NOTIFICATION_POST_READ:
             const postId = action.payload.postId;
-            return state.map(n => postId === n.post_id ? {...n, read: true} : n);
+            return state.map(n => postId === n.post_id ? { ...n, read: true } : n);
         default:
             return state;
     }

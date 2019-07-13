@@ -1,43 +1,43 @@
 .notification-list-item {
-  background-color: white;
-  cursor: pointer;
-  display: flex;
-  margin-bottom: 1px;
-  padding: 10px 0;
-
-  &.unread .details {
-    font-weight: bolder;
-  }
-
-  .type {
-    flex: none;
-    font-size: .6em;
-    overflow: hidden;
-    width: 40px;
-  }
-
-  .details {
+    background-color: white;
+    cursor: pointer;
     display: flex;
-    flex: 1 1;
-    flex-direction: column;
-    margin: 0 10px;
-    overflow: hidden;
+    margin-bottom: 1px;
+    padding: 10px 0;
 
-    .info-text {
-      font-size: .8em;
+    &.unread .details {
+        font-weight: bolder;
     }
 
-    .message,
-    .info-text {
-      flex: auto;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .type {
+        flex: none;
+        font-size: .6em;
+        overflow: hidden;
+        width: 40px;
     }
-  }
 
-  .time {
-    flex: none;
-    font-size: .8em;
-  }
+    .details {
+        display: flex;
+        flex: 1 1;
+        flex-direction: column;
+        margin: 0 10px;
+        overflow: hidden;
+
+        .info-text {
+            font-size: .8em;
+        }
+
+        .message,
+        .info-text {
+            flex: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .time {
+        flex: none;
+        font-size: .8em;
+    }
 }

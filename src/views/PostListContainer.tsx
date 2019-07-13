@@ -1,18 +1,18 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {PostListSortType} from '../enums/PostListSortType';
-import {IPost} from '../interfaces/IPost';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {fetchMorePosts, selectPost, showAddPost, updatePosts} from '../redux/actions';
-import {IJodelAppStore} from '../redux/reducers';
-import {isLocationKnownSelector} from '../redux/selectors/app';
-import {selectedSectionLastUpdatedSelector, selectedSectionSortPostsSelector} from '../redux/selectors/posts';
-import {selectedSectionSelector, selectedSortTypeSelector} from '../redux/selectors/view';
+import { PostListSortType } from '../enums/PostListSortType';
+import { IPost } from '../interfaces/IPost';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { fetchMorePosts, selectPost, showAddPost, updatePosts } from '../redux/actions';
+import { IJodelAppStore } from '../redux/reducers';
+import { isLocationKnownSelector } from '../redux/selectors/app';
+import { selectedSectionLastUpdatedSelector, selectedSectionSortPostsSelector } from '../redux/selectors/posts';
+import { selectedSectionSelector, selectedSortTypeSelector } from '../redux/selectors/view';
 import AddButton from './AddButton';
 import PostList from './PostList';
-import {SortTypeLink} from './SortTypeLink';
-import {StickyList} from './StickyList';
+import { SortTypeLink } from './SortTypeLink';
+import { StickyList } from './StickyList';
 
 export interface IPostListContainerProps {
 }
@@ -47,19 +47,19 @@ class PostListContainerComponent extends React.PureComponent<IPostListContainerC
     }
 
     public render() {
-        const {posts, section, sortType, lastUpdated, locationKnown, onPostClick, onAddClick, onLoadMore} = this.props;
+        const { posts, section, sortType, lastUpdated, locationKnown, onPostClick, onAddClick, onLoadMore } = this.props;
         return (
             <div className="postListContainer">
-                {section !== 'location' ? null : <StickyList/>}
+                {section !== 'location' ? null : <StickyList />}
                 <PostList section={section} sortType={sortType} lastUpdated={lastUpdated} posts={posts}
-                          onPostClick={onPostClick} onLoadMore={onLoadMore}
-                          connectScrollTarget={this.connectScrollTarget}
+                    onPostClick={onPostClick} onLoadMore={onLoadMore}
+                    connectScrollTarget={this.connectScrollTarget}
                 />
-                {locationKnown ? <AddButton onClick={onAddClick}/> : ''}
+                {locationKnown ? <AddButton onClick={onAddClick} /> : ''}
                 <div className="sortTypes">
-                    <SortTypeLink sortType={PostListSortType.RECENT}/>
-                    <SortTypeLink sortType={PostListSortType.DISCUSSED}/>
-                    <SortTypeLink sortType={PostListSortType.POPULAR}/>
+                    <SortTypeLink sortType={PostListSortType.RECENT} />
+                    <SortTypeLink sortType={PostListSortType.DISCUSSED} />
+                    <SortTypeLink sortType={PostListSortType.POPULAR} />
                 </div>
             </div>
         );
@@ -89,7 +89,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: IPostListContainerProp
 };
 
 const mapDispatchToProps = (dispatch: JodelThunkDispatch,
-                            ownProps: IPostListContainerProps) => {
+    ownProps: IPostListContainerProps) => {
     return {
         onAddClick() {
             dispatch(showAddPost(true));

@@ -29,7 +29,7 @@ class NotificationListComponent extends React.PureComponent<INotificationListCom
                         notification={n}
                         selectPost={selectPost}
                     ></NotificationListItem>,
-                )}
+                    )}
             </div>
         );
     }

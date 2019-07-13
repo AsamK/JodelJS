@@ -1,7 +1,7 @@
-import {Color} from '../enums/Color';
-import {PostOwn} from '../enums/PostOwn';
-import {UserHandle} from '../enums/UserHandle';
-import {VoteType} from '../enums/VoteType';
+import { Color } from '../enums/Color';
+import { PostOwn } from '../enums/PostOwn';
+import { UserHandle } from '../enums/UserHandle';
+import { VoteType } from '../enums/VoteType';
 
 export interface IApiLocation {
     name: string;

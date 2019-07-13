@@ -1,13 +1,13 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {IApiSticky} from '../interfaces/IApiSticky';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {selectPost, switchPostSection} from '../redux/actions';
-import {closeSticky} from '../redux/actions/api';
-import {IJodelAppStore} from '../redux/reducers';
-import {stickiesSelector} from '../redux/selectors/posts';
-import {Sticky} from './Sticky';
+import { IApiSticky } from '../interfaces/IApiSticky';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { selectPost, switchPostSection } from '../redux/actions';
+import { closeSticky } from '../redux/actions/api';
+import { IJodelAppStore } from '../redux/reducers';
+import { stickiesSelector } from '../redux/selectors/posts';
+import { Sticky } from './Sticky';
 
 export interface IStickyListProps {
     stickies: ReadonlyArray<IApiSticky>;
@@ -30,14 +30,14 @@ class StickyListComponent extends React.Component<IStickyListProps> {
             clickStickyButton, switchToHashtag, switchToChannel,
         } = this.props;
         const stickyNodes = stickies.map(sticky => {
-                return <Sticky key={sticky.stickypost_id} sticky={sticky}
-                               onCloseClick={() => clickStickyClose(sticky.stickypost_id)}
-                               onButtonClick={title => clickStickyButton(sticky.stickypost_id, title)}
-                               onLinkClick={link => clickStickyLink(link)}
-                               switchToHashtag={hashtag => switchToHashtag(hashtag)}
-                               switchToChannel={channel => switchToChannel(channel)}
-                />;
-            },
+            return <Sticky key={sticky.stickypost_id} sticky={sticky}
+                onCloseClick={() => clickStickyClose(sticky.stickypost_id)}
+                onButtonClick={title => clickStickyButton(sticky.stickypost_id, title)}
+                onLinkClick={link => clickStickyLink(link)}
+                switchToHashtag={hashtag => switchToHashtag(hashtag)}
+                switchToChannel={channel => switchToChannel(channel)}
+            />;
+        },
         );
         return (
             <div className="stickyList">

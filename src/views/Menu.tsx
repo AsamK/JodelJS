@@ -1,15 +1,15 @@
 import classnames from 'classnames';
 import React from 'react';
-import {FormattedMessage, FormattedNumber} from 'react-intl';
-import {connect} from 'react-redux';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {showNotifications, showSearch, showSettings} from '../redux/actions';
-import {showPictureOfDay} from '../redux/actions/api';
-import {IJodelAppStore} from '../redux/reducers';
-import {unreadNotificationsCountSelector} from '../redux/selectors/notifications';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
+import { connect } from 'react-redux';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { showNotifications, showSearch, showSettings } from '../redux/actions';
+import { showPictureOfDay } from '../redux/actions/api';
+import { IJodelAppStore } from '../redux/reducers';
+import { unreadNotificationsCountSelector } from '../redux/selectors/notifications';
 
 import './Menu.scss';
-import {SectionLink} from './SectionLink';
+import { SectionLink } from './SectionLink';
 
 interface IMenuComponentProps {
     showSettingsCallback: () => void;
@@ -40,9 +40,9 @@ class MenuComponent extends React.Component<IMenuComponentProps, IMenuComponentS
             showSearchCallback,
         } = this.props;
         return (
-            <div className={classnames('menu', {'menu_new-notifications': unreadNotifications > 0})}
-                 tabIndex={99999999}
-                 onClick={() => this.setState({menuOpen: !this.state.menuOpen})}
+            <div className={classnames('menu', { 'menu_new-notifications': unreadNotifications > 0 })}
+                tabIndex={99999999}
+                onClick={() => this.setState({ menuOpen: !this.state.menuOpen })}
             >
                 {!this.state.menuOpen ? '' :
                     <ul className="menu_content">
@@ -55,16 +55,16 @@ class MenuComponent extends React.Component<IMenuComponentProps, IMenuComponentS
                             </div>
                         </li>
                         <li className="menu_entry">
-                            <SectionLink section="mine"/>
+                            <SectionLink section="mine" />
                         </li>
                         <li className="menu_entry">
-                            <SectionLink section="mineReplies"/>
+                            <SectionLink section="mineReplies" />
                         </li>
                         <li className="menu_entry">
-                            <SectionLink section="mineVotes"/>
+                            <SectionLink section="mineVotes" />
                         </li>
                         <li className="menu_entry">
-                            <SectionLink section="minePinned"/>
+                            <SectionLink section="minePinned" />
                         </li>
                         <li className="menu_entry">
                             <div onClick={showNotificationsCallback}>
@@ -76,7 +76,7 @@ class MenuComponent extends React.Component<IMenuComponentProps, IMenuComponentS
                                     '' :
                                     [
                                         '(',
-                                        <FormattedNumber value={unreadNotifications}/>,
+                                        <FormattedNumber value={unreadNotifications} />,
                                         ')',
                                     ]
                                 }

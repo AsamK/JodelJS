@@ -1,4 +1,5 @@
 @import '../../style/settings.scss';
+
 .add-post {
     background-color: #eee;
     bottom: 0;
@@ -9,16 +10,20 @@
     text-align: center;
     top: 0;
     z-index: $z-index-overlay;
+
     &.visible {
         display: block;
     }
+
     textarea {
         height: 10em;
         width: 100%;
     }
+
     img {
         height: 100px;
     }
+
     .colorPicker {
         color: white;
     }

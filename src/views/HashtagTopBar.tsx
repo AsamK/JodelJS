@@ -1,19 +1,19 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
+import { connect } from 'react-redux';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 
-import {IJodelAppStore} from '../redux/reducers';
-import {selectedHashtagNameSelector} from '../redux/selectors/view';
+import { IJodelAppStore } from '../redux/reducers';
+import { selectedHashtagNameSelector } from '../redux/selectors/view';
 import BackButton from './BackButton';
 
 export interface IHashtagTopBarProps {
     hashtag: string | undefined;
 }
 
-const HashtagTopBarComponent = ({hashtag}: IHashtagTopBarProps) => {
+const HashtagTopBarComponent = ({ hashtag }: IHashtagTopBarProps) => {
     return !hashtag ? null :
         <div className="hashtagTopBar">
-            <BackButton onClick={() => window.history.back()}/>
+            <BackButton onClick={() => window.history.back()} />
             <div className="title">#{hashtag}</div>
         </div>;
 };

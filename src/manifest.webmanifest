@@ -6,15 +6,25 @@
   "background_color": "#fff",
   "description": "A web app for using Jodel.",
   "theme_color": "#ff9908",
-  "icons": [{
-    "src": "/favicon.ico",
-    "sizes": "16x16",
-    "type": "image/icon"
-  }],
-  "related_applications": [{
-    "platform": "web"
-  }, {
-    "platform": "play",
-    "url": "https://play.google.com/store/apps/details?id=com.tellm.android.app"
-  }]
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16",
+      "type": "image/icon"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "512x512",
+      "type": "image/icon"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "web"
+    },
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.tellm.android.app"
+    }
+  ]
 }

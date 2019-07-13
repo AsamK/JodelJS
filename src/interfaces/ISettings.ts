@@ -1,4 +1,4 @@
-import {Color} from '../enums/Color';
+import { Color } from '../enums/Color';
 
 export interface ISettings {
     API_SERVER: string;

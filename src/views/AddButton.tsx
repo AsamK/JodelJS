@@ -6,7 +6,7 @@ export interface IAddButtonProps {
     onClick: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
-const AddButton = ({onClick}: IAddButtonProps) => {
+const AddButton = ({ onClick }: IAddButtonProps) => {
     return (
         <div className="add-button" onClick={onClick}>
         </div>

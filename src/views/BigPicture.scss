@@ -1,4 +1,5 @@
 @import '../../style/settings.scss';
+
 .big-picture {
     background-color: black;
     bottom: 0;
@@ -7,6 +8,7 @@
     right: 0;
     top: 0;
     z-index: $z-index-overlay;
+
     img {
         height: 100%;
         object-fit: contain;

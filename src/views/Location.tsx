@@ -9,11 +9,11 @@ export interface ILocationProps {
 
 export default class Location extends React.Component<ILocationProps> {
     public render() {
-        const {distance, location, fromHome} = this.props;
+        const { distance, location, fromHome } = this.props;
         return (
             <div className="location">
                 <div className="distance">{distance}km weg</div>
-                <div className={classnames('locationName', {fromHome})}>{location}</div>
+                <div className={classnames('locationName', { fromHome })}>{location}</div>
             </div>
         );
     }

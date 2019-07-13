@@ -671,8 +671,8 @@ export class JodelApi {
                     .catch(() => undefined)
                     .then(description => {
                         return Promise.reject({
-                            message: res.statusText,
                             description,
+                            message: res.statusText,
                             status: res.status,
                         });
                     });

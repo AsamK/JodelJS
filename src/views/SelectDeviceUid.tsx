@@ -1,5 +1,5 @@
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 const CREATE_NEW = 'CREATE_NEW';
 const USE_EXISTING = 'USE_EXISTING';
@@ -28,7 +28,7 @@ export class SelectDeviceUid extends React.PureComponent<ISelectDeviceUidProps, 
             <div className="selectDeviceUid">
                 <label>
                     <input type="radio" value={CREATE_NEW} checked={this.state.radioState === CREATE_NEW}
-                           onChange={this.handleChangeRadio}/>
+                        onChange={this.handleChangeRadio} />
                     <FormattedMessage
                         id="device_uid_new"
                         defaultMessage="Create new Jodel account"
@@ -36,7 +36,7 @@ export class SelectDeviceUid extends React.PureComponent<ISelectDeviceUidProps, 
                 </label>
                 <label>
                     <input type="radio" value={USE_EXISTING} checked={this.state.radioState === USE_EXISTING}
-                           onChange={this.handleChangeRadio}/>
+                        onChange={this.handleChangeRadio} />
                     <FormattedMessage
                         id="device_uid_use_existing"
                         defaultMessage="Use existing Jodel account"
@@ -48,7 +48,7 @@ export class SelectDeviceUid extends React.PureComponent<ISelectDeviceUidProps, 
                             id="device_uid_existing"
                             defaultMessage="Device UID of the existing account"
                         />:
-                        <input type="text" value={this.state.deviceUid} onChange={this.handleChangeText}/>
+                        <input type="text" value={this.state.deviceUid} onChange={this.handleChangeText} />
                         {!this.state.deviceUid || this.state.deviceUid.length === 64 ? null :
                             <span className="formError">
                                 <FormattedMessage
@@ -64,7 +64,7 @@ export class SelectDeviceUid extends React.PureComponent<ISelectDeviceUidProps, 
     }
 
     private handleChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({deviceUid: event.target.value});
+        this.setState({ deviceUid: event.target.value });
         this.props.setDeviceUid(event.target.value);
     };
 
@@ -77,6 +77,6 @@ export class SelectDeviceUid extends React.PureComponent<ISelectDeviceUidProps, 
                 this.props.setDeviceUid(this.state.deviceUid);
                 break;
         }
-        this.setState({radioState: event.target.value});
+        this.setState({ radioState: event.target.value });
     };
 }

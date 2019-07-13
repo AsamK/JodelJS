@@ -1,14 +1,14 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {IPost} from '../interfaces/IPost';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {fetchMoreComments, showAddPost} from '../redux/actions';
-import {IJodelAppStore} from '../redux/reducers';
-import {isLocationKnownSelector} from '../redux/selectors/app';
-import {selectedPostChildrenSelector, selectedPostSelector} from '../redux/selectors/posts';
+import { IPost } from '../interfaces/IPost';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { fetchMoreComments, showAddPost } from '../redux/actions';
+import { IJodelAppStore } from '../redux/reducers';
+import { isLocationKnownSelector } from '../redux/selectors/app';
+import { selectedPostChildrenSelector, selectedPostSelector } from '../redux/selectors/posts';
 import AddButton from './AddButton';
-import {Post} from './Post';
+import { Post } from './Post';
 import PostList from './PostList';
 import ScrollToBottomButton from './ScrollToBottomButton';
 
@@ -55,7 +55,7 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
     }
 
     public render() {
-        const {post, postChildren, locationKnown, onAddClick} = this.props;
+        const { post, postChildren, locationKnown, onAddClick } = this.props;
         if (!post) {
             return null;
         }
@@ -63,10 +63,10 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
 
         return (
             <div className="postDetails" ref={this.scrollable}>
-                <Post post={post} onPostClick={this.onPostClick}/>
-                <PostList parentPost={post} posts={childPosts} onPostClick={this.onPostClick}/>
-                {locationKnown ? <AddButton onClick={onAddClick}/> : ''}
-                <ScrollToBottomButton onClick={this.scrollToBottom}/>
+                <Post post={post} onPostClick={this.onPostClick} />
+                <PostList parentPost={post} posts={childPosts} onPostClick={this.onPostClick} />
+                {locationKnown ? <AddButton onClick={onAddClick} /> : ''}
+                <ScrollToBottomButton onClick={this.scrollToBottom} />
             </div>
         );
     }

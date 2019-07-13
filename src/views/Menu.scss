@@ -1,9 +1,11 @@
 @import '../../style/settings.scss';
+
 .menu {
     cursor: pointer;
     flex: none;
     height: $top-bar-height / 3;
     padding: ($top-bar-height/3) .6em;
+
     &::before {
         background: url("../../img/menu.svg") no-repeat center;
         content: "  ";

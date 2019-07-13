@@ -1,6 +1,6 @@
-import {IJodelAction} from '../../interfaces/IJodelAction';
-import {IToast} from '../../interfaces/IToast';
-import {HIDE_TOAST, SHOW_TOAST} from '../actions/action.consts';
+import { IJodelAction } from '../../interfaces/IJodelAction';
+import { IToast } from '../../interfaces/IToast';
+import { HIDE_TOAST, SHOW_TOAST } from '../actions/action.consts';
 
 export function toasts(state: ReadonlyArray<IToast> = [], action: IJodelAction): typeof state {
     switch (action.type) {

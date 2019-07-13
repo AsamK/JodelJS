@@ -4,9 +4,9 @@ export interface IButtonProps {
     onClick: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
-const ScrollToBottomButton = ({onClick}: IButtonProps) =>
+const ScrollToBottomButton = ({ onClick }: IButtonProps) =>
     <div className="scrollToBottomButton" onClick={onClick}>
     </div>
-;
+    ;
 
 export default ScrollToBottomButton;

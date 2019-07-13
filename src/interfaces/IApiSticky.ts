@@ -1,5 +1,5 @@
-import {Color} from '../enums/Color';
-import {StickyType} from '../enums/StickyType';
+import { Color } from '../enums/Color';
+import { StickyType } from '../enums/StickyType';
 
 export interface IApiStickyButton {
     title: string;

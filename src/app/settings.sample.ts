@@ -1,4 +1,4 @@
-import {ISettings} from '../interfaces/ISettings';
+import { ISettings } from '../interfaces/ISettings';
 
 const Settings: ISettings = {
     // API Server and Path

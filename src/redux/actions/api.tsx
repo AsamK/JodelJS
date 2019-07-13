@@ -86,7 +86,7 @@ export function upVote(postId: string): JodelThunkAction {
                 dispatch(getKarma());
             },
                 err => handleNetworkErrors(dispatch, getState, err),
-        );
+            );
     };
 }
 
@@ -110,7 +110,7 @@ export function giveThanks(postId: string, parentPostId?: string): JodelThunkAct
                 }
             },
                 err => handleNetworkErrors(dispatch, getState, err),
-        );
+            );
     };
 }
 
@@ -832,6 +832,6 @@ export function setUserLanguage(language: string): JodelThunkAction {
                 dispatch(getConfig());
             },
                 err => handleNetworkErrors(dispatch, getState, err),
-        );
+            );
     };
 }

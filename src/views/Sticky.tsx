@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {IApiSticky} from '../interfaces/IApiSticky';
+import { IApiSticky } from '../interfaces/IApiSticky';
 import Message from './Message';
 
 export interface IStickyProps {
@@ -18,11 +18,11 @@ export class Sticky extends React.PureComponent<IStickyProps> {
     }
 
     public render() {
-        const {sticky, onCloseClick, onLinkClick, onButtonClick, switchToChannel, switchToHashtag} = this.props;
+        const { sticky, onCloseClick, onLinkClick, onButtonClick, switchToChannel, switchToHashtag } = this.props;
         const stickyLink = sticky.link;
         const stickyButtons = sticky.buttons;
         return (
-            <div className="sticky" style={{backgroundColor: '#' + sticky.color}}>
+            <div className="sticky" style={{ backgroundColor: '#' + sticky.color }}>
                 <button type="button" onClick={onCloseClick}>X</button>
                 <Message message={sticky.message} onAtClick={(e, channel) => {
                     e.stopPropagation();
@@ -30,7 +30,7 @@ export class Sticky extends React.PureComponent<IStickyProps> {
                 }} onHashtagClick={(e, hashtag) => {
                     e.stopPropagation();
                     switchToHashtag(hashtag);
-                }}/>
+                }} />
                 {
                     stickyLink ?
                         <a className="stickLink" onClick={() => onLinkClick(stickyLink)}>Linked Post</a>

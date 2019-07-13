@@ -1,4 +1,4 @@
-import {IApiPostListPost} from './IApiPostListPost';
+import { IApiPostListPost } from './IApiPostListPost';
 
 export interface IApiPostListCombo {
     max: number;

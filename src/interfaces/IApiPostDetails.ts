@@ -1,4 +1,4 @@
-import {IApiPostDetailsPost, IApiPostReplyPost} from './IApiPostDetailsPost';
+import { IApiPostDetailsPost, IApiPostReplyPost } from './IApiPostDetailsPost';
 
 export interface IApiPostDetails {
     details: IApiPostDetailsPost;

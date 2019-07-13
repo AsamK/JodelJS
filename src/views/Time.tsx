@@ -21,7 +21,7 @@ export class Time extends React.Component<ITimeProps> {
     }
 
     public render() {
-        const {time} = this.props;
+        const { time } = this.props;
         let diff = new Date().valueOf() - new Date(time).valueOf();
         if (diff < 0) {
             // Future date shouldn't happen

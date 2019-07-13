@@ -2,11 +2,13 @@
     float: left;
     text-align: center;
     width: 10%;
+
     &_up-vote {
         cursor: pointer;
         padding-bottom: .5em;
         padding-top: .5em;
         width: 3em;
+
         &::before {
             background: url("../../img/up.svg") no-repeat;
             background-size: 1.5em auto;
@@ -15,22 +17,27 @@
             height: 1em;
             margin-left: .75em;
         }
+
         &.post-vote_down {
             visibility: hidden;
         }
+
         &.post-vote_up {
             cursor: inherit;
             opacity: .5;
         }
     }
+
     &_count {
         width: 3em;
     }
+
     &_down-vote {
         cursor: pointer;
         padding-bottom: .5em;
         padding-top: .5em;
         width: 3em;
+
         &::before {
             background: url("../../img/down.svg") no-repeat;
             background-size: 1.5em auto;
@@ -39,14 +46,17 @@
             height: 1em;
             margin-left: .75em;
         }
+
         &.post-vote_up {
             visibility: hidden;
         }
+
         &.post-vote_down {
             cursor: inherit;
             opacity: .5;
         }
     }
+
     &_just-voted {
         animation: 400ms voting;
     }

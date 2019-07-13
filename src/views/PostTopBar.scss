@@ -1,4 +1,5 @@
 @import '../../style/settings.scss';
+
 .post-top-bar {
     background-color: #eee;
     box-shadow: $bar-shadow;
@@ -8,6 +9,7 @@
     justify-content: space-between;
     width: 100%;
     z-index: $z-index-sub-layer;
+
     .right-buttons {
         display: flex;
         flex: none;
@@ -22,6 +24,7 @@
     cursor: pointer;
     display: inline-block;
     padding: 1em;
+
     &::before {
         content: "Share";
     }
@@ -35,9 +38,11 @@
     cursor: pointer;
     display: inline-block;
     padding: .94em;
+
     &::before {
         content: "OJ";
     }
+
     &.oj-filtered {
         background-color: #ccc;
     }
@@ -51,9 +56,11 @@
     cursor: pointer;
     display: inline-block;
     padding: 1em;
+
     &::before {
         content: "Pin";
     }
+
     &.pinned::before {
         content: "Unpin";
     }

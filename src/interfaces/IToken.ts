@@ -1,4 +1,4 @@
-import {TokenType} from '../enums/TokenType';
+import { TokenType } from '../enums/TokenType';
 
 export interface IToken {
     distinctId: string;

@@ -1,5 +1,5 @@
-import {NotificationType} from '../enums/NotificationType';
-import {INotification} from '../interfaces/INotification';
+import { NotificationType } from '../enums/NotificationType';
+import { INotification } from '../interfaces/INotification';
 
 export function getNotificationDescription(notification: INotification) {
     switch (notification.type) {

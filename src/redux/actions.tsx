@@ -1,9 +1,9 @@
 import randomBytes from 'randombytes';
 
-import {PostListSortType} from '../enums/PostListSortType';
-import {Section} from '../enums/Section';
-import {TokenType} from '../enums/TokenType';
-import {JodelThunkAction} from '../interfaces/JodelThunkAction';
+import { PostListSortType } from '../enums/PostListSortType';
+import { Section } from '../enums/Section';
+import { TokenType } from '../enums/TokenType';
+import { JodelThunkAction } from '../interfaces/JodelThunkAction';
 import {
     fetchPostsIfNeeded,
     getConfig,
@@ -31,7 +31,7 @@ import {
     _switchPostSection,
     invalidatePosts,
 } from './actions/state';
-import {locationSelector} from './selectors/app';
+import { locationSelector } from './selectors/app';
 
 export * from './actions/state';
 export * from './actions/api';
@@ -121,7 +121,7 @@ export function updateLocation(): JodelThunkAction {
 }
 
 export function setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number,
-                         tokenType: TokenType): JodelThunkAction {
+    tokenType: TokenType): JodelThunkAction {
     return (dispatch, getState) => {
         // TODO clear cached posts
         dispatch(_setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType));

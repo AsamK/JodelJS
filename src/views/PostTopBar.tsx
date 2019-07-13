@@ -1,12 +1,12 @@
 import classnames from 'classnames';
 import React from 'react';
-import {connect} from 'react-redux';
-import {IPost} from '../interfaces/IPost';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {pin} from '../redux/actions';
-import {ojFilterPost, sharePost} from '../redux/actions/api';
-import {IJodelAppStore} from '../redux/reducers';
-import {selectedPostSelector} from '../redux/selectors/posts';
+import { connect } from 'react-redux';
+import { IPost } from '../interfaces/IPost';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { pin } from '../redux/actions';
+import { ojFilterPost, sharePost } from '../redux/actions/api';
+import { IJodelAppStore } from '../redux/reducers';
+import { selectedPostSelector } from '../redux/selectors/posts';
 import BackButton from './BackButton';
 
 import './PostTopBar.scss';
@@ -26,14 +26,14 @@ export interface IPostTopBarComponentProps extends IPostTopBarStateProps {
 }
 
 const PostTopBarComponent = (props: IPostTopBarComponentProps) => {
-    const {onBackClick, onOjFilterClick, onPinClick, onShareClick, post} = props;
+    const { onBackClick, onOjFilterClick, onPinClick, onShareClick, post } = props;
     if (!post) {
         return null;
     }
     const pinned = post.pinned && post.pinned;
     return (
         <div className="post-top-bar">
-            <BackButton onClick={onBackClick}/>
+            <BackButton onClick={onBackClick} />
             <div className="right-buttons">
                 {post.shareable && post.shareable ?
                     <div className="share">
@@ -43,13 +43,13 @@ const PostTopBarComponent = (props: IPostTopBarComponentProps) => {
                     </div>
                     : ''}
                 <div className="oj-filter">
-                    <div className={classnames('oj-filter-button', {'oj-filtered': post.oj_filtered})}
-                         onClick={onOjFilterClick}>
+                    <div className={classnames('oj-filter-button', { 'oj-filtered': post.oj_filtered })}
+                        onClick={onOjFilterClick}>
                     </div>
                 </div>
                 <div className="pin">
                     {post.pin_count && post.pin_count > 0 ? post.pin_count : ''}
-                    <div className={classnames('pin-button', {pinned})} onClick={onPinClick}>
+                    <div className={classnames('pin-button', { pinned })} onClick={onPinClick}>
                     </div>
                 </div>
             </div>

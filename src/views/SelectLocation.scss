@@ -1,28 +1,28 @@
 .select-location {
-  &_type {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: .5rem;
+    &_type {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: .5rem;
 
-    label {
-      flex: none;
-      margin-right: 1rem;
-      white-space: nowrap;
-    }
-  }
-
-  &_manual {
-    label {
-      display: block;
+        label {
+            flex: none;
+            margin-right: 1rem;
+            white-space: nowrap;
+        }
     }
 
-    input {
-      height: 2rem;
-    }
-  }
+    &_manual {
+        label {
+            display: block;
+        }
 
-  a {
-    cursor: pointer;
-    text-decoration: underline;
-  }
+        input {
+            height: 2rem;
+        }
+    }
+
+    a {
+        cursor: pointer;
+        text-decoration: underline;
+    }
 }

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {IJodelAppStore} from '../redux/reducers';
-import {shareLinkSelector} from '../redux/selectors/view';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { IJodelAppStore } from '../redux/reducers';
+import { shareLinkSelector } from '../redux/selectors/view';
 import './ShareLink.scss';
 
 interface IShareLinkProps {
@@ -20,13 +20,13 @@ function onClose() {
     window.history.back();
 }
 
-function ShareLink({link}: IShareLinkProps) {
+function ShareLink({ link }: IShareLinkProps) {
     if (!link) {
         return null;
     }
     return <div className="shareLink">
         <div className="link">
-            <input className="linkDisplay" readOnly value={link}/>
+            <input className="linkDisplay" readOnly value={link} />
             {!('share' in navigator) ? null :
                 <button className="shareButton" onClick={() => shareLink(link)}>Share</button>
             }

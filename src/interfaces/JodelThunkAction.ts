@@ -1,8 +1,8 @@
-import {ThunkAction, ThunkDispatch} from 'redux-thunk';
-import {JodelApi} from '../app/api';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { JodelApi } from '../app/api';
 
-import {IJodelAppStore} from '../redux/reducers';
-import {IJodelAction} from './IJodelAction';
+import { IJodelAppStore } from '../redux/reducers';
+import { IJodelAction } from './IJodelAction';
 
 interface IExtraArgument {
     api: JodelApi;

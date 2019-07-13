@@ -1,6 +1,6 @@
-import {createSelector} from 'reselect';
+import { createSelector } from 'reselect';
 
-import {IJodelAppStore} from '../reducers';
+import { IJodelAppStore } from '../reducers';
 
 export const selectedSortTypeSelector = (state: IJodelAppStore) => state.viewState.postListSortType;
 

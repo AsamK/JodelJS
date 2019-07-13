@@ -8,7 +8,7 @@ export interface IMessageProps {
 
 export default class Message extends React.Component<IMessageProps> {
     public render() {
-        const {message, onAtClick, onHashtagClick} = this.props;
+        const { message, onAtClick, onHashtagClick } = this.props;
         const linkReg = /([^#@]*)([@#])([^\s#@:;.,]*)|([^[]*)\[([^[\]]*)\]\(([^()]*)\)/mg;
         let previousIndex = 0;
         const messageParts = [];
@@ -24,11 +24,11 @@ export default class Message extends React.Component<IMessageProps> {
                 if (regResult[2] === '@') {
                     const channel = regResult[3];
                     messageParts.push(<a key={linkReg.lastIndex} className="channel-link"
-                                         onClick={e => onAtClick(e, channel)}>@{channel}</a>);
+                        onClick={e => onAtClick(e, channel)}>@{channel}</a>);
                 } else if (regResult[2] === '#') {
                     const hashtag = regResult[3];
                     messageParts.push(<a key={linkReg.lastIndex} className="hashtag"
-                                         onClick={e => onHashtagClick(e, hashtag)}>#{hashtag}</a>);
+                        onClick={e => onHashtagClick(e, hashtag)}>#{hashtag}</a>);
                 }
             } else if (regResult[4] !== undefined) {
                 messageParts.push(regResult[4]);
@@ -36,10 +36,10 @@ export default class Message extends React.Component<IMessageProps> {
                 const linkTarget = regResult[6];
                 messageParts.push(
                     <a className="sticky-link"
-                       key={linkLabel + linkTarget}
-                       href={linkTarget}
-                       target="_blank"
-                       rel="noopener noreferrer"
+                        key={linkLabel + linkTarget}
+                        href={linkTarget}
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         {linkLabel}
                     </a>,

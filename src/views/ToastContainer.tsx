@@ -1,12 +1,12 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {IToast} from '../interfaces/IToast';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {hideToast} from '../redux/actions/toasts.actions';
-import {IJodelAppStore} from '../redux/reducers';
-import {toastsSelector} from '../redux/selectors/app';
-import {Toast} from './Toast';
+import { IToast } from '../interfaces/IToast';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { hideToast } from '../redux/actions/toasts.actions';
+import { IJodelAppStore } from '../redux/reducers';
+import { toastsSelector } from '../redux/selectors/app';
+import { Toast } from './Toast';
 import './ToastContainer.scss';
 
 interface IToastContainerComponentProps {
@@ -14,7 +14,7 @@ interface IToastContainerComponentProps {
     onToastClick: (toastId: number) => void;
 }
 
-const ToastContainerComponent = ({toasts, onToastClick}: IToastContainerComponentProps) => {
+const ToastContainerComponent = ({ toasts, onToastClick }: IToastContainerComponentProps) => {
     return <div className="toast-container">
         {toasts.map(toast =>
             <Toast

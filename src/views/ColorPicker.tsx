@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Settings from '../app/settings';
-import {Color} from '../enums/Color';
+import { Color } from '../enums/Color';
 
 export interface IColorPickerProps {
     color?: Color;
@@ -14,10 +14,10 @@ export default class ColorPicker extends React.PureComponent<IColorPickerProps> 
     }
 
     public render() {
-        const {color, onChange} = this.props;
+        const { color, onChange } = this.props;
         const colorNodes = Settings.POST_COLORS.map(c => {
-            return <label key={c} style={{backgroundColor: '#' + c}}>
-                <input type="radio" value={c} checked={c === color} onChange={e => onChange(c)}/>
+            return <label key={c} style={{ backgroundColor: '#' + c }}>
+                <input type="radio" value={c} checked={c === color} onChange={e => onChange(c)} />
                 #{c}
             </label>;
         });

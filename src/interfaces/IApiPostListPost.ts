@@ -1,9 +1,9 @@
-import {Color} from '../enums/Color';
-import {PostOwn} from '../enums/PostOwn';
-import {UserHandle} from '../enums/UserHandle';
-import {VoteType} from '../enums/VoteType';
-import {IApiPostReplyPost} from './IApiPostDetailsPost';
-import {IApiLocation} from './IPost';
+import { Color } from '../enums/Color';
+import { PostOwn } from '../enums/PostOwn';
+import { UserHandle } from '../enums/UserHandle';
+import { VoteType } from '../enums/VoteType';
+import { IApiPostReplyPost } from './IApiPostDetailsPost';
+import { IApiLocation } from './IPost';
 
 export interface IApiPostListPost {
     channel?: string;

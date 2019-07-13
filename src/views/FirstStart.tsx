@@ -1,16 +1,16 @@
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
-import {connect} from 'react-redux';
+import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 
 import Settings from '../app/settings';
-import {ILocation} from '../interfaces/ILocation';
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {_setLocation, createNewAccount, setUseBrowserLocation, updateLocation} from '../redux/actions';
-import {setDeviceUid} from '../redux/actions/api';
-import {IJodelAppStore} from '../redux/reducers';
-import {deviceUidSelector, locationSelector} from '../redux/selectors/app';
-import {SelectDeviceUid} from './SelectDeviceUid';
-import {SelectLocation} from './SelectLocation';
+import { ILocation } from '../interfaces/ILocation';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { _setLocation, createNewAccount, setUseBrowserLocation, updateLocation } from '../redux/actions';
+import { setDeviceUid } from '../redux/actions/api';
+import { IJodelAppStore } from '../redux/reducers';
+import { deviceUidSelector, locationSelector } from '../redux/selectors/app';
+import { SelectDeviceUid } from './SelectDeviceUid';
+import { SelectLocation } from './SelectLocation';
 
 export interface IFirstStartProps {
     deviceUid: string | null;
@@ -26,11 +26,11 @@ export interface IFirstStartState {
 class FirstStart extends React.Component<IFirstStartProps, IFirstStartState> {
     constructor(props: IFirstStartProps) {
         super(props);
-        this.state = {deviceUid: null};
+        this.state = { deviceUid: null };
     }
 
     public componentDidMount() {
-        this.setState({deviceUid: this.props.deviceUid});
+        this.setState({ deviceUid: this.props.deviceUid });
     }
 
     public render() {
@@ -56,7 +56,7 @@ class FirstStart extends React.Component<IFirstStartProps, IFirstStartState> {
                     />
                 </h3>
                 <div className="block">
-                    <SelectDeviceUid deviceUid={this.state.deviceUid} setDeviceUid={this.setDeviceUid}/>
+                    <SelectDeviceUid deviceUid={this.state.deviceUid} setDeviceUid={this.setDeviceUid} />
                 </div>
                 <h3>
                     <FormattedMessage
@@ -66,21 +66,21 @@ class FirstStart extends React.Component<IFirstStartProps, IFirstStartState> {
                 </h3>
                 <div className="block">
                     <SelectLocation useBrowserLocation={this.props.useBrowserLocation}
-                                    location={this.props.location}
-                                    onChange={(useBrowserLocation, location) => {
-                                        this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
-                                        if (!location) {
-                                            if (useBrowserLocation || !Settings.DEFAULT_LOCATION) {
-                                                return;
-                                            }
-                                            location = {
-                                                latitude: Settings.DEFAULT_LOCATION.latitude,
-                                                longitude: Settings.DEFAULT_LOCATION.longitude,
-                                            };
-                                        }
-                                        this.props.dispatch(_setLocation(location.latitude, location.longitude));
-                                    }}
-                                    onLocationRequested={this.updateLocation}
+                        location={this.props.location}
+                        onChange={(useBrowserLocation, location) => {
+                            this.props.dispatch(setUseBrowserLocation(useBrowserLocation));
+                            if (!location) {
+                                if (useBrowserLocation || !Settings.DEFAULT_LOCATION) {
+                                    return;
+                                }
+                                location = {
+                                    latitude: Settings.DEFAULT_LOCATION.latitude,
+                                    longitude: Settings.DEFAULT_LOCATION.longitude,
+                                };
+                            }
+                            this.props.dispatch(_setLocation(location.latitude, location.longitude));
+                        }}
+                        onLocationRequested={this.updateLocation}
                     />
                     {!this.props.location ?
                         <div className="locationError formError">
@@ -88,7 +88,7 @@ class FirstStart extends React.Component<IFirstStartProps, IFirstStartState> {
                                 <FormattedMessage
                                     id="location_error"
                                     defaultMessage={'The current Location must be known for the first registration.\n' +
-                                    'However the location request was unsuccessful.'}
+                                        'However the location request was unsuccessful.'}
                                 />
                             </div>
                             <a onClick={this.updateLocation}>
@@ -111,7 +111,7 @@ class FirstStart extends React.Component<IFirstStartProps, IFirstStartState> {
     }
 
     private setDeviceUid = (deviceUid: string | null) => {
-        this.setState({deviceUid});
+        this.setState({ deviceUid });
     };
 
     private updateLocation = () => {

@@ -1,15 +1,15 @@
-import {PostListSortType} from '../../enums/PostListSortType';
-import {Section} from '../../enums/Section';
-import {TokenType} from '../../enums/TokenType';
-import {VoteType} from '../../enums/VoteType';
-import {IApiConfig} from '../../interfaces/IApiConfig';
-import {IApiPostDetailsPost, IApiPostReplyPost} from '../../interfaces/IApiPostDetailsPost';
-import {IApiPostListPost} from '../../interfaces/IApiPostListPost';
-import {IApiSticky} from '../../interfaces/IApiSticky';
-import {IChannel} from '../../interfaces/IChannel';
-import {IJodelAction} from '../../interfaces/IJodelAction';
-import {INotification} from '../../interfaces/INotification';
-import {IViewStateStore} from '../reducers/viewState';
+import { PostListSortType } from '../../enums/PostListSortType';
+import { Section } from '../../enums/Section';
+import { TokenType } from '../../enums/TokenType';
+import { VoteType } from '../../enums/VoteType';
+import { IApiConfig } from '../../interfaces/IApiConfig';
+import { IApiPostDetailsPost, IApiPostReplyPost } from '../../interfaces/IApiPostDetailsPost';
+import { IApiPostListPost } from '../../interfaces/IApiPostListPost';
+import { IApiSticky } from '../../interfaces/IApiSticky';
+import { IChannel } from '../../interfaces/IChannel';
+import { IJodelAction } from '../../interfaces/IJodelAction';
+import { INotification } from '../../interfaces/INotification';
+import { IViewStateStore } from '../reducers/viewState';
 import {
     CLOSE_STICKY,
     INVALIDATE_POSTS,
@@ -50,64 +50,64 @@ import {
 
 export function _switchPostListSortType(sortType: PostListSortType): IJodelAction {
     return {
-        payload: {sortType},
+        payload: { sortType },
         type: SWITCH_POST_LIST_SORT_TYPE,
     };
 }
 
 export function _switchPostSection(section: Section): IJodelAction {
     return {
-        payload: {section},
+        payload: { section },
         type: SWITCH_POST_SECTION,
     };
 }
 
 export function _showAddPost(visible: boolean): IJodelAction {
     return {
-        payload: {visible},
+        payload: { visible },
         type: SHOW_ADD_POST,
     };
 }
 
 export function _showSettings(visible: boolean): IJodelAction {
     return {
-        payload: {visible},
+        payload: { visible },
         type: SHOW_SETTINGS,
     };
 }
 
 export function _showChannelList(visible: boolean): IJodelAction {
     return {
-        payload: {visible},
+        payload: { visible },
         type: SHOW_CHANNEL_LIST,
     };
 }
 
 export function _showNotifications(visible: boolean): IJodelAction {
     return {
-        payload: {visible},
+        payload: { visible },
         type: SHOW_NOTIFICATIONS,
     };
 }
 
 export function _showSearch(visible: boolean): IJodelAction {
     return {
-        payload: {visible},
+        payload: { visible },
         type: SHOW_SEARCH,
     };
 }
 
 export function replaceViewState(newViewState: IViewStateStore): IJodelAction {
     return {
-        payload: {newViewState},
+        payload: { newViewState },
         type: REPLACE_VIEW_STATE,
     };
 }
 
 export function receivePosts(section: Section,
-                             postsBySortType: { [sortType: string]: IApiPostListPost[] },
-                             append = false,
-                             stickies?: IApiSticky[]): IJodelAction {
+    postsBySortType: { [sortType: string]: IApiPostListPost[] },
+    append = false,
+    stickies?: IApiSticky[]): IJodelAction {
     const payload: {
         entities: Array<IApiPostListPost | IApiPostReplyPost>,
         postsBySortType: Array<{ sortType: PostListSortType, posts: string[] }>,
@@ -150,7 +150,7 @@ export function receivePosts(section: Section,
 }
 
 export function receivePost(post: IApiPostDetailsPost, append = false, nextReply: string | null = null,
-                            shareable: boolean = false, ojFilter: boolean): IJodelAction {
+    shareable: boolean = false, ojFilter: boolean): IJodelAction {
     return {
         payload: {
             append,
@@ -207,28 +207,28 @@ export function votedPost(postId: string, voted: VoteType, voteCount: number): I
 
 export function _selectPost(postId: string | null): IJodelAction {
     return {
-        payload: {postId},
+        payload: { postId },
         type: SELECT_POST,
     };
 }
 
 export function _selectPicture(postId: string): IJodelAction {
     return {
-        payload: {postId},
+        payload: { postId },
         type: SELECT_PICTURE,
     };
 }
 
 export function _setKarma(karma: number): IJodelAction {
     return {
-        payload: {karma},
+        payload: { karma },
         type: SET_KARMA,
     };
 }
 
 export function _setConfig(config: IApiConfig): IJodelAction {
     return {
-        payload: {config},
+        payload: { config },
         type: SET_CONFIG,
     };
 }
@@ -280,14 +280,14 @@ export function setSuggestedHashtags(suggestedHashtags: string[]): IJodelAction 
 
 export function _setDeviceUID(deviceUid: string): IJodelAction {
     return {
-        payload: {deviceUid},
+        payload: { deviceUid },
         type: SET_DEVICE_UID,
     };
 }
 
 export function _setPermissionDenied(permissionDenied: boolean): IJodelAction {
     return {
-        payload: {permissionDenied},
+        payload: { permissionDenied },
         type: SET_PERMISSION_DENIED,
     };
 }
@@ -299,7 +299,7 @@ export function beginRefreshToken(): IJodelAction {
 }
 
 export function _setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number,
-                          tokenType: TokenType): IJodelAction {
+    tokenType: TokenType): IJodelAction {
     return {
         payload: {
             token: {
@@ -317,7 +317,7 @@ export function _setToken(distinctId: string, accessToken: string, refreshToken:
 export function _setLocation(latitude: number, longitude: number, city = '', country = 'DE'): IJodelAction {
     return {
         payload: {
-            location: {latitude, longitude, city, country},
+            location: { latitude, longitude, city, country },
         },
         type: SET_LOCATION,
     };
@@ -343,7 +343,7 @@ export function setUseHomeLocation(useHomeLocation: boolean): IJodelAction {
 
 export function invalidatePosts(section: Section): IJodelAction {
     return {
-        payload: {section},
+        payload: { section },
         type: INVALIDATE_POSTS,
     };
 }

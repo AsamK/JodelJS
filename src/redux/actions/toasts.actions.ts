@@ -1,6 +1,6 @@
-import {ToastType} from '../../enums/ToastType';
-import {IJodelAction} from '../../interfaces/IJodelAction';
-import {HIDE_TOAST, SHOW_TOAST} from './action.consts';
+import { ToastType } from '../../enums/ToastType';
+import { IJodelAction } from '../../interfaces/IJodelAction';
+import { HIDE_TOAST, SHOW_TOAST } from './action.consts';
 
 let nextToastId = 0;
 
@@ -19,7 +19,7 @@ export function showToast(message: string, type: ToastType): IJodelAction {
 
 export function hideToast(toastId: number): IJodelAction {
     return {
-        payload: {toastId},
+        payload: { toastId },
         type: HIDE_TOAST,
     };
 }

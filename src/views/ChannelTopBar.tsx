@@ -1,10 +1,10 @@
 import classnames from 'classnames';
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {followChannel} from '../redux/actions';
-import {IJodelAppStore} from '../redux/reducers';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { followChannel } from '../redux/actions';
+import { IJodelAppStore } from '../redux/reducers';
 import {
     isSelectedChannelFollowedSelector,
     selectedChannelFollowersCountSelector,
@@ -19,15 +19,15 @@ export interface IChannelTopBarProps {
     isFollowing: boolean;
 }
 
-const ChannelTopBar = ({onFollowClick, channel, followerCount, isFollowing}: IChannelTopBarProps) => {
+const ChannelTopBar = ({ onFollowClick, channel, followerCount, isFollowing }: IChannelTopBarProps) => {
     return !channel ? null :
         <div className="channelTopBar">
-            <BackButton onClick={() => window.history.back()}/>
+            <BackButton onClick={() => window.history.back()} />
             <div className="title">@{channel}</div>
             <div className="follow">
                 {followerCount > 0 ? followerCount : null}
-                <div className={classnames('followButton', {isFollowing})}
-                     onClick={() => onFollowClick(channel, !isFollowing)}>
+                <div className={classnames('followButton', { isFollowing })}
+                    onClick={() => onFollowClick(channel, !isFollowing)}>
                 </div>
             </div>
         </div>;

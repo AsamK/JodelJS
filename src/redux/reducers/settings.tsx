@@ -1,8 +1,8 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 
-import {IJodelAction} from '../../interfaces/IJodelAction';
-import {ILocation} from '../../interfaces/ILocation';
-import {RECEIVE_POSTS, SET_LOCATION, SET_USE_BROWSER_LOCATION, SET_USE_HOME_LOCATION} from '../actions/action.consts';
+import { IJodelAction } from '../../interfaces/IJodelAction';
+import { ILocation } from '../../interfaces/ILocation';
+import { RECEIVE_POSTS, SET_LOCATION, SET_USE_BROWSER_LOCATION, SET_USE_HOME_LOCATION } from '../actions/action.consts';
 
 export const SETTINGS_VERSION = 1;
 
@@ -35,7 +35,7 @@ export const settings = combineReducers<ISettingsStore>({
 function location(state: Readonly<ILocation> | null = null, action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_LOCATION:
-            return {...state, ...action.payload.location};
+            return { ...state, ...action.payload.location };
         default:
             return state;
     }

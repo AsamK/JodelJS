@@ -1,15 +1,15 @@
-import {createSelector} from 'reselect';
+import { createSelector } from 'reselect';
 
-import {IChannel} from '../../interfaces/IChannel';
-import {IJodelAppStore} from '../reducers';
-import {selectedSectionSelector} from './view';
+import { IChannel } from '../../interfaces/IChannel';
+import { IJodelAppStore } from '../reducers';
+import { selectedSectionSelector } from './view';
 
 /* Begin Helpers **/
 
 function getChannel(channels: { [key: string]: IChannel }, channel: string): IChannel {
     const c = channels[channel];
     if (!c) {
-        return {channel};
+        return { channel };
     }
     return c;
 }

@@ -10,12 +10,15 @@
     position: fixed;
     text-align: center;
     width: 4em;
+
     &:hover {
         background-color: rgba(66, 189, 255, .76);
     }
+
     &:active {
         background-color: rgba(66, 189, 255, .76);
     }
+
     &::before {
         content: "+";
         font-size: 3em;

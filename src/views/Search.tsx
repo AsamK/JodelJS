@@ -1,9 +1,9 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {JodelThunkDispatch} from '../interfaces/JodelThunkAction';
-import {searchPosts} from '../redux/actions/api';
-import {IJodelAppStore} from '../redux/reducers';
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import { searchPosts } from '../redux/actions/api';
+import { IJodelAppStore } from '../redux/reducers';
 
 interface ISearchComponentProps {
     suggestedHashtags: ReadonlyArray<string>;
@@ -29,7 +29,7 @@ class SearchComponent extends React.Component<ISearchComponentProps, ISearchComp
                 this.props.searchPosts(this.state.searchText, false);
             }}>
                 <input type="text" value={this.state.searchText}
-                       onChange={e => this.setState({searchText: e.target.value})}
+                    onChange={e => this.setState({ searchText: e.target.value })}
                 />
                 <button type="submit">Suchen</button>
             </form>

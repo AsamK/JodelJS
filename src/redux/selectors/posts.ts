@@ -1,8 +1,8 @@
-import {createSelector} from 'reselect';
+import { createSelector } from 'reselect';
 
-import {IPost} from '../../interfaces/IPost';
-import {IJodelAppStore} from '../reducers';
-import {selectedSectionSelector, selectedSortTypeSelector} from './view';
+import { IPost } from '../../interfaces/IPost';
+import { IJodelAppStore } from '../reducers';
+import { selectedSectionSelector, selectedSortTypeSelector } from './view';
 
 /* Begin Helpers **/
 

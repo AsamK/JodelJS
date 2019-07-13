@@ -1,5 +1,5 @@
-import {createSelector} from 'reselect';
-import {IJodelAppStore} from '../reducers';
+import { createSelector } from 'reselect';
+import { IJodelAppStore } from '../reducers';
 
 export const notificationsSelector = (state: IJodelAppStore) => state.entities.notifications;
 

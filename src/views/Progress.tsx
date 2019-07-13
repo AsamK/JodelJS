@@ -1,10 +1,10 @@
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {IJodelAppStore} from '../redux/reducers';
-import {isSelectedSectionFetchingSelector} from '../redux/selectors/posts';
+import { IJodelAppStore } from '../redux/reducers';
+import { isSelectedSectionFetchingSelector } from '../redux/selectors/posts';
 
 interface IProgressProps {
     isFetching: boolean;

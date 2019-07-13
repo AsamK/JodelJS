@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import {ToastType} from '../enums/ToastType';
-import {IToast} from '../interfaces/IToast';
+import { ToastType } from '../enums/ToastType';
+import { IToast } from '../interfaces/IToast';
 import './Toast.scss';
 
 export interface IToastProps {
@@ -10,7 +10,7 @@ export interface IToastProps {
     onClick: (toastId: number) => void;
 }
 
-export const Toast = ({toast, onClick}: IToastProps) => {
+export const Toast = ({ toast, onClick }: IToastProps) => {
     return (
         <div
             className={classnames('toast', {

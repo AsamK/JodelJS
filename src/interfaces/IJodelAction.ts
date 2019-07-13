@@ -1,7 +1,7 @@
-import {PostListSortType} from '../enums/PostListSortType';
-import {Section} from '../enums/Section';
+import { PostListSortType } from '../enums/PostListSortType';
+import { Section } from '../enums/Section';
 import { UserType } from '../enums/UserType';
-import {VoteType} from '../enums/VoteType';
+import { VoteType } from '../enums/VoteType';
 import {
     CLOSE_STICKY,
     HIDE_TOAST,
@@ -42,16 +42,16 @@ import {
     SWITCH_POST_SECTION,
     VOTED_POST,
 } from '../redux/actions/action.consts';
-import {IViewStateStore} from '../redux/reducers/viewState';
-import {IApiConfig} from './IApiConfig';
-import {IApiPostDetailsPost, IApiPostReplyPost} from './IApiPostDetailsPost';
-import {IApiPostListPost} from './IApiPostListPost';
-import {IApiSticky} from './IApiSticky';
-import {IChannel} from './IChannel';
-import {ILocation} from './ILocation';
-import {INotification} from './INotification';
-import {IToast} from './IToast';
-import {IToken} from './IToken';
+import { IViewStateStore } from '../redux/reducers/viewState';
+import { IApiConfig } from './IApiConfig';
+import { IApiPostDetailsPost, IApiPostReplyPost } from './IApiPostDetailsPost';
+import { IApiPostListPost } from './IApiPostListPost';
+import { IApiSticky } from './IApiSticky';
+import { IChannel } from './IChannel';
+import { ILocation } from './ILocation';
+import { INotification } from './INotification';
+import { IToast } from './IToast';
+import { IToken } from './IToken';
 
 export interface IPayloadListSort {
     sortType: PostListSortType;

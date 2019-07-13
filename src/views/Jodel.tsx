@@ -29,28 +29,28 @@ import { ToastContainer } from './ToastContainer';
 import { TopBar } from './TopBar';
 
 const LoadableAddPost = loadable({
-    loader: () => import(/* webpackChunkName: "add-post" */ './AddPost').then(module => module.AddPost),
+    loader: () => import(/* webpackChunkName: "add-post" */ './AddPost').then(module => module.AddPost as any),
     loading: () => null,
 });
 
 const LoadableNotificationList = loadable({
-    loader: () => import(/* webpackChunkName: "notifications" */ './NotificationList')
+    loader: () => import(/* webpackChunkName: "notifications" */ './NotificationList' as any)
         .then(module => module.NotificationList),
     loading: () => null,
 });
 
 const LoadableSearch = loadable({
-    loader: () => import(/* webpackChunkName: "search" */ './Search').then(module => module.Search),
+    loader: () => import(/* webpackChunkName: "search" */ './Search').then(module => module.Search as any),
     loading: () => null,
 });
 
 const LoadableAppSettings = loadable({
-    loader: () => import(/* webpackChunkName: "settings" */ './AppSettings'),
+    loader: () => import(/* webpackChunkName: "settings" */ './AppSettings' as any),
     loading: () => null,
 });
 
 const LoadableChannelList = loadable({
-    loader: () => import(/* webpackChunkName: "channels" */ './ChannelList'),
+    loader: () => import(/* webpackChunkName: "channels" */ './ChannelList' as any),
     loading: () => null,
 });
 

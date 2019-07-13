@@ -19,13 +19,15 @@ export const withLeafletMap = () =>
     <P extends BaseComponentWrappedProps>(Component: React.ComponentType<P>)
         : React.ComponentType<React.ClassAttributes<typeof Component> & OuterComponentProps<P, typeof Component>> => {
         const forwardRef: React.RefForwardingComponent<typeof Component, OuterComponentProps<P, typeof Component>> =
-            (innerProps, ref) =>
-                <LeafletMapContext.Consumer>
-                    {map => !map ? null : <Component map={map} ref={ref} {...innerProps}></Component>}
-                </LeafletMapContext.Consumer>;
+            (innerProps, ref) => {
+                const ComponentAny = Component as any;
+                return <LeafletMapContext.Consumer>
+                    {map => !map ? null : <ComponentAny map={map} ref={ref} {...innerProps}></ComponentAny>}
+                </LeafletMapContext.Consumer> as any;
+            };
 
         const name = Component.displayName || Component.name;
         forwardRef.displayName = `withLeafletMap(${name})`;
 
-        return React.forwardRef<typeof Component, OuterComponentProps<P, typeof Component>>(forwardRef);
+        return React.forwardRef<typeof Component, OuterComponentProps<P, typeof Component>>(forwardRef) as any;
     };

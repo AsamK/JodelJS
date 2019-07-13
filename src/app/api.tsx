@@ -592,19 +592,18 @@ export class JodelApi {
         return parser;
     }
 
-    private computeSignature(auth: string | undefined, location: IGeoCoordinates | null, method: string, url: string, timestamp: string,
+    private computeSignature(auth: string | undefined, location: string, method: string, url: string, timestamp: string,
         query: { [key: string]: any }, data: string) {
         const u = this.parseUrl(url);
         let path = u.pathname;
         if (!path.startsWith('/')) {
             path = '/' + path;
         }
-        const locationString = !location ? '' : `${location.latitude.toFixed(4)};${location.longitude.toFixed(4)}`;
         const queryPart = Object.keys(query)
             .filter(key => query[key] !== undefined)
             .map(key => encodeURIComponent(key) + '%' + encodeURIComponent(query[key]))
             .join('%');
-        const raw = `${method}%${u.hostname}%${443}%${path}%${auth || ''}%${locationString}%${timestamp}%${queryPart}%${data}`;
+        const raw = `${method}%${u.hostname}%${443}%${path}%${auth || ''}%${location}%${timestamp}%${queryPart}%${data}`;
 
         const hmac = createHmac('sha1', Settings.KEY);
         hmac.setEncoding('hex');
@@ -616,19 +615,20 @@ export class JodelApi {
     private async jodelRequestWithAuth(method: HttpMethods, url: string, query: { [key: string]: any },
         data?: object | string): Promise<Response> {
         const auth = await this.getAuth();
-        return this.jodelRequest(auth, method, url, query, data);
+        return this.jodelRequest(auth, null, method, url, query, data);
     }
 
     private jodelRequestWithoutAuth(method: HttpMethods, url: string, query: { [key: string]: any },
         data?: object | string): Promise<Response> {
-        return this.jodelRequest(undefined, method, url, query, data);
+        return this.jodelRequest(undefined, null, method, url, query, data);
     }
 
-    private jodelRequest(auth: string | undefined, method: HttpMethods, url: string, query: { [key: string]: any },
-        data?: object | string): Promise<Response> {
+    private jodelRequest(auth: string | undefined, location: IGeoCoordinates | null, method: HttpMethods, url: string,
+        query: { [key: string]: any }, data?: object | string): Promise<Response> {
         const dataString = method !== 'GET' && method !== 'HEAD' && data ? JSON.stringify(data) : undefined;
         const timestamp = new Date().toISOString();
-        const sig = this.computeSignature(auth, null, method, url, timestamp, query, dataString || '');
+        const locationString = !location ? '' : `${location.latitude.toFixed(4)};${location.longitude.toFixed(4)}`;
+        const sig = this.computeSignature(auth, locationString, method, url, timestamp, query, dataString || '');
 
         function toFormUrlencoded(form: { [key: string]: string }): string {
             return Object.keys(form)
@@ -653,6 +653,10 @@ export class JodelApi {
 
         if (auth) {
             headers.set('Authorization', 'Bearer ' + auth);
+        }
+
+        if (locationString) {
+            headers.set('X-Location', locationString);
         }
 
         return fetch(url, {

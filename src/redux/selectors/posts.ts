@@ -72,5 +72,5 @@ export const selectedSectionSortPostsSelector = createSelector(
     selectedSectionSortPostIdsSelector, postsSelector,
     (selectedSectionSortPostIds, posts): IPost[] =>
         selectedSectionSortPostIds.map(postId => getPost(posts, postId))
-            .filter((post): post is IPost => !!post),
+            .filter((post): post is IPost => !!post && post.promoted === false),
 );

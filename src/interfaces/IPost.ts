@@ -37,6 +37,7 @@ export interface IPost {
     pinned?: boolean;
     post_id: string;
     post_own: PostOwn;
+    promoted: boolean;
     replier?: number;
     reply_timestamp?: string;
     share_count?: number;

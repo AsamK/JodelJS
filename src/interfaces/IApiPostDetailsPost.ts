@@ -34,6 +34,7 @@ export interface IApiPostReplyPost {
     pin_count: number;
     post_id: string;
     post_own: PostOwn;
+    promoted: boolean;
     replier: number;
     reply_timestamp: string;
     thumbnail_url?: string;

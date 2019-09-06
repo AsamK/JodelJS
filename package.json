@@ -1,5 +1,5 @@
 {
-  "name": "JodelJS",
+  "name": "jodeljs",
   "description": "Jodel webapp",
   "license": "GPL-3.0",
   "repository": {
@@ -18,7 +18,7 @@
     "react-document-title": "~2.0.3",
     "react-dom": "~16.9.0",
     "react-hot-loader": "~4.12.12",
-    "react-intl": "^2.9.0",
+    "react-intl": "^3.2.0",
     "react-loadable": "~5.5.0",
     "react-redux": "~7.1.1",
     "redux": "~4.0.4",
@@ -33,7 +33,6 @@
     "@types/nprogress": "0.2.0",
     "@types/react": "~16.9.2",
     "@types/react-dom": "~16.9.0",
-    "@types/react-intl": "~2.3.18",
     "@types/react-loadable": "~5.5.1",
     "@types/react-redux": "~7.1.2",
     "autoprefixer": "~9.6.1",
@@ -59,7 +58,6 @@
     "ts-loader": "~6.0.4",
     "tslint": "~5.19.0",
     "typescript": "~3.6.2",
-    "uglifyjs-webpack-plugin": "~2.2.0",
     "webpack": "~4.39.3",
     "webpack-bundle-analyzer": "~3.4.1",
     "webpack-cli": "~3.3.8",

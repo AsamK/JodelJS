@@ -6,8 +6,6 @@ import { Store } from 'redux';
 
 import { Jodel } from './Jodel';
 
-const TextComponent = (props: any) => props.children;
-
 interface IAppProps {
     locale: string;
     messages: { [key: string]: string };
@@ -17,7 +15,6 @@ interface IAppProps {
 export const App = ({ locale, messages, store }: IAppProps) => <IntlProvider
     locale={locale}
     messages={messages}
-    textComponent={TextComponent}
 >
     <Provider store={store}>
         <DocumentTitle title="Jodel Unofficial WebApp">

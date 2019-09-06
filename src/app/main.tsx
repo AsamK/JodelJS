@@ -4,7 +4,6 @@ import 'intl/locale-data/jsonp/en.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { hot } from 'react-hot-loader';
-import { addLocaleData } from 'react-intl';
 import { applyMiddleware, compose, createStore, Middleware } from 'redux';
 import freeze from 'redux-freeze';
 import thunkMiddleware from 'redux-thunk';
@@ -173,27 +172,20 @@ window.onpopstate = (event: PopStateEvent) => {
 const translationLocale = navigator.language || (navigator as any).userLanguage;
 const translationLanguage = translationLocale ? translationLocale.substr(0, 2) : 'en';
 
-let localeData;
 let translationMessages: Promise<{ [key: string]: string }>;
 switch (translationLanguage) {
     case 'de':
-        localeData = import(/* webpackChunkName: "locale-data-de" */ 'react-intl/locale-data/de');
         translationMessages = import(/* webpackChunkName: "messages-de" */ '../translations/de').then(m => m.default);
         break;
     case 'en':
     default:
-        localeData = import(/* webpackChunkName: "locale-data-en" */ 'react-intl/locale-data/en');
         translationMessages = Promise.resolve({});
         break;
 }
 
 const HotloadableApp = process.env.NODE_ENV !== 'production' ? hot(module)(App) : App;
 
-Promise.all([localeData, translationMessages])
-    .then(([data, message]) => {
-        addLocaleData(data.default);
-        return message;
-    })
+translationMessages
     .catch(() => ({}))
     .then(messages => {
         ReactDOM.render(

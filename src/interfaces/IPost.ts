@@ -45,6 +45,7 @@ export interface IPost {
     thumbnail_url?: string;
     updated_at: string;
     user_handle: UserHandle;
+    video_url?: string;
     view_count?: number;
     vote_count: number;
     voted?: VoteType;

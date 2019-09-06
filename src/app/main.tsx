@@ -165,7 +165,7 @@ if (history.state === null) {
     store.dispatch(replaceViewState(history.state));
 }
 
-window.onpopstate = event => {
+window.onpopstate = (event: PopStateEvent) => {
     userClickedBack = true;
     store.dispatch(replaceViewState(event.state));
 };

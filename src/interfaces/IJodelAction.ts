@@ -81,8 +81,8 @@ export interface IPayloadReplaceView {
 }
 
 export interface IPayloadPosts {
-    entities: Array<IApiPostListPost | IApiPostReplyPost>;
-    postsBySortType: Array<{ sortType: PostListSortType, posts: string[] }>;
+    entities: (IApiPostListPost | IApiPostReplyPost)[];
+    postsBySortType: { sortType: PostListSortType, posts: string[] }[];
     stickies?: IApiSticky[];
     append: boolean;
     section: Section;

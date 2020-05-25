@@ -109,8 +109,8 @@ export function receivePosts(section: Section,
     append = false,
     stickies?: IApiSticky[]): IJodelAction {
     const payload: {
-        entities: Array<IApiPostListPost | IApiPostReplyPost>,
-        postsBySortType: Array<{ sortType: PostListSortType, posts: string[] }>,
+        entities: (IApiPostListPost | IApiPostReplyPost)[],
+        postsBySortType: { sortType: PostListSortType, posts: string[] }[],
     } = {
         entities: [],
         postsBySortType: [],

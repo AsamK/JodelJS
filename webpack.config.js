@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -33,7 +33,6 @@ module.exports = function (env, argv) {
                     loader: 'ts-loader',
                     //                type: 'javascript/esm', // Disabled, until #6913 is resolved
                 },
-
                 // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
                 {
                     enforce: 'pre',
@@ -102,9 +101,9 @@ module.exports = function (env, argv) {
             new HtmlWebpackPlugin({
                 template: 'src/index.html'
             }),
-            new CopyWebpackPlugin([
+            new CopyWebpackPlugin({patterns: [
                 'src/manifest.webmanifest'
-            ]),
+            ]}),
             ...(isProduction ?
                 [
                     new CleanWebpackPlugin(),
@@ -167,4 +166,3 @@ module.exports = function (env, argv) {
         }
     }
 }
-

@@ -25,6 +25,6 @@ Start watcher to compile ts and run dev webserver:
 
 ## License
 
-Copyright: AsamK 2016-2018
+Copyright: AsamK 2016-2020
 
 Licensed under the GPLv3: http://www.gnu.org/licenses/gpl-3.0.html

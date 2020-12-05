@@ -56,9 +56,11 @@ module.exports = function (env, argv) {
                         {
                             loader: 'postcss-loader',
                             options: {
-                                plugins: (loader) => [
-                                    require('autoprefixer')(),
-                                ]
+                                postcssOptions: {
+                                    plugins: [
+                                        require.resolve('autoprefixer'),
+                                    ]
+                                }
                             }
                         },
                     ],
@@ -71,9 +73,11 @@ module.exports = function (env, argv) {
                         {
                             loader: 'postcss-loader',
                             options: {
-                                plugins: (loader) => [
-                                    require('autoprefixer')(),
-                                ]
+                                postcssOptions: {
+                                    plugins: [
+                                        require.resolve('autoprefixer'),
+                                    ]
+                                }
                             }
                         },
                         'sass-loader',
@@ -101,9 +105,11 @@ module.exports = function (env, argv) {
             new HtmlWebpackPlugin({
                 template: 'src/index.html'
             }),
-            new CopyWebpackPlugin({patterns: [
-                'src/manifest.webmanifest'
-            ]}),
+            new CopyWebpackPlugin({
+                patterns: [
+                    'src/manifest.webmanifest'
+                ]
+            }),
             ...(isProduction ?
                 [
                     new CleanWebpackPlugin(),

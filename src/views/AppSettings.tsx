@@ -149,30 +149,12 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
                         onChange={e => this.props.updateUserType(e.target.value as UserType)}
                     >
                         <option value={undefined}>-</option>
-                        <option value={UserType.STUDENT}><FormattedMessage
-                            id="user_type.student"
-                            defaultMessage="Student"
-                        /></option>
-                        <option value={UserType.APPRENTICE}><FormattedMessage
-                            id="user_type.apprentice"
-                            defaultMessage="Apprentice"
-                        /></option>
-                        <option value={UserType.EMPLOYEE}><FormattedMessage
-                            id="user_type.employee"
-                            defaultMessage="Employee"
-                        /></option>
-                        <option value={UserType.HIGH_SCHOOL}><FormattedMessage
-                            id="user_type.high_school"
-                            defaultMessage="High school"
-                        /></option>
-                        <option value={UserType.HIGH_SCHOOL_GRADUATE}><FormattedMessage
-                            id="user_type.high_school_graduate"
-                            defaultMessage="High school graduate"
-                        /></option>
-                        <option value={UserType.OTHER}><FormattedMessage
-                            id="user_type.other"
-                            defaultMessage="Other"
-                        /></option>
+                        <option value={UserType.STUDENT}>Student</option>
+                        <option value={UserType.APPRENTICE}>Apprentice</option>
+                        <option value={UserType.EMPLOYEE}>Employee</option>
+                        <option value={UserType.HIGH_SCHOOL}>High school</option>
+                        <option value={UserType.HIGH_SCHOOL_GRADUATE}>High school graduate</option>
+                        <option value={UserType.OTHER}>Other</option>
                     </select>
                     {this.props.moderator ? ', Moderator' : ', kein Moderator'}
                 </div>

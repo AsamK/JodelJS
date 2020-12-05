@@ -7,8 +7,12 @@ export interface IBigPictureProps {
 }
 
 const BigPicture = ({ post }: IBigPictureProps) => {
+    const imgRef = React.useRef<HTMLDivElement>(null);
+    React.useEffect(() => {
+        imgRef.current?.requestFullscreen();
+    }, []);
     return (
-        <div className="big-picture" onMouseUp={e => window.history.back()}>
+        <div className="big-picture" onMouseUp={e => window.history.back()} ref={imgRef}>
             {'video_url' in post
                 ? <video src={'https:' + post.video_url} autoPlay></video>
                 : <img alt={post.message}

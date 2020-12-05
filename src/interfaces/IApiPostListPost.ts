@@ -6,6 +6,7 @@ import { IApiPostReplyPost } from './IApiPostDetailsPost';
 import { IApiLocation } from './IPost';
 
 export interface IApiPostListPost {
+    badge?: string;
     channel?: string;
     child_count: number;
     children: IApiPostReplyPost[];

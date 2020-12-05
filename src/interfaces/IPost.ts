@@ -8,6 +8,7 @@ export interface IApiLocation {
 }
 
 export interface IPost {
+    badge?: string;
     channel?: string;
     child_count?: number;
     children?: string[];

@@ -26,6 +26,8 @@ export interface IApiPostListPost {
     post_id: string;
     post_own: PostOwn;
     replier: number;
+    news_url?: string;
+    news_cta?: string;
     share_count: number;
     thumbnail_url?: string;
     updated_at: string;

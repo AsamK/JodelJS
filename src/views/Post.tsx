@@ -86,7 +86,9 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
                     }} onHashtagClick={(e, hashtag) => {
                         e.stopPropagation();
                         this.props.switchToHashtag(hashtag);
-                    }} />
+                    }}
+                        link={post.news_url ? { title: post.news_cta, url: post.news_url } : undefined}
+                    />
                 }
                 <Vote vote_count={post.vote_count} voted={post.voted ? post.voted : VoteType.NOT_VOTED}
                     upvote={this.upvote} downvote={this.downvote} />

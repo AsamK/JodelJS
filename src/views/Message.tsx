@@ -2,13 +2,14 @@ import React from 'react';
 
 export interface IMessageProps {
     message: string;
+    link?: { url: string, title?: string };
     onAtClick: (e: React.MouseEvent<HTMLElement>, channel: string) => void;
     onHashtagClick: (e: React.MouseEvent<HTMLElement>, channel: string) => void;
 }
 
 export default class Message extends React.Component<IMessageProps> {
     public render() {
-        const { message, onAtClick, onHashtagClick } = this.props;
+        const { message, link, onAtClick, onHashtagClick } = this.props;
         const linkReg = /([^#@]*)([@#])([^\s#@:;.,]*)|([^[]*)\[([^[\]]*)\]\(([^()]*)\)/mg;
         let previousIndex = 0;
         const messageParts = [];
@@ -49,7 +50,12 @@ export default class Message extends React.Component<IMessageProps> {
         }
 
         return (
-            <div className="postMessage">{messageParts}</div>
+            <div className="postMessage">
+                {messageParts}
+                {link
+                    ? <div>{link.title}: <a href={link.url}>{link.url}</a></div>
+                    : null}
+            </div>
         );
     }
 }

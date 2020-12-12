@@ -41,6 +41,8 @@ export interface IPost {
     promoted: boolean;
     replier?: number;
     reply_timestamp?: string;
+    news_url?: string;
+    news_cta?: string;
     share_count?: number;
     shareable?: boolean;
     thumbnail_url?: string;

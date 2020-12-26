@@ -8,4 +8,5 @@ export interface IApiPostDetails {
     remaining: number;
     shareable: boolean;
     readonly: boolean;
+    votable: boolean;
 }

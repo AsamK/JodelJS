@@ -18,6 +18,7 @@ import {
     SET_LOCAL_CHANNELS,
     SET_NOTIFICATION_POST_READ,
     SET_RECOMMENDED_CHANNELS,
+    VOTED_POLL,
     VOTED_POST,
 } from '../actions/action.consts';
 import { IJodelAppStore } from '../reducers';
@@ -80,6 +81,15 @@ function posts(state: { readonly [key: string]: IPost } = {}, action: IJodelActi
                     ...state[action.payload.postId],
                     vote_count: action.payload.voteCount,
                     voted: action.payload.voted,
+                },
+            };
+        case VOTED_POLL:
+            return {
+                ...state,
+                [action.payload.postId]: {
+                    ...state[action.payload.postId],
+                    poll_vote: action.payload.option,
+                    poll_votes: action.payload.votes,
                 },
             };
         case RECEIVE_POST: {

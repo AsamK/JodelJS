@@ -36,6 +36,7 @@ import {
     setRecommendedChannels,
     setSuggestedHashtags,
     votedPost,
+    votedPoll,
 } from './state';
 import { showToast } from './toasts.actions';
 
@@ -95,6 +96,17 @@ export function downVote(postId: string): JodelThunkAction {
         api.apiDownVote(postId)
             .then(res => {
                 dispatch(votedPost(res.post.post_id, VoteType.DOWN, res.vote_count));
+                dispatch(getKarma());
+            },
+                err => handleNetworkErrors(dispatch, getState, err));
+    };
+}
+
+export function pollVote(postId: string, pollId: string, option: number): JodelThunkAction {
+    return (dispatch, getState, { api }) => {
+        api.apiPollVote(pollId, option)
+            .then(res => {
+                dispatch(votedPoll(postId, pollId, option, res.poll_votes));
                 dispatch(getKarma());
             },
                 err => handleNetworkErrors(dispatch, getState, err));

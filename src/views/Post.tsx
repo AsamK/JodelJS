@@ -7,7 +7,7 @@ import { UserHandle } from '../enums/UserHandle';
 import { VoteType } from '../enums/VoteType';
 import { IPost } from '../interfaces/IPost';
 import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
-import { deletePost, downVote, giveThanks, selectPicture, switchPostSection, upVote } from '../redux/actions';
+import { deletePost, downVote, giveThanks, pollVote, selectPicture, switchPostSection, upVote } from '../redux/actions';
 import { IJodelAppStore } from '../redux/reducers';
 import ChildInfo from './ChildInfo';
 import Location from './Location';
@@ -27,6 +27,7 @@ interface IPostComponentProps extends IPostProps {
     deletePost: () => void;
     downVote: () => void;
     upVote: () => void;
+    pollVote: (pollId: string, option: number) => void;
     giveThanks: () => void;
     switchToHashtag: (hashtag: string) => void;
     switchToChannel: (channel: string) => void;
@@ -40,7 +41,7 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
     }
 
     public render() {
-        const { post, author, parentPostId, onPostClick } = this.props;
+        const { post, author, parentPostId, pollVote, onPostClick } = this.props;
         return (
             <div className={classnames('post', {
                 'collapse': post.collapse,
@@ -107,6 +108,25 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
                     e.stopPropagation();
                     this.props.deletePost();
                 }}>delete</a> : ''}
+                {!post.poll_id ? null : <div style={{ clear: 'both' }}>
+                    {post.poll_options
+                        ?.map((option, i) => <label
+                            onClick={e => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                pollVote(post.poll_id!, i);
+                            }}
+                        >
+                            <input
+                                name={post.poll_id}
+                                type="radio"
+                                value={i}
+                                checked={i === post.poll_vote}
+                            />
+                            {option} ({post.poll_votes?.[i]})
+                        </label>)}
+                </div>
+                }
             </div>
         );
     }
@@ -136,6 +156,7 @@ const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: IPostProps) 
     return {
         deletePost: () => dispatch(deletePost(ownProps.post.post_id)),
         downVote: () => dispatch(downVote(ownProps.post.post_id)),
+        pollVote: (pollId: string, option: number) => dispatch(pollVote(ownProps.post.post_id, pollId, option)),
         giveThanks: () => dispatch(giveThanks(ownProps.post.post_id, ownProps.parentPostId)),
         selectPicture: () => dispatch(selectPicture(ownProps.post.post_id)),
         switchToChannel: (channel: string) => dispatch(switchPostSection('channel:' + channel)),

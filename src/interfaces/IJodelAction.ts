@@ -41,6 +41,7 @@ import {
     SWITCH_POST_LIST_SORT_TYPE,
     SWITCH_POST_SECTION,
     VOTED_POST,
+    VOTED_POLL,
 } from '../redux/actions/action.consts';
 import { IViewStateStore } from '../redux/reducers/viewState';
 import { IApiConfig } from './IApiConfig';
@@ -118,6 +119,13 @@ export interface IPayloadVoted {
     postId: string;
     voted: VoteType;
     voteCount: number;
+}
+
+export interface IPayloadPollVoted {
+    postId: string;
+    pollId: string;
+    option: number;
+    votes: [number];
 }
 
 export interface IPayloadKarma {
@@ -214,6 +222,7 @@ export type IJodelAction =
     { type: typeof SWITCH_POST_LIST_SORT_TYPE | 'bar'; payload: IPayloadListSort; } |
     { type: typeof SWITCH_POST_SECTION; payload: IPayloadSection; } |
     { type: typeof VOTED_POST; payload: IPayloadVoted; } |
+    { type: typeof VOTED_POLL; payload: IPayloadPollVoted; } |
     { type: typeof SET_USER_TYPE_RESPONSE; payload: IPayloadUserType; } |
     never
     ;

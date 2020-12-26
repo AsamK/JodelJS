@@ -17,6 +17,7 @@ import { IApiLocationPostListCombo } from '../interfaces/IApiLocationPostListCom
 import { IApiNotificationAvailable } from '../interfaces/IApiNotificationAvailable';
 import { IApiNotifications } from '../interfaces/IApiNotifications';
 import { IApiPin } from '../interfaces/IApiPin';
+import { IApiPollVotes } from '../interfaces/IApiPollVotes';
 import { IApiPostAdded } from '../interfaces/IApiPostAdded';
 import { IApiPostDetails } from '../interfaces/IApiPostDetails';
 import { IApiPostDetailsPost } from '../interfaces/IApiPostDetailsPost';
@@ -274,6 +275,13 @@ export class JodelApi {
         return this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V2 + '/posts/' + postId + '/downvote',
             {},
             { reason_code: -1 })
+            .then(res => res.json());
+    }
+
+    public apiPollVote(pollId: string, option: number): Promise<IApiPollVotes> {
+        return this.jodelRequestWithAuth('PUT', Settings.API_SERVER + API_PATH_V3 + '/polls/' + pollId + '/vote',
+            {},
+            { option })
             .then(res => res.json());
     }
 

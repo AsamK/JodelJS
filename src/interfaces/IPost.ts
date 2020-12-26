@@ -52,4 +52,9 @@ export interface IPost {
     view_count?: number;
     vote_count: number;
     voted?: VoteType;
+    votable?: boolean;
+    poll_id?: string;
+    poll_options?: [string];
+    poll_votes?: [number];
+    poll_vote?: number;
 }

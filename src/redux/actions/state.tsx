@@ -45,6 +45,7 @@ import {
     SHOW_SETTINGS,
     SWITCH_POST_LIST_SORT_TYPE,
     SWITCH_POST_SECTION,
+    VOTED_POLL,
     VOTED_POST,
 } from './action.consts';
 
@@ -202,6 +203,15 @@ export function votedPost(postId: string, voted: VoteType, voteCount: number): I
             voted,
         },
         type: VOTED_POST,
+    };
+}
+
+export function votedPoll(postId: string, pollId: string, option: number, votes: [number]): IJodelAction {
+    return {
+        payload: {
+            postId, pollId, option, votes
+        },
+        type: VOTED_POLL,
     };
 }
 

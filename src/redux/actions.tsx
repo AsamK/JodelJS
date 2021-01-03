@@ -1,6 +1,3 @@
-import randomBytes from 'randombytes';
-
-import { Buffer } from 'buffer';
 import { PostListSortType } from '../enums/PostListSortType';
 import { Section } from '../enums/Section';
 import { TokenType } from '../enums/TokenType';
@@ -33,6 +30,7 @@ import {
     invalidatePosts,
 } from './actions/state';
 import { locationSelector } from './selectors/app';
+import { randomValueHex } from '../utils/bytes.utils';
 
 export * from './actions/state';
 export * from './actions/api';
@@ -131,29 +129,6 @@ export function setToken(distinctId: string, accessToken: string, refreshToken: 
         dispatch(getNotifications());
         dispatch(getKarma());
     };
-}
-
-// Gibt eine Zufallszahl zwischen min (inklusive) und max (exklusive) zurück
-// Die Verwendung von Math.round() erzeugt keine gleichmäßige Verteilung!
-function getRandomInt(min: number, max: number) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
-}
-
-function randomValueHex(byteCount: number) {
-    let rawBytes: Buffer;
-    try {
-        rawBytes = randomBytes(byteCount);
-    } catch (e) {
-        // Old browser, insecure but works
-        const byteArray = [];
-        for (let i = 0; i < byteCount; ++i) {
-            byteArray.push(getRandomInt(0, 256));
-        }
-        rawBytes = new Buffer(new Uint8Array(byteArray));
-    }
-    return rawBytes.toString('hex'); // convert to hexadecimal format
 }
 
 export function createNewAccount(): JodelThunkAction {

@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer';
 import { Store } from 'redux';
 
 import { ApiAction } from '../enums/ApiAction';
@@ -31,6 +30,7 @@ import { IApiVote } from '../interfaces/IApiVote';
 import { IGeoCoordinates } from '../interfaces/ILocation';
 import { IJodelAppStore } from '../redux/reducers';
 import { accessTokenSelector, isRefreshingTokenSelector } from '../redux/selectors/app';
+import { toHex } from '../utils/bytes.utils';
 import Settings from './settings';
 
 const API_PATH_V2 = '/v2';
@@ -626,7 +626,7 @@ export class JodelApi {
             key,
             encodedMessage
         );
-        return new Buffer(signature).toString('hex');
+        return toHex(signature);
     }
 
     private async jodelRequestWithAuth(method: HttpMethods, url: string, query: { [key: string]: any },

@@ -7,13 +7,11 @@
     "url": "git+ssh://git@github.com:AsamK/JodelJS.git"
   },
   "dependencies": {
-    "buffer": "6.0.x",
     "classnames": "2.2.x",
     "core-js": "3.8.x",
     "intl": "1.2.x",
     "leaflet": "1.7.x",
     "nprogress": "0.2.x",
-    "randombytes": "2.1.x",
     "react": "17.0.x",
     "react-document-title": "2.0.x",
     "react-dom": "17.0.x",

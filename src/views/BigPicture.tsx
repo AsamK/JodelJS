@@ -9,7 +9,7 @@ export interface IBigPictureProps {
 const BigPicture = ({ post }: IBigPictureProps) => {
     const imgRef = React.useRef<HTMLDivElement>(null);
     React.useEffect(() => {
-        imgRef.current?.requestFullscreen();
+        imgRef.current?.requestFullscreen?.();
     }, []);
     return (
         <div className="big-picture" onMouseUp={e => window.history.back()} ref={imgRef}>

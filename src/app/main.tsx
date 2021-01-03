@@ -1,6 +1,3 @@
-import 'intl';
-import 'intl/locale-data/jsonp/de.js';
-import 'intl/locale-data/jsonp/en.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { hot } from 'react-hot-loader';

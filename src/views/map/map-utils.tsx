@@ -18,7 +18,7 @@ type OuterComponentProps<P, C> = ObjectExclude<P, BaseComponentWrappedProps>;
 export const withLeafletMap = () =>
     <P extends BaseComponentWrappedProps>(Component: React.ComponentType<P>)
         : React.ComponentType<React.ClassAttributes<typeof Component> & OuterComponentProps<P, typeof Component>> => {
-        const forwardRef: React.RefForwardingComponent<typeof Component, OuterComponentProps<P, typeof Component>> =
+        const forwardRef: React.ForwardRefRenderFunction<typeof Component, OuterComponentProps<P, typeof Component>> =
             (innerProps, ref) => {
                 const ComponentAny = Component as any;
                 return <LeafletMapContext.Consumer>

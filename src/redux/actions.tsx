@@ -1,5 +1,6 @@
 import randomBytes from 'randombytes';
 
+import { Buffer } from 'buffer';
 import { PostListSortType } from '../enums/PostListSortType';
 import { Section } from '../enums/Section';
 import { TokenType } from '../enums/TokenType';

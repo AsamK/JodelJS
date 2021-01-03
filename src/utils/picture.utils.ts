@@ -9,7 +9,7 @@ function convertImageUrlToImage(url: string) {
         image.onload = () => {
             resolve(image);
         };
-        image.onerror = ev => reject(ev);
+        image.onerror = (ev: unknown) => reject(ev);
         image.src = url;
     });
 }

@@ -1,4 +1,4 @@
-import createHmac from 'create-hmac';
+import { Buffer } from 'buffer';
 import { Store } from 'redux';
 
 import { ApiAction } from '../enums/ApiAction';
@@ -601,7 +601,7 @@ export class JodelApi {
     }
 
     private computeSignature(auth: string | undefined, location: string, method: string, url: string, timestamp: string,
-        query: { [key: string]: any }, data: string) {
+        query: { [key: string]: any }, data: string): Promise<string> {
         const u = this.parseUrl(url);
         let path = u.pathname;
         if (!path.startsWith('/')) {
@@ -613,11 +613,20 @@ export class JodelApi {
             .join('%');
         const raw = `${method}%${u.hostname}%${443}%${path}%${auth || ''}%${location}%${timestamp}%${queryPart}%${data}`;
 
-        const hmac = createHmac('sha1', Settings.KEY);
-        hmac.setEncoding('hex');
-        hmac.write(raw);
-        hmac.end();
-        return hmac.read();
+        return this.computeSha1Hex(raw)
+    }
+
+    private async computeSha1Hex(message: string) {
+        let enc = new TextEncoder();
+        let encodedMessage = enc.encode(message);
+        const encodedKey = enc.encode(Settings.KEY);
+        const key = await crypto.subtle.importKey('raw', encodedKey, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
+        let signature = await crypto.subtle.sign(
+            'HMAC',
+            key,
+            encodedMessage
+        );
+        return new Buffer(signature).toString('hex');
     }
 
     private async jodelRequestWithAuth(method: HttpMethods, url: string, query: { [key: string]: any },
@@ -631,12 +640,12 @@ export class JodelApi {
         return this.jodelRequest(undefined, null, method, url, query, data);
     }
 
-    private jodelRequest(auth: string | undefined, location: IGeoCoordinates | null, method: HttpMethods, url: string,
+    private async jodelRequest(auth: string | undefined, location: IGeoCoordinates | null, method: HttpMethods, url: string,
         query: { [key: string]: any }, data?: object | string): Promise<Response> {
         const dataString = method !== 'GET' && method !== 'HEAD' && data ? JSON.stringify(data) : undefined;
         const timestamp = new Date().toISOString();
         const locationString = !location ? '' : `${location.latitude.toFixed(4)};${location.longitude.toFixed(4)}`;
-        const sig = this.computeSignature(auth, locationString, method, url, timestamp, query, dataString || '');
+        const sig = await this.computeSignature(auth, locationString, method, url, timestamp, query, dataString || '');
 
         function toFormUrlencoded(form: { [key: string]: string }): string {
             return Object.keys(form)
@@ -655,7 +664,7 @@ export class JodelApi {
             ['X-Client-Type', Settings.CLIENT_TYPE],
             ['X-Api-Version', '0.2'],
             ['X-Timestamp', timestamp],
-            ['X-Authorization', 'HMAC ' + sig.toString()],
+            ['X-Authorization', 'HMAC ' + sig],
             ['Content-Type', 'application/json; charset=UTF-8'],
         ]);
 
@@ -667,27 +676,31 @@ export class JodelApi {
             headers.set('X-Location', locationString);
         }
 
-        return fetch(url, {
+        const res = await fetch(url, {
             body: dataString,
             headers,
             method,
             mode: 'cors',
-        })
-            .then(res => {
-                if (res.ok) {
-                    return Promise.resolve(res);
-                }
-                return res.json()
-                    .then(body => body.error)
-                    .catch(() => res.text())
-                    .catch(() => undefined)
-                    .then(description => {
-                        return Promise.reject({
-                            description,
-                            message: res.statusText,
-                            status: res.status,
-                        });
-                    });
-            });
+        });
+
+        if (res.ok) {
+            return res;
+        }
+
+        let description: string | undefined;
+        try {
+            description = (await res.json()).error;
+        } catch (e) {
+            try {
+                description = await res.text();
+            } catch (e) {
+            }
+        }
+
+        throw {
+            description,
+            message: res.statusText,
+            status: res.status,
+        };
     }
 }

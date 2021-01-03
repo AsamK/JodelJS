@@ -18,6 +18,9 @@
       "dom"
     ],
     "jsx": "react",
+    "types": [
+      "webpack-env",
+    ],
     "baseUrl": ".",
     "paths": {
       "*": [
@@ -26,6 +29,9 @@
     }
   },
   "include": [
-    "./src/**/*"
+    "./src/**/*",
+  ],
+  "exclude": [
+    "./src/sw.ts",
   ]
 }

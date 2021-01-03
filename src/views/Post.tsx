@@ -108,24 +108,22 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
                     e.stopPropagation();
                     this.props.deletePost();
                 }}>delete</a> : ''}
-                {!post.poll_id ? null : <div style={{ clear: 'both' }}>
-                    {post.poll_options
-                        ?.map((option, i) => <label
-                            onClick={e => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                pollVote(post.poll_id!, i);
-                            }}
-                        >
-                            <input
-                                name={post.poll_id}
-                                type="radio"
-                                value={i}
-                                checked={i === post.poll_vote}
-                            />
-                            {option} ({post.poll_votes?.[i]})
+                {!post.poll_id ? null :
+                    <div style={{ clear: 'both' }}
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {post.poll_options
+                            ?.map((option, i) => <label key={i}>
+                                <input
+                                    name={post.poll_id}
+                                    type="radio"
+                                    value={i}
+                                    checked={i === post.poll_vote}
+                                    onChange={() => pollVote(post.poll_id!, i)}
+                                />
+                                {option} ({post.poll_votes?.[i]})
                         </label>)}
-                </div>
+                    </div>
                 }
             </div>
         );

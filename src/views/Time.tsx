@@ -9,18 +9,18 @@ export interface ITimeProps {
 export class Time extends React.Component<ITimeProps> {
     private timer?: number;
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.timer = window.setInterval(this.tick, 1000);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (this.timer) {
             clearInterval(this.timer);
         }
         this.timer = undefined;
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { time } = this.props;
         let diff = new Date().valueOf() - new Date(time).valueOf();
         if (diff < 0) {

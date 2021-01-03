@@ -50,17 +50,17 @@ export interface IJodelProps {
 class JodelComponent extends React.Component<IJodelProps> {
     private timer: number | undefined;
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.timer = window.setInterval(this.refresh, 20000);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (this.timer) {
             clearInterval(this.timer);
         }
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         if (!this.props.deviceUid) {
             return <div className="jodel">
                 <ToastContainer />
@@ -136,7 +136,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
 
 const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
-        refresh() {
+        refresh(): void {
             dispatch(fetchPostsIfNeeded());
             dispatch(getNotificationsIfAvailable());
         },

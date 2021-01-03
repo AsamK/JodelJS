@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 
+import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { IJodelAppStore } from '../redux/reducers';
 import { selectedHashtagNameSelector } from '../redux/selectors/view';
 import BackButton from './BackButton';

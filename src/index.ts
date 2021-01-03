@@ -1,7 +1,7 @@
 // noinspection TsLint
 import 'normalize.css';
-import '../style/main.scss';
 
+import '../style/main.scss';
 import './app/main';
 
 if (process.env.NODE_ENV === 'production') {

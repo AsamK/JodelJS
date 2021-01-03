@@ -61,7 +61,7 @@ class AppSettings extends React.Component<IAppSettingsComponentProps> {
         super(props);
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         return <div className="appSettings">
             <h2>Einstellungen</h2>
             <h3>Device UID:</h3>

@@ -13,7 +13,7 @@ export default class ColorPicker extends React.PureComponent<IColorPickerProps> 
         super(props);
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { color, onChange } = this.props;
         const colorNodes = Settings.POST_COLORS.map(c => {
             return <label key={c} style={{ backgroundColor: '#' + c }}>

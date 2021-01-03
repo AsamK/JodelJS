@@ -13,18 +13,18 @@ interface IMapCircleProps {
 class MapCircleComponent extends React.PureComponent<IMapCircleProps> {
     private circleShape: Circle | undefined;
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         const { location, radius } = this.props;
         this.circleShape = circle({
             lat: location.latitude,
             lng: location.longitude,
         }, {
-                radius,
-            });
+            radius,
+        });
         this.circleShape.addTo(this.props.map);
     }
 
-    public componentDidUpdate() {
+    public componentDidUpdate(): void {
         const { location, radius } = this.props;
         this.circleShape!.setLatLng({
             lat: location.latitude,
@@ -33,11 +33,11 @@ class MapCircleComponent extends React.PureComponent<IMapCircleProps> {
         this.circleShape!.setRadius(radius);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.circleShape!.remove();
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         return null;
     }
 }

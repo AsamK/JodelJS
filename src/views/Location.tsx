@@ -8,7 +8,7 @@ export interface ILocationProps {
 }
 
 export default class Location extends React.Component<ILocationProps> {
-    public render() {
+    public render(): React.ReactElement | null {
         const { distance, location, fromHome } = this.props;
         return (
             <div className="location">

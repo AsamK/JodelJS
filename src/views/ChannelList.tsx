@@ -39,19 +39,19 @@ export class ChannelListComponent extends React.Component<IChannelListComponentP
 
     private scrollable = React.createRef<HTMLDivElement>();
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         if (this.scrollable.current) {
             this.scrollable.current.scrollTop = ChannelListComponent.lastScrollPosition;
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (this.scrollable.current) {
             ChannelListComponent.lastScrollPosition = this.scrollable.current.scrollTop;
         }
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { channels, recommendedChannels, localChannels, countryChannels, onChannelClick } = this.props;
         const channelNodes = channels.map(channel => {
             return this.createChannelNode(channel, onChannelClick, true);
@@ -113,10 +113,10 @@ export class ChannelListComponent extends React.Component<IChannelListComponentP
         );
     }
 
-    private createChannelNode(channel: IChannel, onChannelClick: (channel: string) => void, showImage: boolean) {
+    private createChannelNode(channel: IChannel, onChannelClick: (channel: string) => void, showImage: boolean): React.ReactElement | null {
         if (this.state.channelFilter &&
             !channel.channel.toLowerCase().includes(this.state.channelFilter.toLowerCase())) {
-            return;
+            return null;
         }
         return <ChannelListItem
             key={channel.channel}
@@ -150,7 +150,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: {}) => {
 
 const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: {}) => {
     return {
-        onChannelClick(channelName: string) {
+        onChannelClick(channelName: string): void {
             dispatch(switchPostSection('channel:' + channelName));
         },
     };

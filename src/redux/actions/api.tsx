@@ -16,13 +16,6 @@ import { getPost } from '../reducers/entities';
 import { locationSelector } from '../selectors/app';
 import { SET_USER_TYPE_RESPONSE } from './action.consts';
 import {
-    _closeSticky,
-    _selectPost,
-    _setConfig,
-    _setDeviceUID,
-    _setKarma,
-    _setLocation,
-    _setNotificationPostRead,
     beginRefreshToken,
     invalidatePosts,
     pinnedPost,
@@ -35,8 +28,15 @@ import {
     setLocalChannels,
     setRecommendedChannels,
     setSuggestedHashtags,
-    votedPost,
     votedPoll,
+    votedPost,
+    _closeSticky,
+    _selectPost,
+    _setConfig,
+    _setDeviceUID,
+    _setKarma,
+    _setLocation,
+    _setNotificationPostRead,
 } from './state';
 import { showToast } from './toasts.actions';
 
@@ -47,7 +47,7 @@ interface IResponseError {
 }
 
 function handleNetworkErrors(dispatch: JodelThunkDispatch,
-    getState: () => IJodelAppStore, err: IResponseError | {}) {
+    getState: () => IJodelAppStore, err: IResponseError | {}): void {
     if (!('status' in err)) {
         dispatch(showToast('Kein Internet Zugriff oder Server down.', ToastType.WARNING));
         console.error('No internet access or server down…,', err);

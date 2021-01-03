@@ -330,7 +330,7 @@ export class JodelApi {
             .then(res => res.json());
     }
 
-    public apiGetSuggestedHashtags(home = false) {
+    public apiGetSuggestedHashtags(home = false): Promise<{ hashtags: string[] }> {
         return this.jodelRequestWithAuth('GET', Settings.API_SERVER + API_PATH_V3 + '/hashtags/suggested', { home })
             .then(res => res.json());
     }
@@ -594,7 +594,7 @@ export class JodelApi {
         });
     }
 
-    private parseUrl(url: string) {
+    private parseUrl(url: string): HTMLAnchorElement {
         const parser = document.createElement('a');
         parser.href = url;
         return parser;
@@ -613,15 +613,15 @@ export class JodelApi {
             .join('%');
         const raw = `${method}%${u.hostname}%${443}%${path}%${auth || ''}%${location}%${timestamp}%${queryPart}%${data}`;
 
-        return this.computeSha1Hex(raw)
+        return this.computeSha1Hex(raw);
     }
 
-    private async computeSha1Hex(message: string) {
-        let enc = new TextEncoder();
-        let encodedMessage = enc.encode(message);
+    private async computeSha1Hex(message: string): Promise<string> {
+        const enc = new TextEncoder();
+        const encodedMessage = enc.encode(message);
         const encodedKey = enc.encode(Settings.KEY);
         const key = await crypto.subtle.importKey('raw', encodedKey, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
-        let signature = await crypto.subtle.sign(
+        const signature = await crypto.subtle.sign(
             'HMAC',
             key,
             encodedMessage
@@ -694,6 +694,7 @@ export class JodelApi {
             try {
                 description = await res.text();
             } catch (e) {
+                description = undefined;
             }
         }
 

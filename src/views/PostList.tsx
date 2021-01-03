@@ -23,7 +23,7 @@ export default class PostList extends React.PureComponent<IPostListProps> {
         super(props);
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         if (this.scrollable.current) {
             this.scrollable.current.addEventListener('scroll', this.onScroll);
             if (this.props.connectScrollTarget) {
@@ -33,7 +33,7 @@ export default class PostList extends React.PureComponent<IPostListProps> {
         this.scrollAtBottom = false;
     }
 
-    public componentDidUpdate(prevProps: IPostListProps) {
+    public componentDidUpdate(prevProps: IPostListProps): void {
         if (prevProps.sortType !== this.props.sortType || prevProps.section !== this.props.section ||
             prevProps.lastUpdated !== this.props.lastUpdated) {
             if (this.scrollable.current) {
@@ -42,13 +42,13 @@ export default class PostList extends React.PureComponent<IPostListProps> {
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (this.scrollable.current) {
             this.scrollable.current.removeEventListener('scroll', this.onScroll);
         }
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { posts, parentPost, onPostClick } = this.props;
         const postNodes = posts.map(post => (
             <PostListItem

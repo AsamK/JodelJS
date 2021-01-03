@@ -2,6 +2,7 @@ import { PostListSortType } from '../enums/PostListSortType';
 import { Section } from '../enums/Section';
 import { TokenType } from '../enums/TokenType';
 import { JodelThunkAction } from '../interfaces/JodelThunkAction';
+import { randomValueHex } from '../utils/bytes.utils';
 import {
     fetchPostsIfNeeded,
     getConfig,
@@ -16,6 +17,7 @@ import {
     updatePost,
 } from './actions/api';
 import {
+    invalidatePosts,
     _selectPicture,
     _selectPost,
     _setPermissionDenied,
@@ -27,10 +29,8 @@ import {
     _showSettings,
     _switchPostListSortType,
     _switchPostSection,
-    invalidatePosts,
 } from './actions/state';
 import { locationSelector } from './selectors/app';
-import { randomValueHex } from '../utils/bytes.utils';
 
 export * from './actions/state';
 export * from './actions/api';

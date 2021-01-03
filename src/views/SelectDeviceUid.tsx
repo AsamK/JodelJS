@@ -23,7 +23,7 @@ export class SelectDeviceUid extends React.PureComponent<ISelectDeviceUidProps, 
         };
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         return (
             <div className="selectDeviceUid">
                 <label>

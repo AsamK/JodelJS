@@ -19,7 +19,7 @@ class NotificationListComponent extends React.PureComponent<INotificationListCom
         super(props);
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { notifications, selectPost } = this.props;
         return (
             <div className="notification-list">

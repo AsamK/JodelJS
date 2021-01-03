@@ -40,8 +40,8 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
         super(props);
     }
 
-    public render() {
-        const { post, author, parentPostId, pollVote, onPostClick } = this.props;
+    public render(): React.ReactElement | null {
+        const { post, author, parentPostId, onPostClick } = this.props;
         return (
             <div className={classnames('post', {
                 'collapse': post.collapse,
@@ -119,7 +119,7 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
                                     type="radio"
                                     value={i}
                                     checked={i === post.poll_vote}
-                                    onChange={() => pollVote(post.poll_id!, i)}
+                                    onChange={() => this.props.pollVote(post.poll_id!, i)}
                                 />
                                 {option} ({post.poll_votes?.[i]})
                         </label>)}

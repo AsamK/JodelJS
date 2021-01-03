@@ -27,9 +27,9 @@ import {
     SET_SUGGESTED_HASHTAGS,
     SET_TOKEN,
     SET_TOKEN_PENDING,
+    SET_USER_TYPE_RESPONSE,
     SET_USE_BROWSER_LOCATION,
     SET_USE_HOME_LOCATION,
-    SET_USER_TYPE_RESPONSE,
     SHARE_LINK,
     SHARE_LINK_CLOSE,
     SHOW_ADD_POST,
@@ -40,8 +40,8 @@ import {
     SHOW_TOAST,
     SWITCH_POST_LIST_SORT_TYPE,
     SWITCH_POST_SECTION,
-    VOTED_POST,
     VOTED_POLL,
+    VOTED_POST,
 } from '../redux/actions/action.consts';
 import { IViewStateStore } from '../redux/reducers/viewState';
 import { IApiConfig } from './IApiConfig';

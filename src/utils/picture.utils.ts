@@ -1,5 +1,5 @@
-function convertImageUrlToImage(url: string) {
-    return new Promise<HTMLImageElement>((resolve, reject) => {
+function convertImageUrlToImage(url: string): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
         if (!url) {
             reject('Error: Given picture url is empty');
             return;
@@ -14,8 +14,8 @@ function convertImageUrlToImage(url: string) {
     });
 }
 
-function convertBlobToDataUrl(blob: Blob) {
-    return new Promise<string>((resolve, reject) => {
+function convertBlobToDataUrl(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
         const fileReader = new FileReader();
         fileReader.onload = () => {
             if (fileReader.result) {
@@ -28,8 +28,8 @@ function convertBlobToDataUrl(blob: Blob) {
     });
 }
 
-function resizeImage(image: HTMLImageElement, newWidth: number, newHeight: number) {
-    return new Promise<Blob>((resolve, reject) => {
+function resizeImage(image: HTMLImageElement, newWidth: number, newHeight: number): Promise<Blob> {
+    return new Promise((resolve, reject) => {
         const canvas = document.createElement('canvas');
 
         canvas.width = newWidth;

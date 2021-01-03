@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Settings from '../app/settings';
 import { ILocation } from '../interfaces/ILocation';
 import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
-import { _setLocation, createNewAccount, setUseBrowserLocation, updateLocation } from '../redux/actions';
+import { createNewAccount, setUseBrowserLocation, updateLocation, _setLocation } from '../redux/actions';
 import { setDeviceUid } from '../redux/actions/api';
 import { IJodelAppStore } from '../redux/reducers';
 import { deviceUidSelector, locationSelector } from '../redux/selectors/app';
@@ -29,11 +29,11 @@ class FirstStart extends React.Component<IFirstStartProps, IFirstStartState> {
         this.state = { deviceUid: null };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.setState({ deviceUid: this.props.deviceUid });
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         return <div className="firstStart">
             <h1>
                 <FormattedMessage

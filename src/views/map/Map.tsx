@@ -21,7 +21,7 @@ export default class MapComponent extends React.Component<IMapComponentProps, IM
 
     private mapElement = React.createRef<HTMLDivElement>();
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         const leafletMap = map(this.mapElement.current!);
         if (this.props.location) {
             leafletMap.setView({
@@ -42,7 +42,7 @@ export default class MapComponent extends React.Component<IMapComponentProps, IM
         });
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         return <div className="map-root" ref={this.mapElement}>
             <LeafletMapContext.Provider value={this.state.map}>
                 {this.props.children}
@@ -50,7 +50,7 @@ export default class MapComponent extends React.Component<IMapComponentProps, IM
         </div>;
     }
 
-    public componentDidUpdate() {
+    public componentDidUpdate(): void {
         const leafletMap = this.state.map;
         if (leafletMap && this.props.location) {
             leafletMap.panTo({
@@ -60,7 +60,7 @@ export default class MapComponent extends React.Component<IMapComponentProps, IM
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         const leafletMap = this.state.map;
         if (leafletMap) {
             leafletMap.remove();

@@ -22,7 +22,7 @@ class SearchComponent extends React.Component<ISearchComponentProps, ISearchComp
         };
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         return <div className="searchContainer">
             <form className="searchBox" onSubmit={e => {
                 e.preventDefault();

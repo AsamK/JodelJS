@@ -22,7 +22,7 @@ export default class Vote extends React.Component<IVoteProps, IVoteState> {
         justUpVoted: false,
     };
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { vote_count, voted, upvote, downvote } = this.props;
         const { justUpVoted, justDownVoted } = this.state;
         return (

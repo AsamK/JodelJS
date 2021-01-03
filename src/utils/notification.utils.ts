@@ -1,7 +1,7 @@
 import { NotificationType } from '../enums/NotificationType';
 import { INotification } from '../interfaces/INotification';
 
-export function getNotificationDescription(notification: INotification) {
+export function getNotificationDescription(notification: INotification): string {
     switch (notification.type) {
         case NotificationType.OJ_REPLY_REPLY:
             return 'OJ hat geantwortet';

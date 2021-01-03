@@ -10,17 +10,17 @@ interface IShareLinkProps {
     link: string | null;
 }
 
-function shareLink(link: string) {
-    (navigator as any).share({
+function shareLink(link: string): void {
+    navigator.share({
         url: link,
     });
 }
 
-function onClose() {
+function onClose(): void {
     window.history.back();
 }
 
-function ShareLink({ link }: IShareLinkProps) {
+function ShareLink({ link }: IShareLinkProps): React.ReactElement | null {
     if (!link) {
         return null;
     }

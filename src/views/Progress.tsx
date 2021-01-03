@@ -13,7 +13,7 @@ interface IProgressProps {
 class Progress extends React.PureComponent<IProgressProps> {
     private timer: number | null = null;
 
-    public componentDidUpdate(prevProps: IProgressProps) {
+    public componentDidUpdate(prevProps: IProgressProps): void {
         if (prevProps.isFetching === this.props.isFetching) {
             return;
         }
@@ -30,7 +30,7 @@ class Progress extends React.PureComponent<IProgressProps> {
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (this.timer) {
             clearTimeout(this.timer);
         }
@@ -39,15 +39,15 @@ class Progress extends React.PureComponent<IProgressProps> {
         }
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         return null;
     }
 }
 
-function mapStateToProps(state: IJodelAppStore) {
+const mapStateToProps = (state: IJodelAppStore) => {
     return {
         isFetching: isSelectedSectionFetchingSelector(state),
     };
-}
+};
 
 export default connect(mapStateToProps)(Progress);

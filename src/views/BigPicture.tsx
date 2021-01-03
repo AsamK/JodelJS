@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { IPost } from '../interfaces/IPost';
 import './BigPicture.scss';
 

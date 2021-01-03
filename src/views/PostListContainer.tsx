@@ -39,14 +39,14 @@ class PostListContainerComponent extends React.PureComponent<IPostListContainerC
         super(props);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (this.scrollable) {
             PostListContainerComponent.lastScrollPosition = this.scrollable.scrollTop;
             PostListContainerComponent.lastScrollSection = this.props.section + this.props.sortType;
         }
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { posts, section, sortType, lastUpdated, locationKnown, onPostClick, onAddClick, onLoadMore } = this.props;
         return (
             <div className="postListContainer">
@@ -91,16 +91,16 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: IPostListContainerProp
 const mapDispatchToProps = (dispatch: JodelThunkDispatch,
     ownProps: IPostListContainerProps) => {
     return {
-        onAddClick() {
+        onAddClick(): void {
             dispatch(showAddPost(true));
         },
-        onLoadMore() {
+        onLoadMore(): void {
             dispatch(fetchMorePosts());
         },
-        onPostClick(post: IPost) {
+        onPostClick(post: IPost): void {
             dispatch(selectPost(post != null ? post.post_id : null));
         },
-        onRefresh() {
+        onRefresh(): void {
             dispatch(updatePosts());
         },
     };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-
 import { connect } from 'react-redux';
+
 import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { showChannelList, showSettings } from '../redux/actions';
 import { IJodelAppStore } from '../redux/reducers';
@@ -15,7 +15,7 @@ interface ITopBarComponentProps {
     onChannelsClick: () => void;
 }
 
-function TopBarComponent({ karma, onKarmaClick, onChannelsClick }: ITopBarComponentProps) {
+function TopBarComponent({ karma, onKarmaClick, onChannelsClick }: ITopBarComponentProps): React.ReactElement | null {
     return (
         <div className="topBar">
             <Menu />
@@ -50,10 +50,10 @@ const mapStateToProps = (state: IJodelAppStore) => {
 
 const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
-        onKarmaClick() {
+        onKarmaClick(): void {
             dispatch(showSettings(true));
         },
-        onChannelsClick() {
+        onChannelsClick(): void {
             dispatch(showChannelList(true));
         },
     };

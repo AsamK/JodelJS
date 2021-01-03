@@ -8,7 +8,7 @@ export interface IMessageProps {
 }
 
 export default class Message extends React.Component<IMessageProps> {
-    public render() {
+    public render(): React.ReactElement | null {
         const { message, link, onAtClick, onHashtagClick } = this.props;
         const linkReg = /([^#@]*)([@#])([^\s#@:;.,]*)|([^[]*)\[([^[\]]*)\]\(([^()]*)\)/mg;
         let previousIndex = 0;

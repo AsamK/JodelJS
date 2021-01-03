@@ -7,7 +7,7 @@ import { Post } from './Post';
 export class PostListItem
     extends React.PureComponent<{ post: IPost, parentPostId?: string, onPostClick: (post: IPost) => void }> {
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { post, parentPostId } = this.props;
 
         const author = parentPostId == null

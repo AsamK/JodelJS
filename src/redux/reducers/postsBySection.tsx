@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+
 import { IJodelAction } from '../../interfaces/IJodelAction';
 import { INVALIDATE_POSTS, RECEIVE_POST, RECEIVE_POSTS, SET_IS_FETCHING } from '../actions/action.consts';
 

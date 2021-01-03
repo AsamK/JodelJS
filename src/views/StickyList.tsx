@@ -24,7 +24,7 @@ class StickyListComponent extends React.Component<IStickyListProps> {
         super(props);
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         const {
             stickies, clickStickyClose, clickStickyLink,
             clickStickyButton, switchToHashtag, switchToChannel,

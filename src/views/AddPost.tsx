@@ -42,7 +42,7 @@ export class AddPostComponent extends React.PureComponent<IAddPostComponentProps
         };
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { channel, ancestor, visible } = this.props;
 
         return (
@@ -125,7 +125,7 @@ export class AddPostComponent extends React.PureComponent<IAddPostComponentProps
     };
 
     private sendAddPost(message: string, encodedImage: string | undefined, channel: string | undefined,
-        ancestor: string | undefined, color: Color | undefined, form: HTMLFormElement) {
+        ancestor: string | undefined, color: Color | undefined, form: HTMLFormElement): void {
         this.props.dispatch(addPost(message, encodedImage, channel, ancestor, color)).then(
             section => {
                 this.resetForm(form);

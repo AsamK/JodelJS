@@ -7,7 +7,7 @@ import './ChannelListItem.scss';
 export class ChannelListItem
     extends React.PureComponent<{ channel: IChannel, onChannelClick: (channel: string) => void, showImage: boolean }> {
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { channel, showImage } = this.props;
         return <div
             className={classnames('channel-list-item', { unread: channel.unread })}

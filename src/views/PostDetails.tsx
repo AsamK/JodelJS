@@ -29,7 +29,7 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
         super(props);
     }
 
-    public componentDidUpdate(prevProps: IPostDetailsPropsComponent) {
+    public componentDidUpdate(prevProps: IPostDetailsPropsComponent): void {
         if (this.props.post === null) {
             return;
         } else if (prevProps.post !== null && prevProps.post.post_id === this.props.post.post_id) {
@@ -41,20 +41,20 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
         }
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         if (this.scrollable.current) {
             this.scrollable.current.addEventListener('scroll', this.onScroll);
         }
         this.scrollAtBottom = false;
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (this.scrollable.current) {
             this.scrollable.current.removeEventListener('scroll', this.onScroll);
         }
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { post, postChildren, locationKnown, onAddClick } = this.props;
         if (!post) {
             return null;
@@ -107,10 +107,10 @@ const mapStateToProps = (state: IJodelAppStore) => {
 
 const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
-        onAddClick() {
+        onAddClick(): void {
             dispatch(showAddPost(true));
         },
-        onLoadMore() {
+        onLoadMore(): void {
             dispatch(fetchMoreComments());
         },
     };

@@ -21,7 +21,7 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
         super(props);
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { location, useBrowserLocation, onLocationRequested } = this.props;
         return (
             <div className="select-location">

@@ -17,7 +17,7 @@ export class Sticky extends React.PureComponent<IStickyProps> {
         super(props);
     }
 
-    public render() {
+    public render(): React.ReactElement | null {
         const { sticky, onCloseClick, onLinkClick, onButtonClick, switchToChannel, switchToHashtag } = this.props;
         const stickyLink = sticky.link;
         const stickyButtons = sticky.buttons;

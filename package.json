@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "classnames": "2.2.x",
-    "core-js": "3.8.x",
     "intl": "1.2.x",
     "leaflet": "1.7.x",
     "nprogress": "0.2.x",

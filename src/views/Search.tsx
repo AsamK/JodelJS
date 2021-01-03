@@ -56,4 +56,4 @@ const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     };
 };
 
-export const Search = connect(mapStateToProps, mapDispatchToProps)(SearchComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchComponent);

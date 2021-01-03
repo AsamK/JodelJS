@@ -47,4 +47,4 @@ const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     };
 };
 
-export const NotificationList = connect(mapStateToProps, mapDispatchToProps)(NotificationListComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationListComponent);

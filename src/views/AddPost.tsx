@@ -145,4 +145,4 @@ const mapStateToProps = (state: IJodelAppStore) => {
     };
 };
 
-export const AddPost = connect(mapStateToProps)(AddPostComponent);
+export default connect(mapStateToProps)(AddPostComponent);

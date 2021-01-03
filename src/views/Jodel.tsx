@@ -1,5 +1,4 @@
 import React from 'react';
-import loadable from 'react-loadable';
 import { connect } from 'react-redux';
 
 import { IPost } from '../interfaces/IPost';
@@ -28,31 +27,11 @@ import ShareLink from './ShareLink';
 import { ToastContainer } from './ToastContainer';
 import { TopBar } from './TopBar';
 
-const LoadableAddPost = loadable({
-    loader: () => import(/* webpackChunkName: "add-post" */ './AddPost').then(module => module.AddPost as any),
-    loading: () => null,
-});
-
-const LoadableNotificationList = loadable({
-    loader: () => import(/* webpackChunkName: "notifications" */ './NotificationList' as any)
-        .then(module => module.NotificationList),
-    loading: () => null,
-});
-
-const LoadableSearch = loadable({
-    loader: () => import(/* webpackChunkName: "search" */ './Search').then(module => module.Search as any),
-    loading: () => null,
-});
-
-const LoadableAppSettings = loadable({
-    loader: () => import(/* webpackChunkName: "settings" */ './AppSettings' as any),
-    loading: () => null,
-});
-
-const LoadableChannelList = loadable({
-    loader: () => import(/* webpackChunkName: "channels" */ './ChannelList' as any),
-    loading: () => null,
-});
+const LazyAddPost = React.lazy(() => import('./AddPost'));
+const LazyNotificationList = React.lazy(() => import('./NotificationList'));
+const LazySearch = React.lazy(() => import('./Search'));
+const LazyAppSettings = React.lazy(() => import('./AppSettings'));
+const LazyChannelList = React.lazy(() => import('./ChannelList'));
 
 export interface IJodelProps {
     addPostVisible: boolean;
@@ -94,15 +73,15 @@ class JodelComponent extends React.Component<IJodelProps> {
         let content = null;
 
         if (this.props.addPostVisible) {
-            content = <LoadableAddPost />;
+            content = <LazyAddPost />;
         } else if (this.props.notificationsVisible) {
-            content = <LoadableNotificationList />;
+            content = <LazyNotificationList />;
         } else if (this.props.searchVisible) {
-            content = <LoadableSearch />;
+            content = <LazySearch />;
         } else if (this.props.settingsVisible) {
-            content = <LoadableAppSettings />;
+            content = <LazyAppSettings />;
         } else if (this.props.channelListVisible) {
-            content = <LoadableChannelList />;
+            content = <LazyChannelList />;
         } else if (this.props.selectedPostId != null) {
             content = <div className="detail">
                 <PostTopBar />
@@ -123,7 +102,9 @@ class JodelComponent extends React.Component<IJodelProps> {
         return <div className="jodel">
             <TopBar />
             <ToastContainer />
-            {content}
+            <React.Suspense fallback={<div>...</div>}>
+                {content}
+            </React.Suspense>
             {overlay}
             <ShareLink />
             <Progress />

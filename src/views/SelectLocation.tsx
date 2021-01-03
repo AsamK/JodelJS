@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-import loadable from 'react-loadable';
 
 import { IGeoCoordinates } from '../interfaces/ILocation';
 import './SelectLocation.scss';
@@ -8,10 +7,7 @@ import './SelectLocation.scss';
 const USE_BROWSER_LOCATION = 'USE_BROWSER_LOCATION';
 const MANUAL = 'MANUAL';
 
-const LoadableMapComponent = loadable({
-    loader: () => import(/* webpackChunkName: "map" */ './SelectLocationMap'),
-    loading: () => null,
-});
+const LazyMapComponent = React.lazy(() => import('./SelectLocationMap'));
 
 export interface ISelectLocationProps {
     location: IGeoCoordinates | null;
@@ -70,11 +66,12 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                     </a>
                 </div> :
                     <div className="select-location_manual">
-                        <LoadableMapComponent
-                            location={location}
-                            onLocationChanged={this.handleChangeLocation}
-                        >
-                        </LoadableMapComponent>
+                        <React.Suspense fallback={<div>...</div>}>
+                            <LazyMapComponent
+                                location={location}
+                                onLocationChanged={this.handleChangeLocation}
+                            />
+                        </React.Suspense>
                         <label>
                             <FormattedMessage
                                 id="location_latitude"

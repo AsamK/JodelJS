@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "classnames": "2.2.x",
+    "create-react-class": "^15.7.0",
+    "fbjs": "^3.0.0",
     "leaflet": "1.7.x",
     "nprogress": "0.2.x",
     "react": "17.0.x",

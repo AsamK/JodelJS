@@ -13,8 +13,8 @@ export interface IApiConfig {
     experiments: IApiExperiment[];
     feedInternationalized: boolean;
     feedInternationalizable: boolean;
-    followed_channels: string[];
-    followed_hashtags: string[];
+    followed_channels?: string[];
+    followed_hashtags?: string[];
     home_set: boolean;
     home_name: string;
     home_clear_allowed: boolean;

@@ -673,7 +673,7 @@ export function getFollowedChannelsMeta(): JodelThunkAction {
         if (!config) {
             return;
         }
-        config.followed_channels.forEach(c => {
+        config.followed_channels?.forEach(c => {
             const timestamp = getState().settings.channelsLastRead[c];
             channels[c] = timestamp === undefined ? 0 : timestamp;
         });

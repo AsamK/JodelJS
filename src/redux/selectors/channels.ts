@@ -21,9 +21,7 @@ export const selectedChannelNameSelector = createSelector(
     (selectedSection): string | undefined => !selectedSection || !selectedSection.startsWith('channel:')
         ? undefined : selectedSection.substring(8));
 
-const followedChannelNamesSelector = (state: IJodelAppStore) => state.account.config ?
-    state.account.config.followed_channels :
-    [];
+const followedChannelNamesSelector = (state: IJodelAppStore) => state.account.config?.followed_channels ?? [];
 
 export const isSelectedChannelFollowedSelector = createSelector(
     selectedChannelNameSelector, followedChannelNamesSelector,

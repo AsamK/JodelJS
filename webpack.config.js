@@ -42,13 +42,8 @@ module.exports = function (env, argv) {
                     loader: 'source-map-loader'
                 },
                 {
-                    test: /\.(png|jpg|gif)$/,
-                    use: [
-                        {
-                            loader: 'file-loader',
-                            options: {}
-                        }
-                    ]
+                    test: /\.(png|jpg|gif|svg)$/,
+                    type: 'asset',
                 },
                 {
                     test: /\.s?css$/,
@@ -66,15 +61,8 @@ module.exports = function (env, argv) {
                                 sourceMap: createSourceMaps,
                             }
                         },
-                        'sass-loader',
+                        { loader: 'sass-loader', options: { sourceMap: createSourceMaps } },
                     ],
-                },
-                {
-                    test: /\.svg$/,
-                    use: {
-                        loader: 'svg-url-loader',
-                        options: {}
-                    }
                 },
                 {
                     test: /\.html$/,
@@ -107,7 +95,6 @@ module.exports = function (env, argv) {
                         swDest: 'sw.js',
                     }),
                 ] : [
-                    new webpack.HotModuleReplacementPlugin()
                 ]),
         ],
         optimization: {
@@ -122,14 +109,12 @@ module.exports = function (env, argv) {
                         sourceMap: createSourceMaps,
                     },
                 }),
-                new CssMinimizerPlugin({
-                    sourceMap: createSourceMaps,
-                }),
-            ]
+                new CssMinimizerPlugin(),
+            ],
         },
 
         devServer: {
             static: false,
-        }
-    }
-}
+        },
+    };
+};

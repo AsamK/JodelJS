@@ -724,7 +724,7 @@ export function verify(): JodelThunkAction {
             await api.apiVerifyPush(verification.server_time, verification.verification_code);
             dispatch(getConfig());
         } catch (err) {
-            handleNetworkErrors(dispatch, getState, err);
+            handleNetworkErrors(dispatch, getState, err as IResponseError);
         }
     };
 }

@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import "settings.scss";
 
 // General
@@ -154,17 +156,17 @@ body,
 
     &.recent {
       background-image: url("../img/clock.svg");
-      background-size: $bottom-bar-height / 2;
+      background-size: $bottom-bar-height * 0.5;
     }
 
     &.discussed {
       background-image: url("../img/comments.svg");
-      background-size: $bottom-bar-height / 2;
+      background-size: $bottom-bar-height * 0.5;
     }
 
     &.popular {
       background-image: url("../img/popular.svg");
-      background-size: $bottom-bar-height / 2;
+      background-size: $bottom-bar-height * 0.5;
     }
   }
 }
@@ -341,9 +343,9 @@ body,
     > * {
       cursor: pointer;
       flex: none;
-      height: $top-bar-height / 3;
+      height: math.div($top-bar-height, 3);
       overflow: hidden;
-      padding: ($top-bar-height/3) .6em;
+      padding: math.div($top-bar-height, 3) .6em;
       text-overflow: ellipsis;
       white-space: nowrap;
 

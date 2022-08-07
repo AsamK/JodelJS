@@ -11,7 +11,7 @@ interface ISelectLocationMapProps {
 }
 
 export default ({ location, onLocationChanged }: ISelectLocationMapProps) => (
-    <MapComponent location={location}>
+    <MapComponent location={location ?? {latitude: 0, longitude: 0}}>
         {!location ? null :
             <>
                 <MapMarkerComponent

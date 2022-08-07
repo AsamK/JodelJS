@@ -28,7 +28,7 @@
     "@types/react-dom": "18.0.x",
     "@types/react-redux": "7.1.x",
     "@types/webpack-env": "1.17.x",
-    "autoprefixer": "10.4.x",
+    "autoprefixer": "10.4.5",
     "clean-webpack-plugin": "4.0.x",
     "copy-webpack-plugin": "11.0.x",
     "css-loader": "6.7.x",

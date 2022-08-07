@@ -41,31 +41,32 @@ function resizeImage(image: HTMLImageElement, newWidth: number, newHeight: numbe
             return;
         }
         context.drawImage(image, 0, 0, newWidth, newHeight);
-        canvas.toBlob(im => {
-            if (!im) {
-                reject('Failed to create blob from canvas');
-                return;
-            }
-            resolve(im);
-        }, 'image/jpeg', 9);
+        canvas.toBlob(
+            im => {
+                if (!im) {
+                    reject('Failed to create blob from canvas');
+                    return;
+                }
+                resolve(im);
+            },
+            'image/jpeg',
+            9,
+        );
     });
 }
 
 export function resizePicture(blob: Blob, maxWidth: number): Promise<string> {
-    return convertBlobToDataUrl(blob)
-        .then(url => resizePictureUrl(url, maxWidth));
+    return convertBlobToDataUrl(blob).then(url => resizePictureUrl(url, maxWidth));
 }
 
 export function resizePictureUrl(imageUrl: string, maxWidth: number): Promise<string> {
-    return convertImageUrlToImage(imageUrl)
-        .then(image => {
-            if (image.naturalWidth <= maxWidth) {
-                return Promise.resolve(imageUrl);
-            }
+    return convertImageUrlToImage(imageUrl).then(image => {
+        if (image.naturalWidth <= maxWidth) {
+            return Promise.resolve(imageUrl);
+        }
 
-            const width = maxWidth;
-            const height = image.naturalHeight / image.naturalWidth * width;
-            return resizeImage(image, width, height)
-                .then(blob => convertBlobToDataUrl(blob));
-        });
+        const width = maxWidth;
+        const height = (image.naturalHeight / image.naturalWidth) * width;
+        return resizeImage(image, width, height).then(blob => convertBlobToDataUrl(blob));
+    });
 }

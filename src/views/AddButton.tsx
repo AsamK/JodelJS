@@ -7,10 +7,7 @@ export interface IAddButtonProps {
 }
 
 const AddButton = ({ onClick }: IAddButtonProps) => {
-    return (
-        <div className="add-button" onClick={onClick}>
-        </div>
-    );
+    return <div className="add-button" onClick={onClick}></div>;
 };
 
 export default AddButton;

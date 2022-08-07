@@ -7,7 +7,10 @@ import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { fetchMorePosts, selectPost, showAddPost, updatePosts } from '../redux/actions';
 import type { IJodelAppStore } from '../redux/reducers';
 import { isLocationKnownSelector } from '../redux/selectors/app';
-import { selectedSectionLastUpdatedSelector, selectedSectionSortPostsSelector } from '../redux/selectors/posts';
+import {
+    selectedSectionLastUpdatedSelector,
+    selectedSectionSortPostsSelector,
+} from '../redux/selectors/posts';
 import { selectedSectionSelector, selectedSortTypeSelector } from '../redux/selectors/view';
 
 import AddButton from './AddButton';
@@ -15,8 +18,7 @@ import PostList from './PostList';
 import { SortTypeLink } from './SortTypeLink';
 import { StickyList } from './StickyList';
 
-export interface IPostListContainerProps {
-}
+export interface IPostListContainerProps {}
 
 export interface IPostListContainerComponentProps extends IPostListContainerProps {
     section: string;
@@ -48,12 +50,26 @@ class PostListContainerComponent extends React.PureComponent<IPostListContainerC
     }
 
     public render(): React.ReactElement | null {
-        const { posts, section, sortType, lastUpdated, locationKnown, onPostClick, onAddClick, onLoadMore } = this.props;
+        const {
+            posts,
+            section,
+            sortType,
+            lastUpdated,
+            locationKnown,
+            onPostClick,
+            onAddClick,
+            onLoadMore,
+        } = this.props;
         return (
             <div className="postListContainer">
                 {section !== 'location' ? null : <StickyList />}
-                <PostList section={section} sortType={sortType} lastUpdated={lastUpdated} posts={posts}
-                    onPostClick={onPostClick} onLoadMore={onLoadMore}
+                <PostList
+                    section={section}
+                    sortType={sortType}
+                    lastUpdated={lastUpdated}
+                    posts={posts}
+                    onPostClick={onPostClick}
+                    onLoadMore={onLoadMore}
                     connectScrollTarget={this.connectScrollTarget}
                 />
                 {locationKnown ? <AddButton onClick={onAddClick} /> : ''}
@@ -71,7 +87,10 @@ class PostListContainerComponent extends React.PureComponent<IPostListContainerC
         if (!target) {
             return;
         }
-        if (PostListContainerComponent.lastScrollSection === this.props.section + this.props.sortType) {
+        if (
+            PostListContainerComponent.lastScrollSection ===
+            this.props.section + this.props.sortType
+        ) {
             target.scrollTop = PostListContainerComponent.lastScrollPosition;
         } else {
             PostListContainerComponent.lastScrollPosition = 0;
@@ -106,4 +125,7 @@ const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     };
 };
 
-export const PostListContainer = connect(mapStateToProps, mapDispatchToProps)(PostListContainerComponent);
+export const PostListContainer = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(PostListContainerComponent);

@@ -9,5 +9,10 @@ interface IExtraArgument {
     api: JodelApi;
 }
 
-export type JodelThunkAction<R = void> = ThunkAction<R, IJodelAppStore, IExtraArgument, IJodelAction>;
+export type JodelThunkAction<R = void> = ThunkAction<
+    R,
+    IJodelAppStore,
+    IExtraArgument,
+    IJodelAction
+>;
 export type JodelThunkDispatch = ThunkDispatch<IJodelAppStore, IExtraArgument, IJodelAction>;

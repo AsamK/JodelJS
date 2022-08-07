@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { PostListSortType } from '../../enums/PostListSortType';
-import type { Section} from '../../enums/Section';
+import type { Section } from '../../enums/Section';
 import { SectionEnum } from '../../enums/Section';
 import type { IJodelAction } from '../../interfaces/IJodelAction';
 import {
@@ -36,7 +36,10 @@ export interface IViewStateStore {
     readonly search: IVisible;
 }
 
-export function viewState(state: IViewStateStore | undefined, action: IJodelAction): IViewStateStore {
+export function viewState(
+    state: IViewStateStore | undefined,
+    action: IJodelAction,
+): IViewStateStore {
     switch (action.type) {
         case REPLACE_VIEW_STATE:
             return { ...state, ...action.payload.newViewState };

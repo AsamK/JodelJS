@@ -12,11 +12,12 @@ export interface IHashtagTopBarProps {
 }
 
 const HashtagTopBarComponent = ({ hashtag }: IHashtagTopBarProps) => {
-    return !hashtag ? null :
+    return !hashtag ? null : (
         <div className="hashtagTopBar">
             <BackButton onClick={() => window.history.back()} />
             <div className="title">#{hashtag}</div>
-        </div>;
+        </div>
+    );
 };
 
 const mapStateToProps = (state: IJodelAppStore) => {

@@ -14,7 +14,7 @@
 .channel-list_header {
     background-color: orange;
     color: white;
-    letter-spacing: .25em;
+    letter-spacing: 0.25em;
     margin-bottom: 1px;
     padding: 1em;
     text-transform: uppercase;
@@ -33,7 +33,7 @@
     color: #555;
     display: flex;
     justify-content: space-between;
-    letter-spacing: .25em;
+    letter-spacing: 0.25em;
     margin-bottom: 1px;
     padding: 1em;
     text-transform: uppercase;
@@ -49,6 +49,6 @@
 }
 
 .channel-count {
-    font-size: .7rem;
+    font-size: 0.7rem;
     letter-spacing: initial;
 }

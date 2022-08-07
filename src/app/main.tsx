@@ -17,11 +17,11 @@ import {
     updateLocation,
 } from '../redux/actions';
 import { getKarma, getNotifications, refreshAccessToken } from '../redux/actions/api';
-import type { IJodelAppStore} from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { JodelApp } from '../redux/reducers';
-import type { IAccountStore} from '../redux/reducers/account';
+import type { IAccountStore } from '../redux/reducers/account';
 import { ACCOUNT_VERSION, migrateAccount } from '../redux/reducers/account';
-import type { ISettingsStore} from '../redux/reducers/settings';
+import type { ISettingsStore } from '../redux/reducers/settings';
 import { migrateSettings, SETTINGS_VERSION } from '../redux/reducers/settings';
 import type { IViewStateStore } from '../redux/reducers/viewState';
 import { getNotificationDescription } from '../utils/notification.utils';
@@ -40,7 +40,10 @@ let persistedStateSettings: ISettingsStore | undefined;
 const storedSettings = localStorage.getItem('settings');
 if (storedSettings) {
     const oldVersion = parseInt(localStorage.getItem('settingsVersion') || '0', 10);
-    persistedStateSettings = migrateSettings(JSON.parse(storedSettings) as ISettingsStore, oldVersion);
+    persistedStateSettings = migrateSettings(
+        JSON.parse(storedSettings) as ISettingsStore,
+        oldVersion,
+    );
 }
 
 const persistedState: Partial<IJodelAppStore> = {
@@ -60,87 +63,91 @@ if (process.env.NODE_ENV !== 'production') {
     reduxMiddlewares.push(freeze);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-const composeEnhancers = (process.env.NODE_ENV !== 'production' &&
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const composeEnhancers =
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    (process.env.NODE_ENV !== 'production' &&
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+        (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+    compose;
 const store = createStore<IJodelAppStore, IJodelAction, { dispatch: JodelThunkDispatch }, unknown>(
     JodelApp,
     persistedState as IJodelAppStore,
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
-    composeEnhancers(
-        applyMiddleware(
-            ...reduxMiddlewares,
-        ),
-    ),
+    composeEnhancers(applyMiddleware(...reduxMiddlewares)),
 );
 
 const api = new JodelApi(store);
 extraThunkArgument.api = api;
 
 let userClickedBack = false;
-store.subscribe((() => {
-    let previousState = store.getState();
-    const shownNotifications: { [notificationId: string]: Notification | null } = {};
+store.subscribe(
+    (() => {
+        let previousState = store.getState();
+        const shownNotifications: { [notificationId: string]: Notification | null } = {};
 
-    return () => {
-        const state = store.getState();
-        localStorage.setItem('account', JSON.stringify(state.account));
-        localStorage.setItem('accountVersion', ACCOUNT_VERSION.toString());
+        return () => {
+            const state = store.getState();
+            localStorage.setItem('account', JSON.stringify(state.account));
+            localStorage.setItem('accountVersion', ACCOUNT_VERSION.toString());
 
-        localStorage.setItem('settings', JSON.stringify(state.settings));
-        localStorage.setItem('settingsVersion', SETTINGS_VERSION.toString());
+            localStorage.setItem('settings', JSON.stringify(state.settings));
+            localStorage.setItem('settingsVersion', SETTINGS_VERSION.toString());
 
-        if (previousState.viewState !== state.viewState) {
-            if (userClickedBack) {
-                userClickedBack = false;
-            } else {
-                history.pushState(state.viewState, '');
-            }
-        }
-        if (previousState.entities.notifications !== state.entities.notifications && 'Notification' in window) {
-            state.entities.notifications
-                .filter(n => n.read)
-                .forEach(n => {
-                    const notification = shownNotifications[n.notification_id];
-                    if (!notification) {
-                        return;
-                    }
-                    notification.close();
-                    shownNotifications[n.notification_id] = null;
-                });
-
-            const newNotifications = state.entities.notifications
-                .filter(n => !n.read)
-                .filter(n => 10 * 60 * 1000 > (Date.now() - new Date(n.last_interaction).getTime()));
-            Notification.requestPermission(permission => {
-                if (permission !== 'granted') {
-                    return;
+            if (previousState.viewState !== state.viewState) {
+                if (userClickedBack) {
+                    userClickedBack = false;
+                } else {
+                    history.pushState(state.viewState, '');
                 }
-                newNotifications.forEach(n => {
-                    const oldNotification = shownNotifications[n.notification_id];
-                    if (oldNotification) {
-                        if (oldNotification.body === n.message) {
+            }
+            if (
+                previousState.entities.notifications !== state.entities.notifications &&
+                'Notification' in window
+            ) {
+                state.entities.notifications
+                    .filter(n => n.read)
+                    .forEach(n => {
+                        const notification = shownNotifications[n.notification_id];
+                        if (!notification) {
                             return;
                         }
-                        oldNotification.close();
-                    }
-                    const notification = new Notification(getNotificationDescription(n), {
-                        body: n.message,
-                        tag: n.notification_id,
+                        notification.close();
+                        shownNotifications[n.notification_id] = null;
                     });
-                    notification.onclick = () => {
-                        store.dispatch(selectPostFromNotification(n.post_id));
-                    };
-                    shownNotifications[n.notification_id] = notification;
-                },
-                );
-            });
-        }
 
-        previousState = state;
-    };
-})(),
+                const newNotifications = state.entities.notifications
+                    .filter(n => !n.read)
+                    .filter(
+                        n => 10 * 60 * 1000 > Date.now() - new Date(n.last_interaction).getTime(),
+                    );
+                Notification.requestPermission(permission => {
+                    if (permission !== 'granted') {
+                        return;
+                    }
+                    newNotifications.forEach(n => {
+                        const oldNotification = shownNotifications[n.notification_id];
+                        if (oldNotification) {
+                            if (oldNotification.body === n.message) {
+                                return;
+                            }
+                            oldNotification.close();
+                        }
+                        const notification = new Notification(getNotificationDescription(n), {
+                            body: n.message,
+                            tag: n.notification_id,
+                        });
+                        notification.onclick = () => {
+                            store.dispatch(selectPostFromNotification(n.post_id));
+                        };
+                        shownNotifications[n.notification_id] = notification;
+                    });
+                });
+            }
+
+            previousState = state;
+        };
+    })(),
 );
 
 const account = store.getState().account;
@@ -175,13 +182,16 @@ window.onpopstate = (event: PopStateEvent) => {
     store.dispatch(replaceViewState(event.state as IViewStateStore));
 };
 
-const translationLocale: string = navigator.language || (navigator as unknown as {userLanguage: string}).userLanguage;
+const translationLocale: string =
+    navigator.language || (navigator as unknown as { userLanguage: string }).userLanguage;
 const translationLanguage = translationLocale ? translationLocale.substring(0, 2) : 'en';
 
 let translationMessages: Promise<{ [key: string]: string }>;
 switch (translationLanguage) {
     case 'de':
-        translationMessages = import(/* webpackChunkName: "messages-de" */ '../translations/de').then(m => m.default);
+        translationMessages = import(
+            /* webpackChunkName: "messages-de" */ '../translations/de'
+        ).then(m => m.default);
         break;
     case 'en':
     default:
@@ -193,11 +203,7 @@ translationMessages
     .catch(() => ({}))
     .then(messages => {
         ReactDOM.render(
-            <App
-                locale={translationLocale}
-                messages={messages}
-                store={store}
-            />,
+            <App locale={translationLocale} messages={messages} store={store} />,
             document.getElementById('content'),
         );
     });

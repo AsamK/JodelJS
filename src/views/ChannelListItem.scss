@@ -22,19 +22,19 @@
 
 .channel-list-item_title {
     flex: auto;
-    margin-bottom: .5em;
-    margin-top: .5em;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .channel-list-item_info {
     flex: 0 1 auto;
-    margin-left: .5em;
+    margin-left: 0.5em;
 }
 
 .channel-list-item_info-followers,
 .channel-list-item_info-country-followers {
-    font-size: .7rem;
+    font-size: 0.7rem;
     text-align: right;
 }

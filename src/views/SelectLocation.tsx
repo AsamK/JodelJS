@@ -27,44 +27,55 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
             <div className="select-location">
                 <div className="select-location_type">
                     <label>
-                        <input type="radio" value={USE_BROWSER_LOCATION} checked={useBrowserLocation}
-                            onChange={this.handleChangeRadio} />
+                        <input
+                            type="radio"
+                            value={USE_BROWSER_LOCATION}
+                            checked={useBrowserLocation}
+                            onChange={this.handleChangeRadio}
+                        />
                         <FormattedMessage
                             id="location_use_browser"
                             defaultMessage="Request location from browser"
                         />
                     </label>
                     <label>
-                        <input type="radio" value={MANUAL} checked={!useBrowserLocation}
-                            onChange={this.handleChangeRadio} />
+                        <input
+                            type="radio"
+                            value={MANUAL}
+                            checked={!useBrowserLocation}
+                            onChange={this.handleChangeRadio}
+                        />
                         <FormattedMessage
                             id="location_manual"
                             defaultMessage="Select location manually"
                         />
                     </label>
                 </div>
-                {useBrowserLocation ? <div className="select-location_browser">
-                    <p>
-                        <FormattedMessage
-                            id="location_current"
-                            defaultMessage="Current location"
-                        />:{' '}
-                        {!location ? '(Unbekannt)' :
-                            <>
-                                <FormattedNumber value={location.latitude}
-                                ></FormattedNumber>,{' '}
-                                <FormattedNumber value={location.longitude}
-                                ></FormattedNumber>
-                            </>
-                        }
-                    </p>
-                    <a onClick={onLocationRequested}>
-                        <FormattedMessage
-                            id="location_refresh"
-                            defaultMessage="Refresh location"
-                        />
-                    </a>
-                </div> :
+                {useBrowserLocation ? (
+                    <div className="select-location_browser">
+                        <p>
+                            <FormattedMessage
+                                id="location_current"
+                                defaultMessage="Current location"
+                            />
+                            :{' '}
+                            {!location ? (
+                                '(Unbekannt)'
+                            ) : (
+                                <>
+                                    <FormattedNumber value={location.latitude}></FormattedNumber>,{' '}
+                                    <FormattedNumber value={location.longitude}></FormattedNumber>
+                                </>
+                            )}
+                        </p>
+                        <a onClick={onLocationRequested}>
+                            <FormattedMessage
+                                id="location_refresh"
+                                defaultMessage="Refresh location"
+                            />
+                        </a>
+                    </div>
+                ) : (
                     <div className="select-location_manual">
                         <React.Suspense fallback={<div>...</div>}>
                             <LazyMapComponent
@@ -73,25 +84,29 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
                             />
                         </React.Suspense>
                         <label>
-                            <FormattedMessage
-                                id="location_latitude"
-                                defaultMessage="Latitude"
-                            />:
-                            <input type="number" min="-90" max="90" step="0.001"
+                            <FormattedMessage id="location_latitude" defaultMessage="Latitude" />:
+                            <input
+                                type="number"
+                                min="-90"
+                                max="90"
+                                step="0.001"
                                 value={location ? Math.round(location.latitude * 1000) / 1000 : ''}
-                                onChange={this.handleChangeLatitude} />
+                                onChange={this.handleChangeLatitude}
+                            />
                         </label>
                         <label>
-                            <FormattedMessage
-                                id="location_longitude"
-                                defaultMessage="Longitude"
-                            />:
-                            <input type="number" min="-180" max="180" step="0.001"
+                            <FormattedMessage id="location_longitude" defaultMessage="Longitude" />:
+                            <input
+                                type="number"
+                                min="-180"
+                                max="180"
+                                step="0.001"
                                 value={location ? Math.round(location.longitude * 1000) / 1000 : ''}
-                                onChange={this.handleChangeLongitude} />
+                                onChange={this.handleChangeLongitude}
+                            />
                         </label>
                     </div>
-                }
+                )}
             </div>
         );
     }
@@ -115,7 +130,10 @@ export class SelectLocation extends React.PureComponent<ISelectLocationProps> {
             return;
         }
         const latitude = this.props.location ? this.props.location.latitude : 0;
-        this.props.onChange(this.props.useBrowserLocation, { latitude, longitude: longitudeNumber });
+        this.props.onChange(this.props.useBrowserLocation, {
+            latitude,
+            longitude: longitudeNumber,
+        });
     };
 
     private handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -77,8 +77,9 @@ export class PostDetailsComponent extends React.Component<IPostDetailsPropsCompo
         if (!element || !this.props.onLoadMore) {
             return;
         }
-        const isNearBottom = element.scrollTop > 0 &&
-            (element.scrollTop + element.clientHeight) >= (element.scrollHeight - 500);
+        const isNearBottom =
+            element.scrollTop > 0 &&
+            element.scrollTop + element.clientHeight >= element.scrollHeight - 500;
         if (isNearBottom && this.scrollAtBottom !== isNearBottom) {
             this.scrollAtBottom = isNearBottom;
             this.props.onLoadMore();

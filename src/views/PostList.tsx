@@ -35,8 +35,11 @@ export default class PostList extends React.PureComponent<IPostListProps> {
     }
 
     public componentDidUpdate(prevProps: IPostListProps): void {
-        if (prevProps.sortType !== this.props.sortType || prevProps.section !== this.props.section ||
-            prevProps.lastUpdated !== this.props.lastUpdated) {
+        if (
+            prevProps.sortType !== this.props.sortType ||
+            prevProps.section !== this.props.section ||
+            prevProps.lastUpdated !== this.props.lastUpdated
+        ) {
             if (this.scrollable.current) {
                 this.scrollable.current.scrollTop = 0;
             }
@@ -58,8 +61,7 @@ export default class PostList extends React.PureComponent<IPostListProps> {
                 onPostClick={onPostClick}
                 post={post}
             />
-        ),
-        );
+        ));
         return (
             <div className="postList" ref={this.scrollable}>
                 {postNodes}
@@ -72,8 +74,9 @@ export default class PostList extends React.PureComponent<IPostListProps> {
         if (!element || !this.props.onLoadMore) {
             return;
         }
-        const newFlag = element.scrollTop > 0 &&
-            (element.scrollTop + element.clientHeight) >= (element.scrollHeight - 500);
+        const newFlag =
+            element.scrollTop > 0 &&
+            element.scrollTop + element.clientHeight >= element.scrollHeight - 500;
         if (this.scrollAtBottom !== newFlag && newFlag) {
             this.scrollAtBottom = newFlag;
             this.props.onLoadMore();

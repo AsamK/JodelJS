@@ -1,4 +1,4 @@
-@use "sass:math";
+@use 'sass:math';
 
 @import '../../style/settings.scss';
 
@@ -6,11 +6,11 @@
     cursor: pointer;
     flex: none;
     height: math.div($top-bar-height, 3);
-    padding: math.div($top-bar-height, 3) .6em;
+    padding: math.div($top-bar-height, 3) 0.6em;
 
     &::before {
-        background: url("../../img/menu.svg") no-repeat center;
-        content: "  ";
+        background: url('../../img/menu.svg') no-repeat center;
+        content: '  ';
         display: block;
         height: math.div($top-bar-height, 3);
         width: $top-bar-height * 0.5;
@@ -20,7 +20,7 @@
 .menu_new-notifications::after {
     background-color: blue;
     border-radius: 10px;
-    content: " ";
+    content: ' ';
     height: 10px;
     left: $top-bar-height * 0.5;
     position: absolute;
@@ -39,7 +39,7 @@
 }
 
 .menu_entry {
-    >* {
+    > * {
         height: 2em;
         padding: 1em 1.3em 1em 1em;
     }

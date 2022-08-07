@@ -106,10 +106,12 @@ export function replaceViewState(newViewState: IViewStateStore): IJodelAction {
     };
 }
 
-export function receivePosts(section: Section,
+export function receivePosts(
+    section: Section,
     postsBySortType: { [sortType: string]: IApiPostListPost[] },
     append = false,
-    stickies?: IApiSticky[]): IJodelAction {
+    stickies?: IApiSticky[],
+): IJodelAction {
     const payload: {
         entities: (IApiPostListPost | IApiPostReplyPost)[];
         postsBySortType: { sortType: PostListSortType; posts: string[] }[];
@@ -151,8 +153,13 @@ export function receivePosts(section: Section,
     };
 }
 
-export function receivePost(post: IApiPostDetailsPost, append = false, nextReply: string | null = null,
-    shareable = false, ojFilter: boolean): IJodelAction {
+export function receivePost(
+    post: IApiPostDetailsPost,
+    append = false,
+    nextReply: string | null = null,
+    shareable = false,
+    ojFilter: boolean,
+): IJodelAction {
     return {
         payload: {
             append,
@@ -207,10 +214,18 @@ export function votedPost(postId: string, voted: VoteType, voteCount: number): I
     };
 }
 
-export function votedPoll(postId: string, pollId: string, option: number, votes: [number]): IJodelAction {
+export function votedPoll(
+    postId: string,
+    pollId: string,
+    option: number,
+    votes: [number],
+): IJodelAction {
     return {
         payload: {
-            postId, pollId, option, votes
+            postId,
+            pollId,
+            option,
+            votes,
         },
         type: VOTED_POLL,
     };
@@ -309,8 +324,13 @@ export function beginRefreshToken(): IJodelAction {
     };
 }
 
-export function _setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number,
-    tokenType: TokenType): IJodelAction {
+export function _setToken(
+    distinctId: string,
+    accessToken: string,
+    refreshToken: string,
+    expirationDate: number,
+    tokenType: TokenType,
+): IJodelAction {
     return {
         payload: {
             token: {
@@ -325,7 +345,12 @@ export function _setToken(distinctId: string, accessToken: string, refreshToken:
     };
 }
 
-export function _setLocation(latitude: number, longitude: number, city = '', country = 'DE'): IJodelAction {
+export function _setLocation(
+    latitude: number,
+    longitude: number,
+    city = '',
+    country = 'DE',
+): IJodelAction {
     return {
         payload: {
             location: { latitude, longitude, city, country },

@@ -24,13 +24,14 @@ class NotificationListComponent extends React.PureComponent<INotificationListCom
         const { notifications, selectPost } = this.props;
         return (
             <div className="notification-list">
-                {notifications.length === 0 ?
-                    'Noch keine Benachrichtigungen vorhanden' :
-                    notifications.map(n => <NotificationListItem
-                        notification={n}
-                        selectPost={selectPost}
-                    ></NotificationListItem>,
-                    )}
+                {notifications.length === 0
+                    ? 'Noch keine Benachrichtigungen vorhanden'
+                    : notifications.map(n => (
+                          <NotificationListItem
+                              notification={n}
+                              selectPost={selectPost}
+                          ></NotificationListItem>
+                      ))}
             </div>
         );
     }

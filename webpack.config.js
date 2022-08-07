@@ -39,7 +39,7 @@ module.exports = function (env, argv) {
                 {
                     enforce: 'pre',
                     test: /\.js$/,
-                    loader: 'source-map-loader'
+                    loader: 'source-map-loader',
                 },
                 {
                     test: /\.(png|jpg|gif|svg)$/,
@@ -54,12 +54,10 @@ module.exports = function (env, argv) {
                             loader: 'postcss-loader',
                             options: {
                                 postcssOptions: {
-                                    plugins: [
-                                        require.resolve('autoprefixer'),
-                                    ]
+                                    plugins: [require.resolve('autoprefixer')],
                                 },
                                 sourceMap: createSourceMaps,
-                            }
+                            },
                         },
                         { loader: 'sass-loader', options: { sourceMap: createSourceMaps } },
                     ],
@@ -69,33 +67,31 @@ module.exports = function (env, argv) {
                     use: [
                         {
                             loader: 'html-loader',
-                            options: { minimize: isProduction }
-                        }
-                    ]
+                            options: { minimize: isProduction },
+                        },
+                    ],
                 },
-            ]
+            ],
         },
         plugins: [
             new HtmlWebpackPlugin({
-                template: 'src/index.html'
+                template: 'src/index.html',
             }),
             new CopyWebpackPlugin({
-                patterns: [
-                    'src/manifest.webmanifest'
-                ]
+                patterns: ['src/manifest.webmanifest'],
             }),
-            ...(isProduction ?
-                [
-                    new CleanWebpackPlugin(),
-                    new MiniCssExtractPlugin({
-                        filename: isProduction ? '[name].[contenthash].css' : '[name].css',
-                    }),
-                    new InjectManifest({
-                        swSrc: './src/sw.ts',
-                        swDest: 'sw.js',
-                    }),
-                ] : [
-                ]),
+            ...(isProduction
+                ? [
+                      new CleanWebpackPlugin(),
+                      new MiniCssExtractPlugin({
+                          filename: isProduction ? '[name].[contenthash].css' : '[name].css',
+                      }),
+                      new InjectManifest({
+                          swSrc: './src/sw.ts',
+                          swDest: 'sw.js',
+                      }),
+                  ]
+                : []),
         ],
         optimization: {
             splitChunks: {

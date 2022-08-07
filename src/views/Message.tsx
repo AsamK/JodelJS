@@ -10,7 +10,7 @@ export interface IMessageProps {
 export default class Message extends React.Component<IMessageProps> {
     public render(): React.ReactElement | null {
         const { message, link, onAtClick, onHashtagClick } = this.props;
-        const linkReg = /([^#@]*)([@#])([^\s#@:;.,]*)|([^[]*)\[([^[\]]*)\]\(([^()]*)\)/mg;
+        const linkReg = /([^#@]*)([@#])([^\s#@:;.,]*)|([^[]*)\[([^[\]]*)\]\(([^()]*)\)/gm;
         let previousIndex = 0;
         const messageParts = [];
         while (true) {
@@ -24,19 +24,34 @@ export default class Message extends React.Component<IMessageProps> {
                 messageParts.push(regResult[1]);
                 if (regResult[2] === '@') {
                     const channel = regResult[3];
-                    messageParts.push(<a key={linkReg.lastIndex} className="channel-link"
-                        onClick={e => onAtClick(e, channel)}>@{channel}</a>);
+                    messageParts.push(
+                        <a
+                            key={linkReg.lastIndex}
+                            className="channel-link"
+                            onClick={e => onAtClick(e, channel)}
+                        >
+                            @{channel}
+                        </a>,
+                    );
                 } else if (regResult[2] === '#') {
                     const hashtag = regResult[3];
-                    messageParts.push(<a key={linkReg.lastIndex} className="hashtag"
-                        onClick={e => onHashtagClick(e, hashtag)}>#{hashtag}</a>);
+                    messageParts.push(
+                        <a
+                            key={linkReg.lastIndex}
+                            className="hashtag"
+                            onClick={e => onHashtagClick(e, hashtag)}
+                        >
+                            #{hashtag}
+                        </a>,
+                    );
                 }
             } else if (regResult[4] !== undefined) {
                 messageParts.push(regResult[4]);
                 const linkLabel = regResult[5];
                 const linkTarget = regResult[6];
                 messageParts.push(
-                    <a className="sticky-link"
+                    <a
+                        className="sticky-link"
                         key={linkLabel + linkTarget}
                         href={linkTarget}
                         target="_blank"
@@ -52,9 +67,11 @@ export default class Message extends React.Component<IMessageProps> {
         return (
             <div className="postMessage">
                 {messageParts}
-                {link
-                    ? <div>{link.title}: <a href={link.url}>{link.url}</a></div>
-                    : null}
+                {link ? (
+                    <div>
+                        {link.title}: <a href={link.url}>{link.url}</a>
+                    </div>
+                ) : null}
             </div>
         );
     }

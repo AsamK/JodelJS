@@ -119,7 +119,7 @@ module.exports = {
         'object-shorthand': 'warn',
         'one-var': ['warn', 'never'],
         'prefer-const': 'warn',
-        'no-constant-condition': ["error", { "checkLoops": false }],
+        'no-constant-condition': ['error', { checkLoops: false }],
         radix: 'warn',
         'spaced-comment': [
             'warn',

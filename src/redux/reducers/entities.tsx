@@ -42,8 +42,7 @@ function convertApiReplyPostToReplyPost(replies: IApiPostReplyPost[]): string[] 
         return undefined;
     }
     const seen: { [key: string]: boolean } = {};
-    return replies.map(child => child.post_id)
-        .filter(c => seen[c] ? false : (seen[c] = true));
+    return replies.map(child => child.post_id).filter(c => (seen[c] ? false : (seen[c] = true)));
 }
 
 function posts(state: { readonly [key: string]: IPost } = {}, action: IJodelAction): typeof state {
@@ -98,7 +97,7 @@ function posts(state: { readonly [key: string]: IPost } = {}, action: IJodelActi
             const postChildren = post.children;
 
             if (postChildren) {
-                postChildren.forEach(child => childrenEntities[child.post_id] = child);
+                postChildren.forEach(child => (childrenEntities[child.post_id] = child));
             }
 
             const oldPost = state[post.post_id];
@@ -112,7 +111,8 @@ function posts(state: { readonly [key: string]: IPost } = {}, action: IJodelActi
             };
             if (oldPost && oldPost.children && newPost.children) {
                 if (action.payload.append === true) {
-                    newPost.child_count = (newPost.child_count ? newPost.child_count : 0) +
+                    newPost.child_count =
+                        (newPost.child_count ? newPost.child_count : 0) +
                         (oldPost.children ? oldPost.children.length : 0);
                     newPost.children = [...oldPost.children, ...newPost.children];
                 } else if (newPost.children.length === 0 && !action.payload.ojFilter) {
@@ -133,7 +133,10 @@ function posts(state: { readonly [key: string]: IPost } = {}, action: IJodelActi
     }
 }
 
-function channels(state: { readonly [key: string]: IChannel } = {}, action: IJodelAction): typeof state {
+function channels(
+    state: { readonly [key: string]: IChannel } = {},
+    action: IJodelAction,
+): typeof state {
     switch (action.type) {
         case SET_RECOMMENDED_CHANNELS:
         case SET_LOCAL_CHANNELS:
@@ -172,7 +175,7 @@ function notifications(state: readonly INotification[] = [], action: IJodelActio
             return action.payload.notifications ? action.payload.notifications : [];
         case SET_NOTIFICATION_POST_READ: {
             const postId = action.payload.postId;
-            return state.map(n => postId === n.post_id ? { ...n, read: true } : n);
+            return state.map(n => (postId === n.post_id ? { ...n, read: true } : n));
         }
         default:
             return state;

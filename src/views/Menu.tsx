@@ -41,11 +41,16 @@ class MenuComponent extends React.Component<IMenuComponentProps, IMenuComponentS
             showSearchCallback,
         } = this.props;
         return (
-            <div className={classnames('menu', { 'menu_new-notifications': unreadNotifications > 0 })}
+            <div
+                className={classnames('menu', {
+                    'menu_new-notifications': unreadNotifications > 0,
+                })}
                 tabIndex={99999999}
                 onClick={() => this.setState({ menuOpen: !this.state.menuOpen })}
             >
-                {!this.state.menuOpen ? '' :
+                {!this.state.menuOpen ? (
+                    ''
+                ) : (
                     <ul className="menu_content">
                         <li className="menu_entry">
                             <div onClick={showPictureOfDayCallback}>
@@ -73,34 +78,23 @@ class MenuComponent extends React.Component<IMenuComponentProps, IMenuComponentS
                                     id="notifications"
                                     defaultMessage="Notifications"
                                 />
-                                {unreadNotifications === 0 ?
-                                    '' :
-                                    [
-                                        '(',
-                                        <FormattedNumber value={unreadNotifications} />,
-                                        ')',
-                                    ]
-                                }
+                                {unreadNotifications === 0
+                                    ? ''
+                                    : ['(', <FormattedNumber value={unreadNotifications} />, ')']}
                             </div>
                         </li>
                         <li className="menu_entry">
                             <div onClick={showSearchCallback}>
-                                <FormattedMessage
-                                    id="search"
-                                    defaultMessage="Search"
-                                />
+                                <FormattedMessage id="search" defaultMessage="Search" />
                             </div>
                         </li>
                         <li className="menu_entry">
                             <div onClick={showSettingsCallback}>
-                                <FormattedMessage
-                                    id="settings"
-                                    defaultMessage="Settings"
-                                />
+                                <FormattedMessage id="settings" defaultMessage="Settings" />
                             </div>
                         </li>
                     </ul>
-                }
+                )}
             </div>
         );
     }

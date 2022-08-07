@@ -12,18 +12,15 @@ interface ISelectLocationMapProps {
 }
 
 export default ({ location, onLocationChanged }: ISelectLocationMapProps) => (
-    <MapComponent location={location ?? {latitude: 0, longitude: 0}}>
-        {!location ? null :
+    <MapComponent location={location ?? { latitude: 0, longitude: 0 }}>
+        {!location ? null : (
             <>
                 <MapMarkerComponent
                     location={location}
                     onMarkerMoved={onLocationChanged}
                 ></MapMarkerComponent>
-                <MapCircleComponent
-                    location={location}
-                    radius={10000}
-                ></MapCircleComponent>
+                <MapCircleComponent location={location} radius={10000}></MapCircleComponent>
             </>
-        }
+        )}
     </MapComponent>
 );

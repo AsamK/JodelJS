@@ -36,7 +36,14 @@ const SectionLinkComponent = ({ section, active, onClick }: ISectionLinkComponen
             name = <FormattedMessage id="my_pins" defaultMessage="My pins" />;
             break;
     }
-    return <div className={classnames('sectionLink', section.toLowerCase(), { active })} onClick={onClick}>{name}</div>;
+    return (
+        <div
+            className={classnames('sectionLink', section.toLowerCase(), { active })}
+            onClick={onClick}
+        >
+            {name}
+        </div>
+    );
 };
 
 const mapStateToProps = (state: IJodelAppStore, ownProps: ISectionLinkProps) => {
@@ -45,8 +52,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: ISectionLinkProps) => 
     };
 };
 
-const mapDispatchToProps = (dispatch: JodelThunkDispatch,
-    ownProps: ISectionLinkProps) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: ISectionLinkProps) => {
     return {
         onClick: () => {
             dispatch(switchPostSection(ownProps.section));

@@ -2,7 +2,12 @@ import { combineReducers } from 'redux';
 
 import type { IJodelAction } from '../../interfaces/IJodelAction';
 import type { ILocation } from '../../interfaces/ILocation';
-import { RECEIVE_POSTS, SET_LOCATION, SET_USE_BROWSER_LOCATION, SET_USE_HOME_LOCATION } from '../actions/action.consts';
+import {
+    RECEIVE_POSTS,
+    SET_LOCATION,
+    SET_USE_BROWSER_LOCATION,
+    SET_USE_HOME_LOCATION,
+} from '../actions/action.consts';
 
 export const SETTINGS_VERSION = 1;
 
@@ -59,11 +64,13 @@ function useHomeLocation(state = false, action: IJodelAction): typeof state {
     }
 }
 
-function channelsLastRead(state: { readonly [key: string]: number } = {}, action: IJodelAction): typeof state {
+function channelsLastRead(
+    state: { readonly [key: string]: number } = {},
+    action: IJodelAction,
+): typeof state {
     switch (action.type) {
         case RECEIVE_POSTS: {
-            if (action.payload.append ||
-                !action.payload.section.startsWith('channel:')) {
+            if (action.payload.append || !action.payload.section.startsWith('channel:')) {
                 return state;
             }
             const channel = action.payload.section.substring(8);

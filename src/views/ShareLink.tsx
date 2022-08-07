@@ -23,15 +23,19 @@ function ShareLink({ link }: IShareLinkProps): React.ReactElement | null {
     if (!link) {
         return null;
     }
-    return <div className="shareLink">
-        <div className="link">
-            <input className="linkDisplay" readOnly value={link} />
-            {!('share' in navigator) ? null :
-                <button className="shareButton" onClick={() => shareLink(link)}>Share</button>
-            }
+    return (
+        <div className="shareLink">
+            <div className="link">
+                <input className="linkDisplay" readOnly value={link} />
+                {!('share' in navigator) ? null : (
+                    <button className="shareButton" onClick={() => shareLink(link)}>
+                        Share
+                    </button>
+                )}
+            </div>
+            <button onClick={onClose}>Close</button>
         </div>
-        <button onClick={onClose}>Close</button>
-    </div>;
+    );
 }
 
 const mapStateToProps = (state: IJodelAppStore) => {

@@ -19,12 +19,15 @@ interface ISortTypeLinkComponentProps extends ISortTypeLinkProps {
 }
 
 const SortTypeLinkComponent = ({ sortType, active, onClick }: ISortTypeLinkComponentProps) => (
-    <div className={classnames('sortType', sortType.toLowerCase(), { active })}
+    <div
+        className={classnames('sortType', sortType.toLowerCase(), { active })}
         onClick={onClick}
         title={
-            sortType === PostListSortType.RECENT ? 'Neueste' :
-                sortType === PostListSortType.DISCUSSED ? 'Meist kommentierte' :
-                    'Lauteste'
+            sortType === PostListSortType.RECENT
+                ? 'Neueste'
+                : sortType === PostListSortType.DISCUSSED
+                ? 'Meist kommentierte'
+                : 'Lauteste'
         }
     />
 );

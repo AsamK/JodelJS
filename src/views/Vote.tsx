@@ -28,10 +28,9 @@ export default class Vote extends React.Component<IVoteProps, IVoteState> {
         return (
             <div className="post-vote">
                 <div
-                    className={classnames('post-vote_up-vote',
-                        'post-vote_' + voted,
-                        { 'post-vote_just-voted': justUpVoted },
-                    )}
+                    className={classnames('post-vote_up-vote', 'post-vote_' + voted, {
+                        'post-vote_just-voted': justUpVoted,
+                    })}
                     title="Up"
                     onClick={e => {
                         this.setState({ justUpVoted: true });
@@ -40,10 +39,9 @@ export default class Vote extends React.Component<IVoteProps, IVoteState> {
                 />
                 <div className="post-vote_count">{vote_count}</div>
                 <div
-                    className={classnames('post-vote_down-vote',
-                        'post-vote_' + voted,
-                        { 'post-vote_just-voted': justDownVoted },
-                    )}
+                    className={classnames('post-vote_down-vote', 'post-vote_' + voted, {
+                        'post-vote_just-voted': justDownVoted,
+                    })}
                     title="Down"
                     onClick={e => {
                         this.setState({ justDownVoted: true });

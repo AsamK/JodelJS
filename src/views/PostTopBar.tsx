@@ -12,8 +12,7 @@ import { selectedPostSelector } from '../redux/selectors/posts';
 import BackButton from './BackButton';
 import './PostTopBar.scss';
 
-export interface IPostTopBarProps {
-}
+export interface IPostTopBarProps {}
 
 export interface IPostTopBarStateProps extends IPostTopBarProps {
     post: IPost | null;
@@ -36,22 +35,28 @@ const PostTopBarComponent = (props: IPostTopBarComponentProps) => {
         <div className="post-top-bar">
             <BackButton onClick={onBackClick} />
             <div className="right-buttons">
-                {post.shareable && post.shareable ?
+                {post.shareable && post.shareable ? (
                     <div className="share">
                         {post.share_count && post.share_count > 0 ? post.share_count : ''}
-                        <div className="share-button" onClick={onShareClick}>
-                        </div>
+                        <div className="share-button" onClick={onShareClick}></div>
                     </div>
-                    : ''}
+                ) : (
+                    ''
+                )}
                 <div className="oj-filter">
-                    <div className={classnames('oj-filter-button', { 'oj-filtered': post.oj_filtered })}
-                        onClick={onOjFilterClick}>
-                    </div>
+                    <div
+                        className={classnames('oj-filter-button', {
+                            'oj-filtered': post.oj_filtered,
+                        })}
+                        onClick={onOjFilterClick}
+                    ></div>
                 </div>
                 <div className="pin">
                     {post.pin_count && post.pin_count > 0 ? post.pin_count : ''}
-                    <div className={classnames('pin-button', { pinned })} onClick={onPinClick}>
-                    </div>
+                    <div
+                        className={classnames('pin-button', { pinned })}
+                        onClick={onPinClick}
+                    ></div>
                 </div>
             </div>
         </div>
@@ -91,4 +96,6 @@ const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: IPostTopBarS
     };
 };
 
-export const PostTopBar = connect(mapStateToProps)(connect(() => ({}), mapDispatchToProps)(PostTopBarComponent));
+export const PostTopBar = connect(mapStateToProps)(
+    connect(() => ({}), mapDispatchToProps)(PostTopBarComponent),
+);

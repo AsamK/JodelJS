@@ -1,6 +1,6 @@
 .add-button {
-    background-color: rgba(0, 0, 0, .3);
-    border: solid .3em #fff;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: solid 0.3em #fff;
     border-radius: 4em;
     color: #fff;
     cursor: pointer;
@@ -12,15 +12,15 @@
     width: 4em;
 
     &:hover {
-        background-color: rgba(66, 189, 255, .76);
+        background-color: rgba(66, 189, 255, 0.76);
     }
 
     &:active {
-        background-color: rgba(66, 189, 255, .76);
+        background-color: rgba(66, 189, 255, 0.76);
     }
 
     &::before {
-        content: "+";
+        content: '+';
         font-size: 3em;
     }
 }

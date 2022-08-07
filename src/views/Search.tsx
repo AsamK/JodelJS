@@ -23,24 +23,30 @@ class SearchComponent extends React.Component<ISearchComponentProps, ISearchComp
     }
 
     public render(): React.ReactElement | null {
-        return <div className="searchContainer">
-            <form className="searchBox" onSubmit={e => {
-                e.preventDefault();
-                this.props.searchPosts(this.state.searchText, false);
-            }}>
-                <input type="text" value={this.state.searchText}
-                    onChange={e => this.setState({ searchText: e.target.value })}
-                />
-                <button type="submit">Suchen</button>
-            </form>
-            <div className="searchList">
+        return (
+            <div className="searchContainer">
+                <form
+                    className="searchBox"
+                    onSubmit={e => {
+                        e.preventDefault();
+                        this.props.searchPosts(this.state.searchText, false);
+                    }}
+                >
+                    <input
+                        type="text"
+                        value={this.state.searchText}
+                        onChange={e => this.setState({ searchText: e.target.value })}
+                    />
+                    <button type="submit">Suchen</button>
+                </form>
+                <div className="searchList"></div>
+                <div className="suggestedHashtags">
+                    {this.props.suggestedHashtags.map(hashtag => (
+                        <div className="hashtag">#{hashtag}</div>
+                    ))}
+                </div>
             </div>
-            <div className="suggestedHashtags">
-                {this.props.suggestedHashtags.map(hashtag => <div className="hashtag">
-                    #{hashtag}
-                </div>)}
-            </div>
-        </div>;
+        );
     }
 }
 
@@ -52,7 +58,8 @@ const mapStateToProps = (state: IJodelAppStore) => {
 
 const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
-        searchPosts: (message: string, suggested: boolean) => dispatch(searchPosts(message, suggested)),
+        searchPosts: (message: string, suggested: boolean) =>
+            dispatch(searchPosts(message, suggested)),
     };
 };
 

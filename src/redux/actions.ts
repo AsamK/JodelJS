@@ -93,35 +93,42 @@ export function updateLocation(): JodelThunkAction {
     return (dispatch, getState) => {
         if (getState().settings.useBrowserLocation && 'geolocation' in navigator) {
             /* geolocation is available */
-            navigator.geolocation.getCurrentPosition(position => {
-
-                const state = getState();
-                const loc = locationSelector(state);
-                const latitude = Math.round(position.coords.latitude * 100) / 100;
-                const longitude = Math.round(position.coords.longitude * 100) / 100;
-                if (!loc || loc.latitude !== latitude || loc.longitude !== longitude) {
-                    dispatch(setLocation(latitude, longitude));
-                    if (state.account.token && state.account.token.access !== undefined) {
-                        dispatch(updatePosts());
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    const state = getState();
+                    const loc = locationSelector(state);
+                    const latitude = Math.round(position.coords.latitude * 100) / 100;
+                    const longitude = Math.round(position.coords.longitude * 100) / 100;
+                    if (!loc || loc.latitude !== latitude || loc.longitude !== longitude) {
+                        dispatch(setLocation(latitude, longitude));
+                        if (state.account.token && state.account.token.access !== undefined) {
+                            dispatch(updatePosts());
+                        }
                     }
-                }
-            }, err => {
-                // TODO do something useful
-                switch (err.code) {
-                    case err.PERMISSION_DENIED:
-                        break;
-                    case err.POSITION_UNAVAILABLE:
-                        break;
-                    case err.TIMEOUT:
-                        break;
-                }
-            });
+                },
+                err => {
+                    // TODO do something useful
+                    switch (err.code) {
+                        case err.PERMISSION_DENIED:
+                            break;
+                        case err.POSITION_UNAVAILABLE:
+                            break;
+                        case err.TIMEOUT:
+                            break;
+                    }
+                },
+            );
         }
     };
 }
 
-export function setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number,
-    tokenType: TokenType): JodelThunkAction {
+export function setToken(
+    distinctId: string,
+    accessToken: string,
+    refreshToken: string,
+    expirationDate: number,
+    tokenType: TokenType,
+): JodelThunkAction {
     return dispatch => {
         // TODO clear cached posts
         dispatch(_setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType));

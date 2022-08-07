@@ -5,17 +5,17 @@
 
     &_up-vote {
         cursor: pointer;
-        padding-bottom: .5em;
-        padding-top: .5em;
+        padding-bottom: 0.5em;
+        padding-top: 0.5em;
         width: 3em;
 
         &::before {
-            background: url("../../img/up.svg") no-repeat;
+            background: url('../../img/up.svg') no-repeat;
             background-size: 1.5em auto;
-            content: "";
+            content: '';
             display: block;
             height: 1em;
-            margin-left: .75em;
+            margin-left: 0.75em;
         }
 
         &.post-vote_down {
@@ -24,7 +24,7 @@
 
         &.post-vote_up {
             cursor: inherit;
-            opacity: .5;
+            opacity: 0.5;
         }
     }
 
@@ -34,17 +34,17 @@
 
     &_down-vote {
         cursor: pointer;
-        padding-bottom: .5em;
-        padding-top: .5em;
+        padding-bottom: 0.5em;
+        padding-top: 0.5em;
         width: 3em;
 
         &::before {
-            background: url("../../img/down.svg") no-repeat;
+            background: url('../../img/down.svg') no-repeat;
             background-size: 1.5em auto;
-            content: "";
+            content: '';
             display: block;
             height: 1em;
-            margin-left: .75em;
+            margin-left: 0.75em;
         }
 
         &.post-vote_up {
@@ -53,7 +53,7 @@
 
         &.post-vote_down {
             cursor: inherit;
-            opacity: .5;
+            opacity: 0.5;
         }
     }
 

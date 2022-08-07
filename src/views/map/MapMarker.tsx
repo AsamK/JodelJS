@@ -17,20 +17,23 @@ class MapMarkerComponent extends React.PureComponent<IMapMarkerProps> {
     private locationMarker: Marker | undefined;
 
     public componentDidMount(): void {
-        this.locationMarker = marker({
-            lat: this.props.location.latitude,
-            lng: this.props.location.longitude,
-        }, {
-            draggable: true,
-            icon: divIcon({
-                className: 'map-marker-icon',
-                iconAnchor: [12, 41],
-                iconSize: [25, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41],
-                tooltipAnchor: [16, -28],
-            }),
-        });
+        this.locationMarker = marker(
+            {
+                lat: this.props.location.latitude,
+                lng: this.props.location.longitude,
+            },
+            {
+                draggable: true,
+                icon: divIcon({
+                    className: 'map-marker-icon',
+                    iconAnchor: [12, 41],
+                    iconSize: [25, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41],
+                    tooltipAnchor: [16, -28],
+                }),
+            },
+        );
         this.locationMarker.on('dragend', () => {
             const loc = this.locationMarker!.getLatLng();
             this.props.onMarkerMoved({ latitude: loc.lat, longitude: loc.lng });

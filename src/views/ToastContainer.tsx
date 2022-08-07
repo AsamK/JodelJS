@@ -16,15 +16,13 @@ interface IToastContainerComponentProps {
 }
 
 const ToastContainerComponent = ({ toasts, onToastClick }: IToastContainerComponentProps) => {
-    return <div className="toast-container">
-        {toasts.map(toast =>
-            <Toast
-                key={toast.id}
-                toast={toast}
-                onClick={onToastClick}
-            />)
-        }
-    </div>;
+    return (
+        <div className="toast-container">
+            {toasts.map(toast => (
+                <Toast key={toast.id} toast={toast} onClick={onToastClick} />
+            ))}
+        </div>
+    );
 };
 
 const mapStateToProps = (state: IJodelAppStore) => {

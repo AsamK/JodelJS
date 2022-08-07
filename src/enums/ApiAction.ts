@@ -1,1 +1,5 @@
-export type ApiAction = 'SetHomeStarted' | 'SetHomeCompleted' | 'NewestFeedSelected' | 'MostCommentedFeedSelected';
+export type ApiAction =
+    | 'SetHomeStarted'
+    | 'SetHomeCompleted'
+    | 'NewestFeedSelected'
+    | 'MostCommentedFeedSelected';

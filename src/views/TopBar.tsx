@@ -16,27 +16,25 @@ interface ITopBarComponentProps {
     onChannelsClick: () => void;
 }
 
-function TopBarComponent({ karma, onKarmaClick, onChannelsClick }: ITopBarComponentProps): React.ReactElement | null {
+function TopBarComponent({
+    karma,
+    onKarmaClick,
+    onChannelsClick,
+}: ITopBarComponentProps): React.ReactElement | null {
     return (
         <div className="topBar">
             <Menu />
             <div className="barEntries">
                 <SectionLink section="location" />
                 <div className="sectionLink channelListLink" onClick={onChannelsClick}>
-                    <FormattedMessage
-                        id="channels"
-                        defaultMessage="Channels"
-                    />
+                    <FormattedMessage id="channels" defaultMessage="Channels" />
                 </div>
             </div>
             <div className="karma" onClick={onKarmaClick}>
-                {(karma > 0 ? '+' : '')}
+                {karma > 0 ? '+' : ''}
                 <FormattedNumber value={karma} />
                 <div className="subText">
-                    <FormattedMessage
-                        id="my_karma"
-                        defaultMessage="My karma"
-                    />
+                    <FormattedMessage id="my_karma" defaultMessage="My karma" />
                 </div>
             </div>
         </div>

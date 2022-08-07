@@ -1,11 +1,16 @@
 import { combineReducers } from 'redux';
 
 import type { IJodelAction } from '../../interfaces/IJodelAction';
-import { INVALIDATE_POSTS, RECEIVE_POST, RECEIVE_POSTS, SET_IS_FETCHING } from '../actions/action.consts';
+import {
+    INVALIDATE_POSTS,
+    RECEIVE_POST,
+    RECEIVE_POSTS,
+    SET_IS_FETCHING,
+} from '../actions/action.consts';
 
 function uniq(a: string[]): string[] {
     const seen: { [key: string]: boolean } = {};
-    return a.filter(item => Object.hasOwnProperty.call(seen, item) ? false : (seen[item] = true));
+    return a.filter(item => (Object.hasOwnProperty.call(seen, item) ? false : (seen[item] = true)));
 }
 
 export interface IPostSection {
@@ -23,7 +28,10 @@ export interface IPostsBySectionStore {
     readonly [key: string]: IPostSection;
 }
 
-export function postsBySection(state: IPostsBySectionStore = {}, action: IJodelAction): typeof state {
+export function postsBySection(
+    state: IPostsBySectionStore = {},
+    action: IJodelAction,
+): typeof state {
     switch (action.type) {
         case RECEIVE_POSTS:
         case INVALIDATE_POSTS:
@@ -85,9 +93,10 @@ function postsBySortType(state: IPostsBySortType = {}, action: IJodelAction): ty
             const newState: { [key: string]: string[] } = {};
             if (action.payload.append) {
                 action.payload.postsBySortType.forEach(
-                    p => newState[p.sortType] = uniq([...state[p.sortType], ...p.posts]));
+                    p => (newState[p.sortType] = uniq([...state[p.sortType], ...p.posts])),
+                );
             } else {
-                action.payload.postsBySortType.forEach(p => newState[p.sortType] = p.posts);
+                action.payload.postsBySortType.forEach(p => (newState[p.sortType] = p.posts));
             }
             return {
                 ...state,

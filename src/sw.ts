@@ -1,7 +1,7 @@
 /// <reference lib="es2015" />
 /// <reference lib="webworker" />
 declare var self: ServiceWorkerGlobalScope;
-import { } from '.';
+import {} from '.';
 
 type ManifestEntry = {
     url: string;
@@ -13,25 +13,32 @@ const CACHE_NAME = 'jodel-cache-v1';
 const META_ENTRY = '__meta-data__';
 const NAVIGATE_TARGET = '.';
 
-const MANIFEST = INJECTED_MANIFEST
-    .map(entry => ({ ...entry, url: new URL(entry.url, location.toString()).toString() }));
+const MANIFEST = INJECTED_MANIFEST.map(entry => ({
+    ...entry,
+    url: new URL(entry.url, location.toString()).toString(),
+}));
 
 const metadataMap = manifestToMap(MANIFEST);
 
 self.addEventListener('install', event => {
     self.skipWaiting();
-    event.waitUntil(precache().catch(e => console.error('SW precache failed: ' + JSON.stringify(e))));
+    event.waitUntil(
+        precache().catch(e => console.error('SW precache failed: ' + JSON.stringify(e))),
+    );
 });
 
 self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys()
-            .then(cacheNames => Promise.all(
-                cacheNames
-                    .filter(cacheName => cacheName !== CACHE_NAME)
-                    .map(cacheName => caches.delete(cacheName))
-            ))
-            .then(() => self.clients.claim())
+        caches
+            .keys()
+            .then(cacheNames =>
+                Promise.all(
+                    cacheNames
+                        .filter(cacheName => cacheName !== CACHE_NAME)
+                        .map(cacheName => caches.delete(cacheName)),
+                ),
+            )
+            .then(() => self.clients.claim()),
     );
 });
 
@@ -78,7 +85,11 @@ async function precache(): Promise<void> {
             continue;
         }
 
-        waitFor.push(cache.delete(oldEntryUrl).then(() => { /*ignore*/ }));
+        waitFor.push(
+            cache.delete(oldEntryUrl).then(() => {
+                /*ignore*/
+            }),
+        );
     }
 
     await Promise.all(waitFor);

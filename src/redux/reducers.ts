@@ -7,12 +7,12 @@ import type { IAccountStore } from './reducers/account';
 import { account } from './reducers/account';
 import type { IEntitiesStore } from './reducers/entities';
 import { entities } from './reducers/entities';
-import type { IPostsBySectionStore} from './reducers/postsBySection';
+import type { IPostsBySectionStore } from './reducers/postsBySection';
 import { postsBySection } from './reducers/postsBySection';
-import type { ISettingsStore} from './reducers/settings';
+import type { ISettingsStore } from './reducers/settings';
 import { settings } from './reducers/settings';
 import { toasts } from './reducers/toasts';
-import type { IViewStateStore} from './reducers/viewState';
+import type { IViewStateStore } from './reducers/viewState';
 import { viewState } from './reducers/viewState';
 
 export type IJodelAppStore = Readonly<IJodelAppStoreMutable>;

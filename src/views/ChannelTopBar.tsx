@@ -20,18 +20,25 @@ export interface IChannelTopBarProps {
     isFollowing: boolean;
 }
 
-const ChannelTopBar = ({ onFollowClick, channel, followerCount, isFollowing }: IChannelTopBarProps) => {
-    return !channel ? null :
+const ChannelTopBar = ({
+    onFollowClick,
+    channel,
+    followerCount,
+    isFollowing,
+}: IChannelTopBarProps) => {
+    return !channel ? null : (
         <div className="channelTopBar">
             <BackButton onClick={() => window.history.back()} />
             <div className="title">@{channel}</div>
             <div className="follow">
                 {followerCount > 0 ? followerCount : null}
-                <div className={classnames('followButton', { isFollowing })}
-                    onClick={() => onFollowClick(channel, !isFollowing)}>
-                </div>
+                <div
+                    className={classnames('followButton', { isFollowing })}
+                    onClick={() => onFollowClick(channel, !isFollowing)}
+                ></div>
             </div>
-        </div>;
+        </div>
+    );
 };
 
 const mapStateToProps = (state: IJodelAppStore) => {

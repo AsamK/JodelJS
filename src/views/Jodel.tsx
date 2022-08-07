@@ -6,7 +6,11 @@ import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { fetchPostsIfNeeded } from '../redux/actions';
 import { getNotificationsIfAvailable } from '../redux/actions/api';
 import type { IJodelAppStore } from '../redux/reducers';
-import { deviceUidSelector, isConfigAvailableSelector, isRegisteredSelector } from '../redux/selectors/app';
+import {
+    deviceUidSelector,
+    isConfigAvailableSelector,
+    isRegisteredSelector,
+} from '../redux/selectors/app';
 import { selectedPicturePostSelector, selectedPostIdSelector } from '../redux/selectors/posts';
 import {
     addPostVisibleSelector,
@@ -63,10 +67,12 @@ class JodelComponent extends React.Component<IJodelProps> {
 
     public render(): React.ReactElement | null {
         if (!this.props.deviceUid) {
-            return <div className="jodel">
-                <ToastContainer />
-                <FirstStart />
-            </div>;
+            return (
+                <div className="jodel">
+                    <ToastContainer />
+                    <FirstStart />
+                </div>
+            );
         } else if (!this.props.isConfigAvailable) {
             return null;
         }
@@ -84,32 +90,36 @@ class JodelComponent extends React.Component<IJodelProps> {
         } else if (this.props.channelListVisible) {
             content = <LazyChannelList />;
         } else if (this.props.selectedPostId != null) {
-            content = <div className="detail">
-                <PostTopBar />
-                <PostDetails />
-            </div>;
+            content = (
+                <div className="detail">
+                    <PostTopBar />
+                    <PostDetails />
+                </div>
+            );
         } else {
-            content = <div className="list">
-                <ChannelTopBar />
-                <HashtagTopBar />
-                <PostListContainer />
-            </div>;
+            content = (
+                <div className="list">
+                    <ChannelTopBar />
+                    <HashtagTopBar />
+                    <PostListContainer />
+                </div>
+            );
         }
         let overlay = null;
         if (this.props.selectedPicturePost) {
             overlay = <BigPicture post={this.props.selectedPicturePost} />;
         }
 
-        return <div className="jodel">
-            <TopBar />
-            <ToastContainer />
-            <React.Suspense fallback={<div>...</div>}>
-                {content}
-            </React.Suspense>
-            {overlay}
-            <ShareLink />
-            <Progress />
-        </div>;
+        return (
+            <div className="jodel">
+                <TopBar />
+                <ToastContainer />
+                <React.Suspense fallback={<div>...</div>}>{content}</React.Suspense>
+                {overlay}
+                <ShareLink />
+                <Progress />
+            </div>
+        );
     }
 
     private refresh = () => {

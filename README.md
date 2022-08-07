@@ -15,6 +15,7 @@ Build app:
 Copy the files in `dist/` to your webspace and open index.html in your browser.
 
 ## Develop
+
 After first clone and after updating:
 
     npm install

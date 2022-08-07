@@ -17,12 +17,15 @@ class MapCircleComponent extends React.PureComponent<IMapCircleProps> {
 
     public componentDidMount(): void {
         const { location, radius } = this.props;
-        this.circleShape = circle({
-            lat: location.latitude,
-            lng: location.longitude,
-        }, {
-            radius,
-        });
+        this.circleShape = circle(
+            {
+                lat: location.latitude,
+                lng: location.longitude,
+            },
+            {
+                radius,
+            },
+        );
         this.circleShape.addTo(this.props.map);
     }
 

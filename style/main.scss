@@ -1,28 +1,28 @@
-@use "sass:math";
-@import "settings";
+@use 'sass:math';
+@import 'settings';
 
 // General
 
 html {
-  font-family: sans-serif;
-  font-size: 15px;
+    font-family: sans-serif;
+    font-size: 15px;
 }
 
 .formError {
-  background-color: red;
-  display: block;
-  margin-top: 1em;
-  padding: 1em;
+    background-color: red;
+    display: block;
+    margin-top: 1em;
+    padding: 1em;
 }
 
-input[type="checkbox"],
-input[type="radio"] {
-  margin: 4px;
+input[type='checkbox'],
+input[type='radio'] {
+    margin: 4px;
 }
 
-input[type="text"],
-input[type="number"] {
-  margin-left: 4px;
+input[type='text'],
+input[type='number'] {
+    margin-left: 4px;
 }
 
 // Layout
@@ -32,394 +32,394 @@ html,
 body,
 #content,
 .jodel {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
 }
 
 .list {
-  display: flex;
-  flex: auto;
-  flex-direction: column;
-  overflow: hidden;
-  width: 100%;
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
 }
 
 .detail {
-  display: flex;
-  flex: auto;
-  flex-direction: column;
-  overflow: hidden;
-  width: 100%;
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
 }
 
 .searchContainer {
-  background-color: #eee;
-  bottom: 0;
-  left: 0;
-  overflow-y: scroll;
-  position: absolute;
-  right: 0;
-  top: $top-bar-height;
-  z-index: $z-index-sub-layer;
+    background-color: #eee;
+    bottom: 0;
+    left: 0;
+    overflow-y: scroll;
+    position: absolute;
+    right: 0;
+    top: $top-bar-height;
+    z-index: $z-index-sub-layer;
 }
 
 .backButton {
-  cursor: pointer;
-  flex: none;
-  padding-bottom: 1em;
-  padding-left: 1em;
-  padding-top: 1em;
+    cursor: pointer;
+    flex: none;
+    padding-bottom: 1em;
+    padding-left: 1em;
+    padding-top: 1em;
 }
 
 .channelTopBar,
 .hashtagTopBar {
-  background-color: #eee;
-  box-shadow: $bar-shadow;
-  display: flex;
-  flex: none;
-  height: $channel-top-bar-height;
-  width: 100%;
-  z-index: $z-index-sub-layer;
+    background-color: #eee;
+    box-shadow: $bar-shadow;
+    display: flex;
+    flex: none;
+    height: $channel-top-bar-height;
+    width: 100%;
+    z-index: $z-index-sub-layer;
 
-  .title {
-    flex: auto;
-    font-weight: bold;
-    overflow: hidden;
-    padding-bottom: 1em;
-    padding-left: 1em;
-    padding-top: 1em;
-    text-overflow: ellipsis;
-  }
+    .title {
+        flex: auto;
+        font-weight: bold;
+        overflow: hidden;
+        padding-bottom: 1em;
+        padding-left: 1em;
+        padding-top: 1em;
+        text-overflow: ellipsis;
+    }
 }
 
 .follow {
-  flex: none;
+    flex: none;
 }
 
 .followButton {
-  cursor: pointer;
-  display: inline-block;
-  padding: 1em;
+    cursor: pointer;
+    display: inline-block;
+    padding: 1em;
 
-  &::before {
-    content: "Follow";
-  }
+    &::before {
+        content: 'Follow';
+    }
 
-  &.isFollowing::before {
-    content: "Unfollow";
-  }
+    &.isFollowing::before {
+        content: 'Unfollow';
+    }
 }
 
 .postListContainer {
-  display: flex;
-  flex: auto;
-  flex-direction: column;
-  overflow: hidden;
-  width: 100%;
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
 }
 
 .postListContainer .postList {
-  flex: auto;
-  overflow-y: scroll;
-  width: 100%;
+    flex: auto;
+    overflow-y: scroll;
+    width: 100%;
 }
 
 .postListContainer .add-button {
-  bottom: 3.5em;
+    bottom: 3.5em;
 }
 
 .postDetails .add-button {
-  bottom: 1em;
+    bottom: 1em;
 }
 
 .postListContainer .sortTypes {
-  background-color: #eee;
-  box-shadow: $bar-shadow;
-  display: flex;
-  flex: none;
-  text-align: center;
-  width: 100%;
-  z-index: $z-index-sub-layer;
+    background-color: #eee;
+    box-shadow: $bar-shadow;
+    display: flex;
+    flex: none;
+    text-align: center;
+    width: 100%;
+    z-index: $z-index-sub-layer;
 
-  .sortType {
-    background: no-repeat center;
-    cursor: pointer;
-    flex: auto;
-    height: $bottom-bar-height;
+    .sortType {
+        background: no-repeat center;
+        cursor: pointer;
+        flex: auto;
+        height: $bottom-bar-height;
 
-    &.active {
-      background-color: #ccc;
+        &.active {
+            background-color: #ccc;
+        }
+
+        &.recent {
+            background-image: url('../img/clock.svg');
+            background-size: $bottom-bar-height * 0.5;
+        }
+
+        &.discussed {
+            background-image: url('../img/comments.svg');
+            background-size: $bottom-bar-height * 0.5;
+        }
+
+        &.popular {
+            background-image: url('../img/popular.svg');
+            background-size: $bottom-bar-height * 0.5;
+        }
     }
-
-    &.recent {
-      background-image: url("../img/clock.svg");
-      background-size: $bottom-bar-height * .5;
-    }
-
-    &.discussed {
-      background-image: url("../img/comments.svg");
-      background-size: $bottom-bar-height * .5;
-    }
-
-    &.popular {
-      background-image: url("../img/popular.svg");
-      background-size: $bottom-bar-height * .5;
-    }
-  }
 }
 
 .post,
 .sticky {
-  color: #fff;
-  margin-bottom: .5em;
-  overflow: hidden;
-  padding: 5px;
-  position: relative;
+    color: #fff;
+    margin-bottom: 0.5em;
+    overflow: hidden;
+    padding: 5px;
+    position: relative;
 
-  .postPicture {
-    background-size: cover;
-    clear: both;
-    filter: blur(5px);
-    float: left;
-    height: 100px;
-    margin: .2em;
-    width: 85%;
-  }
-
-  .postMessage {
-    clear: both;
-    float: left;
-    margin: .2em;
-    white-space: pre-wrap;
-    width: 85%;
-  }
-
-  .childInfo {
-    color: rgb(255 255 255 / 50%);
-    float: left;
-    font-size: .8em;
-    text-align: center;
-    width: 30%;
-  }
-
-  .location {
-    color: rgb(255 255 255 / 50%);
-    float: left;
-    font-size: .8em;
-    width: 30%;
-
-    .distance {
-      float: left;
-      width: 40%;
+    .postPicture {
+        background-size: cover;
+        clear: both;
+        filter: blur(5px);
+        float: left;
+        height: 100px;
+        margin: 0.2em;
+        width: 85%;
     }
 
-    .locationName {
-      float: left;
-      width: 60%;
+    .postMessage {
+        clear: both;
+        float: left;
+        margin: 0.2em;
+        white-space: pre-wrap;
+        width: 85%;
     }
 
-    .fromHome::after {
-      content: "🏠";
-      margin-left: .5em;
-    }
-  }
-
-  .author {
-    color: rgb(255 255 255 / 50%);
-    float: left;
-    font-size: .8em;
-    width: 10%;
-
-    .OJ::after {
-      content: "👑";
-      margin-left: .5em;
+    .childInfo {
+        color: rgb(255 255 255 / 50%);
+        float: left;
+        font-size: 0.8em;
+        text-align: center;
+        width: 30%;
     }
 
-    .gotThanks::after {
-      content: "❤";
-      margin-left: .5em;
+    .location {
+        color: rgb(255 255 255 / 50%);
+        float: left;
+        font-size: 0.8em;
+        width: 30%;
+
+        .distance {
+            float: left;
+            width: 40%;
+        }
+
+        .locationName {
+            float: left;
+            width: 60%;
+        }
+
+        .fromHome::after {
+            content: '🏠';
+            margin-left: 0.5em;
+        }
     }
-  }
 
-  &.post-oj {
-    padding-left: 1em;
+    .author {
+        color: rgb(255 255 255 / 50%);
+        float: left;
+        font-size: 0.8em;
+        width: 10%;
 
-    &::before {
-      background-color: rgb(255 255 255 / 60%);
-      bottom: 0;
-      content: " ";
-      left: 0;
-      position: absolute;
-      top: 0;
-      width: 1em;
+        .OJ::after {
+            content: '👑';
+            margin-left: 0.5em;
+        }
+
+        .gotThanks::after {
+            content: '❤';
+            margin-left: 0.5em;
+        }
     }
-  }
 
-  &.collapse {
-    opacity: .3;
-  }
+    &.post-oj {
+        padding-left: 1em;
+
+        &::before {
+            background-color: rgb(255 255 255 / 60%);
+            bottom: 0;
+            content: ' ';
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 1em;
+        }
+    }
+
+    &.collapse {
+        opacity: 0.3;
+    }
 }
 
 .postDetails {
-  flex: auto;
-  overflow-y: auto;
-  width: 100%;
+    flex: auto;
+    overflow-y: auto;
+    width: 100%;
 
-  .postList .post {
-    margin-bottom: .1em;
-  }
-
-  .scrollToBottomButton {
-    background-color: rgb(255 255 255 / 100%);
-    border-radius: 4em;
-    bottom: 1em;
-    box-shadow: $button-shadow;
-    color: #888;
-    cursor: pointer;
-    height: 2em;
-    position: fixed;
-    right: 1em;
-    text-align: center;
-    width: 2em;
-
-    &:active,
-    &:hover {
-      background-color: rgb(200 200 200 / 100%);
+    .postList .post {
+        margin-bottom: 0.1em;
     }
 
-    &::before {
-      content: "\\/";
-      display: block;
-      margin-top: .5em;
+    .scrollToBottomButton {
+        background-color: rgb(255 255 255 / 100%);
+        border-radius: 4em;
+        bottom: 1em;
+        box-shadow: $button-shadow;
+        color: #888;
+        cursor: pointer;
+        height: 2em;
+        position: fixed;
+        right: 1em;
+        text-align: center;
+        width: 2em;
+
+        &:active,
+        &:hover {
+            background-color: rgb(200 200 200 / 100%);
+        }
+
+        &::before {
+            content: '\\/';
+            display: block;
+            margin-top: 0.5em;
+        }
     }
-  }
 }
 
 @keyframes voting {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
 
-  50% {
-    opacity: 1;
-    transform: scale(1.5);
-  }
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+    }
 
-  to {
-    opacity: .5;
-    transform: scale(1);
-  }
+    to {
+        opacity: 0.5;
+        transform: scale(1);
+    }
 }
 
 .topBar {
-  background-color: #eee;
-  box-shadow: $bar-shadow;
-  display: flex;
-  flex: none;
-  height: $top-bar-height;
-  width: 100%;
-  z-index: $z-index-top-layer;
-
-  .karma {
-    flex: none;
-    margin-right: 5px;
-    margin-top: 5px;
-    text-align: right;
-
-    .subText {
-      font-size: .5em;
-    }
-  }
-
-  .barEntries {
+    background-color: #eee;
+    box-shadow: $bar-shadow;
     display: flex;
-    flex: auto;
-    overflow: hidden;
+    flex: none;
+    height: $top-bar-height;
+    width: 100%;
+    z-index: $z-index-top-layer;
 
-    > * {
-      cursor: pointer;
-      flex: none;
-      height: math.div($top-bar-height, 3);
-      overflow: hidden;
-      padding: math.div($top-bar-height, 3) .6em;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .karma {
+        flex: none;
+        margin-right: 5px;
+        margin-top: 5px;
+        text-align: right;
 
-      &.active {
-        background-color: #ccc;
-      }
+        .subText {
+            font-size: 0.5em;
+        }
     }
-  }
+
+    .barEntries {
+        display: flex;
+        flex: auto;
+        overflow: hidden;
+
+        > * {
+            cursor: pointer;
+            flex: none;
+            height: math.div($top-bar-height, 3);
+            overflow: hidden;
+            padding: math.div($top-bar-height, 3) 0.6em;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &.active {
+                background-color: #ccc;
+            }
+        }
+    }
 }
 
 .firstStart {
-  margin: 1em;
+    margin: 1em;
 
-  .block {
-    margin-bottom: 2em;
-    margin-left: 2em;
-  }
+    .block {
+        margin-bottom: 2em;
+        margin-left: 2em;
+    }
 }
 
 .selectDeviceUid label {
-  display: block;
-  margin-bottom: .5em;
+    display: block;
+    margin-bottom: 0.5em;
 }
 
 .locationError {
-  a {
-    cursor: pointer;
-    text-decoration: underline;
-  }
+    a {
+        cursor: pointer;
+        text-decoration: underline;
+    }
 }
 
 .hashtag,
 .channel-link,
 .sticky-link {
-  cursor: pointer;
-  font-weight: bold;
+    cursor: pointer;
+    font-weight: bold;
 
-  &:link,
-  &:visited {
-    color: white;
-  }
+    &:link,
+    &:visited {
+        color: white;
+    }
 
-  &:hover {
-    color: rgb(0 16 20 / 33%);
-  }
+    &:hover {
+        color: rgb(0 16 20 / 33%);
+    }
 
-  &:active {
-    color: rgb(0 16 20 / 33%);
-  }
+    &:active {
+        color: rgb(0 16 20 / 33%);
+    }
 }
 
 .appSettings {
-  background-color: #eee;
-  bottom: 0;
-  left: 0;
-  overflow-y: scroll;
-  padding: 1em;
-  position: absolute;
-  right: 0;
-  top: $top-bar-height;
-  z-index: $z-index-sub-layer;
+    background-color: #eee;
+    bottom: 0;
+    left: 0;
+    overflow-y: scroll;
+    padding: 1em;
+    position: absolute;
+    right: 0;
+    top: $top-bar-height;
+    z-index: $z-index-sub-layer;
 
-  .block {
-    margin-bottom: 2em;
-    margin-left: 2em;
-  }
+    .block {
+        margin-bottom: 2em;
+        margin-left: 2em;
+    }
 
-  .deviceUid {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+    .deviceUid {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-  .closeButton {
-    margin: 1em;
-  }
+    .closeButton {
+        margin: 1em;
+    }
 }
 
 .accountVerification,
@@ -427,7 +427,7 @@ body,
 .userType,
 .pendingDeletion,
 .internationalFeed {
-  margin-bottom: 1em;
-  margin-top: 1em;
-  width: 100%;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    width: 100%;
 }

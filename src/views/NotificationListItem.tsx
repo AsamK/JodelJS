@@ -13,17 +13,20 @@ interface INotificationListItemProps {
 }
 
 export const NotificationListItem = ({ notification, selectPost }: INotificationListItemProps) => {
-    return <div className={classnames('notification-list-item', { unread: !notification.read })}
-        key={notification.notification_id}
-        onClick={() => {
-            selectPost(notification.post_id);
-        }}
-    >
-        <div className="type">{notification.type}</div>
-        <div className="details">
-            <div className="info-text">{getNotificationDescription(notification)}</div>
-            <div className="message">{notification.message}</div>
+    return (
+        <div
+            className={classnames('notification-list-item', { unread: !notification.read })}
+            key={notification.notification_id}
+            onClick={() => {
+                selectPost(notification.post_id);
+            }}
+        >
+            <div className="type">{notification.type}</div>
+            <div className="details">
+                <div className="info-text">{getNotificationDescription(notification)}</div>
+                <div className="message">{notification.message}</div>
+            </div>
+            <Time time={notification.last_interaction} />
         </div>
-        <Time time={notification.last_interaction} />
-    </div>;
+    );
 };

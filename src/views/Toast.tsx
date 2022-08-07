@@ -20,9 +20,7 @@ export const Toast = ({ toast, onClick }: IToastProps) => {
             })}
             onClick={() => onClick(toast.id)}
         >
-            <div className="toast-message">
-                {toast.message}
-            </div>
+            <div className="toast-message">{toast.message}</div>
         </div>
     );
 };

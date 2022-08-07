@@ -1,4 +1,4 @@
-import type { Map as LeafletMap} from 'leaflet';
+import type { Map as LeafletMap } from 'leaflet';
 import { map, tileLayer } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import React from 'react';
@@ -26,14 +26,18 @@ export default class MapComponent extends React.Component<IMapComponentProps, IM
     public componentDidMount(): void {
         const leafletMap = map(this.mapElement.current!);
         if (this.props.location) {
-            leafletMap.setView({
-                lat: this.props.location.latitude,
-                lng: this.props.location.longitude,
-            }, 13);
+            leafletMap.setView(
+                {
+                    lat: this.props.location.latitude,
+                    lng: this.props.location.longitude,
+                },
+                13,
+            );
         }
 
         const tiles = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '\xa9 <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>' +
+            attribution:
+                '\xa9 <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>' +
                 ' contributors',
             maxZoom: 18,
         });
@@ -45,11 +49,13 @@ export default class MapComponent extends React.Component<IMapComponentProps, IM
     }
 
     public render(): React.ReactElement | null {
-        return <div className="map-root" ref={this.mapElement}>
-            <LeafletMapContext.Provider value={this.state.map}>
-                {this.props.children}
-            </LeafletMapContext.Provider>
-        </div>;
+        return (
+            <div className="map-root" ref={this.mapElement}>
+                <LeafletMapContext.Provider value={this.state.map}>
+                    {this.props.children}
+                </LeafletMapContext.Provider>
+            </div>
+        );
     }
 
     public componentDidUpdate(): void {

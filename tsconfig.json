@@ -1,37 +1,26 @@
 {
-  "compilerOptions": {
-    "outDir": "./dist/",
-    "sourceMap": true,
-    "strict": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noFallthroughCasesInSwitch": true,
-    "importHelpers": true,
-    "downlevelIteration": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "module": "esNext",
-    "moduleResolution": "node",
-    "target": "es6",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
-    "jsx": "react",
-    "types": [
-      "webpack-env",
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "*": [
-        "typings/*"
-      ]
-    }
-  },
-  "include": [
-    "./src/**/*",
-  ],
-  "exclude": [
-    "./src/sw.ts",
-  ]
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "strict": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noFallthroughCasesInSwitch": true,
+        "importHelpers": true,
+        "downlevelIteration": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "module": "esNext",
+        "moduleResolution": "node",
+        "target": "es6",
+        "lib": ["es2017", "dom"],
+        "jsx": "react",
+        "types": ["webpack-env"],
+        "baseUrl": ".",
+        "paths": {
+            "*": ["typings/*"]
+        }
+    },
+    "include": ["./src/**/*"],
+    "exclude": ["./src/sw.ts"]
 }

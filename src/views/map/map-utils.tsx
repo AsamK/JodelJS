@@ -19,19 +19,33 @@ type BaseComponentWrappedProps = IWithMapProps & React.ClassAttributes<any>;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type OuterComponentProps<P, C> = ObjectExclude<P, BaseComponentWrappedProps>;
 
-export const withLeafletMap = () =>
-    <P extends BaseComponentWrappedProps>(Component: React.ComponentType<P>)
-        : React.ComponentType<React.ClassAttributes<typeof Component> & OuterComponentProps<P, typeof Component>> => {
-        const forwardRef: React.ForwardRefRenderFunction<typeof Component, OuterComponentProps<P, typeof Component>> =
-            (innerProps, ref) => {
-                const ComponentAny = Component as any;
-                return <LeafletMapContext.Consumer>
-                    {map => !map ? null : <ComponentAny map={map} ref={ref} {...innerProps}></ComponentAny>}
-                </LeafletMapContext.Consumer> as any;
-            };
+export const withLeafletMap =
+    () =>
+    <P extends BaseComponentWrappedProps>(
+        Component: React.ComponentType<P>,
+    ): React.ComponentType<
+        React.ClassAttributes<typeof Component> & OuterComponentProps<P, typeof Component>
+    > => {
+        const forwardRef: React.ForwardRefRenderFunction<
+            typeof Component,
+            OuterComponentProps<P, typeof Component>
+        > = (innerProps, ref) => {
+            const ComponentAny = Component as any;
+            return (
+                <LeafletMapContext.Consumer>
+                    {map =>
+                        !map ? null : (
+                            <ComponentAny map={map} ref={ref} {...innerProps}></ComponentAny>
+                        )
+                    }
+                </LeafletMapContext.Consumer>
+            ) as any;
+        };
 
         const name = Component.displayName || Component.name;
         forwardRef.displayName = `withLeafletMap(${name})`;
 
-        return React.forwardRef<typeof Component, OuterComponentProps<P, typeof Component>>(forwardRef) as any;
+        return React.forwardRef<typeof Component, OuterComponentProps<P, typeof Component>>(
+            forwardRef,
+        ) as any;
     };

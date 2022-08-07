@@ -29,7 +29,10 @@ interface IChannelListComponentState {
     showCountryChannels: boolean;
 }
 
-export class ChannelListComponent extends React.Component<IChannelListComponentProps, IChannelListComponentState> {
+export class ChannelListComponent extends React.Component<
+    IChannelListComponentProps,
+    IChannelListComponentState
+> {
     private static lastScrollPosition = 0;
 
     public state: IChannelListComponentState = {
@@ -53,78 +56,88 @@ export class ChannelListComponent extends React.Component<IChannelListComponentP
     }
 
     public render(): React.ReactElement | null {
-        const { channels, recommendedChannels, localChannels, countryChannels, onChannelClick } = this.props;
+        const { channels, recommendedChannels, localChannels, countryChannels, onChannelClick } =
+            this.props;
         const channelNodes = channels.map(channel => {
             return this.createChannelNode(channel, onChannelClick, true);
-        },
-        );
+        });
         const recommendedChannelNodes = recommendedChannels.map(channel => {
             return this.createChannelNode(channel, onChannelClick, true);
-        },
-        );
-        const localChannelNodes = !this.state.showLocalChannels ? null : localChannels.map(channel => {
-            return this.createChannelNode(channel, onChannelClick, false);
-        },
-        );
-        const countryChannelNodes = !this.state.showCountryChannels ? null : countryChannels.map(channel => {
-            return this.createChannelNode(channel, onChannelClick, false);
-        },
-        );
+        });
+        const localChannelNodes = !this.state.showLocalChannels
+            ? null
+            : localChannels.map(channel => {
+                  return this.createChannelNode(channel, onChannelClick, false);
+              });
+        const countryChannelNodes = !this.state.showCountryChannels
+            ? null
+            : countryChannels.map(channel => {
+                  return this.createChannelNode(channel, onChannelClick, false);
+              });
         return (
             <div className="channel-list" ref={this.scrollable}>
                 <div className="channel-list_header">Kanäle(beta)</div>
                 <div className="channel-list_filter">
-                    <input type="text"
+                    <input
+                        type="text"
                         placeholder="Channel filtern"
                         value={this.state.channelFilter}
                         onChange={this.onFilterChange}
                     />
-                    {!this.state.channelFilter ? null :
+                    {!this.state.channelFilter ? null : (
                         <ChannelListItem
                             key={this.state.channelFilter}
                             channel={{ unread: false, channel: this.state.channelFilter }}
                             onChannelClick={onChannelClick}
                             showImage={false}
                         />
-                    }
+                    )}
                 </div>
                 {channelNodes}
-                {recommendedChannelNodes.length === 0 ? null :
+                {recommendedChannelNodes.length === 0 ? null : (
                     <div className="channel-list_recommended">
                         Vorschläge
                         <div className="channel-count">{recommendedChannels.length}</div>
                     </div>
-                }
+                )}
                 {recommendedChannelNodes}
-                {localChannels.length === 0 ? null :
+                {localChannels.length === 0 ? null : (
                     <div className="channel-list_local" onClick={this.onToggleLocalChannels}>
                         Lokale
                         <div className="channel-count">{localChannels.length}</div>
                     </div>
-                }
+                )}
                 {localChannelNodes}
-                {countryChannels.length === 0 ? null :
+                {countryChannels.length === 0 ? null : (
                     <div className="channel-list_country" onClick={this.onToggleCountryChannels}>
                         Landesweit
                         <div className="channel-count">{countryChannels.length}</div>
                     </div>
-                }
+                )}
                 {countryChannelNodes}
             </div>
         );
     }
 
-    private createChannelNode(channel: IChannel, onChannelClick: (channel: string) => void, showImage: boolean): React.ReactElement | null {
-        if (this.state.channelFilter &&
-            !channel.channel.toLowerCase().includes(this.state.channelFilter.toLowerCase())) {
+    private createChannelNode(
+        channel: IChannel,
+        onChannelClick: (channel: string) => void,
+        showImage: boolean,
+    ): React.ReactElement | null {
+        if (
+            this.state.channelFilter &&
+            !channel.channel.toLowerCase().includes(this.state.channelFilter.toLowerCase())
+        ) {
             return null;
         }
-        return <ChannelListItem
-            key={channel.channel}
-            channel={channel}
-            onChannelClick={onChannelClick}
-            showImage={showImage}
-        />;
+        return (
+            <ChannelListItem
+                key={channel.channel}
+                channel={channel}
+                onChannelClick={onChannelClick}
+                showImage={showImage}
+            />
+        );
     }
 
     private onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {

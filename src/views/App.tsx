@@ -12,13 +12,12 @@ interface IAppProps {
     store: Store;
 }
 
-export const App = ({ locale, messages, store }: IAppProps) => <IntlProvider
-    locale={locale}
-    messages={messages}
->
-    <Provider store={store}>
-        <DocumentTitle title="Jodel Unofficial WebApp">
-            <Jodel />
-        </DocumentTitle>
-    </Provider>
-</IntlProvider>;
+export const App = ({ locale, messages, store }: IAppProps) => (
+    <IntlProvider locale={locale} messages={messages}>
+        <Provider store={store}>
+            <DocumentTitle title="Jodel Unofficial WebApp">
+                <Jodel />
+            </DocumentTitle>
+        </Provider>
+    </IntlProvider>
+);

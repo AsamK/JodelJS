@@ -11,7 +11,7 @@
 
     .type {
         flex: none;
-        font-size: .6em;
+        font-size: 0.6em;
         overflow: hidden;
         width: 40px;
     }
@@ -24,7 +24,7 @@
         overflow: hidden;
 
         .info-text {
-            font-size: .8em;
+            font-size: 0.8em;
         }
 
         .message,
@@ -38,6 +38,6 @@
 
     .time {
         flex: none;
-        font-size: .8em;
+        font-size: 0.8em;
     }
 }

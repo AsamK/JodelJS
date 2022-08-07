@@ -5,7 +5,11 @@ export interface IBackButtonProps {
 }
 
 const BackButton = ({ onClick }: IBackButtonProps) => {
-    return <div className="backButton" onClick={onClick}>Zurück</div>;
+    return (
+        <div className="backButton" onClick={onClick}>
+            Zurück
+        </div>
+    );
 };
 
 export default BackButton;

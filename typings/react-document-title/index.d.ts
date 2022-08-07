@@ -8,5 +8,4 @@ declare namespace DocumentTitle {
     }
 }
 
-declare class DocumentTitle extends React.Component<DocumentTitle.IDocumentTitleProps> {
-}
+declare class DocumentTitle extends React.Component<DocumentTitle.IDocumentTitleProps> {}

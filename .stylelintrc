@@ -1,5 +1,5 @@
 {
-    "extends": ["stylelint-config-standard-scss"],
+    "extends": ["stylelint-config-prettier", "stylelint-config-standard-scss"],
     "plugins": ["stylelint-order"],
     "ignoreFiles": [],
     "rules": {
@@ -12,6 +12,7 @@
         "declaration-block-trailing-semicolon": "always",
         "declaration-colon-space-after": "always",
         "declaration-colon-space-before": "never",
+        "indentation": 4,
         "length-zero-no-unit": true,
         "max-empty-lines": 1,
         "media-feature-colon-space-after": "always",
@@ -19,7 +20,7 @@
         "no-eol-whitespace": true,
         "no-extra-semicolons": true,
         "no-missing-end-of-source-newline": true,
-        "number-leading-zero": "never",
+        "number-leading-zero": "always",
         "number-no-trailing-zeros": true,
         "order/properties-alphabetical-order": true,
         "property-case": "lower",
@@ -37,7 +38,7 @@
         "selector-max-specificity": "0,4,0",
         "selector-max-id": 0,
         "selector-pseudo-element-colon-notation": "double",
-        "string-quotes": "double",
+        "string-quotes": "single",
         "unit-case": "lower",
         "unit-no-unknown": true
     }

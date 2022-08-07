@@ -20,31 +20,33 @@ export interface IStickyListProps {
 }
 
 class StickyListComponent extends React.Component<IStickyListProps> {
-
     constructor(props: IStickyListProps) {
         super(props);
     }
 
     public render(): React.ReactElement | null {
         const {
-            stickies, clickStickyClose, clickStickyLink,
-            clickStickyButton, switchToHashtag, switchToChannel,
+            stickies,
+            clickStickyClose,
+            clickStickyLink,
+            clickStickyButton,
+            switchToHashtag,
+            switchToChannel,
         } = this.props;
         const stickyNodes = stickies.map(sticky => {
-            return <Sticky key={sticky.stickypost_id} sticky={sticky}
-                onCloseClick={() => clickStickyClose(sticky.stickypost_id)}
-                onButtonClick={title => clickStickyButton(sticky.stickypost_id, title)}
-                onLinkClick={link => clickStickyLink(link)}
-                switchToHashtag={hashtag => switchToHashtag(hashtag)}
-                switchToChannel={channel => switchToChannel(channel)}
-            />;
-        },
-        );
-        return (
-            <div className="stickyList">
-                {stickyNodes}
-            </div>
-        );
+            return (
+                <Sticky
+                    key={sticky.stickypost_id}
+                    sticky={sticky}
+                    onCloseClick={() => clickStickyClose(sticky.stickypost_id)}
+                    onButtonClick={title => clickStickyButton(sticky.stickypost_id, title)}
+                    onLinkClick={link => clickStickyLink(link)}
+                    switchToHashtag={hashtag => switchToHashtag(hashtag)}
+                    switchToChannel={channel => switchToChannel(channel)}
+                />
+            );
+        });
+        return <div className="stickyList">{stickyNodes}</div>;
     }
 }
 

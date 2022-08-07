@@ -2,7 +2,7 @@ import type { JodelApi } from '../../app/api';
 import Settings from '../../app/settings';
 import type { Color } from '../../enums/Color';
 import { PostListSortType } from '../../enums/PostListSortType';
-import type { Section} from '../../enums/Section';
+import type { Section } from '../../enums/Section';
 import { SectionEnum } from '../../enums/Section';
 import { ToastType } from '../../enums/ToastType';
 import type { UserType } from '../../enums/UserType';
@@ -11,7 +11,14 @@ import type { IApiPostDetails } from '../../interfaces/IApiPostDetails';
 import type { IApiPostListPost } from '../../interfaces/IApiPostListPost';
 import type { IJodelAction } from '../../interfaces/IJodelAction';
 import type { JodelThunkAction, JodelThunkDispatch } from '../../interfaces/JodelThunkAction';
-import { setPermissionDenied, setToken, shareLink, showSettings, switchPostSection, updatePosts } from '../actions';
+import {
+    setPermissionDenied,
+    setToken,
+    shareLink,
+    showSettings,
+    switchPostSection,
+    updatePosts,
+} from '../actions';
 import type { IJodelAppStore } from '../reducers';
 import { getPost } from '../reducers/entities';
 import { locationSelector } from '../selectors/app';
@@ -48,101 +55,138 @@ interface IResponseError {
     status: number;
 }
 
-function handleNetworkErrors(dispatch: JodelThunkDispatch,
-    getState: () => IJodelAppStore, error: IResponseError | unknown): void {
+function handleNetworkErrors(
+    dispatch: JodelThunkDispatch,
+    getState: () => IJodelAppStore,
+    error: IResponseError | unknown,
+): void {
     if (!error || typeof error !== 'object' || !('status' in error)) {
         dispatch(showToast('Kein Internet Zugriff oder Server down.', ToastType.WARNING));
         console.error('No internet access or server down…,', error);
         return;
-    } ;
+    }
     const err = error as IResponseError;
     if (err.status === 401) {
         dispatch(showToast('Zugriff verweigert, token ist abgelaufen.', ToastType.ERROR));
         console.error('Permission denied');
         dispatch(setPermissionDenied(true));
     } else if (err.status === 477) {
-        dispatch(showToast(`Zugriff verweigert, Jodel Geheimnis ist veraltet: ${err.description ?? 'unknown error'}`, ToastType.ERROR));
-        console.error(`Request error: Secret is probably outdated ${err.status} ${err.message}: ${err.description ?? 'unknown error'}`);
+        dispatch(
+            showToast(
+                `Zugriff verweigert, Jodel Geheimnis ist veraltet: ${
+                    err.description ?? 'unknown error'
+                }`,
+                ToastType.ERROR,
+            ),
+        );
+        console.error(
+            `Request error: Secret is probably outdated ${err.status} ${err.message}: ${
+                err.description ?? 'unknown error'
+            }`,
+        );
     } else if (err.status === 478) {
         dispatch(verify());
-        dispatch(showToast(`Zugriff verweigert, Konto nicht verifiziert: ${err.description ?? 'unknown error'}`, ToastType.ERROR));
-        console.error(`Request error: Account probably not verified ${err.status} ${err.message}: ${err.description ?? 'unknown error'}`);
+        dispatch(
+            showToast(
+                `Zugriff verweigert, Konto nicht verifiziert: ${
+                    err.description ?? 'unknown error'
+                }`,
+                ToastType.ERROR,
+            ),
+        );
+        console.error(
+            `Request error: Account probably not verified ${err.status} ${err.message}: ${
+                err.description ?? 'unknown error'
+            }`,
+        );
         dispatch(showSettings(true));
     } else {
-        dispatch(showToast(`Fehler: ${err.status} ${err.message} ${err.description ?? 'unknown error'}.`, ToastType.ERROR));
-        console.error(`Request error: ${err.status} ${err.message}: ${err.description ?? 'unknown error'}`);
+        dispatch(
+            showToast(
+                `Fehler: ${err.status} ${err.message} ${err.description ?? 'unknown error'}.`,
+                ToastType.ERROR,
+            ),
+        );
+        console.error(
+            `Request error: ${err.status} ${err.message}: ${err.description ?? 'unknown error'}`,
+        );
     }
 }
 
 export function deletePost(postId: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiDeletePost(postId)
-            .then(() => dispatch(updatePosts()),
-                err => handleNetworkErrors(dispatch, getState, err));
+        api.apiDeletePost(postId).then(
+            () => dispatch(updatePosts()),
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function upVote(postId: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiUpVote(postId)
-            .then(res => {
+        api.apiUpVote(postId).then(
+            res => {
                 dispatch(votedPost(res.post.post_id, VoteType.UP, res.vote_count));
                 dispatch(getKarma());
             },
-                err => handleNetworkErrors(dispatch, getState, err),
-            );
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function downVote(postId: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiDownVote(postId)
-            .then(res => {
+        api.apiDownVote(postId).then(
+            res => {
                 dispatch(votedPost(res.post.post_id, VoteType.DOWN, res.vote_count));
                 dispatch(getKarma());
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function pollVote(postId: string, pollId: string, option: number): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiPollVote(pollId, option)
-            .then(res => {
+        api.apiPollVote(pollId, option).then(
+            res => {
                 dispatch(votedPoll(postId, pollId, option, res.poll_votes));
                 dispatch(getKarma());
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function giveThanks(postId: string, parentPostId?: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiGiveThanks(postId)
-            .then(() => {
+        api.apiGiveThanks(postId).then(
+            () => {
                 if (parentPostId) {
                     dispatch(updatePost(parentPostId));
                 }
             },
-                err => handleNetworkErrors(dispatch, getState, err),
-            );
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function pin(postId: string, pinned = true): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         if (pinned) {
-            api.apiPin(postId)
-                .then(res => {
+            api.apiPin(postId).then(
+                res => {
                     dispatch(pinnedPost(postId, pinned, res.pin_count));
                 },
-                    err => handleNetworkErrors(dispatch, getState, err));
+                err => handleNetworkErrors(dispatch, getState, err),
+            );
         } else {
-            api.apiUnpin(postId)
-                .then(res => {
+            api.apiUnpin(postId).then(
+                res => {
                     dispatch(pinnedPost(postId, pinned, res.pin_count));
                 },
-                    err => handleNetworkErrors(dispatch, getState, err));
+                err => handleNetworkErrors(dispatch, getState, err),
+            );
         }
     };
 }
@@ -171,38 +215,49 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): JodelThunkAction {
             if (section.startsWith('channel:')) {
                 dispatch(setIsFetching(section));
                 const channel = section.substring(8);
-                api.apiGetPostsChannelCombo(channel, getState().settings.useHomeLocation)
-                    .then(res => {
-                        dispatch(receivePosts(section, {
-                            discussed: res.replied,
-                            popular: res.voted,
-                            recent: res.recent,
-                        }));
-                        dispatch(setChannelsMeta([
-                            {
-                                channel,
-                                followers: res.followers_count,
-                                sponsored: res.sponsored,
-                            }]));
-                    }, err => {
+                api.apiGetPostsChannelCombo(channel, getState().settings.useHomeLocation).then(
+                    res => {
+                        dispatch(
+                            receivePosts(section, {
+                                discussed: res.replied,
+                                popular: res.voted,
+                                recent: res.recent,
+                            }),
+                        );
+                        dispatch(
+                            setChannelsMeta([
+                                {
+                                    channel,
+                                    followers: res.followers_count,
+                                    sponsored: res.sponsored,
+                                },
+                            ]),
+                        );
+                    },
+                    err => {
                         dispatch(setIsFetching(section, false));
                         handleNetworkErrors(dispatch, getState, err);
-                    });
+                    },
+                );
             }
             if (section.startsWith('hashtag:')) {
                 dispatch(setIsFetching(section));
                 const hashtag = section.substring(8);
-                api.apiGetPostsHashtagCombo(hashtag, getState().settings.useHomeLocation)
-                    .then(res => {
-                        dispatch(receivePosts(section, {
-                            discussed: res.replied,
-                            popular: res.voted,
-                            recent: res.recent,
-                        }));
-                    }, err => {
+                api.apiGetPostsHashtagCombo(hashtag, getState().settings.useHomeLocation).then(
+                    res => {
+                        dispatch(
+                            receivePosts(section, {
+                                discussed: res.replied,
+                                popular: res.voted,
+                                recent: res.recent,
+                            }),
+                        );
+                    },
+                    err => {
                         dispatch(setIsFetching(section, false));
                         handleNetworkErrors(dispatch, getState, err);
-                    });
+                    },
+                );
             } else {
                 switch (section) {
                     case SectionEnum.LOCATION: {
@@ -211,69 +266,100 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): JodelThunkAction {
                             break;
                         }
                         dispatch(setIsFetching(section));
-                        api.apiGetPostsCombo(loc.latitude, loc.longitude, true,
-                            getState().settings.useHomeLocation, false, true)
-                            .then(res => {
-                                dispatch(receivePosts(section, {
-                                    discussed: res.replied,
-                                    popular: res.voted,
-                                    recent: res.recent,
-                                }, false, res.stickies));
-                            }, err => {
+                        api.apiGetPostsCombo(
+                            loc.latitude,
+                            loc.longitude,
+                            true,
+                            getState().settings.useHomeLocation,
+                            false,
+                            true,
+                        ).then(
+                            res => {
+                                dispatch(
+                                    receivePosts(
+                                        section,
+                                        {
+                                            discussed: res.replied,
+                                            popular: res.voted,
+                                            recent: res.recent,
+                                        },
+                                        false,
+                                        res.stickies,
+                                    ),
+                                );
+                            },
+                            err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
-                            });
+                            },
+                        );
                         break;
                     }
                     case SectionEnum.MINE:
                         dispatch(setIsFetching(section));
-                        api.apiGetPostsMineCombo()
-                            .then(res => {
-                                dispatch(receivePosts(section, {
-                                    discussed: res.replied,
-                                    popular: res.voted,
-                                    recent: res.recent,
-                                }));
-                            }, err => {
+                        api.apiGetPostsMineCombo().then(
+                            res => {
+                                dispatch(
+                                    receivePosts(section, {
+                                        discussed: res.replied,
+                                        popular: res.voted,
+                                        recent: res.recent,
+                                    }),
+                                );
+                            },
+                            err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
-                            });
+                            },
+                        );
                         break;
                     case SectionEnum.MINE_REPLIES:
                         dispatch(setIsFetching(section));
-                        api.apiGetPostsMineReplies()
-                            .then(res => {
-                                dispatch(receivePosts(section, {
-                                    recent: res.posts,
-                                }));
-                            }, err => {
+                        api.apiGetPostsMineReplies().then(
+                            res => {
+                                dispatch(
+                                    receivePosts(section, {
+                                        recent: res.posts,
+                                    }),
+                                );
+                            },
+                            err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
-                            });
+                            },
+                        );
                         break;
                     case SectionEnum.MINE_VOTES:
                         dispatch(setIsFetching(section));
-                        api.apiGetPostsMineVotes()
-                            .then(res => {
-                                dispatch(receivePosts(section, {
-                                    recent: res.posts,
-                                }));
-                            }, err => {
+                        api.apiGetPostsMineVotes().then(
+                            res => {
+                                dispatch(
+                                    receivePosts(section, {
+                                        recent: res.posts,
+                                    }),
+                                );
+                            },
+                            err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
-                            });
+                            },
+                        );
                         break;
                     case SectionEnum.MINE_PINNED:
                         dispatch(setIsFetching(section));
-                        api.apiGetPostsMinePinned()
-                            .then(res => {
-                                dispatch(receivePosts(section, {
-                                    recent: res.posts,
-                                }));
-                            }, err => {
+                        api.apiGetPostsMinePinned().then(
+                            res => {
+                                dispatch(
+                                    receivePosts(section, {
+                                        recent: res.posts,
+                                    }),
+                                );
+                            },
+                            err => {
                                 dispatch(setIsFetching(section, false));
                                 handleNetworkErrors(dispatch, getState, err);
-                            });
+                            },
+                        );
                         break;
                 }
             }
@@ -281,8 +367,10 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): JodelThunkAction {
     };
 }
 
-export function fetchMorePosts(sectionToFetch?: Section,
-    sortTypeToFetch?: PostListSortType): JodelThunkAction {
+export function fetchMorePosts(
+    sectionToFetch?: Section,
+    sortTypeToFetch?: PostListSortType,
+): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         const section = sectionToFetch ? sectionToFetch : getState().viewState.postSection;
         const sortType = sortTypeToFetch ? sortTypeToFetch : getState().viewState.postListSortType;
@@ -296,15 +384,22 @@ export function fetchMorePosts(sectionToFetch?: Section,
             const channel = section.substring(8);
             const afterId = posts ? posts[posts.length - 1] : undefined;
             dispatch(setIsFetching(section));
-            api.apiGetPostsChannel(sortType, afterId, channel, getState().settings.useHomeLocation)
-                .then(res => {
+            api.apiGetPostsChannel(
+                sortType,
+                afterId,
+                channel,
+                getState().settings.useHomeLocation,
+            ).then(
+                res => {
                     const p: { [sortType: string]: IApiPostListPost[] } = {};
                     p[sortType] = res.posts;
                     dispatch(receivePosts(section, p, true));
-                }, err => {
+                },
+                err => {
                     dispatch(setIsFetching(section, false));
                     handleNetworkErrors(dispatch, getState, err);
-                });
+                },
+            );
         } else if (section.startsWith('hashtag:')) {
             const hashtag = section.substring(8);
             let afterId;
@@ -312,15 +407,22 @@ export function fetchMorePosts(sectionToFetch?: Section,
                 afterId = posts[posts.length - 1];
             }
             dispatch(setIsFetching(section));
-            api.apiGetPostsHashtag(sortType, afterId, hashtag, getState().settings.useHomeLocation)
-                .then(res => {
+            api.apiGetPostsHashtag(
+                sortType,
+                afterId,
+                hashtag,
+                getState().settings.useHomeLocation,
+            ).then(
+                res => {
                     const p: { [sortType: string]: IApiPostListPost[] } = {};
                     p[sortType] = res.posts;
                     dispatch(receivePosts(section, p, true));
-                }, err => {
+                },
+                err => {
                     dispatch(setIsFetching(section, false));
                     handleNetworkErrors(dispatch, getState, err);
-                });
+                },
+            );
         } else {
             let skip;
             let limit;
@@ -335,16 +437,24 @@ export function fetchMorePosts(sectionToFetch?: Section,
                         break;
                     }
                     dispatch(setIsFetching(section));
-                    api.apiGetPosts(sortType, afterId, loc.latitude, loc.longitude,
-                        getState().settings.useHomeLocation, true)
-                        .then(res => {
+                    api.apiGetPosts(
+                        sortType,
+                        afterId,
+                        loc.latitude,
+                        loc.longitude,
+                        getState().settings.useHomeLocation,
+                        true,
+                    ).then(
+                        res => {
                             const p: { [sortType: string]: IApiPostListPost[] } = {};
                             p[sortType] = res.posts;
                             dispatch(receivePosts(section, p, true));
-                        }, err => {
+                        },
+                        err => {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
-                        });
+                        },
+                    );
                     break;
                 }
                 case SectionEnum.MINE:
@@ -353,15 +463,17 @@ export function fetchMorePosts(sectionToFetch?: Section,
                         limit = 10;
                     }
                     dispatch(setIsFetching(section));
-                    api.apiGetPostsMine(sortType, skip, limit)
-                        .then(res => {
+                    api.apiGetPostsMine(sortType, skip, limit).then(
+                        res => {
                             const p: { [sortType: string]: IApiPostListPost[] } = {};
                             p[sortType] = res.posts;
                             dispatch(receivePosts(section, p, true));
-                        }, err => {
+                        },
+                        err => {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
-                        });
+                        },
+                    );
                     break;
                 case SectionEnum.MINE_REPLIES:
                     if (sortType !== PostListSortType.RECENT) {
@@ -372,15 +484,17 @@ export function fetchMorePosts(sectionToFetch?: Section,
                         limit = 10;
                     }
                     dispatch(setIsFetching(section));
-                    api.apiGetPostsMineReplies(skip, limit)
-                        .then(res => {
+                    api.apiGetPostsMineReplies(skip, limit).then(
+                        res => {
                             const p: { [sortType: string]: IApiPostListPost[] } = {};
                             p[sortType] = res.posts;
                             dispatch(receivePosts(section, p, true));
-                        }, err => {
+                        },
+                        err => {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
-                        });
+                        },
+                    );
                     break;
                 case SectionEnum.MINE_VOTES:
                     if (sortType !== PostListSortType.RECENT) {
@@ -391,15 +505,17 @@ export function fetchMorePosts(sectionToFetch?: Section,
                         limit = 10;
                     }
                     dispatch(setIsFetching(section));
-                    api.apiGetPostsMineVotes(skip, limit)
-                        .then(res => {
+                    api.apiGetPostsMineVotes(skip, limit).then(
+                        res => {
                             const p: { [sortType: string]: IApiPostListPost[] } = {};
                             p[sortType] = res.posts;
                             dispatch(receivePosts(section, p, true));
-                        }, err => {
+                        },
+                        err => {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
-                        });
+                        },
+                    );
                     break;
                 case SectionEnum.MINE_PINNED:
                     if (sortType !== PostListSortType.RECENT) {
@@ -410,15 +526,17 @@ export function fetchMorePosts(sectionToFetch?: Section,
                         limit = 10;
                     }
                     dispatch(setIsFetching(section));
-                    api.apiGetPostsMinePinned(skip, limit)
-                        .then(res => {
+                    api.apiGetPostsMinePinned(skip, limit).then(
+                        res => {
                             const p: { [sortType: string]: IApiPostListPost[] } = {};
                             p[sortType] = res.posts;
                             dispatch(receivePosts(section, p, true));
-                        }, err => {
+                        },
+                        err => {
                             dispatch(setIsFetching(section, false));
                             handleNetworkErrors(dispatch, getState, err);
-                        });
+                        },
+                    );
                     break;
             }
         }
@@ -458,17 +576,22 @@ export function updatePost(postId: string, force = false): JodelThunkAction {
     };
 }
 
-function getAllPostDetails(api: JodelApi, dispatch: JodelThunkDispatch, getState: () => IJodelAppStore,
+function getAllPostDetails(
+    api: JodelApi,
+    dispatch: JodelThunkDispatch,
+    getState: () => IJodelAppStore,
     postId: string,
-    nextReply?: string, ojFilter = false): Promise<IApiPostDetails | void> {
-    return api.apiGetPostDetails(postId, true, nextReply, false, ojFilter)
-        .then(res => {
+    nextReply?: string,
+    ojFilter = false,
+): Promise<IApiPostDetails | void> {
+    return api.apiGetPostDetails(postId, true, nextReply, false, ojFilter).then(
+        res => {
             if (!res.next) {
                 return res;
             }
 
-            return getAllPostDetails(api, dispatch, getState, postId, res.next, ojFilter)
-                .then(nextRes => {
+            return getAllPostDetails(api, dispatch, getState, postId, res.next, ojFilter).then(
+                nextRes => {
                     if (!nextRes) {
                         return res;
                     }
@@ -478,29 +601,33 @@ function getAllPostDetails(api: JodelApi, dispatch: JodelThunkDispatch, getState
                         res.replies = nextRes.replies;
                     }
                     return res;
-                });
+                },
+            );
         },
-            err => handleNetworkErrors(dispatch, getState, err));
+        err => handleNetworkErrors(dispatch, getState, err),
+    );
 }
 
-export function fetchPost(postId: string, nextReply?: string,
-    ojFilter = false): JodelThunkAction {
+export function fetchPost(postId: string, nextReply?: string, ojFilter = false): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiGetPostDetails(postId, true, nextReply, false, ojFilter)
-            .then(res => {
+        api.apiGetPostDetails(postId, true, nextReply, false, ojFilter).then(
+            res => {
                 const post = res.details;
                 post.children = res.replies;
                 post.child_count = post.children.length + res.remaining;
-                dispatch(receivePost(post, nextReply !== undefined, res.next, res.shareable, ojFilter));
+                dispatch(
+                    receivePost(post, nextReply !== undefined, res.next, res.shareable, ojFilter),
+                );
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 function fetchCompletePost(postId: string, ojFilter = false): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        getAllPostDetails(api, dispatch, getState, postId, undefined, ojFilter)
-            .then(res => {
+        getAllPostDetails(api, dispatch, getState, postId, undefined, ojFilter).then(
+            res => {
                 if (!res) {
                     return;
                 }
@@ -509,62 +636,84 @@ function fetchCompletePost(postId: string, ojFilter = false): JodelThunkAction {
                 post.child_count = post.children.length;
                 dispatch(receivePost(post, false, null, res.shareable, ojFilter));
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function getKarma(): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiGetKarma()
-            .then(res => {
+        api.apiGetKarma().then(
+            res => {
                 dispatch(_setKarma(res.karma));
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function getConfig(): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiGetConfig()
-            .then(config => {
+        api.apiGetConfig().then(
+            config => {
                 if (!config.verified) {
                     dispatch(verify());
                 }
                 dispatch(_setConfig(config));
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
-export function addPost(text: string, image?: string, channel?: string, ancestor?: string,
-    color: Color = 'FF9908'): JodelThunkAction<Promise<Section | null>> {
+export function addPost(
+    text: string,
+    image?: string,
+    channel?: string,
+    ancestor?: string,
+    color: Color = 'FF9908',
+): JodelThunkAction<Promise<Section | null>> {
     return (dispatch, getState, { api }) => {
         const loc = locationSelector(getState());
         if (!loc) {
             return Promise.reject('No location available to post');
         }
-        return api.apiAddPost(channel, ancestor, color, 0.0, loc.latitude, loc.longitude, loc.city,
-            loc.country, text, image, getState().settings.useHomeLocation)
-            .then(() => {
-                if (ancestor) {
-                    dispatch(updatePost(ancestor, true));
-                    return null;
-                } else if (channel) {
-                    const section = 'channel:' + channel;
-                    dispatch(invalidatePosts(section));
-                    dispatch(fetchPostsIfNeeded(section));
-                    return section;
-                } else {
-                    const section = SectionEnum.LOCATION;
-                    dispatch(invalidatePosts(section));
-                    dispatch(fetchPostsIfNeeded(section));
-                    return section;
-                }
-            },
+        return api
+            .apiAddPost(
+                channel,
+                ancestor,
+                color,
+                0.0,
+                loc.latitude,
+                loc.longitude,
+                loc.city,
+                loc.country,
+                text,
+                image,
+                getState().settings.useHomeLocation,
+            )
+            .then(
+                () => {
+                    if (ancestor) {
+                        dispatch(updatePost(ancestor, true));
+                        return null;
+                    } else if (channel) {
+                        const section = 'channel:' + channel;
+                        dispatch(invalidatePosts(section));
+                        dispatch(fetchPostsIfNeeded(section));
+                        return section;
+                    } else {
+                        const section = SectionEnum.LOCATION;
+                        dispatch(invalidatePosts(section));
+                        dispatch(fetchPostsIfNeeded(section));
+                        return section;
+                    }
+                },
                 err => {
                     handleNetworkErrors(dispatch, getState, err);
                     return null;
-                });
+                },
+            );
     };
 }
 
@@ -572,14 +721,23 @@ export function setDeviceUid(deviceUid: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         const loc = locationSelector(getState());
         if (!loc) {
-            dispatch(showToast('Standort nicht bekannt. Registrierung nicht möglich.', ToastType.ERROR));
+            dispatch(
+                showToast('Standort nicht bekannt. Registrierung nicht möglich.', ToastType.ERROR),
+            );
             return;
         }
         api.apiGetAccessToken(deviceUid, loc.latitude, loc.longitude, loc.city, loc.country)
             .then(res => {
                 dispatch(_setDeviceUID(deviceUid));
-                dispatch(setToken(res.distinct_id, res.access_token, res.refresh_token,
-                    res.expiration_date, res.token_type));
+                dispatch(
+                    setToken(
+                        res.distinct_id,
+                        res.access_token,
+                        res.refresh_token,
+                        res.expiration_date,
+                        res.token_type,
+                    ),
+                );
                 dispatch(switchPostSection('location'));
             })
             .catch(err => {
@@ -595,39 +753,54 @@ export function refreshAccessToken(): JodelThunkAction {
         if (!token) {
             return;
         }
-        api.apiRefreshAccessToken(token.distinctId, token.refresh)
-            .then(res => {
-                dispatch(setToken(token.distinctId, res.access_token, token.refresh, res.expiration_date,
-                    res.token_type));
+        api.apiRefreshAccessToken(token.distinctId, token.refresh).then(
+            res => {
+                dispatch(
+                    setToken(
+                        token.distinctId,
+                        res.access_token,
+                        token.refresh,
+                        res.expiration_date,
+                        res.token_type,
+                    ),
+                );
             },
-                (err: {status?: number}) => {
-                    // Reregister
-                    if (account.deviceUid && err.status === 401) {
-                        console.warn('Failed to refresh token, registering...');
-                        dispatch(setDeviceUid(account.deviceUid));
-                    }
+            (err: { status?: number }) => {
+                // Reregister
+                if (account.deviceUid && err.status === 401) {
+                    console.warn('Failed to refresh token, registering...');
+                    dispatch(setDeviceUid(account.deviceUid));
+                }
 
-                    handleNetworkErrors(dispatch, getState, err);
-                });
+                handleNetworkErrors(dispatch, getState, err);
+            },
+        );
         dispatch(beginRefreshToken());
     };
 }
 
-export function setLocation(latitude: number, longitude: number, city = '',
-    country = 'DE'): JodelThunkAction {
+export function setLocation(
+    latitude: number,
+    longitude: number,
+    city = '',
+    country = 'DE',
+): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         dispatch(_setLocation(latitude, longitude, city, country));
         if (getState().account.token) {
-            api.apiSetLocation(latitude, longitude, city, country)
-                .catch(err => {
-                    handleNetworkErrors(dispatch, getState, err);
-                });
+            api.apiSetLocation(latitude, longitude, city, country).catch(err => {
+                handleNetworkErrors(dispatch, getState, err);
+            });
         }
     };
 }
 
-export function setHome(latitude: number, longitude: number, city = '',
-    country = 'DE'): JodelThunkAction {
+export function setHome(
+    latitude: number,
+    longitude: number,
+    city = '',
+    country = 'DE',
+): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         api.apiSetAction('SetHomeStarted')
             .then(() => api.apiSetHome(latitude, longitude, city, country))
@@ -651,7 +824,10 @@ export function deleteHome(): JodelThunkAction {
 
 export function setInternationalFeed(enable: boolean): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        (enable ? api.apiEnableFeedInternationalization() : api.apiDisableFeedInternationalization())
+        (enable
+            ? api.apiEnableFeedInternationalization()
+            : api.apiDisableFeedInternationalization()
+        )
             .then(() => dispatch(getConfig()))
             .catch(err => {
                 handleNetworkErrors(dispatch, getState, err);
@@ -661,13 +837,14 @@ export function setInternationalFeed(enable: boolean): JodelThunkAction {
 
 export function getRecommendedChannels(): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiGetRecommendedChannels(getState().settings.useHomeLocation)
-            .then(res => {
+        api.apiGetRecommendedChannels(getState().settings.useHomeLocation).then(
+            res => {
                 dispatch(setRecommendedChannels(res.recommended));
                 dispatch(setLocalChannels(res.local));
                 dispatch(setCountryChannels(res.country));
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
@@ -682,31 +859,34 @@ export function getFollowedChannelsMeta(): JodelThunkAction {
             const timestamp = getState().settings.channelsLastRead[c];
             channels[c] = timestamp === undefined ? 0 : timestamp;
         });
-        api.apiGetFollowedChannelsMeta(channels, getState().settings.useHomeLocation)
-            .then(res => {
+        api.apiGetFollowedChannelsMeta(channels, getState().settings.useHomeLocation).then(
+            res => {
                 dispatch(setChannelsMeta(res.channels));
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function followChannel(channel: string, follow = true): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        (follow ? api.apiFollowChannel(channel) : api.apiUnfollowChannel(channel))
-            .then(() => {
+        (follow ? api.apiFollowChannel(channel) : api.apiUnfollowChannel(channel)).then(
+            () => {
                 dispatch(getConfig()); // TODO
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function getSuggestedHashtags(): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiGetSuggestedHashtags(getState().settings.useHomeLocation)
-            .then(body => {
+        api.apiGetSuggestedHashtags(getState().settings.useHomeLocation).then(
+            body => {
                 dispatch(setSuggestedHashtags(body.hashtags));
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
@@ -736,44 +916,48 @@ export function verify(): JodelThunkAction {
 
 export function getNotificationsIfAvailable(): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiIsNotificationAvailable()
-            .then(res => {
+        api.apiIsNotificationAvailable().then(
+            res => {
                 if (res.available) {
                     dispatch(getNotifications());
                 }
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function getNotifications(): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiGetNotifications()
-            .then(res => {
+        api.apiGetNotifications().then(
+            res => {
                 dispatch(receiveNotifications(res.notifications));
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function setNotificationPostRead(postId: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiSetNotificationPostRead(postId)
-            .then(() => {
+        api.apiSetNotificationPostRead(postId).then(
+            () => {
                 dispatch(_setNotificationPostRead(postId));
                 dispatch(getNotifications());
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function sharePost(postId: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiSharePost(postId)
-            .then(res => {
+        api.apiSharePost(postId).then(
+            res => {
                 dispatch(shareLink(postId, res.share_count, res.url));
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
@@ -785,28 +969,30 @@ export function ojFilterPost(postId: string, ojFilter: boolean): JodelThunkActio
 
 export function searchPosts(message: string, suggested = false): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiSearchPosts(message, suggested, getState().settings.useHomeLocation)
-            .then(res => {
+        api.apiSearchPosts(message, suggested, getState().settings.useHomeLocation).then(
+            res => {
                 console.info(res.body);
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function closeSticky(stickyId: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiStickyPostClose(stickyId)
-            .then(() => {
+        api.apiStickyPostClose(stickyId).then(
+            () => {
                 dispatch(_closeSticky(stickyId));
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function showPictureOfDay(): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiGetPictureOfDay()
-            .then(res => {
+        api.apiGetPictureOfDay().then(
+            res => {
                 if (!res) {
                     console.info('No picture of the day available');
                     return;
@@ -815,17 +1001,19 @@ export function showPictureOfDay(): JodelThunkAction {
                 dispatch(_selectPost(res.post_id));
                 dispatch(updatePost(res.post_id, true));
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
 export function updateUserType(userType: UserType): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiSetUserProfile(userType)
-            .then(() => {
+        api.apiSetUserProfile(userType).then(
+            () => {
                 dispatch(updateUserTypeResponse(userType));
             },
-                err => handleNetworkErrors(dispatch, getState, err));
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }
 
@@ -845,11 +1033,11 @@ export function updateUserTypeResponse(userType: UserType): IJodelAction {
  */
 export function setUserLanguage(language: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
-        api.apiSetUserLanguage(language)
-            .then(() => {
+        api.apiSetUserLanguage(language).then(
+            () => {
                 dispatch(getConfig());
             },
-                err => handleNetworkErrors(dispatch, getState, err),
-            );
+            err => handleNetworkErrors(dispatch, getState, err),
+        );
     };
 }

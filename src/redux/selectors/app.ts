@@ -13,9 +13,11 @@ export const isRegisteredSelector = (state: IJodelAppStore) => !!state.account.t
 
 export const karmaSelector = (state: IJodelAppStore) => state.account.karma;
 
-export const userAgeSelector = (state: IJodelAppStore) => !state.account.config ? null : state.account.config.age;
+export const userAgeSelector = (state: IJodelAppStore) =>
+    !state.account.config ? null : state.account.config.age;
 
-export const userTypeSelector = (state: IJodelAppStore) => !state.account.config ? null : state.account.config.user_type;
+export const userTypeSelector = (state: IJodelAppStore) =>
+    !state.account.config ? null : state.account.config.user_type;
 
 export const canChangeUserTypeSelector = (state: IJodelAppStore) =>
     !state.account.config ? false : state.account.config.can_change_type;
@@ -24,8 +26,9 @@ export const specialPostColorsSelector = (state: IJodelAppStore) =>
     !state.account.config ? [] : state.account.config.special_post_colors;
 
 export const addPostChannelSelector = createSelector(
-    selectedPostIdSelector, selectedChannelNameSelector,
-    (selectedPostId, selectedChannelName) => selectedPostId ? undefined : selectedChannelName,
+    selectedPostIdSelector,
+    selectedChannelNameSelector,
+    (selectedPostId, selectedChannelName) => (selectedPostId ? undefined : selectedChannelName),
 );
 
 export const locationSelector = (store: IJodelAppStore) => store.settings.location;

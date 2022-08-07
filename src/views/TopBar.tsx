@@ -2,10 +2,11 @@ import React from 'react';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { showChannelList, showSettings } from '../redux/actions';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { karmaSelector } from '../redux/selectors/app';
+
 import { Menu } from './Menu';
 import { SectionLink } from './SectionLink';
 

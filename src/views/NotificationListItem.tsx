@@ -1,8 +1,9 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import { INotification } from '../interfaces/INotification';
+import type { INotification } from '../interfaces/INotification';
 import { getNotificationDescription } from '../utils/notification.utils';
+
 import './NotificationListItem.scss';
 import { Time } from './Time';
 

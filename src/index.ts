@@ -4,6 +4,7 @@ import 'normalize.css';
 import '../style/main.scss';
 import './app/main';
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 if (process.env.NODE_ENV === 'production') {
     let serviceWorkerRegistered = false;
     if ('serviceWorker' in navigator) {
@@ -14,7 +15,7 @@ if (process.env.NODE_ENV === 'production') {
                     reg.addEventListener('updatefound', () => {
                         console.info('[SW] Update found');
                         const newSW = reg.installing;
-                        newSW?.addEventListener('statechange', e => {
+                        newSW?.addEventListener('statechange', () => {
                             if (newSW?.state === 'installed') {
                                 console.info('[SW] Reloading to update');
                                 window.location.reload();

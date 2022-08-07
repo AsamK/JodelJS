@@ -3,11 +3,12 @@ import React from 'react';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { showNotifications, showSearch, showSettings } from '../redux/actions';
 import { showPictureOfDay } from '../redux/actions/api';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { unreadNotificationsCountSelector } from '../redux/selectors/notifications';
+
 import './Menu.scss';
 import { SectionLink } from './SectionLink';
 
@@ -111,7 +112,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: {}) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
         showNotificationsCallback: () => dispatch(showNotifications(true)),
         showPictureOfDayCallback: () => dispatch(showPictureOfDay()),

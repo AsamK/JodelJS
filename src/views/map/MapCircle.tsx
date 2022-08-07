@@ -1,7 +1,9 @@
-import { circle, Circle, Map as LeafletMap } from 'leaflet';
+import type { Circle, Map as LeafletMap } from 'leaflet';
+import { circle } from 'leaflet';
 import React from 'react';
 
-import { IGeoCoordinates } from '../../interfaces/ILocation';
+import type { IGeoCoordinates } from '../../interfaces/ILocation';
+
 import { withLeafletMap } from './map-utils';
 
 interface IMapCircleProps {

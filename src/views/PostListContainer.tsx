@@ -2,13 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { PostListSortType } from '../enums/PostListSortType';
-import { IPost } from '../interfaces/IPost';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { IPost } from '../interfaces/IPost';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { fetchMorePosts, selectPost, showAddPost, updatePosts } from '../redux/actions';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { isLocationKnownSelector } from '../redux/selectors/app';
 import { selectedSectionLastUpdatedSelector, selectedSectionSortPostsSelector } from '../redux/selectors/posts';
 import { selectedSectionSelector, selectedSortTypeSelector } from '../redux/selectors/view';
+
 import AddButton from './AddButton';
 import PostList from './PostList';
 import { SortTypeLink } from './SortTypeLink';
@@ -30,7 +31,7 @@ export interface IPostListContainerComponentProps extends IPostListContainerProp
 }
 
 class PostListContainerComponent extends React.PureComponent<IPostListContainerComponentProps> {
-    private static lastScrollPosition: number = 0;
+    private static lastScrollPosition = 0;
     private static lastScrollSection: string | undefined;
 
     private scrollable: HTMLElement | undefined;
@@ -78,7 +79,7 @@ class PostListContainerComponent extends React.PureComponent<IPostListContainerC
     };
 }
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: IPostListContainerProps) => {
+const mapStateToProps = (state: IJodelAppStore) => {
     return {
         lastUpdated: selectedSectionLastUpdatedSelector(state) || undefined,
         locationKnown: isLocationKnownSelector(state),
@@ -88,8 +89,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: IPostListContainerProp
     };
 };
 
-const mapDispatchToProps = (dispatch: JodelThunkDispatch,
-    ownProps: IPostListContainerProps) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
         onAddClick(): void {
             dispatch(showAddPost(true));

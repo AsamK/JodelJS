@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 
-import { IApiConfig } from '../../interfaces/IApiConfig';
-import { IJodelAction } from '../../interfaces/IJodelAction';
-import { IToken } from '../../interfaces/IToken';
+import type { IApiConfig } from '../../interfaces/IApiConfig';
+import type { IJodelAction } from '../../interfaces/IJodelAction';
+import type { IToken } from '../../interfaces/IToken';
 import {
     SET_CONFIG,
     SET_COUNTRY_CHANNELS,
@@ -40,10 +40,10 @@ interface IAccountStoreMutable {
     refreshingToken: boolean;
     config: IApiConfig | null;
     permissionDenied: boolean;
-    recommendedChannels: ReadonlyArray<string>;
-    localChannels: ReadonlyArray<string>;
-    countryChannels: ReadonlyArray<string>;
-    suggestedHashtags: ReadonlyArray<string>;
+    recommendedChannels: readonly string[];
+    localChannels: readonly string[];
+    countryChannels: readonly string[];
+    suggestedHashtags: readonly string[];
 }
 
 export const account = combineReducers<IAccountStore>({
@@ -116,7 +116,7 @@ function config(state: IApiConfig | null = null, action: IJodelAction): typeof s
     }
 }
 
-function permissionDenied(state: boolean = false, action: IJodelAction): typeof state {
+function permissionDenied(state = false, action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_TOKEN:
             return false;
@@ -127,7 +127,7 @@ function permissionDenied(state: boolean = false, action: IJodelAction): typeof 
     }
 }
 
-function recommendedChannels(state: ReadonlyArray<string> = [], action: IJodelAction): typeof state {
+function recommendedChannels(state: readonly string[] = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_RECOMMENDED_CHANNELS:
             return action.payload.entitiesChannels.map(c => c.channel);
@@ -136,7 +136,7 @@ function recommendedChannels(state: ReadonlyArray<string> = [], action: IJodelAc
     }
 }
 
-function localChannels(state: ReadonlyArray<string> = [], action: IJodelAction): typeof state {
+function localChannels(state: readonly string[] = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_LOCAL_CHANNELS:
             return action.payload.entitiesChannels.map(c => c.channel);
@@ -145,7 +145,7 @@ function localChannels(state: ReadonlyArray<string> = [], action: IJodelAction):
     }
 }
 
-function countryChannels(state: ReadonlyArray<string> = [], action: IJodelAction): typeof state {
+function countryChannels(state: readonly string[] = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_COUNTRY_CHANNELS:
             return action.payload.entitiesChannels.map(c => c.channel);
@@ -154,7 +154,7 @@ function countryChannels(state: ReadonlyArray<string> = [], action: IJodelAction
     }
 }
 
-function suggestedHashtags(state: ReadonlyArray<string> = [], action: IJodelAction): typeof state {
+function suggestedHashtags(state: readonly string[] = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case SET_SUGGESTED_HASHTAGS:
             return action.payload.suggestedHashtags;

@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
-import { IJodelAppStore } from '../reducers';
+import type { IJodelAppStore } from '../reducers';
+
 import { selectedChannelNameSelector } from './channels';
 import { selectedPostIdSelector } from './posts';
 

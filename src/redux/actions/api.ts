@@ -1,19 +1,21 @@
-import { JodelApi } from '../../app/api';
+import type { JodelApi } from '../../app/api';
 import Settings from '../../app/settings';
-import { Color } from '../../enums/Color';
+import type { Color } from '../../enums/Color';
 import { PostListSortType } from '../../enums/PostListSortType';
-import { Section, SectionEnum } from '../../enums/Section';
+import type { Section} from '../../enums/Section';
+import { SectionEnum } from '../../enums/Section';
 import { ToastType } from '../../enums/ToastType';
-import { UserType } from '../../enums/UserType';
+import type { UserType } from '../../enums/UserType';
 import { VoteType } from '../../enums/VoteType';
-import { IApiPostDetails } from '../../interfaces/IApiPostDetails';
-import { IApiPostListPost } from '../../interfaces/IApiPostListPost';
-import { IJodelAction } from '../../interfaces/IJodelAction';
-import { JodelThunkAction, JodelThunkDispatch } from '../../interfaces/JodelThunkAction';
+import type { IApiPostDetails } from '../../interfaces/IApiPostDetails';
+import type { IApiPostListPost } from '../../interfaces/IApiPostListPost';
+import type { IJodelAction } from '../../interfaces/IJodelAction';
+import type { JodelThunkAction, JodelThunkDispatch } from '../../interfaces/JodelThunkAction';
 import { setPermissionDenied, setToken, shareLink, showSettings, switchPostSection, updatePosts } from '../actions';
-import { IJodelAppStore } from '../reducers';
+import type { IJodelAppStore } from '../reducers';
 import { getPost } from '../reducers/entities';
 import { locationSelector } from '../selectors/app';
+
 import { SET_USER_TYPE_RESPONSE } from './action.consts';
 import {
     beginRefreshToken,
@@ -47,34 +49,35 @@ interface IResponseError {
 }
 
 function handleNetworkErrors(dispatch: JodelThunkDispatch,
-    getState: () => IJodelAppStore, err: IResponseError | {}): void {
-    if (!('status' in err)) {
+    getState: () => IJodelAppStore, error: IResponseError | unknown): void {
+    if (!error || typeof error !== 'object' || !('status' in error)) {
         dispatch(showToast('Kein Internet Zugriff oder Server down.', ToastType.WARNING));
-        console.error('No internet access or server down…,', err);
-    } else if (err.status === 401) {
+        console.error('No internet access or server down…,', error);
+        return;
+    } ;
+    const err = error as IResponseError;
+    if (err.status === 401) {
         dispatch(showToast('Zugriff verweigert, token ist abgelaufen.', ToastType.ERROR));
         console.error('Permission denied');
         dispatch(setPermissionDenied(true));
     } else if (err.status === 477) {
-        dispatch(showToast('Zugriff verweigert, Jodel Geheimnis ist veraltet: ' + err.description, ToastType.ERROR));
-        console.error('Request error: Secret is probably outdated ' + err.status + ' ' + err.message + ': ' +
-            err.description);
+        dispatch(showToast(`Zugriff verweigert, Jodel Geheimnis ist veraltet: ${err.description ?? 'unknown error'}`, ToastType.ERROR));
+        console.error(`Request error: Secret is probably outdated ${err.status} ${err.message}: ${err.description ?? 'unknown error'}`);
     } else if (err.status === 478) {
         dispatch(verify());
-        dispatch(showToast('Zugriff verweigert, Konto nicht verifiziert: ' + err.description, ToastType.ERROR));
-        console.error('Request error: Account probably not verified ' + err.status + ' ' + err.message + ': ' +
-            err.description);
+        dispatch(showToast(`Zugriff verweigert, Konto nicht verifiziert: ${err.description ?? 'unknown error'}`, ToastType.ERROR));
+        console.error(`Request error: Account probably not verified ${err.status} ${err.message}: ${err.description ?? 'unknown error'}`);
         dispatch(showSettings(true));
     } else {
-        dispatch(showToast(`Fehler: ${err.status} ${err.message} ${err.description}.`, ToastType.ERROR));
-        console.error('Request error: ' + err.status + ' ' + err.message + ': ' + err.description);
+        dispatch(showToast(`Fehler: ${err.status} ${err.message} ${err.description ?? 'unknown error'}.`, ToastType.ERROR));
+        console.error(`Request error: ${err.status} ${err.message}: ${err.description ?? 'unknown error'}`);
     }
 }
 
 export function deletePost(postId: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         api.apiDeletePost(postId)
-            .then(res => dispatch(updatePosts()),
+            .then(() => dispatch(updatePosts()),
                 err => handleNetworkErrors(dispatch, getState, err));
     };
 }
@@ -116,7 +119,7 @@ export function pollVote(postId: string, pollId: string, option: number): JodelT
 export function giveThanks(postId: string, parentPostId?: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         api.apiGiveThanks(postId)
-            .then(res => {
+            .then(() => {
                 if (parentPostId) {
                     dispatch(updatePost(parentPostId));
                 }
@@ -202,7 +205,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): JodelThunkAction {
                     });
             } else {
                 switch (section) {
-                    case SectionEnum.LOCATION:
+                    case SectionEnum.LOCATION: {
                         const loc = locationSelector(getState());
                         if (!loc) {
                             break;
@@ -221,6 +224,7 @@ export function fetchPostsIfNeeded(sectionToFetch?: Section): JodelThunkAction {
                                 handleNetworkErrors(dispatch, getState, err);
                             });
                         break;
+                    }
                     case SectionEnum.MINE:
                         dispatch(setIsFetching(section));
                         api.apiGetPostsMineCombo()
@@ -321,7 +325,7 @@ export function fetchMorePosts(sectionToFetch?: Section,
             let skip;
             let limit;
             switch (section) {
-                case SectionEnum.LOCATION:
+                case SectionEnum.LOCATION: {
                     let afterId;
                     if (posts !== undefined) {
                         afterId = posts[posts.length - 1];
@@ -342,6 +346,7 @@ export function fetchMorePosts(sectionToFetch?: Section,
                             handleNetworkErrors(dispatch, getState, err);
                         });
                     break;
+                }
                 case SectionEnum.MINE:
                     if (posts !== undefined) {
                         skip = posts.length;
@@ -421,7 +426,7 @@ export function fetchMorePosts(sectionToFetch?: Section,
 }
 
 export function fetchMoreComments(): JodelThunkAction {
-    return (dispatch, getState, { api }) => {
+    return (dispatch, getState) => {
         const postId = getState().viewState.selectedPostId;
         if (!postId) {
             return;
@@ -437,7 +442,7 @@ export function fetchMoreComments(): JodelThunkAction {
 }
 
 export function updatePost(postId: string, force = false): JodelThunkAction {
-    return (dispatch, getState, { api }) => {
+    return (dispatch, getState) => {
         const post = getPost(getState(), postId);
         if (!post || force) {
             dispatch(fetchPost(postId));
@@ -540,7 +545,7 @@ export function addPost(text: string, image?: string, channel?: string, ancestor
         }
         return api.apiAddPost(channel, ancestor, color, 0.0, loc.latitude, loc.longitude, loc.city,
             loc.country, text, image, getState().settings.useHomeLocation)
-            .then(res => {
+            .then(() => {
                 if (ancestor) {
                     dispatch(updatePost(ancestor, true));
                     return null;
@@ -595,7 +600,7 @@ export function refreshAccessToken(): JodelThunkAction {
                 dispatch(setToken(token.distinctId, res.access_token, token.refresh, res.expiration_date,
                     res.token_type));
             },
-                err => {
+                (err: {status?: number}) => {
                     // Reregister
                     if (account.deviceUid && err.status === 401) {
                         console.warn('Failed to refresh token, registering...');
@@ -608,7 +613,7 @@ export function refreshAccessToken(): JodelThunkAction {
     };
 }
 
-export function setLocation(latitude: number, longitude: number, city: string = '',
+export function setLocation(latitude: number, longitude: number, city = '',
     country = 'DE'): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         dispatch(_setLocation(latitude, longitude, city, country));
@@ -621,7 +626,7 @@ export function setLocation(latitude: number, longitude: number, city: string = 
     };
 }
 
-export function setHome(latitude: number, longitude: number, city: string = '',
+export function setHome(latitude: number, longitude: number, city = '',
     country = 'DE'): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         api.apiSetAction('SetHomeStarted')
@@ -688,7 +693,7 @@ export function getFollowedChannelsMeta(): JodelThunkAction {
 export function followChannel(channel: string, follow = true): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         (follow ? api.apiFollowChannel(channel) : api.apiUnfollowChannel(channel))
-            .then(res => {
+            .then(() => {
                 dispatch(getConfig()); // TODO
             },
                 err => handleNetworkErrors(dispatch, getState, err));
@@ -754,7 +759,7 @@ export function getNotifications(): JodelThunkAction {
 export function setNotificationPostRead(postId: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         api.apiSetNotificationPostRead(postId)
-            .then(res => {
+            .then(() => {
                 dispatch(_setNotificationPostRead(postId));
                 dispatch(getNotifications());
             },
@@ -773,7 +778,7 @@ export function sharePost(postId: string): JodelThunkAction {
 }
 
 export function ojFilterPost(postId: string, ojFilter: boolean): JodelThunkAction {
-    return (dispatch, getState, { api }) => {
+    return dispatch => {
         dispatch(fetchPost(postId, undefined, ojFilter));
     };
 }
@@ -791,7 +796,7 @@ export function searchPosts(message: string, suggested = false): JodelThunkActio
 export function closeSticky(stickyId: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         api.apiStickyPostClose(stickyId)
-            .then(res => {
+            .then(() => {
                 dispatch(_closeSticky(stickyId));
             },
                 err => handleNetworkErrors(dispatch, getState, err));
@@ -817,7 +822,7 @@ export function showPictureOfDay(): JodelThunkAction {
 export function updateUserType(userType: UserType): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         api.apiSetUserProfile(userType)
-            .then(res => {
+            .then(() => {
                 dispatch(updateUserTypeResponse(userType));
             },
                 err => handleNetworkErrors(dispatch, getState, err));
@@ -835,12 +840,13 @@ export function updateUserTypeResponse(userType: UserType): IJodelAction {
 
 /**
  * Set the user's language on the server
+ *
  * @param language Language name in ISO 639-1 format, e.g. 'de-de'
  */
 export function setUserLanguage(language: string): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         api.apiSetUserLanguage(language)
-            .then(res => {
+            .then(() => {
                 dispatch(getConfig());
             },
                 err => handleNetworkErrors(dispatch, getState, err),

@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
-import { IJodelAction } from '../../interfaces/IJodelAction';
+import type { IJodelAction } from '../../interfaces/IJodelAction';
 import { INVALIDATE_POSTS, RECEIVE_POST, RECEIVE_POSTS, SET_IS_FETCHING } from '../actions/action.consts';
 
 function uniq(a: string[]): string[] {
     const seen: { [key: string]: boolean } = {};
-    return a.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
+    return a.filter(item => Object.hasOwnProperty.call(seen, item) ? false : (seen[item] = true));
 }
 
 export interface IPostSection {
@@ -81,7 +81,7 @@ function lastUpdated(state: number | null = null, action: IJodelAction): typeof 
 
 function postsBySortType(state: IPostsBySortType = {}, action: IJodelAction): typeof state {
     switch (action.type) {
-        case RECEIVE_POSTS:
+        case RECEIVE_POSTS: {
             const newState: { [key: string]: string[] } = {};
             if (action.payload.append) {
                 action.payload.postsBySortType.forEach(
@@ -93,6 +93,7 @@ function postsBySortType(state: IPostsBySortType = {}, action: IJodelAction): ty
                 ...state,
                 ...newState,
             };
+        }
         default:
             return state;
     }

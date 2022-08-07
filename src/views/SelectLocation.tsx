@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 
-import { IGeoCoordinates } from '../interfaces/ILocation';
+import type { IGeoCoordinates } from '../interfaces/ILocation';
 import './SelectLocation.scss';
 
 const USE_BROWSER_LOCATION = 'USE_BROWSER_LOCATION';

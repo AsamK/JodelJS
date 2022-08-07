@@ -3,9 +3,9 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { switchPostSection } from '../redux/actions';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { selectedSectionSelector } from '../redux/selectors/view';
 
 interface ISectionLinkProps {

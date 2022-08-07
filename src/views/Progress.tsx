@@ -3,7 +3,7 @@ import 'nprogress/nprogress.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { isSelectedSectionFetchingSelector } from '../redux/selectors/posts';
 
 interface IProgressProps {

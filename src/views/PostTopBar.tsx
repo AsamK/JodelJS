@@ -2,12 +2,13 @@ import classnames from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { IPost } from '../interfaces/IPost';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { IPost } from '../interfaces/IPost';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { pin } from '../redux/actions';
 import { ojFilterPost, sharePost } from '../redux/actions/api';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { selectedPostSelector } from '../redux/selectors/posts';
+
 import BackButton from './BackButton';
 import './PostTopBar.scss';
 
@@ -57,7 +58,7 @@ const PostTopBarComponent = (props: IPostTopBarComponentProps) => {
     );
 };
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: IPostTopBarProps) => {
+const mapStateToProps = (state: IJodelAppStore) => {
     return {
         post: selectedPostSelector(state),
     };

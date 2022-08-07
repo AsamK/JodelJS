@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { IPost } from '../interfaces/IPost';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { IPost } from '../interfaces/IPost';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { fetchPostsIfNeeded } from '../redux/actions';
 import { getNotificationsIfAvailable } from '../redux/actions/api';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { deviceUidSelector, isConfigAvailableSelector, isRegisteredSelector } from '../redux/selectors/app';
 import { selectedPicturePostSelector, selectedPostIdSelector } from '../redux/selectors/posts';
 import {
@@ -15,6 +15,7 @@ import {
     searchVisibleSelector,
     settingsVisibleSelector,
 } from '../redux/selectors/view';
+
 import BigPicture from './BigPicture';
 import ChannelTopBar from './ChannelTopBar';
 import FirstStart from './FirstStart';

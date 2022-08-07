@@ -1,8 +1,9 @@
 import { PostListSortType } from '../enums/PostListSortType';
-import { Section } from '../enums/Section';
-import { TokenType } from '../enums/TokenType';
-import { JodelThunkAction } from '../interfaces/JodelThunkAction';
+import type { Section } from '../enums/Section';
+import type { TokenType } from '../enums/TokenType';
+import type { JodelThunkAction } from '../interfaces/JodelThunkAction';
 import { randomValueHex } from '../utils/bytes.utils';
+
 import {
     fetchPostsIfNeeded,
     getConfig,
@@ -64,7 +65,7 @@ export function updatePosts(): JodelThunkAction {
 }
 
 export function selectPost(postId: string | null): JodelThunkAction {
-    return (dispatch, getState) => {
+    return dispatch => {
         dispatch(_selectPost(postId));
         if (postId != null) {
             dispatch(updatePost(postId, true));
@@ -73,7 +74,7 @@ export function selectPost(postId: string | null): JodelThunkAction {
 }
 
 export function selectPostFromNotification(postId: string): JodelThunkAction {
-    return (dispatch, getState) => {
+    return dispatch => {
         dispatch(setNotificationPostRead(postId));
         dispatch(_selectPost(postId));
         if (postId != null) {
@@ -83,7 +84,7 @@ export function selectPostFromNotification(postId: string): JodelThunkAction {
 }
 
 export function selectPicture(postId: string): JodelThunkAction {
-    return (dispatch, getState) => {
+    return dispatch => {
         dispatch(_selectPicture(postId));
     };
 }
@@ -121,7 +122,7 @@ export function updateLocation(): JodelThunkAction {
 
 export function setToken(distinctId: string, accessToken: string, refreshToken: string, expirationDate: number,
     tokenType: TokenType): JodelThunkAction {
-    return (dispatch, getState) => {
+    return dispatch => {
         // TODO clear cached posts
         dispatch(_setToken(distinctId, accessToken, refreshToken, expirationDate, tokenType));
         dispatch(getConfig());
@@ -132,7 +133,7 @@ export function setToken(distinctId: string, accessToken: string, refreshToken: 
 }
 
 export function createNewAccount(): JodelThunkAction {
-    return (dispatch, getState) => {
+    return dispatch => {
         const deviceUid = randomValueHex(32);
         dispatch(setDeviceUid(deviceUid));
     };
@@ -148,19 +149,19 @@ export function setPermissionDenied(permissionDenied: boolean): JodelThunkAction
 }
 
 export function showAddPost(visible: boolean): JodelThunkAction {
-    return (dispatch, getState) => {
+    return dispatch => {
         dispatch(_showAddPost(visible));
     };
 }
 
 export function showSettings(visible: boolean): JodelThunkAction {
-    return (dispatch, getState) => {
+    return dispatch => {
         dispatch(_showSettings(visible));
     };
 }
 
 export function showChannelList(visible: boolean): JodelThunkAction {
-    return (dispatch, getState) => {
+    return dispatch => {
         if (visible) {
             dispatch(getRecommendedChannels());
             dispatch(getFollowedChannelsMeta());
@@ -170,13 +171,13 @@ export function showChannelList(visible: boolean): JodelThunkAction {
 }
 
 export function showNotifications(visible: boolean): JodelThunkAction {
-    return (dispatch, getState) => {
+    return dispatch => {
         dispatch(_showNotifications(visible));
     };
 }
 
 export function showSearch(visible: boolean): JodelThunkAction {
-    return (dispatch, getState) => {
+    return dispatch => {
         dispatch(getSuggestedHashtags());
         dispatch(_showSearch(visible));
     };

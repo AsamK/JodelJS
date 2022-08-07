@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { INotification } from '../interfaces/INotification';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { INotification } from '../interfaces/INotification';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { selectPostFromNotification } from '../redux/actions';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { notificationsSelector } from '../redux/selectors/notifications';
+
 import './NotificationList.scss';
 import { NotificationListItem } from './NotificationListItem';
 
 export interface INotificationListComponentProps {
-    notifications: ReadonlyArray<INotification>;
+    notifications: readonly INotification[];
     selectPost: (postId: string) => void;
 }
 

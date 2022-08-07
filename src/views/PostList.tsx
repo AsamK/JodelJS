@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { IPost } from '../interfaces/IPost';
+import type { IPost } from '../interfaces/IPost';
+
 import { PostListItem } from './PostListItem';
 
 export interface IPostListProps {

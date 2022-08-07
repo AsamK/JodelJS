@@ -34,16 +34,16 @@ export class Time extends React.Component<ITimeProps> {
         const hours = Math.trunc(minutes / 60);
         const days = Math.trunc(hours / 24);
         if (days > 0) {
-            age = days + 'd';
+            age = `${days}d`;
             timerInterval = 1000 * 60 * 60;
         } else if (hours > 0) {
-            age = hours + 'h';
+            age = `${hours}h`;
             timerInterval = 1000 * 60 * 15;
         } else if (minutes > 0) {
-            age = minutes + 'min';
+            age = `${minutes}min`;
             timerInterval = 1000 * 15;
         } else {
-            age = seconds + 's';
+            age = `${seconds}s`;
             timerInterval = 1000;
         }
         if (this.timer) {

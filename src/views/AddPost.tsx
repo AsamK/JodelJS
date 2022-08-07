@@ -2,14 +2,15 @@ import classnames from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Color } from '../enums/Color';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { Color } from '../enums/Color';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { addPost, switchPostSection } from '../redux/actions';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { addPostChannelSelector } from '../redux/selectors/app';
 import { selectedPostIdSelector } from '../redux/selectors/posts';
 import { addPostVisibleSelector } from '../redux/selectors/view';
 import { resizePicture } from '../utils/picture.utils';
+
 import './AddPost.scss';
 import ColorPicker from './ColorPicker';
 

@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { IPost } from '../interfaces/IPost';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { IPost } from '../interfaces/IPost';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { fetchMoreComments, showAddPost } from '../redux/actions';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { isLocationKnownSelector } from '../redux/selectors/app';
 import { selectedPostChildrenSelector, selectedPostSelector } from '../redux/selectors/posts';
+
 import AddButton from './AddButton';
 import { Post } from './Post';
 import PostList from './PostList';

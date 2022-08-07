@@ -1,9 +1,10 @@
-import { Color } from '../enums/Color';
-import { PostOwn } from '../enums/PostOwn';
-import { UserHandle } from '../enums/UserHandle';
-import { VoteType } from '../enums/VoteType';
-import { IApiPostListPost } from './IApiPostListPost';
-import { IApiLocation } from './IPost';
+import type { Color } from '../enums/Color';
+import type { PostOwn } from '../enums/PostOwn';
+import type { UserHandle } from '../enums/UserHandle';
+import type { VoteType } from '../enums/VoteType';
+
+import type { IApiPostListPost } from './IApiPostListPost';
+import type { IApiLocation } from './IPost';
 
 export interface IApiPostDetailsPost extends IApiPostListPost {
     notifications_enabled: boolean;

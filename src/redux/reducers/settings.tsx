@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 
-import { IJodelAction } from '../../interfaces/IJodelAction';
-import { ILocation } from '../../interfaces/ILocation';
+import type { IJodelAction } from '../../interfaces/IJodelAction';
+import type { ILocation } from '../../interfaces/ILocation';
 import { RECEIVE_POSTS, SET_LOCATION, SET_USE_BROWSER_LOCATION, SET_USE_HOME_LOCATION } from '../actions/action.consts';
 
 export const SETTINGS_VERSION = 1;
 
-export function migrateSettings(storedState: ISettingsStore, oldVersion: number): ISettingsStore {
+export function migrateSettings(storedState: ISettingsStore, _oldVersion: number): ISettingsStore {
     if (storedState.location) {
         if (!storedState.location.latitude || !storedState.location.longitude) {
             return {
@@ -61,7 +61,7 @@ function useHomeLocation(state = false, action: IJodelAction): typeof state {
 
 function channelsLastRead(state: { readonly [key: string]: number } = {}, action: IJodelAction): typeof state {
     switch (action.type) {
-        case RECEIVE_POSTS:
+        case RECEIVE_POSTS: {
             if (action.payload.append ||
                 !action.payload.section.startsWith('channel:')) {
                 return state;
@@ -71,6 +71,7 @@ function channelsLastRead(state: { readonly [key: string]: number } = {}, action
                 ...state,
                 [channel]: action.receivedAt,
             };
+        }
         default:
             return state;
     }

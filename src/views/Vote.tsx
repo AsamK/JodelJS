@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import { VoteType } from '../enums/VoteType';
+import type { VoteType } from '../enums/VoteType';
 import './Vote.scss';
 
 export interface IVoteProps {

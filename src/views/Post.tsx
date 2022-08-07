@@ -5,10 +5,11 @@ import { connect } from 'react-redux';
 import { PostOwn } from '../enums/PostOwn';
 import { UserHandle } from '../enums/UserHandle';
 import { VoteType } from '../enums/VoteType';
-import { IPost } from '../interfaces/IPost';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { IPost } from '../interfaces/IPost';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { deletePost, downVote, giveThanks, pollVote, selectPicture, switchPostSection, upVote } from '../redux/actions';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
+
 import ChildInfo from './ChildInfo';
 import Location from './Location';
 import Message from './Message';
@@ -62,7 +63,7 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
                 {post.thumbnail_url ?
                     <div className="postPicture"
                         style={{ backgroundImage: 'url(https:' + post.thumbnail_url + ')' }}
-                        onMouseUp={e => {
+                        onMouseUp={() => {
                             if (this.pressTimer !== undefined) {
                                 clearTimeout(this.pressTimer);
                             }
@@ -74,7 +75,7 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
                             }
                             this.props.selectPicture();
                         }}
-                        onMouseDown={e => {
+                        onMouseDown={() => {
                             if (this.pressTimer !== undefined) {
                                 clearTimeout(this.pressTimer);
                             }
@@ -146,7 +147,7 @@ export class PostComponent extends React.PureComponent<IPostComponentProps> {
     };
 }
 
-const mapStateToProps = (state: IJodelAppStore) => {
+const mapStateToProps = (_state: IJodelAppStore) => {
     return {};
 };
 

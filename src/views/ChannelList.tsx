@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { IChannel } from '../interfaces/IChannel';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { IChannel } from '../interfaces/IChannel';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { switchPostSection } from '../redux/actions';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import {
     countryChannelsSelector,
     followedChannelsSelector,
     localChannelsSelector,
     recommendedChannelsSelector,
 } from '../redux/selectors/channels';
+
 import './ChannelList.scss';
 import { ChannelListItem } from './ChannelListItem';
 
@@ -130,16 +131,16 @@ export class ChannelListComponent extends React.Component<IChannelListComponentP
         this.setState({ channelFilter: e.target.value });
     };
 
-    private onToggleLocalChannels = (e: React.MouseEvent<HTMLDivElement>) => {
+    private onToggleLocalChannels = () => {
         this.setState({ showLocalChannels: !this.state.showLocalChannels });
     };
 
-    private onToggleCountryChannels = (e: React.MouseEvent<HTMLDivElement>) => {
+    private onToggleCountryChannels = () => {
         this.setState({ showCountryChannels: !this.state.showCountryChannels });
     };
 }
 
-const mapStateToProps = (state: IJodelAppStore, ownProps: {}) => {
+const mapStateToProps = (state: IJodelAppStore) => {
     return {
         channels: followedChannelsSelector(state),
         countryChannels: countryChannelsSelector(state),
@@ -148,7 +149,7 @@ const mapStateToProps = (state: IJodelAppStore, ownProps: {}) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: JodelThunkDispatch, ownProps: {}) => {
+const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
         onChannelClick(channelName: string): void {
             dispatch(switchPostSection('channel:' + channelName));

@@ -3,9 +3,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { PostListSortType } from '../enums/PostListSortType';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { switchPostListSortType } from '../redux/actions';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { selectedSortTypeSelector } from '../redux/selectors/view';
 
 interface ISortTypeLinkProps {

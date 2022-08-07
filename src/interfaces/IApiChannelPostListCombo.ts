@@ -1,4 +1,4 @@
-import { IApiPostListCombo } from './IApiPostListCombo';
+import type { IApiPostListCombo } from './IApiPostListCombo';
 
 export interface IApiChannelPostListCombo extends IApiPostListCombo {
     followers_count: number;

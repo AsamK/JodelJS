@@ -1,5 +1,5 @@
-import { IApiPostReplyPost } from './IApiPostDetailsPost';
-import { IApiPostListPost } from './IApiPostListPost';
+import type { IApiPostReplyPost } from './IApiPostDetailsPost';
+import type { IApiPostListPost } from './IApiPostListPost';
 
 export interface IApiVote {
     post: IApiPostListPost | IApiPostReplyPost;

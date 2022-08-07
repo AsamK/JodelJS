@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { IApiSticky } from '../interfaces/IApiSticky';
+import type { IApiSticky } from '../interfaces/IApiSticky';
+
 import Message from './Message';
 
 export interface IStickyProps {

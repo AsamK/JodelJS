@@ -1,8 +1,8 @@
-import { PostListSortType } from '../enums/PostListSortType';
-import { Section } from '../enums/Section';
-import { UserType } from '../enums/UserType';
-import { VoteType } from '../enums/VoteType';
-import {
+import type { PostListSortType } from '../enums/PostListSortType';
+import type { Section } from '../enums/Section';
+import type { UserType } from '../enums/UserType';
+import type { VoteType } from '../enums/VoteType';
+import type {
     CLOSE_STICKY,
     HIDE_TOAST,
     INVALIDATE_POSTS,
@@ -43,16 +43,17 @@ import {
     VOTED_POLL,
     VOTED_POST,
 } from '../redux/actions/action.consts';
-import { IViewStateStore } from '../redux/reducers/viewState';
-import { IApiConfig } from './IApiConfig';
-import { IApiPostDetailsPost, IApiPostReplyPost } from './IApiPostDetailsPost';
-import { IApiPostListPost } from './IApiPostListPost';
-import { IApiSticky } from './IApiSticky';
-import { IChannel } from './IChannel';
-import { ILocation } from './ILocation';
-import { INotification } from './INotification';
-import { IToast } from './IToast';
-import { IToken } from './IToken';
+import type { IViewStateStore } from '../redux/reducers/viewState';
+
+import type { IApiConfig } from './IApiConfig';
+import type { IApiPostDetailsPost, IApiPostReplyPost } from './IApiPostDetailsPost';
+import type { IApiPostListPost } from './IApiPostListPost';
+import type { IApiSticky } from './IApiSticky';
+import type { IChannel } from './IChannel';
+import type { ILocation } from './ILocation';
+import type { INotification } from './INotification';
+import type { IToast } from './IToast';
+import type { IToken } from './IToken';
 
 export interface IPayloadListSort {
     sortType: PostListSortType;
@@ -83,7 +84,7 @@ export interface IPayloadReplaceView {
 
 export interface IPayloadPosts {
     entities: (IApiPostListPost | IApiPostReplyPost)[];
-    postsBySortType: { sortType: PostListSortType, posts: string[] }[];
+    postsBySortType: { sortType: PostListSortType; posts: string[] }[];
     stickies?: IApiSticky[];
     append: boolean;
     section: Section;
@@ -185,44 +186,44 @@ export interface IPayloadUserType {
 }
 
 export type IJodelAction =
-    { type: typeof CLOSE_STICKY; payload: IPayloadStickyId; } |
-    { type: typeof HIDE_TOAST; payload: IPayloadHideToast; } |
-    { type: typeof INVALIDATE_POSTS; payload: IPayloadSection; } |
-    { type: typeof PINNED_POST; payload: IPayloadPinned; } |
+    { type: typeof CLOSE_STICKY; payload: IPayloadStickyId } |
+    { type: typeof HIDE_TOAST; payload: IPayloadHideToast } |
+    { type: typeof INVALIDATE_POSTS; payload: IPayloadSection } |
+    { type: typeof PINNED_POST; payload: IPayloadPinned } |
     { type: typeof RECEIVE_NOTIFICATIONS; payload: IPayloadNotifications; receivedAt: number } |
     { type: typeof RECEIVE_POST; payload: IPayloadPost; receivedAt: number } |
     { type: typeof RECEIVE_POSTS; payload: IPayloadPosts; receivedAt: number } |
-    { type: typeof REPLACE_VIEW_STATE; payload: IPayloadReplaceView; } |
-    { type: typeof SELECT_PICTURE; payload: IPayloadPostId; } |
-    { type: typeof SELECT_POST; payload: IPayloadSelectPost; } |
-    { type: typeof SET_CHANNELS_META; payload: IPayloadChannels; } |
-    { type: typeof SET_CONFIG; payload: IPayloadConfig; } |
-    { type: typeof SET_COUNTRY_CHANNELS; payload: IPayloadChannels; } |
-    { type: typeof SET_DEVICE_UID; payload: IPayloadDeviceUid; } |
-    { type: typeof SET_IS_FETCHING; payload: IPayloadSectionIsFetching; } |
-    { type: typeof SET_KARMA; payload: IPayloadKarma; } |
-    { type: typeof SET_LOCAL_CHANNELS; payload: IPayloadChannels; } |
-    { type: typeof SET_LOCATION; payload: IPayloadLocation; } |
-    { type: typeof SET_NOTIFICATION_POST_READ; payload: IPayloadPostId; } |
-    { type: typeof SET_PERMISSION_DENIED; payload: IPayloadPermissionDenied; } |
-    { type: typeof SET_RECOMMENDED_CHANNELS; payload: IPayloadChannels; } |
-    { type: typeof SET_SUGGESTED_HASHTAGS; payload: IPayloadHashtags; } |
-    { type: typeof SET_TOKEN; payload: IPayloadToken; } |
-    { type: typeof SET_TOKEN_PENDING; } |
-    { type: typeof SET_USE_BROWSER_LOCATION; payload: IPayloadBrowserLocation; } |
-    { type: typeof SET_USE_HOME_LOCATION; payload: IPayloadHomeLocation; } |
-    { type: typeof SHARE_LINK; payload: IPayloadShareLink; } |
-    { type: typeof SHARE_LINK_CLOSE; payload: {}; } |
-    { type: typeof SHOW_ADD_POST; payload: IPayloadVisible; } |
-    { type: typeof SHOW_CHANNEL_LIST; payload: IPayloadVisible; } |
-    { type: typeof SHOW_NOTIFICATIONS; payload: IPayloadVisible; } |
-    { type: typeof SHOW_SEARCH; payload: IPayloadVisible; } |
-    { type: typeof SHOW_SETTINGS; payload: IPayloadVisible; } |
-    { type: typeof SHOW_TOAST; payload: IPayloadShowToast; } |
-    { type: typeof SWITCH_POST_LIST_SORT_TYPE | 'bar'; payload: IPayloadListSort; } |
-    { type: typeof SWITCH_POST_SECTION; payload: IPayloadSection; } |
-    { type: typeof VOTED_POST; payload: IPayloadVoted; } |
-    { type: typeof VOTED_POLL; payload: IPayloadPollVoted; } |
-    { type: typeof SET_USER_TYPE_RESPONSE; payload: IPayloadUserType; } |
+    { type: typeof REPLACE_VIEW_STATE; payload: IPayloadReplaceView } |
+    { type: typeof SELECT_PICTURE; payload: IPayloadPostId } |
+    { type: typeof SELECT_POST; payload: IPayloadSelectPost } |
+    { type: typeof SET_CHANNELS_META; payload: IPayloadChannels } |
+    { type: typeof SET_CONFIG; payload: IPayloadConfig } |
+    { type: typeof SET_COUNTRY_CHANNELS; payload: IPayloadChannels } |
+    { type: typeof SET_DEVICE_UID; payload: IPayloadDeviceUid } |
+    { type: typeof SET_IS_FETCHING; payload: IPayloadSectionIsFetching } |
+    { type: typeof SET_KARMA; payload: IPayloadKarma } |
+    { type: typeof SET_LOCAL_CHANNELS; payload: IPayloadChannels } |
+    { type: typeof SET_LOCATION; payload: IPayloadLocation } |
+    { type: typeof SET_NOTIFICATION_POST_READ; payload: IPayloadPostId } |
+    { type: typeof SET_PERMISSION_DENIED; payload: IPayloadPermissionDenied } |
+    { type: typeof SET_RECOMMENDED_CHANNELS; payload: IPayloadChannels } |
+    { type: typeof SET_SUGGESTED_HASHTAGS; payload: IPayloadHashtags } |
+    { type: typeof SET_TOKEN; payload: IPayloadToken } |
+    { type: typeof SET_TOKEN_PENDING } |
+    { type: typeof SET_USE_BROWSER_LOCATION; payload: IPayloadBrowserLocation } |
+    { type: typeof SET_USE_HOME_LOCATION; payload: IPayloadHomeLocation } |
+    { type: typeof SHARE_LINK; payload: IPayloadShareLink } |
+    { type: typeof SHARE_LINK_CLOSE; payload: object } |
+    { type: typeof SHOW_ADD_POST; payload: IPayloadVisible } |
+    { type: typeof SHOW_CHANNEL_LIST; payload: IPayloadVisible } |
+    { type: typeof SHOW_NOTIFICATIONS; payload: IPayloadVisible } |
+    { type: typeof SHOW_SEARCH; payload: IPayloadVisible } |
+    { type: typeof SHOW_SETTINGS; payload: IPayloadVisible } |
+    { type: typeof SHOW_TOAST; payload: IPayloadShowToast } |
+    { type: typeof SWITCH_POST_LIST_SORT_TYPE | 'bar'; payload: IPayloadListSort } |
+    { type: typeof SWITCH_POST_SECTION; payload: IPayloadSection } |
+    { type: typeof VOTED_POST; payload: IPayloadVoted } |
+    { type: typeof VOTED_POLL; payload: IPayloadPollVoted } |
+    { type: typeof SET_USER_TYPE_RESPONSE; payload: IPayloadUserType } |
     never
     ;

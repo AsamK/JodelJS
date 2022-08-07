@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { searchPosts } from '../redux/actions/api';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 
 interface ISearchComponentProps {
-    suggestedHashtags: ReadonlyArray<string>;
+    suggestedHashtags: readonly string[];
     searchPosts: (message: string, suggested: boolean) => void;
 }
 

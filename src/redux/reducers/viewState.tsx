@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
 
 import { PostListSortType } from '../../enums/PostListSortType';
-import { Section, SectionEnum } from '../../enums/Section';
-import { IJodelAction } from '../../interfaces/IJodelAction';
+import type { Section} from '../../enums/Section';
+import { SectionEnum } from '../../enums/Section';
+import type { IJodelAction } from '../../interfaces/IJodelAction';
 import {
     REPLACE_VIEW_STATE,
     SELECT_PICTURE,

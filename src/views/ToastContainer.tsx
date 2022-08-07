@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { IToast } from '../interfaces/IToast';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { IToast } from '../interfaces/IToast';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { hideToast } from '../redux/actions/toasts.actions';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { toastsSelector } from '../redux/selectors/app';
+
 import { Toast } from './Toast';
 import './ToastContainer.scss';
 
 interface IToastContainerComponentProps {
-    toasts: ReadonlyArray<IToast>;
+    toasts: readonly IToast[];
     onToastClick: (toastId: number) => void;
 }
 

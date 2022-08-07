@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { IApiSticky } from '../interfaces/IApiSticky';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { IApiSticky } from '../interfaces/IApiSticky';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { selectPost, switchPostSection } from '../redux/actions';
 import { closeSticky } from '../redux/actions/api';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { stickiesSelector } from '../redux/selectors/posts';
+
 import { Sticky } from './Sticky';
 
 export interface IStickyListProps {
-    stickies: ReadonlyArray<IApiSticky>;
+    stickies: readonly IApiSticky[];
     clickStickyClose: (sticky: string) => void;
     clickStickyLink: (postId: string) => void;
     clickStickyButton: (postId: string, buttonTitle: string) => void;
@@ -55,7 +56,7 @@ const mapStateToProps = (state: IJodelAppStore) => {
 
 const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
     return {
-        clickStickyButton: (postId: string, buttonTitle: string) => {
+        clickStickyButton: (_postId: string, _buttonTitle: string) => {
             /* TODO implement */
         },
         clickStickyClose: (stickyId: string) => dispatch(closeSticky(stickyId)),

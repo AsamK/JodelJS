@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 
 import Settings from '../app/settings';
 import { UserType } from '../enums/UserType';
-import { IApiExperiment } from '../interfaces/IApiConfig';
-import { IGeoCoordinates, ILocation } from '../interfaces/ILocation';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { IApiExperiment } from '../interfaces/IApiConfig';
+import type { IGeoCoordinates, ILocation } from '../interfaces/ILocation';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import {
     deleteHome,
     setHome,
@@ -16,8 +16,9 @@ import {
     updateLocation,
 } from '../redux/actions';
 import { setInternationalFeed, setUserLanguage, updateUserType } from '../redux/actions/api';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { canChangeUserTypeSelector, deviceUidSelector, locationSelector } from '../redux/selectors/app';
+
 import { SelectLocation } from './SelectLocation';
 
 interface IAppSettingsStateProps {

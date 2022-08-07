@@ -1,4 +1,4 @@
-import { TokenType } from '../enums/TokenType';
+import type { TokenType } from '../enums/TokenType';
 
 export interface IApiRefreshToken {
     access_token: string;

@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { UserHandle } from '../enums/UserHandle';
-import { IPost } from '../interfaces/IPost';
+import type { IPost } from '../interfaces/IPost';
+
 import { Post } from './Post';
 
 export class PostListItem
-    extends React.PureComponent<{ post: IPost, parentPostId?: string, onPostClick: (post: IPost) => void }> {
+    extends React.PureComponent<{ post: IPost; parentPostId?: string; onPostClick: (post: IPost) => void }> {
 
     public render(): React.ReactElement | null {
         const { post, parentPostId } = this.props;
@@ -15,7 +16,7 @@ export class PostListItem
             : post.user_handle === UserHandle.OJ
                 ? 'OJ'
                 : post.replier ?
-                    'C' + post.replier :
+                    `C${post.replier}` :
                     undefined;
 
         return <Post

@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
 
-import { IChannel } from '../../interfaces/IChannel';
-import { IJodelAppStore } from '../reducers';
+import type { IChannel } from '../../interfaces/IChannel';
+import type { IJodelAppStore } from '../reducers';
+
 import { selectedSectionSelector } from './view';
 
 /* Begin Helpers **/

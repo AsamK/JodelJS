@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { applyMiddleware, compose, createStore, Middleware } from 'redux';
+import type { Middleware } from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import freeze from 'redux-freeze';
 import thunkMiddleware from 'redux-thunk';
 
-import { IJodelAction } from '../interfaces/IJodelAction';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { IJodelAction } from '../interfaces/IJodelAction';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import {
     fetchPostsIfNeeded,
     getConfig,
@@ -16,25 +17,30 @@ import {
     updateLocation,
 } from '../redux/actions';
 import { getKarma, getNotifications, refreshAccessToken } from '../redux/actions/api';
-import { IJodelAppStore, JodelApp } from '../redux/reducers';
-import { ACCOUNT_VERSION, IAccountStore, migrateAccount } from '../redux/reducers/account';
-import { ISettingsStore, migrateSettings, SETTINGS_VERSION } from '../redux/reducers/settings';
+import type { IJodelAppStore} from '../redux/reducers';
+import { JodelApp } from '../redux/reducers';
+import type { IAccountStore} from '../redux/reducers/account';
+import { ACCOUNT_VERSION, migrateAccount } from '../redux/reducers/account';
+import type { ISettingsStore} from '../redux/reducers/settings';
+import { migrateSettings, SETTINGS_VERSION } from '../redux/reducers/settings';
+import type { IViewStateStore } from '../redux/reducers/viewState';
 import { getNotificationDescription } from '../utils/notification.utils';
 import { App } from '../views/App';
+
 import { JodelApi } from './api';
 
 let persistedStateAccount: IAccountStore | undefined;
 const storedAccount = localStorage.getItem('account');
 if (storedAccount) {
     const oldVersion = parseInt(localStorage.getItem('accountVersion') || '0', 10);
-    persistedStateAccount = migrateAccount(JSON.parse(storedAccount), oldVersion);
+    persistedStateAccount = migrateAccount(JSON.parse(storedAccount) as IAccountStore, oldVersion);
 }
 
 let persistedStateSettings: ISettingsStore | undefined;
 const storedSettings = localStorage.getItem('settings');
 if (storedSettings) {
     const oldVersion = parseInt(localStorage.getItem('settingsVersion') || '0', 10);
-    persistedStateSettings = migrateSettings(JSON.parse(storedSettings), oldVersion);
+    persistedStateSettings = migrateSettings(JSON.parse(storedSettings) as ISettingsStore, oldVersion);
 }
 
 const persistedState: Partial<IJodelAppStore> = {
@@ -47,17 +53,21 @@ const reduxMiddlewares: Middleware[] = [
     thunkMiddleware.withExtraArgument(extraThunkArgument), // lets us use dispatch() functions
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 if (process.env.NODE_ENV !== 'production') {
     // Freeze redux state in development to prevent accidental modifications
     // Disable in production to improve performance
     reduxMiddlewares.push(freeze);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
 const composeEnhancers = (process.env.NODE_ENV !== 'production' &&
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
     (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
-const store = createStore<IJodelAppStore, IJodelAction, { dispatch: JodelThunkDispatch }, {}>(
+const store = createStore<IJodelAppStore, IJodelAction, { dispatch: JodelThunkDispatch }, unknown>(
     JodelApp,
     persistedState as IJodelAppStore,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
     composeEnhancers(
         applyMiddleware(
             ...reduxMiddlewares,
@@ -157,16 +167,16 @@ if (history.state === null) {
     store.dispatch(switchPostSection('location'));
 } else {
     userClickedBack = true;
-    store.dispatch(replaceViewState(history.state));
+    store.dispatch(replaceViewState(history.state as IViewStateStore));
 }
 
 window.onpopstate = (event: PopStateEvent) => {
     userClickedBack = true;
-    store.dispatch(replaceViewState(event.state));
+    store.dispatch(replaceViewState(event.state as IViewStateStore));
 };
 
-const translationLocale = navigator.language || (navigator as any).userLanguage;
-const translationLanguage = translationLocale ? translationLocale.substr(0, 2) : 'en';
+const translationLocale: string = navigator.language || (navigator as unknown as {userLanguage: string}).userLanguage;
+const translationLanguage = translationLocale ? translationLocale.substring(0, 2) : 'en';
 
 let translationMessages: Promise<{ [key: string]: string }>;
 switch (translationLanguage) {

@@ -3,12 +3,13 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
 import Settings from '../app/settings';
-import { ILocation } from '../interfaces/ILocation';
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { ILocation } from '../interfaces/ILocation';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { createNewAccount, setUseBrowserLocation, updateLocation, _setLocation } from '../redux/actions';
 import { setDeviceUid } from '../redux/actions/api';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { deviceUidSelector, locationSelector } from '../redux/selectors/app';
+
 import { SelectDeviceUid } from './SelectDeviceUid';
 import { SelectLocation } from './SelectLocation';
 

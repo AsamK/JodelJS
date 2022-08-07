@@ -2,14 +2,15 @@ import classnames from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
+import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import { followChannel } from '../redux/actions';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import {
     isSelectedChannelFollowedSelector,
     selectedChannelFollowersCountSelector,
     selectedChannelNameLikeFollowedSelector,
 } from '../redux/selectors/channels';
+
 import BackButton from './BackButton';
 
 export interface IChannelTopBarProps {

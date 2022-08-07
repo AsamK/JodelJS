@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { IGeoCoordinates } from '../interfaces/ILocation';
+import type { IGeoCoordinates } from '../interfaces/ILocation';
+
 import MapComponent from './map/Map';
 import MapCircleComponent from './map/MapCircle';
 import MapMarkerComponent from './map/MapMarker';

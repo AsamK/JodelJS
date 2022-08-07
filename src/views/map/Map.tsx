@@ -1,8 +1,10 @@
-import { map, Map as LeafletMap, tileLayer } from 'leaflet';
+import type { Map as LeafletMap} from 'leaflet';
+import { map, tileLayer } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import React from 'react';
 
-import { IGeoCoordinates } from '../../interfaces/ILocation';
+import type { IGeoCoordinates } from '../../interfaces/ILocation';
+
 import { LeafletMapContext } from './map-utils';
 import './Map.scss';
 

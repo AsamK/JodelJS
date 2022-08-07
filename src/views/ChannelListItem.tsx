@@ -1,11 +1,11 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import { IChannel } from '../interfaces/IChannel';
+import type { IChannel } from '../interfaces/IChannel';
 import './ChannelListItem.scss';
 
 export class ChannelListItem
-    extends React.PureComponent<{ channel: IChannel, onChannelClick: (channel: string) => void, showImage: boolean }> {
+    extends React.PureComponent<{ channel: IChannel; onChannelClick: (channel: string) => void; showImage: boolean }> {
 
     public render(): React.ReactElement | null {
         const { channel, showImage } = this.props;

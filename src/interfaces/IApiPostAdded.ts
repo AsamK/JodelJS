@@ -1,4 +1,4 @@
-import { IApiPostDetailsPost } from './IApiPostDetailsPost';
+import type { IApiPostDetailsPost } from './IApiPostDetailsPost';
 
 export interface IApiPostAdded {
     post_id: string;

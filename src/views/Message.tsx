@@ -2,7 +2,7 @@ import React from 'react';
 
 export interface IMessageProps {
     message: string;
-    link?: { url: string, title?: string };
+    link?: { url: string; title?: string };
     onAtClick: (e: React.MouseEvent<HTMLElement>, channel: string) => void;
     onHashtagClick: (e: React.MouseEvent<HTMLElement>, channel: string) => void;
 }

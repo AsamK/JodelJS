@@ -1,13 +1,19 @@
 import { combineReducers } from 'redux';
 
-import { IJodelAction } from '../interfaces/IJodelAction';
-import { IToast } from '../interfaces/IToast';
-import { account, IAccountStore } from './reducers/account';
-import { entities, IEntitiesStore } from './reducers/entities';
-import { IPostsBySectionStore, postsBySection } from './reducers/postsBySection';
-import { ISettingsStore, settings } from './reducers/settings';
+import type { IJodelAction } from '../interfaces/IJodelAction';
+import type { IToast } from '../interfaces/IToast';
+
+import type { IAccountStore } from './reducers/account';
+import { account } from './reducers/account';
+import type { IEntitiesStore } from './reducers/entities';
+import { entities } from './reducers/entities';
+import type { IPostsBySectionStore} from './reducers/postsBySection';
+import { postsBySection } from './reducers/postsBySection';
+import type { ISettingsStore} from './reducers/settings';
+import { settings } from './reducers/settings';
 import { toasts } from './reducers/toasts';
-import { IViewStateStore, viewState } from './reducers/viewState';
+import type { IViewStateStore} from './reducers/viewState';
+import { viewState } from './reducers/viewState';
 
 export type IJodelAppStore = Readonly<IJodelAppStoreMutable>;
 
@@ -17,7 +23,7 @@ interface IJodelAppStoreMutable {
     viewState: IViewStateStore;
     account: IAccountStore;
     settings: ISettingsStore;
-    toasts: ReadonlyArray<IToast>;
+    toasts: readonly IToast[];
 }
 
 export const JodelApp = combineReducers<IJodelAppStore, IJodelAction>({

@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 
-import { IApiPostReplyPost } from '../../interfaces/IApiPostDetailsPost';
-import { IApiPostListPost } from '../../interfaces/IApiPostListPost';
-import { IApiSticky } from '../../interfaces/IApiSticky';
-import { IChannel } from '../../interfaces/IChannel';
-import { IJodelAction } from '../../interfaces/IJodelAction';
-import { INotification } from '../../interfaces/INotification';
-import { IPost } from '../../interfaces/IPost';
+import type { IApiPostReplyPost } from '../../interfaces/IApiPostDetailsPost';
+import type { IApiPostListPost } from '../../interfaces/IApiPostListPost';
+import type { IApiSticky } from '../../interfaces/IApiSticky';
+import type { IChannel } from '../../interfaces/IChannel';
+import type { IJodelAction } from '../../interfaces/IJodelAction';
+import type { INotification } from '../../interfaces/INotification';
+import type { IPost } from '../../interfaces/IPost';
 import {
     CLOSE_STICKY,
     PINNED_POST,
@@ -21,13 +21,13 @@ import {
     VOTED_POLL,
     VOTED_POST,
 } from '../actions/action.consts';
-import { IJodelAppStore } from '../reducers';
+import type { IJodelAppStore } from '../reducers';
 
 export interface IEntitiesStore {
     readonly posts: { readonly [key: string]: IPost };
     readonly channels: { readonly [key: string]: IChannel };
-    readonly notifications: ReadonlyArray<INotification>;
-    readonly stickies: ReadonlyArray<IApiSticky>;
+    readonly notifications: readonly INotification[];
+    readonly stickies: readonly IApiSticky[];
 }
 
 export const entities = combineReducers({
@@ -138,7 +138,7 @@ function channels(state: { readonly [key: string]: IChannel } = {}, action: IJod
         case SET_RECOMMENDED_CHANNELS:
         case SET_LOCAL_CHANNELS:
         case SET_COUNTRY_CHANNELS:
-        case SET_CHANNELS_META:
+        case SET_CHANNELS_META: {
             const newState: { [key: string]: IChannel } = {};
             action.payload.entitiesChannels.forEach(channel => {
                 newState[channel.channel] = { ...state[channel.channel], ...channel };
@@ -147,6 +147,7 @@ function channels(state: { readonly [key: string]: IChannel } = {}, action: IJod
                 ...state,
                 ...newState,
             };
+        }
         case RECEIVE_POSTS:
             if (action.payload.section.startsWith('channel:')) {
                 const channelName = action.payload.section.substring(8);
@@ -165,28 +166,30 @@ function channels(state: { readonly [key: string]: IChannel } = {}, action: IJod
     }
 }
 
-function notifications(state: ReadonlyArray<INotification> = [], action: IJodelAction): typeof state {
+function notifications(state: readonly INotification[] = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case RECEIVE_NOTIFICATIONS:
             return action.payload.notifications ? action.payload.notifications : [];
-        case SET_NOTIFICATION_POST_READ:
+        case SET_NOTIFICATION_POST_READ: {
             const postId = action.payload.postId;
             return state.map(n => postId === n.post_id ? { ...n, read: true } : n);
+        }
         default:
             return state;
     }
 }
 
-function stickies(state: ReadonlyArray<IApiSticky> = [], action: IJodelAction): typeof state {
+function stickies(state: readonly IApiSticky[] = [], action: IJodelAction): typeof state {
     switch (action.type) {
         case RECEIVE_POSTS:
             if (!action.payload.stickies) {
                 return state;
             }
             return action.payload.stickies;
-        case CLOSE_STICKY:
+        case CLOSE_STICKY: {
             const stickyId = action.payload.stickyId;
             return state.filter(sticky => sticky.stickypost_id !== stickyId);
+        }
         default:
             return state;
     }

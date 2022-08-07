@@ -1,6 +1,6 @@
-import { Color } from '../enums/Color';
-import { NotificationScrollType } from '../enums/NotificationScrollType';
-import { NotificationType } from '../enums/NotificationType';
+import type { Color } from '../enums/Color';
+import type { NotificationScrollType } from '../enums/NotificationScrollType';
+import type { NotificationType } from '../enums/NotificationType';
 
 export interface INotification {
     post_id: string;

@@ -1,4 +1,4 @@
-import { UserType } from '../enums/UserType';
+import type { UserType } from '../enums/UserType';
 
 export interface IApiExperiment {
     features: string[];

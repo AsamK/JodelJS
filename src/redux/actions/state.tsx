@@ -1,15 +1,16 @@
 import { PostListSortType } from '../../enums/PostListSortType';
-import { Section } from '../../enums/Section';
-import { TokenType } from '../../enums/TokenType';
-import { VoteType } from '../../enums/VoteType';
-import { IApiConfig } from '../../interfaces/IApiConfig';
-import { IApiPostDetailsPost, IApiPostReplyPost } from '../../interfaces/IApiPostDetailsPost';
-import { IApiPostListPost } from '../../interfaces/IApiPostListPost';
-import { IApiSticky } from '../../interfaces/IApiSticky';
-import { IChannel } from '../../interfaces/IChannel';
-import { IJodelAction } from '../../interfaces/IJodelAction';
-import { INotification } from '../../interfaces/INotification';
-import { IViewStateStore } from '../reducers/viewState';
+import type { Section } from '../../enums/Section';
+import type { TokenType } from '../../enums/TokenType';
+import type { VoteType } from '../../enums/VoteType';
+import type { IApiConfig } from '../../interfaces/IApiConfig';
+import type { IApiPostDetailsPost, IApiPostReplyPost } from '../../interfaces/IApiPostDetailsPost';
+import type { IApiPostListPost } from '../../interfaces/IApiPostListPost';
+import type { IApiSticky } from '../../interfaces/IApiSticky';
+import type { IChannel } from '../../interfaces/IChannel';
+import type { IJodelAction } from '../../interfaces/IJodelAction';
+import type { INotification } from '../../interfaces/INotification';
+import type { IViewStateStore } from '../reducers/viewState';
+
 import {
     CLOSE_STICKY,
     INVALIDATE_POSTS,
@@ -110,8 +111,8 @@ export function receivePosts(section: Section,
     append = false,
     stickies?: IApiSticky[]): IJodelAction {
     const payload: {
-        entities: (IApiPostListPost | IApiPostReplyPost)[],
-        postsBySortType: { sortType: PostListSortType, posts: string[] }[],
+        entities: (IApiPostListPost | IApiPostReplyPost)[];
+        postsBySortType: { sortType: PostListSortType; posts: string[] }[];
     } = {
         entities: [],
         postsBySortType: [],
@@ -151,7 +152,7 @@ export function receivePosts(section: Section,
 }
 
 export function receivePost(post: IApiPostDetailsPost, append = false, nextReply: string | null = null,
-    shareable: boolean = false, ojFilter: boolean): IJodelAction {
+    shareable = false, ojFilter: boolean): IJodelAction {
     return {
         payload: {
             append,

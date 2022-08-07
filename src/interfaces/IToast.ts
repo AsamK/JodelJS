@@ -1,4 +1,4 @@
-import { ToastType } from '../enums/ToastType';
+import type { ToastType } from '../enums/ToastType';
 
 export interface IToast {
     id: number;

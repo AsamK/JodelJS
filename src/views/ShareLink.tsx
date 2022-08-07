@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
-import { IJodelAppStore } from '../redux/reducers';
+import type { IJodelAppStore } from '../redux/reducers';
 import { shareLinkSelector } from '../redux/selectors/view';
 import './ShareLink.scss';
 
@@ -41,8 +40,4 @@ const mapStateToProps = (state: IJodelAppStore) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: JodelThunkDispatch) => {
-    return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ShareLink);
+export default connect(mapStateToProps)(ShareLink);

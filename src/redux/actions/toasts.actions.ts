@@ -1,5 +1,6 @@
-import { ToastType } from '../../enums/ToastType';
-import { IJodelAction } from '../../interfaces/IJodelAction';
+import type { ToastType } from '../../enums/ToastType';
+import type { IJodelAction } from '../../interfaces/IJodelAction';
+
 import { HIDE_TOAST, SHOW_TOAST } from './action.consts';
 
 let nextToastId = 0;

@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { hot } from 'react-hot-loader';
 import { applyMiddleware, compose, createStore, Middleware } from 'redux';
 import freeze from 'redux-freeze';
 import thunkMiddleware from 'redux-thunk';
@@ -180,13 +179,11 @@ switch (translationLanguage) {
         break;
 }
 
-const HotloadableApp = process.env.NODE_ENV !== 'production' ? hot(module)(App) : App;
-
 translationMessages
     .catch(() => ({}))
     .then(messages => {
         ReactDOM.render(
-            <HotloadableApp
+            <App
                 locale={translationLocale}
                 messages={messages}
                 store={store}

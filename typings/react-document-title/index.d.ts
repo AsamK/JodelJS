@@ -3,7 +3,7 @@ import React from 'react';
 export = DocumentTitle;
 
 declare namespace DocumentTitle {
-    interface IDocumentTitleProps {
+    interface IDocumentTitleProps extends React.PropsWithChildren {
         title: string;
     }
 }

@@ -1,10 +1,7 @@
 {
-    "plugins": [
-        "stylelint-order",
-        "stylelint-scss"
-    ],
-    "ignoreFiles": [
-    ],
+    "extends": ["stylelint-config-standard-scss"],
+    "plugins": ["stylelint-order"],
+    "ignoreFiles": [],
     "rules": {
         "block-closing-brace-newline-before": ["always"],
         "block-no-empty": true,
@@ -33,6 +30,7 @@
                 "ignore": ["after-comment"]
             }
         ],
+        "selector-class-pattern": ".*",
         "selector-list-comma-newline-after": "always",
         "selector-list-comma-newline-before": "never-multi-line",
         "selector-max-empty-lines": 0,

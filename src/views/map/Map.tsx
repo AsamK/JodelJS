@@ -6,7 +6,7 @@ import { IGeoCoordinates } from '../../interfaces/ILocation';
 import { LeafletMapContext } from './map-utils';
 import './Map.scss';
 
-interface IMapComponentProps {
+interface IMapComponentProps extends React.PropsWithChildren {
     location: IGeoCoordinates | null;
 }
 

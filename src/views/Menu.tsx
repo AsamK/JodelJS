@@ -78,9 +78,14 @@ class MenuComponent extends React.Component<IMenuComponentProps, IMenuComponentS
                                     id="notifications"
                                     defaultMessage="Notifications"
                                 />
-                                {unreadNotifications === 0
-                                    ? ''
-                                    : ['(', <FormattedNumber value={unreadNotifications} />, ')']}
+                                {unreadNotifications === 0 ? (
+                                    ''
+                                ) : (
+                                    <>
+                                        &nbsp;(
+                                        <FormattedNumber value={unreadNotifications} />)
+                                    </>
+                                )}
                             </div>
                         </li>
                         <li className="menu_entry">

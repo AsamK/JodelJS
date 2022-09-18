@@ -14,10 +14,13 @@ const Settings: ISettings = {
     DEFAULT_LOCATION: undefined,
 
     // Helper server url to create GCM account
-    GCM_ACCOUNT_HELPER_URL: '',
+    GCM_ACCOUNT_HELPER_URL: 'http://127.0.0.1:9090/account',
 
     // Helper server url to receive GCM verification message
-    GCM_RECEIVE_HELPER_URL: '',
+    GCM_RECEIVE_HELPER_URL: 'http://127.0.0.1:9090/verification',
+
+    EMAIL_REQUEST_HELPER_URL: 'http://127.0.0.1:9090/email/request',
+    EMAIL_CONFIRM_HELPER_URL: 'http://127.0.0.1:9090/email/confirm',
 
     // Key for signed requests
     KEY: 'GNyUrEmBdEkihJOIoUTXbCQmBpDSxfFNGCuaWAUH',

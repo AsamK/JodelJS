@@ -8,7 +8,7 @@ export const EmailVerification: React.FC<{ onToken: (token: FirebaseTokenRespons
 }) => {
     const [email, setEmail] = React.useState('');
     const [emailLink, setEmailLink] = React.useState('');
-    const [verificationRequested, setVerificationRequested] = React.useState(true);
+    const [verificationRequested, setVerificationRequested] = React.useState(false);
     return (
         <div>
             <label>Email:</label>

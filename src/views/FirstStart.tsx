@@ -42,7 +42,11 @@ const FirstStart: React.FC = () => {
                     defaultMessage="Welcome to the unofficial Jodel web app"
                 />
             </h1>
-            <EmailVerification onToken={setFirebaseToken} />
+            {firebaseToken ? (
+                <span>Successfully verified an email address for registration.</span>
+            ) : (
+                <EmailVerification onToken={setFirebaseToken} />
+            )}
             <form
                 onSubmit={e => {
                     e.preventDefault();

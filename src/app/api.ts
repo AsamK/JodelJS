@@ -31,6 +31,7 @@ import type { IGeoCoordinates } from '../interfaces/ILocation';
 import type { IJodelAppStore } from '../redux/reducers';
 import { accessTokenSelector, isRefreshingTokenSelector } from '../redux/selectors/app';
 import { toHex } from '../utils/bytes.utils';
+import { toFormUrlencoded } from '../utils/utils';
 
 import Settings from './settings';
 
@@ -627,14 +628,19 @@ export class JodelApi {
 
     public async apiGetAccessToken(
         deviceUid: string,
+        firebaseUid: string | undefined,
+        firebaseJWT: string | undefined,
         latitude = 0.0,
         longitude = 0.0,
         city: string,
         country: string,
     ): Promise<IApiRegister> {
         const data = {
+            language: 'de-DE',
             client_id: Settings.CLIENT_ID,
             device_uid: deviceUid,
+            firebase_uid: firebaseUid,
+            firebaseJWT,
             location: {
                 city,
                 country,
@@ -918,15 +924,6 @@ export class JodelApi {
             query,
             dataString || '',
         );
-
-        function toFormUrlencoded(form: {
-            [key: string]: string | number | boolean | undefined;
-        }): string {
-            return Object.keys(form)
-                .filter(key => form[key] != null)
-                .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(form[key]!))
-                .join('&');
-        }
 
         const queryString = toFormUrlencoded(query);
         if (queryString) {

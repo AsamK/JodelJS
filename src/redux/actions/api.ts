@@ -717,7 +717,11 @@ export function addPost(
     };
 }
 
-export function setDeviceUid(deviceUid: string): JodelThunkAction {
+export function setDeviceUid(
+    deviceUid: string,
+    firebaseUid?: string,
+    firebaseJWT?: string,
+): JodelThunkAction {
     return (dispatch, getState, { api }) => {
         const loc = locationSelector(getState());
         if (!loc) {
@@ -726,7 +730,15 @@ export function setDeviceUid(deviceUid: string): JodelThunkAction {
             );
             return;
         }
-        api.apiGetAccessToken(deviceUid, loc.latitude, loc.longitude, loc.city, loc.country)
+        api.apiGetAccessToken(
+            deviceUid,
+            firebaseUid,
+            firebaseJWT,
+            loc.latitude,
+            loc.longitude,
+            loc.city,
+            loc.country,
+        )
             .then(res => {
                 dispatch(_setDeviceUID(deviceUid));
                 dispatch(

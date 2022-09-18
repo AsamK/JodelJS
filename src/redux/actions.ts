@@ -139,10 +139,10 @@ export function setToken(
     };
 }
 
-export function createNewAccount(): JodelThunkAction {
+export function createNewAccount(firebaseUid?: string, firebaseJWT?: string): JodelThunkAction {
     return dispatch => {
         const deviceUid = randomValueHex(32);
-        dispatch(setDeviceUid(deviceUid));
+        dispatch(setDeviceUid(deviceUid, firebaseUid, firebaseJWT));
     };
 }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
+import type { FirebaseTokenResponse } from '../app/mailAuth';
 import Settings from '../app/settings';
 import type { JodelThunkDispatch } from '../interfaces/JodelThunkAction';
 import {
@@ -14,6 +15,7 @@ import { setDeviceUid } from '../redux/actions/api';
 import type { IJodelAppStore } from '../redux/reducers';
 import { deviceUidSelector, locationSelector } from '../redux/selectors/app';
 
+import { EmailVerification } from './EmailVerification';
 import { SelectDeviceUid } from './SelectDeviceUid';
 import { SelectLocation } from './SelectLocation';
 
@@ -26,6 +28,7 @@ const FirstStart: React.FC = () => {
     );
 
     const [deviceUid, setInputDeviceUid] = React.useState(initialDeviceUid);
+    const [firebaseToken, setFirebaseToken] = React.useState<FirebaseTokenResponse | null>(null);
 
     const triggerUpdateLocation = () => {
         dispatch(updateLocation());
@@ -39,13 +42,22 @@ const FirstStart: React.FC = () => {
                     defaultMessage="Welcome to the unofficial Jodel web app"
                 />
             </h1>
+            <EmailVerification onToken={setFirebaseToken} />
             <form
                 onSubmit={e => {
                     e.preventDefault();
                     if (!deviceUid) {
-                        dispatch(createNewAccount());
+                        dispatch(
+                            createNewAccount(firebaseToken?.user_id, firebaseToken?.access_token),
+                        );
                     } else {
-                        dispatch(setDeviceUid(deviceUid));
+                        dispatch(
+                            setDeviceUid(
+                                deviceUid,
+                                firebaseToken?.user_id,
+                                firebaseToken?.access_token,
+                            ),
+                        );
                     }
                 }}
             >
